@@ -66,16 +66,6 @@ commands:
     permission: chat.clear
     aliases: [cc]
 
-  mute:
-    description: Mute a player
-    usage: /mute <player> <time> [reason]
-    permission: chat.mute
-
-  unmute:
-    description: Unmute a player
-    usage: /unmute <player>
-    permission: chat.mute
-
   lochat:
     description: LoChat admin command
     usage: /lochat [reload]
@@ -120,8 +110,6 @@ permissions:
   chat.spy:
     default: op
   chat.clear:
-    default: op
-  chat.mute:
     default: op
   chat.bypass.cooldown:
     default: op

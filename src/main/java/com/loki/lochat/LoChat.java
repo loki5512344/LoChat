@@ -23,7 +23,6 @@ public final class LoChat extends JavaPlugin {
     private FilterManager filterManager;
     private AntiSpamManager antiSpamManager;
     private CooldownManager cooldownManager;
-    private MuteManager muteManager;
     private MentionManager mentionManager;
     private SpyManager spyManager;
     private EmojiManager emojiManager;
@@ -44,7 +43,6 @@ public final class LoChat extends JavaPlugin {
         filterManager = new FilterManager(this);
         antiSpamManager = new AntiSpamManager(this);
         cooldownManager = new CooldownManager();
-        muteManager = new MuteManager(this);
         mentionManager = new MentionManager(this);
         spyManager = new SpyManager(this);
         chatManager = new ChatManager(this);
@@ -82,9 +80,6 @@ public final class LoChat extends JavaPlugin {
         if (ignoreManager != null) {
             ignoreManager.save();
         }
-        if (muteManager != null) {
-            muteManager.save();
-        }
         if (gradientModule != null) {
             gradientModule.shutdown();
         }
@@ -102,8 +97,6 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
-        getCommand("mute").setExecutor(new MuteCommand(this));
-        getCommand("unmute").setExecutor(new UnmuteCommand(this));
         
         LoChatCommand loChatCommand = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCommand);
@@ -159,10 +152,6 @@ public final class LoChat extends JavaPlugin {
 
     public CooldownManager getCooldownManager() {
         return cooldownManager;
-    }
-
-    public MuteManager getMuteManager() {
-        return muteManager;
     }
 
     public MentionManager getMentionManager() {

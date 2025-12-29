@@ -47,15 +47,6 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         GradientModule gradient = plugin.getGradientModule();
 
         return switch (params.toLowerCase()) {
-            case "muted" -> String.valueOf(plugin.getMuteManager().isMuted(uuid));
-            case "mute_time" -> {
-                String time = plugin.getMuteManager().getRemainingTime(uuid);
-                yield time != null ? time : "0";
-            }
-            case "mute_reason" -> {
-                String reason = plugin.getMuteManager().getReason(uuid);
-                yield reason != null ? reason : "";
-            }
             case "ignored_count" -> String.valueOf(plugin.getIgnoreManager().getIgnoredCount(uuid));
             case "global_enabled" -> String.valueOf(!plugin.getChatManager().isGlobalChatDisabled(uuid));
             case "last_pm" -> {

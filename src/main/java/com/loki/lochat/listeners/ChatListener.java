@@ -34,19 +34,6 @@ public class ChatListener implements Listener {
     }
 
     private void processChat(Player player, String message) {
-        // Проверка мута
-        if (plugin.getMuteManager().isMuted(player.getUniqueId())) {
-            String remaining = plugin.getMuteManager().getRemainingTime(player.getUniqueId());
-            if (remaining.equals("навсегда")) {
-                player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("mute.permanent")));
-            } else {
-                player.sendMessage(ChatFormatter.parse(
-                        plugin.getMessageConfig().get("mute.you-muted", "{time}", remaining)
-                ));
-            }
-            return;
-        }
-
         String globalSymbol = plugin.getConfigManager().getGlobalSymbol();
         boolean isGlobal = message.startsWith(globalSymbol) && player.hasPermission("chat.global.use");
         String chatType = isGlobal ? "global" : "local";

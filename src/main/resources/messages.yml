@@ -35,14 +35,6 @@ ignore:
 announce:
   reloaded: "<green>Конфигурация перезагружена</green>"
 
-mute:
-  muted: "<green>Игрок {player} замучен на {time}</green>"
-  unmuted: "<green>Игрок {player} размучен</green>"
-  already-muted: "<red>Игрок уже замучен</red>"
-  not-muted: "<red>Игрок не замучен</red>"
-  you-muted: "<red>Вы замучены! Осталось: {time}</red>"
-  permanent: "<red>Вы замучены навсегда!</red>"
-
 spy:
   enabled: "<green>Шпион режим включен</green>"
   disabled: "<red>Шпион режим выключен</red>"
