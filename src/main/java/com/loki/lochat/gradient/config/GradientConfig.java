@@ -64,6 +64,7 @@ public class GradientConfig {
     public int getMaxPrefixLength() { return config.getInt("max-prefix-length", 7); }
     public String getPrefixFormat() { return config.getString("prefix-format", "[{prefix}] "); }
     public boolean isGradientOnPrefix() { return config.getBoolean("gradient-on-prefix", true); }
+    public boolean isGradientOnLuckPermsPrefix() { return config.getBoolean("gradient-on-luckperms-prefix", true); }
     public boolean isContinuousGradient() { return config.getBoolean("continuous-gradient", true); }
     public boolean isUseLegacyRgbFormat() { return config.getBoolean("use-legacy-rgb-format", true); }
     public String getStorageType() { return config.getString("storage-type", "YAML"); }

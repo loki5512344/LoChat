@@ -34,6 +34,9 @@ prefix-format: "[{prefix}] "
 # Применять градиент на префикс
 gradient-on-prefix: true
 
+# Применять градиент на LuckPerms префикс (если нет кастомного)
+gradient-on-luckperms-prefix: true
+
 # Единый градиент на префикс + ник
 continuous-gradient: true
 

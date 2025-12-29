@@ -122,7 +122,7 @@ public class GradientModule {
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         StringBuilder result = new StringBuilder();
         
-        // Сначала LuckPerms префикс (если нет кастомного)
+        // LuckPerms префикс
         String lpPrefix = null;
         if (luckPermsHook.isEnabled()) {
             lpPrefix = luckPermsHook.getActivePrefix(player);
@@ -137,7 +137,13 @@ public class GradientModule {
                 result.append(customPrefix);
             }
         } else if (lpPrefix != null && !lpPrefix.isEmpty()) {
-            result.append(lpPrefix);
+            // Применяем градиент на LP префикс если включено и есть цвета
+            if (data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
+                String cleanPrefix = stripColors(lpPrefix);
+                result.append(GradientUtil.applyGradient(cleanPrefix, data.getColors(), config.isUseLegacyRgbFormat()));
+            } else {
+                result.append(lpPrefix);
+            }
         }
         
         // Ник с градиентом
@@ -148,6 +154,14 @@ public class GradientModule {
         }
         
         return result.toString();
+    }
+
+    /**
+     * Убирает цветовые коды из строки
+     */
+    private String stripColors(String text) {
+        if (text == null) return "";
+        return text.replaceAll("(?i)(§x(§[0-9a-f]){6}|§[0-9a-fk-or]|&[0-9a-fk-or]|&#[0-9a-f]{6}|<[^>]+>)", "");
     }
 
     /**
@@ -185,6 +199,11 @@ public class GradientModule {
         if (luckPermsHook.isEnabled()) {
             String lpPrefix = luckPermsHook.getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
+                // Применяем градиент если включено
+                if (data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
+                    String cleanPrefix = stripColors(lpPrefix);
+                    return GradientUtil.applyGradient(cleanPrefix, data.getColors(), config.isUseLegacyRgbFormat());
+                }
                 return lpPrefix;
             }
         }
