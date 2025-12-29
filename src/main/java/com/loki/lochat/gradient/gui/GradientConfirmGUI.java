@@ -109,17 +109,39 @@ public class GradientConfirmGUI implements InventoryHolder {
         String prefixToUse = this.prefix;
         List<String> colorsToUse = this.colors;
 
+        // Получаем данные игрока
+        var data = module.getDataManager().getPlayerData(player.getUniqueId());
+
         if (type == ConfirmType.PREFIX && (colorsToUse == null || colorsToUse.isEmpty())) {
-            var data = module.getDataManager().getPlayerData(player.getUniqueId());
             if (data.hasColors() && data.isColorEnabled()) {
                 colorsToUse = data.getColors();
             }
         }
 
         if (type == ConfirmType.COLOR && (prefixToUse == null || prefixToUse.isEmpty())) {
-            var data = module.getDataManager().getPlayerData(player.getUniqueId());
             if (data.hasPrefix() && data.isPrefixEnabled()) {
                 prefixToUse = data.getPrefix();
+            }
+        }
+
+        // Если нет кастомного префикса - используем LuckPerms префикс
+        if ((prefixToUse == null || prefixToUse.isEmpty()) && module.getLuckPermsHook().isEnabled()) {
+            String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
+            if (lpPrefix != null && !lpPrefix.isEmpty()) {
+                // Для превью показываем LP префикс
+                // Если градиент на LP префикс включен - применяем градиент на всю строку
+                if (colorsToUse != null && !colorsToUse.isEmpty() && module.getConfig().isGradientOnLuckPermsPrefix()) {
+                    // Убираем цвета из LP префикса и применяем градиент на всё
+                    String cleanLpPrefix = stripColors(lpPrefix);
+                    String fullText = cleanLpPrefix + nick;
+                    return GradientUtil.applyGradient(fullText, colorsToUse, module.getConfig().isUseLegacyRgbFormat());
+                } else {
+                    // LP префикс со своими цветами + градиентный ник
+                    if (colorsToUse != null && !colorsToUse.isEmpty()) {
+                        return lpPrefix + GradientUtil.applyGradient(nick, colorsToUse, module.getConfig().isUseLegacyRgbFormat());
+                    }
+                    return lpPrefix + nick;
+                }
             }
         }
 
@@ -132,6 +154,14 @@ public class GradientConfirmGUI implements InventoryHolder {
                 module.getConfig().getPrefixFormat(),
                 module.getConfig().isUseLegacyRgbFormat()
         );
+    }
+
+    /**
+     * Убирает цветовые коды из строки
+     */
+    private String stripColors(String text) {
+        if (text == null) return "";
+        return text.replaceAll("(?i)(§x(§[0-9a-f]){6}|§[0-9a-fk-or]|&[0-9a-fk-or]|&#[0-9a-f]{6}|<[^>]+>)", "");
     }
 
     private ItemStack createItem(Material material, String name) {

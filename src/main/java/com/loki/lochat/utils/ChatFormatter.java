@@ -222,6 +222,52 @@ public class ChatFormatter {
                 .replace("{message}", message));
     }
 
+    /**
+     * Форматирует исходящее PM с поддержкой градиентных имён
+     */
+    public static Component formatPmSentNew(String format, Player sender, Player receiver, String message) {
+        LoChat plugin = LoChat.getInstance();
+        String senderDisplay = sender.getName();
+        String receiverDisplay = receiver.getName();
+        
+        // Используем градиентные имена если включено
+        if (plugin != null && plugin.getMessageConfig().isPmUseGradientNames() 
+                && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
+            senderDisplay = plugin.getGradientModule().getFormattedName(sender);
+            receiverDisplay = plugin.getGradientModule().getFormattedName(receiver);
+        }
+        
+        return parse(format
+                .replace("{sender}", sender.getName())
+                .replace("{receiver}", receiver.getName())
+                .replace("{sender_display}", senderDisplay)
+                .replace("{receiver_display}", receiverDisplay)
+                .replace("{message}", message));
+    }
+
+    /**
+     * Форматирует входящее PM с поддержкой градиентных имён
+     */
+    public static Component formatPmReceivedNew(String format, Player sender, Player receiver, String message) {
+        LoChat plugin = LoChat.getInstance();
+        String senderDisplay = sender.getName();
+        String receiverDisplay = receiver.getName();
+        
+        // Используем градиентные имена если включено
+        if (plugin != null && plugin.getMessageConfig().isPmUseGradientNames() 
+                && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
+            senderDisplay = plugin.getGradientModule().getFormattedName(sender);
+            receiverDisplay = plugin.getGradientModule().getFormattedName(receiver);
+        }
+        
+        return parse(format
+                .replace("{sender}", sender.getName())
+                .replace("{receiver}", receiver.getName())
+                .replace("{sender_display}", senderDisplay)
+                .replace("{receiver_display}", receiverDisplay)
+                .replace("{message}", message));
+    }
+
     public static Component formatAnnouncement(String format, String message) {
         return parse(format.replace("<message>", message));
     }

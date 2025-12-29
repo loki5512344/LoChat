@@ -9,6 +9,15 @@ local:
   no-players: "<red>Рядом нет игроков</red>"
 
 pm:
+  # Форматы личных сообщений
+  # {sender} - ник отправителя, {receiver} - ник получателя
+  # {sender_display} - отправитель с градиентом, {receiver_display} - получатель с градиентом
+  # {message} - текст сообщения
+  format-sent: "<gray>[PM] Ты → {receiver_display}<gray>: {message}</gray>"
+  format-received: "<gray>[PM] {sender_display}<gray> → Ты: {message}</gray>"
+  # Использовать градиентные ники в PM
+  use-gradient-names: true
+  # Старые форматы (для совместимости)
   sent: "<gray>[PM] Ты → {player}: {message}</gray>"
   received: "<gray>[PM] {player} → Ты: {message}</gray>"
   no-reply: "<red>Некому ответить</red>"

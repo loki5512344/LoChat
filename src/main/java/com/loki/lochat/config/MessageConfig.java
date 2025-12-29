@@ -57,4 +57,17 @@ public class MessageConfig {
     public String getInvalidUsage(String usage) {
         return get("errors.invalid-usage", "{usage}", usage);
     }
+
+    // PM форматы
+    public String getPmFormatSent() {
+        return get("pm.format-sent");
+    }
+
+    public String getPmFormatReceived() {
+        return get("pm.format-received");
+    }
+
+    public boolean isPmUseGradientNames() {
+        return messages.getBoolean("pm.use-gradient-names", true);
+    }
 }

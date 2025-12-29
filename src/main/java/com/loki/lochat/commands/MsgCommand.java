@@ -59,16 +59,18 @@ public class MsgCommand implements CommandExecutor {
         }
         String message = messageBuilder.toString();
 
-        // Отправляем сообщения
-        player.sendMessage(ChatFormatter.formatPmSent(
-                plugin.getMessageConfig().get("pm.sent"),
-                target.getName(),
+        // Отправляем сообщения с градиентными именами
+        player.sendMessage(ChatFormatter.formatPmSentNew(
+                plugin.getMessageConfig().getPmFormatSent(),
+                player,
+                target,
                 message
         ));
 
-        target.sendMessage(ChatFormatter.formatPmReceived(
-                plugin.getMessageConfig().get("pm.received"),
-                player.getName(),
+        target.sendMessage(ChatFormatter.formatPmReceivedNew(
+                plugin.getMessageConfig().getPmFormatReceived(),
+                player,
+                target,
                 message
         ));
 
