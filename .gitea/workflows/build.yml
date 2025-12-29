@@ -13,14 +13,11 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone --depth 1 $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git .
-          git checkout $GITHUB_SHA
+          git clone --depth 1 https://oauth2:${{ secrets.RELEASE_TOKEN }}@git.lokili.xyz/${{ gitea.repository }}.git .
 
       - name: Setup Java 21
         run: |
           curl -sL https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz | tar xz
-          echo "JAVA_HOME=$PWD/jdk-21.0.2" >> $GITHUB_ENV
-          echo "$PWD/jdk-21.0.2/bin" >> $GITHUB_PATH
 
       - name: Build & Test
         run: |
