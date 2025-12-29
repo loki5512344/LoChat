@@ -11,24 +11,36 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: https://gitea.com/actions/checkout@v4
+        run: |
+          git clone --depth 1 --branch $GITHUB_REF_NAME $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git .
 
       - name: Setup Java 21
         run: |
-          apt-get update && apt-get install -y wget
-          wget -q https://download.java.net/java/GA/jdk21/fd2272bbf8e04c3dbaee13770090416c/35/GPL/openjdk-21_linux-x64_bin.tar.gz
-          tar -xzf openjdk-21_linux-x64_bin.tar.gz
-          echo "JAVA_HOME=$PWD/jdk-21" >> $GITHUB_ENV
-          echo "$PWD/jdk-21/bin" >> $GITHUB_PATH
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
+          curl -sL https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz | tar xz
 
       - name: Build
-        run: ./gradlew build --no-daemon
+        run: |
+          export JAVA_HOME=$PWD/jdk-21.0.2
+          export PATH=$JAVA_HOME/bin:$PATH
+          chmod +x gradlew
+          ./gradlew build --no-daemon
 
       - name: Create Release
-        uses: https://gitea.com/actions/release-action@main
-        with:
-          files: build/libs/LoChat-*.jar
-          api_key: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          JAR_FILE=$(ls build/libs/LoChat-*.jar | head -1)
+          
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.RELEASE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            "$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY/releases" \
+            -d "{\"tag_name\": \"$GITHUB_REF_NAME\", \"name\": \"LoChat $VERSION\", \"body\": \"Release $VERSION\"}"
+          
+          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.RELEASE_TOKEN }}" \
+            "$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" | grep -o '"id":[0-9]*' | head -1 | cut -d: -f2)
+          
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.RELEASE_TOKEN }}" \
+            -H "Content-Type: application/octet-stream" \
+            "$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=LoChat-$VERSION.jar" \
+            --data-binary @"$JAR_FILE"

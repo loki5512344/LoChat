@@ -12,21 +12,19 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: https://gitea.com/actions/checkout@v4
+        run: |
+          git clone --depth 1 $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git .
+          git checkout $GITHUB_SHA
 
       - name: Setup Java 21
         run: |
-          apt-get update && apt-get install -y wget
-          wget -q https://download.java.net/java/GA/jdk21/fd2272bbf8e04c3dbaee13770090416c/35/GPL/openjdk-21_linux-x64_bin.tar.gz
-          tar -xzf openjdk-21_linux-x64_bin.tar.gz
-          echo "JAVA_HOME=$PWD/jdk-21" >> $GITHUB_ENV
-          echo "$PWD/jdk-21/bin" >> $GITHUB_PATH
+          curl -sL https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz | tar xz
+          echo "JAVA_HOME=$PWD/jdk-21.0.2" >> $GITHUB_ENV
+          echo "$PWD/jdk-21.0.2/bin" >> $GITHUB_PATH
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Build
-        run: ./gradlew build --no-daemon
-
-      - name: Test
-        run: ./gradlew test --no-daemon
+      - name: Build & Test
+        run: |
+          export JAVA_HOME=$PWD/jdk-21.0.2
+          export PATH=$JAVA_HOME/bin:$PATH
+          chmod +x gradlew
+          ./gradlew build test --no-daemon
