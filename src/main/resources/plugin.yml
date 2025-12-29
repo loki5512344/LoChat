@@ -76,6 +76,11 @@ commands:
     usage: /unmute <player>
     permission: chat.mute
 
+  lochat:
+    description: LoChat admin command
+    usage: /lochat [reload]
+    permission: lochat.admin
+
   color:
     description: Set gradient nick color
     usage: /color <hex1> [hex2] ...
@@ -135,4 +140,6 @@ permissions:
   gradient.bypass.cooldown:
     default: op
   gradient.bypass.cost:
+    default: op
+  lochat.admin:
     default: op

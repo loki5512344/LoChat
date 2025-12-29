@@ -104,6 +104,10 @@ public final class LoChat extends JavaPlugin {
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
         getCommand("mute").setExecutor(new MuteCommand(this));
         getCommand("unmute").setExecutor(new UnmuteCommand(this));
+        
+        LoChatCommand loChatCommand = new LoChatCommand(this);
+        getCommand("lochat").setExecutor(loChatCommand);
+        getCommand("lochat").setTabCompleter(loChatCommand);
     }
     
     public void reload() {

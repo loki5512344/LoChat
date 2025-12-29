@@ -68,22 +68,38 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             
             // Gradient placeholders (совместимость с LoPreff)
             case "gradient_full", "full" -> {
-                if (gradient == null || !gradient.isEnabled()) yield player.getName();
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield player.getName();
+                if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
+                
+                // Если gradient модуль выключен — берём только LuckPerms префикс + ник
+                if (gradient == null || !gradient.isEnabled()) {
+                    yield player.getName() != null ? player.getName() : "";
+                }
+                
                 yield gradient.getFormattedName(onlinePlayer);
             }
             case "gradient_name", "name" -> {
-                if (gradient == null || !gradient.isEnabled()) yield player.getName();
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield player.getName();
+                if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
+                
+                if (gradient == null || !gradient.isEnabled()) {
+                    yield player.getName();
+                }
                 yield gradient.getGradientNick(onlinePlayer);
             }
             case "gradient_prefix", "prefix" -> {
-                if (gradient == null || !gradient.isEnabled()) yield "";
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield "";
+                
+                if (gradient == null || !gradient.isEnabled()) yield "";
                 yield gradient.getPrefix(onlinePlayer);
+            }
+            case "lp_prefix" -> {
+                Player onlinePlayer = player.getPlayer();
+                if (onlinePlayer == null) yield "";
+                
+                if (gradient == null || !gradient.isEnabled()) yield "";
+                yield gradient.getLuckPermsPrefix(onlinePlayer);
             }
             default -> null;
         };

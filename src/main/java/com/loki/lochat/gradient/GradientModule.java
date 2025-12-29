@@ -114,11 +114,40 @@ public class GradientModule {
     }
 
     /**
-     * Получает отформатированное имя игрока с градиентом
+     * Получает отформатированное имя игрока с градиентом и LuckPerms префиксом
      */
     public String getFormattedName(Player player) {
         if (!enabled) return player.getName();
-        return DisplayNameUtil.getFullDisplayName(this, player);
+        
+        GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
+        StringBuilder result = new StringBuilder();
+        
+        // Сначала LuckPerms префикс (если нет кастомного)
+        String lpPrefix = null;
+        if (luckPermsHook.isEnabled()) {
+            lpPrefix = luckPermsHook.getActivePrefix(player);
+        }
+        
+        // Кастомный префикс имеет приоритет
+        if (data.hasPrefix() && data.isPrefixEnabled()) {
+            String customPrefix = config.getPrefixFormat().replace("{prefix}", data.getPrefix());
+            if (data.hasColors() && data.isColorEnabled() && config.isGradientOnPrefix()) {
+                result.append(GradientUtil.applyGradient(customPrefix, data.getColors(), config.isUseLegacyRgbFormat()));
+            } else {
+                result.append(customPrefix);
+            }
+        } else if (lpPrefix != null && !lpPrefix.isEmpty()) {
+            result.append(lpPrefix);
+        }
+        
+        // Ник с градиентом
+        if (data.hasColors() && data.isColorEnabled()) {
+            result.append(GradientUtil.applyGradient(player.getName(), data.getColors(), config.isUseLegacyRgbFormat()));
+        } else {
+            result.append(player.getName());
+        }
+        
+        return result.toString();
     }
 
     /**
@@ -136,21 +165,40 @@ public class GradientModule {
     }
 
     /**
-     * Получает только префикс игрока
+     * Получает префикс игрока (кастомный или LuckPerms)
      */
     public String getPrefix(Player player) {
         if (!enabled) return "";
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
-        if (!data.hasPrefix() || !data.isPrefixEnabled()) {
-            return "";
+        
+        // Кастомный префикс
+        if (data.hasPrefix() && data.isPrefixEnabled()) {
+            String prefix = config.getPrefixFormat().replace("{prefix}", data.getPrefix());
+            if (data.hasColors() && data.isColorEnabled() && config.isGradientOnPrefix()) {
+                return GradientUtil.applyGradient(prefix, data.getColors(), config.isUseLegacyRgbFormat());
+            }
+            return prefix;
         }
         
-        String prefix = config.getPrefixFormat().replace("{prefix}", data.getPrefix());
-        if (data.hasColors() && data.isColorEnabled() && config.isGradientOnPrefix()) {
-            return GradientUtil.applyGradient(prefix, data.getColors(), config.isUseLegacyRgbFormat());
+        // LuckPerms префикс
+        if (luckPermsHook.isEnabled()) {
+            String lpPrefix = luckPermsHook.getActivePrefix(player);
+            if (lpPrefix != null && !lpPrefix.isEmpty()) {
+                return lpPrefix;
+            }
         }
-        return prefix;
+        
+        return "";
+    }
+
+    /**
+     * Получает только LuckPerms префикс
+     */
+    public String getLuckPermsPrefix(Player player) {
+        if (!enabled || !luckPermsHook.isEnabled()) return "";
+        String prefix = luckPermsHook.getActivePrefix(player);
+        return prefix != null ? prefix : "";
     }
 
     // Геттеры
