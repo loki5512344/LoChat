@@ -8,12 +8,18 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container:
-      image: eclipse-temurin:21-jdk
     
     steps:
       - name: Checkout
         uses: https://gitea.com/actions/checkout@v4
+
+      - name: Setup Java 21
+        run: |
+          apt-get update && apt-get install -y wget
+          wget -q https://download.java.net/java/GA/jdk21/fd2272bbf8e04c3dbaee13770090416c/35/GPL/openjdk-21_linux-x64_bin.tar.gz
+          tar -xzf openjdk-21_linux-x64_bin.tar.gz
+          echo "JAVA_HOME=$PWD/jdk-21" >> $GITHUB_ENV
+          echo "$PWD/jdk-21/bin" >> $GITHUB_PATH
 
       - name: Grant execute permission
         run: chmod +x gradlew
