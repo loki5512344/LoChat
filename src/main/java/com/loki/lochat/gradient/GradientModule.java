@@ -115,12 +115,15 @@ public class GradientModule {
 
     /**
      * Получает отформатированное имя игрока с градиентом и LuckPerms префиксом
+     * Градиент применяется на всю строку целиком (префикс + ник)
      */
     public String getFormattedName(Player player) {
         if (!enabled) return player.getName();
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
-        StringBuilder result = new StringBuilder();
+        
+        // Собираем полную строку: префикс + ник
+        StringBuilder fullText = new StringBuilder();
         
         // LuckPerms префикс
         String lpPrefix = null;
@@ -128,32 +131,32 @@ public class GradientModule {
             lpPrefix = luckPermsHook.getActivePrefix(player);
         }
         
-        // Кастомный префикс имеет приоритет
+        // Определяем какой префикс использовать
         if (data.hasPrefix() && data.isPrefixEnabled()) {
-            String customPrefix = config.getPrefixFormat().replace("{prefix}", data.getPrefix());
-            if (data.hasColors() && data.isColorEnabled() && config.isGradientOnPrefix()) {
-                result.append(GradientUtil.applyGradient(customPrefix, data.getColors(), config.isUseLegacyRgbFormat()));
-            } else {
-                result.append(customPrefix);
-            }
+            // Кастомный префикс
+            fullText.append(config.getPrefixFormat().replace("{prefix}", data.getPrefix()));
         } else if (lpPrefix != null && !lpPrefix.isEmpty()) {
-            // Применяем градиент на LP префикс если включено и есть цвета
+            // LuckPerms префикс (убираем его цвета если будем применять градиент)
             if (data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
-                String cleanPrefix = stripColors(lpPrefix);
-                result.append(GradientUtil.applyGradient(cleanPrefix, data.getColors(), config.isUseLegacyRgbFormat()));
+                fullText.append(stripColors(lpPrefix));
             } else {
-                result.append(lpPrefix);
+                // LP префикс со своими цветами, ник отдельно
+                String nick = data.hasColors() && data.isColorEnabled() 
+                    ? GradientUtil.applyGradient(player.getName(), data.getColors(), config.isUseLegacyRgbFormat())
+                    : player.getName();
+                return lpPrefix + nick;
             }
         }
         
-        // Ник с градиентом
+        // Добавляем ник
+        fullText.append(player.getName());
+        
+        // Применяем единый градиент на всю строку
         if (data.hasColors() && data.isColorEnabled()) {
-            result.append(GradientUtil.applyGradient(player.getName(), data.getColors(), config.isUseLegacyRgbFormat()));
-        } else {
-            result.append(player.getName());
+            return GradientUtil.applyGradient(fullText.toString(), data.getColors(), config.isUseLegacyRgbFormat());
         }
         
-        return result.toString();
+        return fullText.toString();
     }
 
     /**
@@ -179,7 +182,8 @@ public class GradientModule {
     }
 
     /**
-     * Получает префикс игрока (кастомный или LuckPerms)
+     * Получает префикс игрока (кастомный или LuckPerms) с градиентом
+     * Градиент применяется только на префикс
      */
     public String getPrefix(Player player) {
         if (!enabled) return "";
@@ -199,7 +203,6 @@ public class GradientModule {
         if (luckPermsHook.isEnabled()) {
             String lpPrefix = luckPermsHook.getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
-                // Применяем градиент если включено
                 if (data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
                     String cleanPrefix = stripColors(lpPrefix);
                     return GradientUtil.applyGradient(cleanPrefix, data.getColors(), config.isUseLegacyRgbFormat());
