@@ -1,0 +1,93 @@
+package com.loki.lochat.commands;
+
+import com.loki.lochat.LoChat;
+import com.loki.lochat.utils.ChatFormatter;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+public class ReplyCommand implements CommandExecutor {
+
+    private final LoChat plugin;
+
+    public ReplyCommand(LoChat plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Только для игроков!");
+            return true;
+        }
+
+        if (!plugin.getConfigManager().isPmEnabled()) {
+            return true;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/reply <сообщение>")));
+            return true;
+        }
+
+        UUID lastUuid = plugin.getPmManager().getLastConversation(player.getUniqueId());
+        if (lastUuid == null) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.no-reply")));
+            return true;
+        }
+
+        Player target = Bukkit.getPlayer(lastUuid);
+        if (target == null) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.player-offline")));
+            return true;
+        }
+
+        // Проверка игнора
+        if (plugin.getIgnoreManager().isIgnoring(target.getUniqueId(), player.getUniqueId())) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored")));
+            return true;
+        }
+
+        String message = String.join(" ", args);
+
+        // Отправляем сообщения
+        player.sendMessage(ChatFormatter.formatPmSent(
+                plugin.getMessageConfig().get("pm.sent"),
+                target.getName(),
+                message
+        ));
+
+        target.sendMessage(ChatFormatter.formatPmReceived(
+                plugin.getMessageConfig().get("pm.received"),
+                player.getName(),
+                message
+        ));
+
+        // Звук для получателя
+        if (plugin.getConfigManager().isPmSoundEnabled()) {
+            try {
+                Sound sound = Sound.valueOf(plugin.getConfigManager().getPmSoundType());
+                target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
+            } catch (IllegalArgumentException ignored) {}
+        }
+
+        // Шпион
+        plugin.getSpyManager().broadcastPM(player, target, message);
+
+        // Обновляем последнего собеседника
+        plugin.getPmManager().setLastConversation(target.getUniqueId(), player.getUniqueId());
+
+        // Логирование
+        if (plugin.getConfigManager().isPmLogEnabled()) {
+            plugin.getLogger().info("[PM] " + player.getName() + " -> " + target.getName() + ": " + message);
+        }
+
+        return true;
+    }
+}

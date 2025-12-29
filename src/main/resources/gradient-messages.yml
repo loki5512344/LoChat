@@ -1,0 +1,57 @@
+# LoChat Gradient Module Messages
+# Сообщения модуля градиентных ников
+
+# Общие
+only-player: "§cЭта команда только для игроков!"
+no-permission: "§cУ вас нет прав на это действие!"
+player-not-found: "§cИгрок не найден!"
+reload-success: "§aКонфигурация градиентов перезагружена!"
+cooldown: "§cПодождите ещё {time} секунд!"
+
+# Цвета
+color-help: |
+  §e=== Команда /color ===
+  §e/color <цвет1> [цвет2] ... §7— установить градиент
+  §e/color on §7— включить цвет
+  §e/color off §7— выключить цвет
+  §e/color reset §7— сбросить цвет
+  §e/color copy <игрок> §7— скопировать цвет
+  §7Пример: /color #FF0000 #00FF00 #0000FF
+color-enabled: "§aЦвет ника включён!"
+color-disabled: "§cЦвет ника выключен!"
+color-reset: "§aЦвет ника сброшен!"
+color-no-colors: "§cУ вас нет установленных цветов!"
+color-success: "§aЦвет успешно установлен! Списано: {price} PP"
+color-copy-usage: "§cИспользование: /color copy <игрок>"
+color-copy-no-colors: "§cУ игрока {player} нет цветов!"
+invalid-color: "§cНеверный формат цвета: {color}. Используйте #RRGGBB"
+too-many-colors: "§cМаксимум {max} цветов!"
+not-enough-colors: "§cМинимум {min} цветов!"
+not-enough-points-color: "§cНедостаточно поинтов! Нужно: {price} PP"
+
+# Префикс
+prefix-help: |
+  §e=== Команда /prefix ===
+  §e/prefix <текст> §7— установить префикс
+  §e/prefix on §7— включить префикс
+  §e/prefix off §7— выключить префикс
+  §e/prefix reset §7— сбросить префикс
+prefix-enabled: "§aПрефикс включён!"
+prefix-disabled: "§cПрефикс выключен!"
+prefix-reset-success: "§aПрефикс сброшен!"
+prefix-no-prefix: "§cУ вас нет установленного префикса!"
+prefix-success: "§aПрефикс успешно установлен! Списано: {price} PP"
+prefix-success-free: "§aПрефикс успешно изменён!"
+prefix-no-colors: "§cПрефикс не может содержать цветовые коды!"
+prefix-invalid-chars: "§cПрефикс содержит недопустимые символы!"
+prefix-blacklisted: "§cЭтот префикс запрещён!"
+prefix-too-long: "§cПрефикс слишком длинный! Максимум: {max} символов"
+not-enough-points-prefix: "§cНедостаточно поинтов! Нужно: {price} PP"
+
+# Админ информация
+info-header: "§e=== Информация об игроке {player} ==="
+info-prefix: "§7Префикс: §f{prefix}"
+info-prefix-enabled: "§7Префикс включён: §f{enabled}"
+info-colors: "§7Цвета: §f{colors}"
+info-color-enabled: "§7Цвет включён: §f{enabled}"
+info-prefix-purchased: "§7Префикс куплен: §f{purchased}"

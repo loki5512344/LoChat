@@ -1,0 +1,138 @@
+name: LoChat
+version: '1.0.0'
+main: com.loki.lochat.LoChat
+api-version: '1.21'
+folia-supported: true
+author: loki
+description: Advanced chat plugin for Folia with gradient nicks
+
+softdepend:
+  - PlaceholderAPI
+  - PlayerPoints
+  - LuckPerms
+
+commands:
+  g:
+    description: Send global message
+    usage: /g <message>
+    permission: chat.global.use
+
+  globalchat:
+    description: Toggle global chat
+    usage: /globalchat toggle
+    permission: chat.global.toggle
+
+  l:
+    description: Send local message
+    usage: /l <message>
+    permission: chat.local.use
+
+  msg:
+    description: Send private message
+    usage: /msg <player> <message>
+    permission: chat.pm.use
+    aliases: [tell, w, pm]
+
+  reply:
+    description: Reply to last message
+    usage: /reply <message>
+    permission: chat.pm.use
+    aliases: [r]
+
+  ignore:
+    description: Ignore player
+    usage: /ignore <player>
+    permission: chat.pm.ignore
+
+  unignore:
+    description: Unignore player
+    usage: /unignore <player>
+    permission: chat.pm.ignore
+
+  announce:
+    description: Send announcement
+    usage: /announce <message>
+    permission: chat.announce.use
+
+  chatspy:
+    description: Toggle chat spy mode
+    usage: /chatspy
+    permission: chat.spy
+    aliases: [spy]
+
+  clearchat:
+    description: Clear chat for all players
+    usage: /clearchat
+    permission: chat.clear
+    aliases: [cc]
+
+  mute:
+    description: Mute a player
+    usage: /mute <player> <time> [reason]
+    permission: chat.mute
+
+  unmute:
+    description: Unmute a player
+    usage: /unmute <player>
+    permission: chat.mute
+
+  color:
+    description: Set gradient nick color
+    usage: /color <hex1> [hex2] ...
+    permission: gradient.color
+    aliases: [gradient]
+
+  prefix:
+    description: Set custom prefix
+    usage: /prefix <text>
+    permission: gradient.prefix
+
+  aprefix:
+    description: Admin gradient commands
+    usage: /aprefix <subcommand>
+    permission: gradient.admin
+    aliases: [gradientadmin]
+
+permissions:
+  chat.global.use:
+    default: true
+  chat.global.toggle:
+    default: true
+  chat.global.color:
+    default: op
+  chat.local.use:
+    default: true
+  chat.local.color:
+    default: op
+  chat.pm.use:
+    default: true
+  chat.pm.ignore:
+    default: true
+  chat.announce.use:
+    default: op
+  chat.announce.reload:
+    default: op
+  chat.spy:
+    default: op
+  chat.clear:
+    default: op
+  chat.mute:
+    default: op
+  chat.bypass.cooldown:
+    default: op
+  chat.bypass.filter:
+    default: op
+  chat.bypass.antispam:
+    default: op
+  chat.mention.use:
+    default: true
+  gradient.color:
+    default: true
+  gradient.prefix:
+    default: true
+  gradient.admin:
+    default: op
+  gradient.bypass.cooldown:
+    default: op
+  gradient.bypass.cost:
+    default: op

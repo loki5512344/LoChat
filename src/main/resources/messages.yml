@@ -1,0 +1,60 @@
+prefix: "<gold>[LoChat]</gold>"
+
+global:
+  disabled: "<red>Глобальный чат отключен</red>"
+  toggled-on: "<green>Глобальный чат включен</green>"
+  toggled-off: "<red>Глобальный чат отключен</red>"
+
+local:
+  no-players: "<red>Рядом нет игроков</red>"
+
+pm:
+  sent: "<gray>[PM] Ты → {player}: {message}</gray>"
+  received: "<gray>[PM] {player} → Ты: {message}</gray>"
+  no-reply: "<red>Некому ответить</red>"
+  ignored: "<red>Этот игрок вас игнорирует</red>"
+  player-offline: "<red>Игрок не в сети</red>"
+  self: "<red>Нельзя писать самому себе</red>"
+
+ignore:
+  added: "<green>Игрок {player} добавлен в игнор</green>"
+  removed: "<green>Игрок {player} убран из игнора</green>"
+  already-ignored: "<red>Игрок уже в игноре</red>"
+  not-ignored: "<red>Игрок не в игноре</red>"
+  self: "<red>Нельзя игнорировать себя</red>"
+
+announce:
+  reloaded: "<green>Конфигурация перезагружена</green>"
+
+mute:
+  muted: "<green>Игрок {player} замучен на {time}</green>"
+  unmuted: "<green>Игрок {player} размучен</green>"
+  already-muted: "<red>Игрок уже замучен</red>"
+  not-muted: "<red>Игрок не замучен</red>"
+  you-muted: "<red>Вы замучены! Осталось: {time}</red>"
+  permanent: "<red>Вы замучены навсегда!</red>"
+
+spy:
+  enabled: "<green>Шпион режим включен</green>"
+  disabled: "<red>Шпион режим выключен</red>"
+  format: "<gray>[SPY] {sender} → {receiver}: {message}</gray>"
+
+filter:
+  blocked: "<red>Сообщение заблокировано (мат)</red>"
+  warned: "<yellow>Предупреждение: не используйте мат!</yellow>"
+
+cooldown:
+  wait: "<red>Подождите {time} сек перед следующим сообщением</red>"
+
+antispam:
+  caps: "<red>Слишком много заглавных букв!</red>"
+  repeat: "<red>Не повторяйте символы!</red>"
+  similar: "<red>Не отправляйте одинаковые сообщения!</red>"
+
+clearchat:
+  cleared: "<green>Чат очищен администратором {player}</green>"
+
+errors:
+  no-permission: "<red>Нет прав!</red>"
+  player-not-found: "<red>Игрок не найден</red>"
+  invalid-usage: "<red>Использование: {usage}</red>"

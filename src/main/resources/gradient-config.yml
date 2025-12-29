@@ -1,0 +1,58 @@
+# LoChat Gradient Module Configuration
+# Модуль градиентных ников (интегрированный LoPreff)
+
+# Включить/выключить модуль
+enabled: true
+
+# Максимальное количество цветов в градиенте
+max-colors: 7
+
+# Минимальное количество цветов
+min-colors: 1
+
+# Цена за каждый цвет (PlayerPoints)
+price-per-color: 50
+
+# Цена за префикс
+prefix-price: 500
+
+# Покупка префикса один раз (потом бесплатно)
+prefix-one-time-purchase: true
+
+# Кулдаун на смену цвета (секунды)
+color-cooldown: 60
+
+# Кулдаун на смену префикса (секунды)
+prefix-cooldown: 300
+
+# Максимальная длина префикса
+max-prefix-length: 7
+
+# Формат префикса ({prefix} - сам префикс)
+prefix-format: "[{prefix}] "
+
+# Применять градиент на префикс
+gradient-on-prefix: true
+
+# Единый градиент на префикс + ник
+continuous-gradient: true
+
+# Использовать &#RRGGBB формат (true) или <#RRGGBB> (false)
+use-legacy-rgb-format: true
+
+# Тип хранилища: YAML или SQLITE
+storage-type: YAML
+
+# Файл SQLite базы данных
+sqlite-file: gradient-data.db
+
+# Чёрный список префиксов (нельзя использовать)
+prefix-blacklist:
+  - admin
+  - owner
+  - moder
+  - helper
+  - staff
+  - модер
+  - админ
+  - хелпер

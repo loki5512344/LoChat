@@ -1,0 +1,69 @@
+# LoChat Configuration
+# Author: loki
+
+chat:
+  global:
+    enabled: true
+    prefix: "[G]"
+    format: "<prefix><player>: <message>"
+    symbol: "!"
+    cooldown: 3
+
+  local:
+    enabled: true
+    radius: 100
+    prefix: "[L]"
+    format: "<player>: <message>"
+    cooldown: 1
+
+  pm:
+    enabled: true
+    log: false
+    sound: true
+    sound-type: "ENTITY_EXPERIENCE_ORB_PICKUP"
+
+# Интеграция с GradientNick (LoPreff)
+# Использует PlaceholderAPI плейсхолдеры
+lopreff:
+  enabled: true
+  # Использовать градиентный ник в чате
+  use-gradient-name: true
+  # Использовать кастомный префикс
+  use-custom-prefix: true
+
+# Упоминания @ник
+mentions:
+  enabled: true
+  sound: true
+  sound-type: "BLOCK_NOTE_BLOCK_PLING"
+  # Выделение при @ник
+  highlight: "<yellow>@{player}</yellow>"
+  # Выделение когда твой ник написали (без @)
+  self-highlight: "<gold><bold>{player}</bold></gold>"
+
+# Фильтр мата
+filter:
+  enabled: true
+  words:
+    - "хуй"
+    - "пизд"
+    - "блять"
+    - "ебать"
+    - "сука"
+  action: "censor"  # censor/block/warn
+  replacement: "***"
+
+# Анти-спам
+antispam:
+  enabled: true
+  max-caps-percent: 70
+  max-repeat-chars: 5
+  similar-message-delay: 30
+
+automessages:
+  enabled: true
+  interval: 300
+  random: false
+
+formats:
+  announcement: "<gold>[ОБЪЯВЛЕНИЕ]</gold> <message>"
