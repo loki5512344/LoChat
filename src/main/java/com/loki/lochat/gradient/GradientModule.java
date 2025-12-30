@@ -116,8 +116,25 @@ public class GradientModule {
     /**
      * Получает отформатированное имя игрока с градиентом и LuckPerms префиксом
      * Градиент применяется на всю строку целиком (префикс + ник)
+     * Использует формат &#RRGGBB
      */
     public String getFormattedName(Player player) {
+        return getFormattedName(player, false);
+    }
+
+    /**
+     * Получает отформатированное имя для TAB плагина
+     * Использует формат §x§R§R§G§G§B§B
+     */
+    public String getFormattedNameForTab(Player player) {
+        return getFormattedName(player, true);
+    }
+
+    /**
+     * Получает отформатированное имя игрока с градиентом и LuckPerms префиксом
+     * @param useTabFormat true для §x§... формата (TAB), false для &#RRGGBB
+     */
+    private String getFormattedName(Player player, boolean useTabFormat) {
         if (!enabled) return player.getName();
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
@@ -142,7 +159,7 @@ public class GradientModule {
             } else {
                 // LP префикс со своими цветами, ник отдельно
                 String nick = data.hasColors() && data.isColorEnabled() 
-                    ? GradientUtil.applyGradient(player.getName(), data.getColors(), config.isUseLegacyRgbFormat())
+                    ? applyGradientWithFormat(player.getName(), data.getColors(), useTabFormat)
                     : player.getName();
                 return lpPrefix + nick;
             }
@@ -153,10 +170,23 @@ public class GradientModule {
         
         // Применяем единый градиент на всю строку
         if (data.hasColors() && data.isColorEnabled()) {
-            return GradientUtil.applyGradient(fullText.toString(), data.getColors(), config.isUseLegacyRgbFormat());
+            return applyGradientWithFormat(fullText.toString(), data.getColors(), useTabFormat);
         }
         
         return fullText.toString();
+    }
+
+    /**
+     * Применяет градиент с нужным форматом
+     */
+    private String applyGradientWithFormat(String text, java.util.List<String> colors, boolean useTabFormat) {
+        if (useTabFormat) {
+            // Формат §x§R§R§G§G§B§B для TAB
+            return GradientUtil.applyGradientTabFormat(text, colors);
+        } else {
+            // Формат &#RRGGBB для GUI и чата
+            return GradientUtil.applyGradient(text, colors, true);
+        }
     }
 
     /**

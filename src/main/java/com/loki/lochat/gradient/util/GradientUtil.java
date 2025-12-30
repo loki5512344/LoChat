@@ -98,15 +98,57 @@ public final class GradientUtil {
     private static String formatHex(String hex, boolean useLegacyFormat) {
         hex = hex.replace("#", "").toLowerCase();
         if (useLegacyFormat) {
-            // Формат §x§R§R§G§G§B§B для TAB и других плагинов
-            StringBuilder sb = new StringBuilder("§x");
-            for (char c : hex.toCharArray()) {
-                sb.append("§").append(c);
-            }
-            return sb.toString();
+            // Формат &#RRGGBB для LegacyComponentSerializer
+            return "&#" + hex;
         } else {
             return "<#" + hex + ">";
         }
+    }
+
+    /**
+     * Конвертирует HEX в формат §x§R§R§G§G§B§B для TAB плагина
+     */
+    private static String formatHexForTab(String hex) {
+        hex = hex.replace("#", "").toLowerCase();
+        StringBuilder sb = new StringBuilder("§x");
+        for (char c : hex.toCharArray()) {
+            sb.append("§").append(c);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Применяет градиент в формате §x§R§R§G§G§B§B для TAB плагина
+     */
+    public static String applyGradientTabFormat(String text, List<String> hexColors) {
+        if (text == null || text.isEmpty() || hexColors == null || hexColors.isEmpty()) {
+            return text;
+        }
+
+        char[] chars = text.toCharArray();
+        int length = chars.length;
+        if (length == 0) return text;
+
+        StringBuilder result = new StringBuilder();
+
+        if (hexColors.size() == 1) {
+            String colorCode = formatHexForTab(hexColors.get(0));
+            result.append(colorCode).append(text);
+        } else {
+            Color[] colors = hexColors.stream()
+                    .map(GradientUtil::parseHex)
+                    .toArray(Color[]::new);
+
+            for (int i = 0; i < length; i++) {
+                double ratio = length > 1 ? (double) i / (length - 1) : 0.0;
+                Color interpolated = interpolateMultiColor(colors, ratio);
+                String hex = String.format("#%02x%02x%02x", 
+                        interpolated.getRed(), interpolated.getGreen(), interpolated.getBlue());
+                result.append(formatHexForTab(hex)).append(chars[i]);
+            }
+        }
+
+        return result.toString();
     }
 
     public static String buildDisplayName(String prefix, String nick, List<String> colors, 

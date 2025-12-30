@@ -69,6 +69,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             }
             
             // Gradient placeholders (совместимость с LoPreff)
+            // Используем TAB формат §x§R§R§G§G§B§B для совместимости с TAB плагином
             case "gradient_full", "full" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
@@ -78,7 +79,8 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                     yield player.getName() != null ? player.getName() : "";
                 }
                 
-                yield gradient.getFormattedName(onlinePlayer);
+                // Используем TAB формат для плейсхолдеров
+                yield gradient.getFormattedNameForTab(onlinePlayer);
             }
             case "gradient_name", "name" -> {
                 Player onlinePlayer = player.getPlayer();

@@ -68,8 +68,8 @@ public class GradientConfirmGUI implements InventoryHolder {
         skullMeta.setOwningPlayer(player);
         
         String preview = buildPreview();
-        // Preview уже в MiniMessage формате, просто парсим
-        Component previewComponent = ChatFormatter.parse(preview);
+        // Для GUI используем LegacyComponentSerializer с поддержкой HEX
+        Component previewComponent = SERIALIZER.deserialize(preview);
         skullMeta.displayName(previewComponent.decoration(TextDecoration.ITALIC, false));
         
         List<Component> lore = new ArrayList<>();
@@ -126,22 +126,22 @@ public class GradientConfirmGUI implements InventoryHolder {
             }
         }
 
-        // Для GUI всегда используем MiniMessage формат (false) для правильного отображения градиента
-        boolean useLegacyForPreview = false;
+        // Для GUI используем legacy формат &#RRGGBB который LegacyComponentSerializer понимает
+        boolean useLegacyForPreview = true;
 
         // Если нет кастомного префикса - используем LuckPerms префикс
         if ((prefixToUse == null || prefixToUse.isEmpty()) && module.getLuckPermsHook().isEnabled()) {
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
-                // Для превью показываем LP префикс
+                // Конвертируем LP префикс в legacy формат
+                lpPrefix = convertToLegacy(lpPrefix);
+                
                 // Если градиент на LP префикс включен - применяем градиент на всю строку
                 if (colorsToUse != null && !colorsToUse.isEmpty() && module.getConfig().isGradientOnLuckPermsPrefix()) {
-                    // Убираем цвета из LP префикса и применяем градиент на всё
                     String cleanLpPrefix = stripColors(lpPrefix);
                     String fullText = cleanLpPrefix + nick;
                     return GradientUtil.applyGradient(fullText, colorsToUse, useLegacyForPreview);
                 } else {
-                    // LP префикс со своими цветами + градиентный ник
                     if (colorsToUse != null && !colorsToUse.isEmpty()) {
                         return lpPrefix + GradientUtil.applyGradient(nick, colorsToUse, useLegacyForPreview);
                     }
@@ -159,6 +159,15 @@ public class GradientConfirmGUI implements InventoryHolder {
                 module.getConfig().getPrefixFormat(),
                 useLegacyForPreview
         );
+    }
+
+    /**
+     * Конвертирует MiniMessage теги в legacy формат
+     */
+    private String convertToLegacy(String text) {
+        if (text == null) return "";
+        // Конвертируем <#RRGGBB> в &#RRGGBB
+        return text.replaceAll("<#([A-Fa-f0-9]{6})>", "&#$1");
     }
 
     /**

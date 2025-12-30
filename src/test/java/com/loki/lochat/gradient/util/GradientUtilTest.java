@@ -35,8 +35,8 @@ class GradientUtilTest {
     void applyGradient_singleColor_legacy() {
         String result = GradientUtil.applyGradient("Hi", List.of("#FF0000"), true);
         assertNotNull(result);
-        // Формат §x§f§f§0§0§0§0
-        assertTrue(result.contains("§x§f§f§0§0§0§0"));
+        // Формат &#RRGGBB для LegacyComponentSerializer
+        assertTrue(result.contains("&#ff0000"));
     }
 
     @Test
@@ -50,9 +50,9 @@ class GradientUtilTest {
     void applyGradient_twoColors() {
         String result = GradientUtil.applyGradient("AB", List.of("#FF0000", "#0000FF"), true);
         assertNotNull(result);
-        // Первый символ должен быть красным, последний синим
-        assertTrue(result.contains("§x§f§f§0§0§0§0")); // красный
-        assertTrue(result.contains("§x§0§0§0§0§f§f")); // синий
+        // Первый символ должен быть красным, последний синим (формат &#RRGGBB)
+        assertTrue(result.contains("&#ff0000")); // красный
+        assertTrue(result.contains("&#0000ff")); // синий
     }
 
     @Test
@@ -105,23 +105,24 @@ class GradientUtilTest {
     void buildDisplayName_noPrefix_withColors() {
         String result = GradientUtil.buildDisplayName(null, "AB", List.of("#FF0000", "#0000FF"), true, true, "[{prefix}] ", true);
         assertNotNull(result);
-        assertTrue(result.contains("§x"));
+        // Формат &#RRGGBB
+        assertTrue(result.contains("&#"));
     }
 
     @Test
     void buildDisplayName_withPrefix_withColors_continuous() {
         String result = GradientUtil.buildDisplayName("V", "AB", List.of("#FF0000", "#0000FF"), true, true, "[{prefix}] ", true);
         assertNotNull(result);
-        // Единый градиент на всё
-        assertTrue(result.contains("§x"));
+        // Единый градиент на всё (формат &#RRGGBB)
+        assertTrue(result.contains("&#"));
     }
 
     @Test
     void buildDisplayName_withPrefix_withColors_separate() {
         String result = GradientUtil.buildDisplayName("V", "AB", List.of("#FF0000", "#0000FF"), true, false, "[{prefix}] ", true);
         assertNotNull(result);
-        // Отдельные градиенты
-        assertTrue(result.contains("§x"));
+        // Отдельные градиенты (формат &#RRGGBB)
+        assertTrue(result.contains("&#"));
     }
 
     @Test
@@ -130,5 +131,22 @@ class GradientUtilTest {
         assertNotNull(result);
         // Префикс без градиента
         assertTrue(result.startsWith("[VIP] "));
+    }
+
+    @Test
+    void applyGradientTabFormat_singleColor() {
+        String result = GradientUtil.applyGradientTabFormat("Hi", List.of("#FF0000"));
+        assertNotNull(result);
+        // Формат §x§f§f§0§0§0§0 для TAB
+        assertTrue(result.contains("§x§f§f§0§0§0§0"));
+    }
+
+    @Test
+    void applyGradientTabFormat_twoColors() {
+        String result = GradientUtil.applyGradientTabFormat("AB", List.of("#FF0000", "#0000FF"));
+        assertNotNull(result);
+        // Первый символ красный, последний синий
+        assertTrue(result.contains("§x§f§f§0§0§0§0")); // красный
+        assertTrue(result.contains("§x§0§0§0§0§f§f")); // синий
     }
 }
