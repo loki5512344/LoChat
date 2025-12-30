@@ -1,5 +1,8 @@
 # LoChat Configuration
 # Author: loki
+# Config Version: 2
+
+config-version: 2
 
 chat:
   global:
@@ -67,3 +70,14 @@ automessages:
 
 formats:
   announcement: "<gold>[ОБЪЯВЛЕНИЕ]</gold> <message>"
+
+# Настройки объявлений
+announcements:
+  # Показывать title при объявлении
+  show-title: true
+  # Заголовок title
+  title-header: "<gold>ОБЪЯВЛЕНИЕ</gold>"
+  # Показывать actionbar при объявлении  
+  show-actionbar: true
+  # Время показа title (в секундах)
+  title-duration: 3

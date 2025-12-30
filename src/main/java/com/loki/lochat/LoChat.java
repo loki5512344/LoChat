@@ -26,6 +26,8 @@ public final class LoChat extends JavaPlugin {
     private MentionManager mentionManager;
     private SpyManager spyManager;
     private EmojiManager emojiManager;
+    private ChatColorManager chatColorManager;
+    private CustomCommandManager customCommandManager;
     private GradientModule gradientModule;
 
     @Override
@@ -45,6 +47,8 @@ public final class LoChat extends JavaPlugin {
         cooldownManager = new CooldownManager();
         mentionManager = new MentionManager(this);
         spyManager = new SpyManager(this);
+        chatColorManager = new ChatColorManager(this);
+        customCommandManager = new CustomCommandManager(this);
         chatManager = new ChatManager(this);
         autoMessageManager = new AutoMessageManager(this);
         
@@ -80,6 +84,9 @@ public final class LoChat extends JavaPlugin {
         if (ignoreManager != null) {
             ignoreManager.save();
         }
+        if (chatColorManager != null) {
+            chatColorManager.saveData();
+        }
         if (gradientModule != null) {
             gradientModule.shutdown();
         }
@@ -97,6 +104,7 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
+        getCommand("chatcolor").setExecutor(new ChatColorCommand(this));
         
         LoChatCommand loChatCommand = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCommand);
@@ -111,6 +119,9 @@ public final class LoChat extends JavaPlugin {
         autoMessageManager.start();
         if (gradientModule != null) {
             gradientModule.reload();
+        }
+        if (customCommandManager != null) {
+            customCommandManager.reload();
         }
     }
 
@@ -168,5 +179,13 @@ public final class LoChat extends JavaPlugin {
 
     public GradientModule getGradientModule() {
         return gradientModule;
+    }
+
+    public ChatColorManager getChatColorManager() {
+        return chatColorManager;
+    }
+
+    public CustomCommandManager getCustomCommandManager() {
+        return customCommandManager;
     }
 }

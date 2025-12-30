@@ -43,6 +43,13 @@ continuous-gradient: true
 # Использовать &#RRGGBB формат (true) или <#RRGGBB> (false)
 use-legacy-rgb-format: true
 
+# Отображение над игроком
+display:
+  # Обновлять display name игрока (показывает префикс+ник над головой)
+  update-display-name: true
+  # Обновлять tab list
+  update-tab-list: true
+
 # Тип хранилища: YAML или SQLITE
 storage-type: YAML
 

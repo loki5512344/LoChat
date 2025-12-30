@@ -123,7 +123,7 @@ public class ChatFormatter {
 
     /**
      * Полная обработка сообщения игрока
-     * Цвета + смайлики
+     * Цвета + смайлики + цвет чата
      */
     public static String processPlayerMessage(String message, Player player, boolean hasColorPermission) {
         String result = message;
@@ -137,6 +137,12 @@ public class ChatFormatter {
         } else {
             // Убираем цветовые коды
             result = stripLegacyColors(result);
+            
+            // Применяем цвет чата если установлен
+            LoChat plugin = LoChat.getInstance();
+            if (plugin != null && plugin.getChatColorManager() != null) {
+                result = plugin.getChatColorManager().applyChatColor(player.getUniqueId(), result);
+            }
         }
         
         return result;
@@ -235,6 +241,10 @@ public class ChatFormatter {
                 && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
             senderDisplay = plugin.getGradientModule().getFormattedName(sender);
             receiverDisplay = plugin.getGradientModule().getFormattedName(receiver);
+            
+            // Конвертируем legacy коды в MiniMessage формат
+            senderDisplay = convertAllColors(senderDisplay);
+            receiverDisplay = convertAllColors(receiverDisplay);
         }
         
         return parse(format
@@ -258,6 +268,10 @@ public class ChatFormatter {
                 && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
             senderDisplay = plugin.getGradientModule().getFormattedName(sender);
             receiverDisplay = plugin.getGradientModule().getFormattedName(receiver);
+            
+            // Конвертируем legacy коды в MiniMessage формат
+            senderDisplay = convertAllColors(senderDisplay);
+            receiverDisplay = convertAllColors(receiverDisplay);
         }
         
         return parse(format

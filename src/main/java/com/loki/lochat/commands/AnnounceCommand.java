@@ -43,16 +43,24 @@ public class AnnounceCommand implements CommandExecutor {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(formatted);
             
-            // ActionBar
-            player.sendActionBar(formatted);
+            // ActionBar (если включен)
+            if (plugin.getConfigManager().isAnnouncementActionBarEnabled()) {
+                player.sendActionBar(formatted);
+            }
             
-            // Title
-            Title title = Title.title(
-                    ChatFormatter.parse("<gold>ОБЪЯВЛЕНИЕ</gold>"),
-                    ChatFormatter.parse(message),
-                    Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofMillis(500))
-            );
-            player.showTitle(title);
+            // Title (если включен)
+            if (plugin.getConfigManager().isAnnouncementTitleEnabled()) {
+                Title title = Title.title(
+                        ChatFormatter.parse(plugin.getConfigManager().getAnnouncementTitleHeader()),
+                        ChatFormatter.parse(message),
+                        Title.Times.times(
+                                Duration.ofMillis(500), 
+                                Duration.ofSeconds(plugin.getConfigManager().getAnnouncementTitleDuration()), 
+                                Duration.ofMillis(500)
+                        )
+                );
+                player.showTitle(title);
+            }
         }
 
         plugin.getLogger().info("[ANNOUNCE] " + sender.getName() + ": " + ChatFormatter.stripTags(message));

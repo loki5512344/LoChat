@@ -1,0 +1,51 @@
+# Кастомные команды LoChat
+# Здесь можно создавать свои команды с сообщениями и алиасами
+
+# Пример структуры:
+# command-name:
+#   permission: "lochat.command.name"  # Право для использования (опционально)
+#   message: "Текст сообщения"         # Сообщение которое отправится
+#   aliases: ["alias1", "alias2"]      # Алиасы команды (опционально)
+#   type: "chat"                       # Тип: chat, broadcast, title, actionbar
+#   target: "sender"                   # Кому отправить: sender, all, permission:право
+
+# Примеры команд:
+help:
+  message: "<gold>Добро пожаловать на сервер!</gold>\n<gray>Используйте /rules для просмотра правил</gray>"
+  aliases: ["помощь", "хелп"]
+  type: "chat"
+  target: "sender"
+
+rules:
+  message: "<red><bold>ПРАВИЛА СЕРВЕРА:</bold></red>\n<gray>1. Не гриферить\n2. Не читерить\n3. Уважать других игроков</gray>"
+  aliases: ["правила", "rule"]
+  type: "chat"
+  target: "sender"
+
+discord:
+  message: "<blue>Наш Discord сервер: discord.gg/example</blue>"
+  aliases: ["дискорд", "ds"]
+  type: "chat"
+  target: "sender"
+
+# Команда для админов
+restart-warning:
+  permission: "lochat.admin"
+  message: "<red><bold>ВНИМАНИЕ!</bold></red> <yellow>Сервер будет перезагружен через 5 минут!</yellow>"
+  aliases: ["рестарт", "reboot"]
+  type: "broadcast"
+  target: "all"
+
+# Команда с title
+welcome:
+  message: "Добро пожаловать!"
+  aliases: ["привет"]
+  type: "title"
+  target: "sender"
+
+# Команда с actionbar
+coords:
+  message: "Ваши координаты: {x}, {y}, {z}"
+  aliases: ["координаты", "pos"]
+  type: "actionbar"
+  target: "sender"

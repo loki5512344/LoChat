@@ -32,7 +32,10 @@ public class GradientPlayerListener implements Listener {
             FoliaUtil.runEntityTask(module.getPlugin(), player, () -> {
                 if (!player.isOnline()) return;
                 
-                DisplayNameUtil.updateDisplayName(module, player, data);
+                // Обновляем display name если включено
+                if (module.getConfig().isUpdateDisplayName()) {
+                    DisplayNameUtil.updateDisplayName(module, player, data);
+                }
                 
                 if (data.hasPrefix() && data.isPrefixEnabled()) {
                     module.getLuckPermsHook().setPrefix(player, 

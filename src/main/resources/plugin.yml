@@ -1,5 +1,5 @@
 name: LoChat
-version: '1.0.0'
+version: '1.5.0'
 main: com.loki.lochat.LoChat
 api-version: '1.21'
 folia-supported: true
@@ -31,28 +31,31 @@ commands:
     description: Send private message
     usage: /msg <player> <message>
     permission: chat.pm.use
-    aliases: [tell, w, pm]
+    aliases: [tell, w, pm, m, ьып]
 
   reply:
     description: Reply to last message
     usage: /reply <message>
     permission: chat.pm.use
-    aliases: [r]
+    aliases: [r, ответить]
 
   ignore:
     description: Ignore player
     usage: /ignore <player>
     permission: chat.pm.ignore
+    aliases: [игнор]
 
   unignore:
     description: Unignore player
     usage: /unignore <player>
     permission: chat.pm.ignore
+    aliases: [разигнор]
 
   announce:
     description: Send announcement
     usage: /announce <message>
     permission: chat.announce.use
+    aliases: [объявление, анонс]
 
   chatspy:
     description: Toggle chat spy mode
@@ -66,6 +69,12 @@ commands:
     permission: chat.clear
     aliases: [cc]
 
+  chatcolor:
+    description: Set chat color
+    usage: /chatcolor <color>
+    permission: lochat.chatcolor
+    aliases: [цветчата, chatcolour]
+
   lochat:
     description: LoChat admin command
     usage: /lochat [reload]
@@ -75,12 +84,13 @@ commands:
     description: Set gradient nick color
     usage: /color <hex1> [hex2] ...
     permission: gradient.color
-    aliases: [gradient]
+    aliases: [gradient, цвет, градиент]
 
   prefix:
     description: Set custom prefix
     usage: /prefix <text>
     permission: gradient.prefix
+    aliases: [префикс]
 
   aprefix:
     description: Admin gradient commands
@@ -118,6 +128,8 @@ permissions:
   chat.bypass.antispam:
     default: op
   chat.mention.use:
+    default: true
+  lochat.chatcolor:
     default: true
   gradient.color:
     default: true

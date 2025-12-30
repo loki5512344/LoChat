@@ -79,4 +79,8 @@ public class GradientConfig {
         return getPrefixBlacklist().stream()
                 .anyMatch(blacklisted -> lowerPrefix.contains(blacklisted.toLowerCase()));
     }
+
+    // Display settings
+    public boolean isUpdateDisplayName() { return config.getBoolean("display.update-display-name", true); }
+    public boolean isUpdateTabList() { return config.getBoolean("display.update-tab-list", true); }
 }

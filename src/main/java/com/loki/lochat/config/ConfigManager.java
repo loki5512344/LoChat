@@ -14,6 +14,76 @@ public class ConfigManager {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         this.config = plugin.getConfig();
+        
+        // Проверяем версию конфига и обновляем при необходимости
+        updateConfig();
+    }
+
+    private void updateConfig() {
+        int currentVersion = config.getInt("config-version", 1);
+        int requiredVersion = 2; // Текущая версия конфига
+        
+        if (currentVersion < requiredVersion) {
+            plugin.getLogger().info("Обновление конфига с версии " + currentVersion + " до " + requiredVersion);
+            
+            // Добавляем новые настройки если их нет
+            addMissingConfigOptions();
+            
+            // Обновляем версию
+            config.set("config-version", requiredVersion);
+            plugin.saveConfig();
+            
+            plugin.getLogger().info("Конфиг успешно обновлен!");
+        }
+    }
+
+    private void addMissingConfigOptions() {
+        // Добавляем настройки объявлений если их нет
+        if (!config.contains("announcements")) {
+            config.set("announcements.show-title", true);
+            config.set("announcements.title-header", "<gold>ОБЪЯВЛЕНИЕ</gold>");
+            config.set("announcements.show-actionbar", true);
+            config.set("announcements.title-duration", 3);
+        }
+        
+        // Можно добавить другие недостающие настройки
+        if (!config.contains("chat.pm.enabled")) {
+            config.set("chat.pm.enabled", true);
+        }
+        
+        if (!config.contains("mentions.enabled")) {
+            config.set("mentions.enabled", true);
+            config.set("mentions.sound", true);
+            config.set("mentions.sound-type", "BLOCK_NOTE_BLOCK_PLING");
+            config.set("mentions.highlight", "<yellow>@{player}</yellow>");
+            config.set("mentions.self-highlight", "<gold><bold>{player}</bold></gold>");
+        }
+        
+        if (!config.contains("filter.enabled")) {
+            config.set("filter.enabled", true);
+            config.set("filter.words", java.util.Arrays.asList("хуй", "пизд", "блять", "ебать", "сука"));
+            config.set("filter.action", "censor");
+            config.set("filter.replacement", "***");
+        }
+        
+        if (!config.contains("antispam.enabled")) {
+            config.set("antispam.enabled", true);
+            config.set("antispam.max-caps-percent", 70);
+            config.set("antispam.max-repeat-chars", 5);
+            config.set("antispam.similar-message-delay", 30);
+        }
+        
+        if (!config.contains("automessages.enabled")) {
+            config.set("automessages.enabled", true);
+            config.set("automessages.interval", 300);
+            config.set("automessages.random", false);
+        }
+        
+        if (!config.contains("lopreff.enabled")) {
+            config.set("lopreff.enabled", true);
+            config.set("lopreff.use-gradient-name", true);
+            config.set("lopreff.use-custom-prefix", true);
+        }
     }
 
     public void reload() {
@@ -151,6 +221,23 @@ public class ConfigManager {
     // Formats
     public String getAnnouncementFormat() {
         return config.getString("formats.announcement", "<gold>[ОБЪЯВЛЕНИЕ]</gold> <message>");
+    }
+
+    // Announcements
+    public boolean isAnnouncementTitleEnabled() {
+        return config.getBoolean("announcements.show-title", true);
+    }
+
+    public String getAnnouncementTitleHeader() {
+        return config.getString("announcements.title-header", "<gold>ОБЪЯВЛЕНИЕ</gold>");
+    }
+
+    public boolean isAnnouncementActionBarEnabled() {
+        return config.getBoolean("announcements.show-actionbar", true);
+    }
+
+    public int getAnnouncementTitleDuration() {
+        return config.getInt("announcements.title-duration", 3);
     }
 
     // LoPreff integration
