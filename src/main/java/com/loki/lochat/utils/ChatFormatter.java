@@ -41,12 +41,12 @@ public final class ChatFormatter {
     /* ===================== COLORS ===================== */
 
     /**
-     * Legacy-совместимость.
-     * Сейчас просто возвращает MiniMessage-ready строку.
+     * Конвертирует &#RRGGBB формат в MiniMessage <#RRGGBB> формат
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
-        return message;
+        // Конвертируем &#RRGGBB в <#RRGGBB> для MiniMessage
+        return message.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
     }
 
     /* ===================== EMOJIS ===================== */
