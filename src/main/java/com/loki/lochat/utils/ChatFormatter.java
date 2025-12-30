@@ -52,21 +52,21 @@ public class ChatFormatter {
     }
     
     /**
-     * Нормализует существующие MiniMessage HEX теги в lowercase
+     * Нормализует существующие MiniMessage HEX теги в формат <color:#rrggbb>
      */
     public static String normalizeMiniMessageHex(String message) {
         if (message == null) return "";
         Matcher matcher = MINIMESSAGE_HEX_PATTERN.matcher(message);
         StringBuilder result = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(result, "<#" + matcher.group(1).toLowerCase() + ">");
+            matcher.appendReplacement(result, "<color:#" + matcher.group(1).toLowerCase() + ">");
         }
         matcher.appendTail(result);
         return result.toString();
     }
     
     /**
-     * Конвертирует §x§R§R§G§G§B§B в <#RRGGBB>
+     * Конвертирует §x§R§R§G§G§B§B в <color:#RRGGBB>
      */
     public static String convertSectionHexColors(String message) {
         if (message == null) return "";
@@ -75,8 +75,8 @@ public class ChatFormatter {
         while (matcher.find()) {
             String match = matcher.group();
             // §x§R§R§G§G§B§B -> RRGGBB
-            String hex = match.replace("§x", "").replace("§", "");
-            matcher.appendReplacement(result, "<#" + hex + ">");
+            String hex = match.replace("§x", "").replace("§", "").toLowerCase();
+            matcher.appendReplacement(result, "<color:#" + hex + ">");
         }
         matcher.appendTail(result);
         return result.toString();
@@ -91,25 +91,25 @@ public class ChatFormatter {
     }
 
     /**
-     * Конвертирует &#RRGGBB и #RRGGBB в MiniMessage формат <#RRGGBB>
+     * Конвертирует &#RRGGBB и #RRGGBB в MiniMessage формат <color:#RRGGBB>
      */
     public static String convertHexColors(String message) {
         String result = message;
         
-        // Конвертируем &#RRGGBB
+        // Конвертируем &#RRGGBB -> <color:#rrggbb>
         Matcher matcher = HEX_PATTERN.matcher(result);
         StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, "<#" + matcher.group(1).toLowerCase() + ">");
+            matcher.appendReplacement(sb, "<color:#" + matcher.group(1).toLowerCase() + ">");
         }
         matcher.appendTail(sb);
         result = sb.toString();
         
-        // Конвертируем #RRGGBB (без &, но не если это часть &#RRGGBB)
+        // Конвертируем #RRGGBB (без &, но не если это часть &#RRGGBB или <color:#)
         matcher = HEX_PATTERN_NO_AMPERSAND.matcher(result);
         sb = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, "<#" + matcher.group(1).toLowerCase() + ">");
+            matcher.appendReplacement(sb, "<color:#" + matcher.group(1).toLowerCase() + ">");
         }
         matcher.appendTail(sb);
         return sb.toString();
