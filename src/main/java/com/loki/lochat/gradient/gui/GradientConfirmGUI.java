@@ -3,6 +3,7 @@ package com.loki.lochat.gradient.gui;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.util.GradientConstants;
 import com.loki.lochat.gradient.util.GradientUtil;
+import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -67,7 +68,8 @@ public class GradientConfirmGUI implements InventoryHolder {
         skullMeta.setOwningPlayer(player);
         
         String preview = buildPreview();
-        Component previewComponent = SERIALIZER.deserialize(preview);
+        // Preview уже в MiniMessage формате, просто парсим
+        Component previewComponent = ChatFormatter.parse(preview);
         skullMeta.displayName(previewComponent.decoration(TextDecoration.ITALIC, false));
         
         List<Component> lore = new ArrayList<>();
@@ -124,6 +126,9 @@ public class GradientConfirmGUI implements InventoryHolder {
             }
         }
 
+        // Для GUI всегда используем MiniMessage формат (false) для правильного отображения градиента
+        boolean useLegacyForPreview = false;
+
         // Если нет кастомного префикса - используем LuckPerms префикс
         if ((prefixToUse == null || prefixToUse.isEmpty()) && module.getLuckPermsHook().isEnabled()) {
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
@@ -134,11 +139,11 @@ public class GradientConfirmGUI implements InventoryHolder {
                     // Убираем цвета из LP префикса и применяем градиент на всё
                     String cleanLpPrefix = stripColors(lpPrefix);
                     String fullText = cleanLpPrefix + nick;
-                    return GradientUtil.applyGradient(fullText, colorsToUse, module.getConfig().isUseLegacyRgbFormat());
+                    return GradientUtil.applyGradient(fullText, colorsToUse, useLegacyForPreview);
                 } else {
                     // LP префикс со своими цветами + градиентный ник
                     if (colorsToUse != null && !colorsToUse.isEmpty()) {
-                        return lpPrefix + GradientUtil.applyGradient(nick, colorsToUse, module.getConfig().isUseLegacyRgbFormat());
+                        return lpPrefix + GradientUtil.applyGradient(nick, colorsToUse, useLegacyForPreview);
                     }
                     return lpPrefix + nick;
                 }
@@ -152,7 +157,7 @@ public class GradientConfirmGUI implements InventoryHolder {
                 module.getConfig().isGradientOnPrefix(),
                 module.getConfig().isContinuousGradient(),
                 module.getConfig().getPrefixFormat(),
-                module.getConfig().isUseLegacyRgbFormat()
+                useLegacyForPreview
         );
     }
 

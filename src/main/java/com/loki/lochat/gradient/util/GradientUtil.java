@@ -40,12 +40,16 @@ public final class GradientUtil {
                 result.append(colorCode).append(text).append("</color>");
             }
         } else {
+            // Градиент из нескольких цветов
             Color[] colors = hexColors.stream()
                     .map(GradientUtil::parseHex)
                     .toArray(Color[]::new);
 
+            // Правильно вычисляем ratio для каждого символа
             for (int i = 0; i < length; i++) {
-                Color interpolated = interpolateMultiColor(colors, (double) i / Math.max(1, length - 1));
+                // Вычисляем позицию символа от 0.0 до 1.0
+                double ratio = length > 1 ? (double) i / (length - 1) : 0.0;
+                Color interpolated = interpolateMultiColor(colors, ratio);
                 String hex = String.format("#%02x%02x%02x", 
                         interpolated.getRed(), interpolated.getGreen(), interpolated.getBlue());
                 result.append(formatHex(hex, useLegacyFormat)).append(chars[i]);
