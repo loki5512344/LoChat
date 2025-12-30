@@ -28,6 +28,7 @@ public final class LoChat extends JavaPlugin {
     private EmojiManager emojiManager;
     private ChatColorManager chatColorManager;
     private CustomCommandManager customCommandManager;
+    private MuteManager muteManager;
     private GradientModule gradientModule;
     private com.loki.lochat.listeners.DisplayNameListener displayNameListener;
 
@@ -50,6 +51,7 @@ public final class LoChat extends JavaPlugin {
         spyManager = new SpyManager(this);
         chatColorManager = new ChatColorManager(this);
         customCommandManager = new CustomCommandManager(this);
+        muteManager = new MuteManager(this);
         chatManager = new ChatManager(this);
         autoMessageManager = new AutoMessageManager(this);
         
@@ -90,6 +92,9 @@ public final class LoChat extends JavaPlugin {
         if (chatColorManager != null) {
             chatColorManager.saveData();
         }
+        if (muteManager != null) {
+            muteManager.saveData();
+        }
         if (gradientModule != null) {
             gradientModule.shutdown();
         }
@@ -107,6 +112,8 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
+        getCommand("mute").setExecutor(new MuteCommand(this));
+        getCommand("unmute").setExecutor(new UnmuteCommand(this));
         getCommand("chatcolor").setExecutor(new ChatColorCommand(this));
         
         LoChatCommand loChatCommand = new LoChatCommand(this);
@@ -193,6 +200,10 @@ public final class LoChat extends JavaPlugin {
 
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
+    }
+
+    public MuteManager getMuteManager() {
+        return muteManager;
     }
 
     public com.loki.lochat.listeners.DisplayNameListener getDisplayNameListener() {

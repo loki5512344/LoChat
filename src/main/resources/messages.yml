@@ -1,12 +1,12 @@
-prefix: "<gold>[LoChat]</gold>"
+prefix: "<#04CADF>[LoChat]</#04CADF>"
 
 global:
-  disabled: "<red>Глобальный чат отключен</red>"
-  toggled-on: "<green>Глобальный чат включен</green>"
-  toggled-off: "<red>Глобальный чат отключен</red>"
+  disabled: "<#04CADF>Глобальный чат отключен</#04CADF>"
+  toggled-on: "<#04CADF>Глобальный чат включен</#04CADF>"
+  toggled-off: "<#04CADF>Глобальный чат отключен</#04CADF>"
 
 local:
-  no-players: "<red>Рядом нет игроков</red>"
+  no-players: "<#04CADF>Рядом нет игроков</#04CADF>"
 
 pm:
   # Форматы личных сообщений
@@ -20,42 +20,42 @@ pm:
   # Старые форматы (для совместимости)
   sent: "<gray>[PM] Ты → {player}: {message}</gray>"
   received: "<gray>[PM] {player} → Ты: {message}</gray>"
-  no-reply: "<red>Некому ответить</red>"
-  ignored: "<red>Этот игрок вас игнорирует</red>"
-  player-offline: "<red>Игрок не в сети</red>"
-  self: "<red>Нельзя писать самому себе</red>"
+  no-reply: "<#04CADF>Некому ответить</#04CADF>"
+  ignored: "<#04CADF>Этот игрок вас игнорирует</#04CADF>"
+  player-offline: "<#04CADF>Игрок не в сети</#04CADF>"
+  self: "<#04CADF>Нельзя писать самому себе</#04CADF>"
 
 ignore:
-  added: "<green>Игрок {player} добавлен в игнор</green>"
-  removed: "<green>Игрок {player} убран из игнора</green>"
-  already-ignored: "<red>Игрок уже в игноре</red>"
-  not-ignored: "<red>Игрок не в игноре</red>"
-  self: "<red>Нельзя игнорировать себя</red>"
+  added: "<#04CADF>Игрок {player} добавлен в игнор</#04CADF>"
+  removed: "<#04CADF>Игрок {player} убран из игнора</#04CADF>"
+  already-ignored: "<#04CADF>Игрок уже в игноре</#04CADF>"
+  not-ignored: "<#04CADF>Игрок не в игноре</#04CADF>"
+  self: "<#04CADF>Нельзя игнорировать себя</#04CADF>"
 
 announce:
-  reloaded: "<green>Конфигурация перезагружена</green>"
+  reloaded: "<#04CADF>Конфигурация перезагружена</#04CADF>"
 
 spy:
-  enabled: "<green>Шпион режим включен</green>"
-  disabled: "<red>Шпион режим выключен</red>"
+  enabled: "<#04CADF>Шпион режим включен</#04CADF>"
+  disabled: "<#04CADF>Шпион режим выключен</#04CADF>"
   format: "<gray>[SPY] {sender} → {receiver}: {message}</gray>"
 
 filter:
-  blocked: "<red>Сообщение заблокировано (мат)</red>"
-  warned: "<yellow>Предупреждение: не используйте мат!</yellow>"
+  blocked: "<#04CADF>Сообщение заблокировано (мат)</#04CADF>"
+  warned: "<#04CADF>Предупреждение: не используйте мат!</#04CADF>"
 
 cooldown:
-  wait: "<red>Подождите {time} сек перед следующим сообщением</red>"
+  wait: "<#04CADF>Подождите {time} сек перед следующим сообщением</#04CADF>"
 
 antispam:
-  caps: "<red>Слишком много заглавных букв!</red>"
-  repeat: "<red>Не повторяйте символы!</red>"
-  similar: "<red>Не отправляйте одинаковые сообщения!</red>"
+  caps: "<#04CADF>Слишком много заглавных букв!</#04CADF>"
+  repeat: "<#04CADF>Не повторяйте символы!</#04CADF>"
+  similar: "<#04CADF>Не отправляйте одинаковые сообщения!</#04CADF>"
 
 clearchat:
-  cleared: "<green>Чат очищен администратором {player}</green>"
+  cleared: "<#04CADF>Чат очищен администратором {player}</#04CADF>"
 
 errors:
-  no-permission: "<red>Нет прав!</red>"
-  player-not-found: "<red>Игрок не найден</red>"
-  invalid-usage: "<red>Использование: {usage}</red>"
+  no-permission: "<#04CADF>Нет прав!</#04CADF>"
+  player-not-found: "<#04CADF>Игрок не найден</#04CADF>"
+  invalid-usage: "<#04CADF>Использование: {usage}</#04CADF>"

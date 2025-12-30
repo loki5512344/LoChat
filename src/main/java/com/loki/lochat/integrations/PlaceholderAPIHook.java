@@ -57,6 +57,17 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             }
             case "spy_enabled" -> String.valueOf(plugin.getSpyManager().isSpying(uuid));
             
+            // Mute placeholders
+            case "muted" -> String.valueOf(plugin.getMuteManager().isMuted(uuid));
+            case "mute_time" -> {
+                if (!plugin.getMuteManager().isMuted(uuid)) yield "";
+                yield plugin.getMuteManager().formatRemainingTime(uuid);
+            }
+            case "mute_reason" -> {
+                var muteData = plugin.getMuteManager().getMuteData(uuid);
+                yield muteData != null ? muteData.reason : "";
+            }
+            
             // Gradient placeholders (совместимость с LoPreff)
             case "gradient_full", "full" -> {
                 Player onlinePlayer = player.getPlayer();
