@@ -18,29 +18,50 @@ public class ChatFormatter {
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
     private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk-orA-FK-OR])");
     private static final Pattern SECTION_COLOR_PATTERN = Pattern.compile("§([0-9a-fk-orA-FK-OR])");
+    private static final Pattern SECTION_HEX_PATTERN = Pattern.compile("§x(§[0-9A-Fa-f]){6}");
     private static final Pattern MINIMESSAGE_HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]{6})>");
 
     private ChatFormatter() {}
 
     /**
      * Конвертирует все форматы цветов в MiniMessage
-     * Поддерживает: &коды, §коды, &#HEX, MiniMessage теги
+     * Поддерживает: &коды, §коды, &#HEX, §x§...HEX, MiniMessage теги
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
         
         String result = message;
         
-        // 1. Конвертируем §коды -> &коды (для унификации)
+        // 1. Конвертируем §x§R§R§G§G§B§B -> <#RRGGBB>
+        result = convertSectionHexColors(result);
+        
+        // 2. Конвертируем §коды -> &коды (для унификации)
         result = convertSectionToAmpersand(result);
         
-        // 2. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
+        // 3. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
         result = convertHexColors(result);
         
-        // 3. Конвертируем &коды -> MiniMessage теги
+        // 4. Конвертируем &коды -> MiniMessage теги
         result = convertLegacyColors(result);
         
         return result;
+    }
+    
+    /**
+     * Конвертирует §x§R§R§G§G§B§B в <#RRGGBB>
+     */
+    public static String convertSectionHexColors(String message) {
+        if (message == null) return "";
+        Matcher matcher = SECTION_HEX_PATTERN.matcher(message);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            String match = matcher.group();
+            // §x§R§R§G§G§B§B -> RRGGBB
+            String hex = match.replace("§x", "").replace("§", "");
+            matcher.appendReplacement(result, "<#" + hex + ">");
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
     
     /**
@@ -251,7 +272,9 @@ public class ChatFormatter {
     private static String getPlayerDisplay(Player player) {
         LoChat plugin = LoChat.getInstance();
         if (plugin != null && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
-            return plugin.getGradientModule().getFormattedName(player);
+            String name = plugin.getGradientModule().getFormattedName(player);
+            // Конвертируем §x§... формат в MiniMessage
+            return convertAllColors(name);
         }
         return player.getName();
     }

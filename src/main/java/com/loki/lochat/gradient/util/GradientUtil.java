@@ -88,7 +88,12 @@ public final class GradientUtil {
     private static String formatHex(String hex, boolean useLegacyFormat) {
         hex = hex.replace("#", "").toLowerCase();
         if (useLegacyFormat) {
-            return "&#" + hex;
+            // Формат §x§R§R§G§G§B§B для TAB и других плагинов
+            StringBuilder sb = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                sb.append("§").append(c);
+            }
+            return sb.toString();
         } else {
             return "<#" + hex + ">";
         }

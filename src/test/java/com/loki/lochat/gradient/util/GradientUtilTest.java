@@ -35,8 +35,8 @@ class GradientUtilTest {
     void applyGradient_singleColor_legacy() {
         String result = GradientUtil.applyGradient("Hi", List.of("#FF0000"), true);
         assertNotNull(result);
-        assertTrue(result.contains("&#ff0000"));
-        assertEquals("&#ff0000H&#ff0000i", result);
+        // Формат §x§f§f§0§0§0§0
+        assertTrue(result.contains("§x§f§f§0§0§0§0"));
     }
 
     @Test
@@ -51,8 +51,8 @@ class GradientUtilTest {
         String result = GradientUtil.applyGradient("AB", List.of("#FF0000", "#0000FF"), true);
         assertNotNull(result);
         // Первый символ должен быть красным, последний синим
-        assertTrue(result.startsWith("&#ff0000A"));
-        assertTrue(result.contains("&#0000ffB"));
+        assertTrue(result.contains("§x§f§f§0§0§0§0")); // красный
+        assertTrue(result.contains("§x§0§0§0§0§f§f")); // синий
     }
 
     @Test
@@ -105,7 +105,7 @@ class GradientUtilTest {
     void buildDisplayName_noPrefix_withColors() {
         String result = GradientUtil.buildDisplayName(null, "AB", List.of("#FF0000", "#0000FF"), true, true, "[{prefix}] ", true);
         assertNotNull(result);
-        assertTrue(result.contains("&#"));
+        assertTrue(result.contains("§x"));
     }
 
     @Test
@@ -113,7 +113,7 @@ class GradientUtilTest {
         String result = GradientUtil.buildDisplayName("V", "AB", List.of("#FF0000", "#0000FF"), true, true, "[{prefix}] ", true);
         assertNotNull(result);
         // Единый градиент на всё
-        assertTrue(result.contains("&#"));
+        assertTrue(result.contains("§x"));
     }
 
     @Test
@@ -121,7 +121,7 @@ class GradientUtilTest {
         String result = GradientUtil.buildDisplayName("V", "AB", List.of("#FF0000", "#0000FF"), true, false, "[{prefix}] ", true);
         assertNotNull(result);
         // Отдельные градиенты
-        assertTrue(result.contains("&#"));
+        assertTrue(result.contains("§x"));
     }
 
     @Test
