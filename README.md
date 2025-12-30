@@ -142,11 +142,117 @@
 - `messages.yml` — сообщения чата
 - `automessages.yml` — автосообщения
 - `emojis.yml` — смайлики
+- `custom-commands.yml` — кастомные команды
 - `gradient-config.yml` — настройки градиентов
 - `gradient-messages.yml` — сообщения градиентов
 - `ignores.yml` — сохранённые игноры
 - `mutes.yml` — активные муты
 - `gradient-data.yml` — данные градиентов (или SQLite)
+
+---
+
+## Кастомные команды
+
+LoChat позволяет создавать собственные команды через файл `custom-commands.yml`. После создания команды выполните `/lochat reload` для применения изменений.
+
+### Структура команды
+
+```yaml
+command-name:
+  permission: "lochat.command.name"  # Право для использования (опционально)
+  message: "Текст сообщения"         # Сообщение которое отправится
+  aliases: ["alias1", "alias2"]      # Алиасы команды (опционально)
+  type: "chat"                       # Тип: chat, broadcast, title, actionbar
+  target: "sender"                   # Кому отправить: sender, all, permission:право
+```
+
+### Типы команд
+
+- **chat** — отправляет сообщение в чат
+- **broadcast** — отправляет сообщение всем игрокам
+- **title** — показывает title (первая строка — заголовок, вторая — подзаголовок, разделяются `\n`)
+- **actionbar** — показывает сообщение в actionbar
+
+### Целевая аудитория (target)
+
+- **sender** — только отправителю команды
+- **all** — всем игрокам на сервере
+- **permission:право** — только игрокам с указанным правом (например: `permission:lochat.admin`)
+
+### Плейсхолдеры
+
+В сообщениях можно использовать следующие плейсхолдеры:
+
+- `{player}` — имя игрока
+- `{x}`, `{y}`, `{z}` — координаты игрока
+- `{world}` — название мира
+- `{arg0}`, `{arg1}`, `{arg2}` — аргументы команды (нумерация с 0)
+- `{args}` — все аргументы через пробел
+
+Также поддерживаются плейсхолдеры PlaceholderAPI (если установлен).
+
+### Примеры
+
+#### Простая команда помощи
+```yaml
+help:
+  message: "<gold>Добро пожаловать на сервер!</gold>\n<gray>Используйте /rules для просмотра правил</gray>"
+  aliases: ["помощь", "хелп"]
+  type: "chat"
+  target: "sender"
+```
+
+#### Команда с координатами
+```yaml
+coords:
+  message: "Ваши координаты: <green>{x}</green>, <green>{y}</green>, <green>{z}</green> в мире <yellow>{world}</yellow>"
+  aliases: ["координаты", "pos"]
+  type: "actionbar"
+  target: "sender"
+```
+
+#### Команда для админов (broadcast)
+```yaml
+restart-warning:
+  permission: "lochat.admin"
+  message: "<red><bold>ВНИМАНИЕ!</bold></red> <yellow>Сервер будет перезагружен через 5 минут!</yellow>"
+  aliases: ["рестарт", "reboot"]
+  type: "broadcast"
+  target: "all"
+```
+
+#### Команда с title
+```yaml
+welcome:
+  message: "<gold>Добро пожаловать!</gold>\n<gray>Наслаждайтесь игрой!</gray>"
+  aliases: ["привет"]
+  type: "title"
+  target: "sender"
+```
+
+#### Команда только для VIP
+```yaml
+vip-info:
+  permission: "lochat.vip"
+  message: "<gold>VIP информация:</gold>\n<yellow>Вы имеете доступ к специальным командам!</yellow>"
+  type: "chat"
+  target: "permission:lochat.vip"
+```
+
+### Форматирование цветов
+
+В сообщениях можно использовать:
+- **MiniMessage теги**: `<red>`, `<bold>`, `<#FF0000>`
+- **Legacy коды**: `&a`, `&l`, `&c`
+- **HEX цвета**: `#FF0000` (автоматически конвертируется)
+
+### Важные замечания
+
+1. После изменения `custom-commands.yml` выполните `/lochat reload`
+2. Имена команд должны быть уникальными
+3. Если команда уже существует в Minecraft/Bukkit, она будет перезаписана
+4. Для title используйте `\n` для разделения заголовка и подзаголовка
+5. PlaceholderAPI плейсхолдеры работают только если установлен PlaceholderAPI
 
 ---
 

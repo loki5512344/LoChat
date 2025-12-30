@@ -29,9 +29,15 @@ public final class GradientUtil {
         StringBuilder result = new StringBuilder();
 
         if (hexColors.size() == 1) {
+            // Для одного цвета применяем цвет один раз в начале
             String colorCode = formatHex(hexColors.get(0), useLegacyFormat);
-            for (char c : chars) {
-                result.append(colorCode).append(c);
+            if (useLegacyFormat) {
+                // В legacy формате цвет применяется к каждому символу, но мы применяем один цвет
+                // Поэтому применяем цвет один раз в начале и добавляем весь текст
+                result.append(colorCode).append(text);
+            } else {
+                // В MiniMessage формате применяем цвет один раз
+                result.append(colorCode).append(text).append("</color>");
             }
         } else {
             Color[] colors = hexColors.stream()

@@ -145,7 +145,15 @@ public class CustomCommandManager {
         
         // PlaceholderAPI если доступен
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            result = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, result);
+            try {
+                // Используем безопасный способ вызова PlaceholderAPI
+                Class<?> papiClass = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+                java.lang.reflect.Method setPlaceholdersMethod = papiClass.getMethod("setPlaceholders", org.bukkit.entity.Player.class, String.class);
+                result = (String) setPlaceholdersMethod.invoke(null, player, result);
+            } catch (Exception e) {
+                // Если PlaceholderAPI недоступен или произошла ошибка, просто пропускаем
+                plugin.getLogger().warning("Ошибка при обработке PlaceholderAPI плейсхолдеров: " + e.getMessage());
+            }
         }
         
         return result;
