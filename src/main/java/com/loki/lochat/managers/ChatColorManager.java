@@ -82,12 +82,59 @@ public class ChatColorManager {
 
     /**
      * Применяет цвет чата к сообщению
+     * Поддерживает формат &X (Minecraft color codes)
      */
     public String applyChatColor(UUID playerId, String message) {
         String color = getChatColor(playerId);
         if (color != null) {
+            // Если цвет в формате &X, конвертируем его в MiniMessage
+            if (color.startsWith("&") && color.length() == 2) {
+                String miniMessageColor = convertLegacyColorToMiniMessage(color);
+                if (!miniMessageColor.isEmpty()) {
+                    // Извлекаем имя тега из <tag> для закрывающего тега
+                    String tagName = miniMessageColor.substring(1, miniMessageColor.length() - 1);
+                    return miniMessageColor + message + "</" + tagName + ">";
+                }
+            }
+            // Если уже в формате MiniMessage, используем как есть
             return "<" + color + ">" + message + "</" + color + ">";
         }
         return message;
+    }
+    
+    /**
+     * Конвертирует &X код в MiniMessage формат
+     */
+    private String convertLegacyColorToMiniMessage(String legacyColor) {
+        if (legacyColor == null || legacyColor.length() != 2 || !legacyColor.startsWith("&")) {
+            return "";
+        }
+        
+        char code = legacyColor.charAt(1);
+        return switch (Character.toLowerCase(code)) {
+            case '0' -> "<black>";
+            case '1' -> "<dark_blue>";
+            case '2' -> "<dark_green>";
+            case '3' -> "<dark_aqua>";
+            case '4' -> "<dark_red>";
+            case '5' -> "<dark_purple>";
+            case '6' -> "<gold>";
+            case '7' -> "<gray>";
+            case '8' -> "<dark_gray>";
+            case '9' -> "<blue>";
+            case 'a' -> "<green>";
+            case 'b' -> "<aqua>";
+            case 'c' -> "<red>";
+            case 'd' -> "<light_purple>";
+            case 'e' -> "<yellow>";
+            case 'f' -> "<white>";
+            case 'k' -> "<obfuscated>";
+            case 'l' -> "<bold>";
+            case 'm' -> "<strikethrough>";
+            case 'n' -> "<underlined>";
+            case 'o' -> "<italic>";
+            case 'r' -> "<reset>";
+            default -> "";
+        };
     }
 }

@@ -16,6 +16,7 @@ public class ChatFormatter {
     
     // Паттерны для цветов
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
+    private static final Pattern HEX_PATTERN_NO_AMPERSAND = Pattern.compile("(?<!&)#([A-Fa-f0-9]{6})");
     private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk-orA-FK-OR])");
     private static final Pattern SECTION_COLOR_PATTERN = Pattern.compile("§([0-9a-fk-orA-FK-OR])");
     private static final Pattern SECTION_HEX_PATTERN = Pattern.compile("§x(§[0-9A-Fa-f]){6}");
@@ -73,16 +74,28 @@ public class ChatFormatter {
     }
 
     /**
-     * Конвертирует &#RRGGBB в MiniMessage формат <#RRGGBB>
+     * Конвертирует &#RRGGBB и #RRGGBB в MiniMessage формат <#RRGGBB>
      */
     public static String convertHexColors(String message) {
-        Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuilder result = new StringBuilder();
+        String result = message;
+        
+        // Конвертируем &#RRGGBB
+        Matcher matcher = HEX_PATTERN.matcher(result);
+        StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(result, "<#" + matcher.group(1) + ">");
+            matcher.appendReplacement(sb, "<#" + matcher.group(1) + ">");
         }
-        matcher.appendTail(result);
-        return result.toString();
+        matcher.appendTail(sb);
+        result = sb.toString();
+        
+        // Конвертируем #RRGGBB (без &, но не если это часть &#RRGGBB)
+        matcher = HEX_PATTERN_NO_AMPERSAND.matcher(result);
+        sb = new StringBuilder();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "<#" + matcher.group(1) + ">");
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     /**
@@ -171,6 +184,7 @@ public class ChatFormatter {
         boolean hasColorCodes = LEGACY_COLOR_PATTERN.matcher(result).find() 
                 || SECTION_COLOR_PATTERN.matcher(result).find()
                 || HEX_PATTERN.matcher(result).find()
+                || HEX_PATTERN_NO_AMPERSAND.matcher(result).find()
                 || MINIMESSAGE_HEX_PATTERN.matcher(result).find();
         
         // Если есть право на цвета И есть цветовые коды - конвертируем
@@ -238,6 +252,9 @@ public class ChatFormatter {
         
         // Убираем &#RRGGBB
         result = HEX_PATTERN.matcher(result).replaceAll("");
+        
+        // Убираем #RRGGBB (без &)
+        result = HEX_PATTERN_NO_AMPERSAND.matcher(result).replaceAll("");
         
         // Убираем &коды
         result = stripLegacyColors(result);
