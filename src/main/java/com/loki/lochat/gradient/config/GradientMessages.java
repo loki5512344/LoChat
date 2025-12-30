@@ -1,5 +1,6 @@
 package com.loki.lochat.gradient.config;
 
+import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,16 +44,17 @@ public class GradientMessages {
     }
 
     public String get(String key) {
-        return messages.getString(key, "§cСообщение не найдено: " + key);
+        String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
+        return ChatFormatter.convertAllColors(message);
     }
 
     public String get(String key, String... replacements) {
-        String message = get(key);
+        String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 < replacements.length) {
                 message = message.replace("{" + replacements[i] + "}", replacements[i + 1]);
             }
         }
-        return message;
+        return ChatFormatter.convertAllColors(message);
     }
 }
