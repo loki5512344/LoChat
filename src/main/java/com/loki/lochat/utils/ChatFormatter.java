@@ -167,14 +167,22 @@ public class ChatFormatter {
         // Заменяем смайлики
         result = replaceEmojis(result, player);
         
-        // Если есть право на цвета - конвертируем
-        if (hasColorPermission) {
+        // Проверяем есть ли цветовые коды в сообщении
+        boolean hasColorCodes = LEGACY_COLOR_PATTERN.matcher(result).find() 
+                || SECTION_COLOR_PATTERN.matcher(result).find()
+                || HEX_PATTERN.matcher(result).find()
+                || MINIMESSAGE_HEX_PATTERN.matcher(result).find();
+        
+        // Если есть право на цвета И есть цветовые коды - конвертируем
+        if (hasColorPermission && hasColorCodes) {
             result = convertAllColors(result);
         } else {
-            // Убираем цветовые коды
-            result = stripLegacyColors(result);
+            // Убираем цветовые коды если нет прав
+            if (!hasColorPermission) {
+                result = stripLegacyColors(result);
+            }
             
-            // Применяем цвет чата если установлен
+            // Применяем цвет чата если установлен (когда нет своих цветов)
             LoChat plugin = LoChat.getInstance();
             if (plugin != null && plugin.getChatColorManager() != null) {
                 result = plugin.getChatColorManager().applyChatColor(player.getUniqueId(), result);
