@@ -7,6 +7,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Утилита для обновления отображаемого имени игрока
@@ -14,10 +16,12 @@ import java.util.List;
 public final class DisplayNameUtil {
 
     private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
-            .character('&')
+            .character('§')
             .hexCharacter('#')
             .hexColors()
             .build();
+    
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#([0-9a-fA-F]{6})");
 
     private DisplayNameUtil() {}
 
@@ -39,6 +43,8 @@ public final class DisplayNameUtil {
                         cfg.isUseLegacyRgbFormat(),
                         cfg.isContinuousGradient()
                 );
+                // Конвертируем &#RRGGBB в §x§R§R§G§G§B§B для display name
+                displayName = convertToLegacyFormat(displayName);
                 var component = SERIALIZER.deserialize(displayName);
                 player.displayName(component);
                 player.playerListName(component);
@@ -55,9 +61,34 @@ public final class DisplayNameUtil {
                 prefixFormat,
                 cfg.isUseLegacyRgbFormat()
         );
+        
+        // Конвертируем &#RRGGBB в §x§R§R§G§G§B§B для display name
+        displayName = convertToLegacyFormat(displayName);
         var component = SERIALIZER.deserialize(displayName);
         player.displayName(component);
         player.playerListName(component);
+    }
+
+    /**
+     * Конвертирует &#RRGGBB формат в §x§R§R§G§G§B§B для display name
+     */
+    private static String convertToLegacyFormat(String text) {
+        if (text == null) return "";
+        
+        Matcher matcher = HEX_PATTERN.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        
+        while (matcher.find()) {
+            String hex = matcher.group(1).toLowerCase();
+            StringBuilder replacement = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                replacement.append("§").append(c);
+            }
+            matcher.appendReplacement(sb, replacement.toString());
+        }
+        matcher.appendTail(sb);
+        
+        return sb.toString();
     }
 
     private static String buildWithLuckPermsPrefix(String lpPrefix, String nick, 
