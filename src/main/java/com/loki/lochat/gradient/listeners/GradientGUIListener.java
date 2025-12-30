@@ -57,7 +57,7 @@ public class GradientGUIListener implements Listener {
             }
             int balance = module.getPlayerPointsAPI().look(player.getUniqueId());
             if (balance < price) {
-                player.sendMessage(msg.get(PRICE_MSG_KEYS.get(gui.getType()), "price", String.valueOf(price)));
+                msg.send(player, PRICE_MSG_KEYS.get(gui.getType()), "price", String.valueOf(price));
                 return;
             }
             module.getPlayerPointsAPI().take(player.getUniqueId(), price);
@@ -70,7 +70,7 @@ public class GradientGUIListener implements Listener {
                 data.setColors(gui.getColors());
                 data.setColorEnabled(true);
                 data.setLastColorChange(System.currentTimeMillis());
-                player.sendMessage(msg.get("color-success", "price", String.valueOf(price)));
+                msg.send(player, "color-success", "price", String.valueOf(price));
             }
             case PREFIX -> {
                 data.setPrefix(gui.getPrefix());
@@ -78,8 +78,8 @@ public class GradientGUIListener implements Listener {
                 data.setPrefixPurchased(true);
                 data.setLastPrefixChange(System.currentTimeMillis());
                 module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
-                player.sendMessage(msg.get(price > 0 ? "prefix-success" : "prefix-success-free", 
-                        "price", String.valueOf(price)));
+                msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free", 
+                        "price", String.valueOf(price));
             }
         }
 

@@ -51,17 +51,17 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(module.getMessages().get("only-player"));
+            module.getMessages().send(sender, "only-player");
             return true;
         }
 
         if (!player.hasPermission("gradient.color")) {
-            player.sendMessage(module.getMessages().get("no-permission"));
+            module.getMessages().send(player, "no-permission");
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(module.getMessages().get("color-help"));
+            module.getMessages().send(player, "color-help");
             return true;
         }
 
@@ -79,13 +79,13 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         GradientMessages msg = module.getMessages();
         
         if (!data.hasColors()) {
-            player.sendMessage(msg.get("color-no-colors"));
+            msg.send(player, "color-no-colors");
             return true;
         }
         
         data.setColorEnabled(true);
         saveAndUpdate(player, data);
-        player.sendMessage(msg.get("color-enabled"));
+        msg.send(player, "color-enabled");
         return true;
     }
 
@@ -93,7 +93,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         data.setColorEnabled(false);
         saveAndUpdate(player, data);
-        player.sendMessage(module.getMessages().get("color-disabled"));
+        module.getMessages().send(player, "color-disabled");
         return true;
     }
 
@@ -102,14 +102,14 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         GradientMessages msg = module.getMessages();
         
         if (!data.hasColors()) {
-            player.sendMessage(msg.get("color-no-colors"));
+            msg.send(player, "color-no-colors");
             return true;
         }
         
         data.setColors(new ArrayList<>());
         data.setColorEnabled(false);
         saveAndUpdate(player, data);
-        player.sendMessage(msg.get("color-reset"));
+        msg.send(player, "color-reset");
         return true;
     }
 
@@ -118,19 +118,19 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         GradientConfig cfg = module.getConfig();
         
         if (args.length < 2) {
-            player.sendMessage(msg.get("color-copy-usage"));
+            msg.send(player, "color-copy-usage");
             return true;
         }
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            player.sendMessage(msg.get("player-not-found"));
+            msg.send(player, "player-not-found");
             return true;
         }
         
         GradientPlayerData targetData = module.getDataManager().getPlayerData(target.getUniqueId());
         if (!targetData.hasColors()) {
-            player.sendMessage(msg.get("color-copy-no-colors", "player", target.getName()));
+            msg.send(player, "color-copy-no-colors", "player", target.getName());
             return true;
         }
 
@@ -159,12 +159,12 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         GradientConfig cfg = module.getConfig();
 
         if (args.length > cfg.getMaxColors()) {
-            player.sendMessage(msg.get("too-many-colors", "max", String.valueOf(cfg.getMaxColors())));
+            msg.send(player, "too-many-colors", "max", String.valueOf(cfg.getMaxColors()));
             return true;
         }
 
         if (args.length < cfg.getMinColors()) {
-            player.sendMessage(msg.get("not-enough-colors", "min", String.valueOf(cfg.getMinColors())));
+            msg.send(player, "not-enough-colors", "min", String.valueOf(cfg.getMinColors()));
             return true;
         }
 
@@ -179,7 +179,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         for (String arg : args) {
             String color = arg.startsWith("#") ? arg : "#" + arg;
             if (!GradientUtil.isValidHex(color)) {
-                player.sendMessage(msg.get("invalid-color", "color", arg));
+                msg.send(player, "invalid-color", "color", arg);
                 return true;
             }
             colors.add(color.toUpperCase());
@@ -202,7 +202,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         long timePassed = System.currentTimeMillis() - lastChange;
         if (timePassed < cooldownMs) {
             long remaining = (cooldownMs - timePassed) / GradientConstants.MILLIS_PER_SECOND;
-            player.sendMessage(module.getMessages().get("cooldown", "time", String.valueOf(remaining)));
+            module.getMessages().send(player, "cooldown", "time", String.valueOf(remaining));
             return false;
         }
         return true;
@@ -215,7 +215,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         }
         int balance = module.getPlayerPointsAPI().look(player.getUniqueId());
         if (balance < price) {
-            player.sendMessage(module.getMessages().get("not-enough-points-color", "price", String.valueOf(price)));
+            module.getMessages().send(player, "not-enough-points-color", "price", String.valueOf(price));
             return false;
         }
         return true;

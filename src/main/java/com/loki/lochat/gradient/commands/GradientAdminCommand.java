@@ -41,7 +41,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         GradientMessages msg = module.getMessages();
 
         if (!sender.hasPermission("gradient.admin")) {
-            sender.sendMessage(msg.get("no-permission"));
+            msg.send(sender, "no-permission");
             return true;
         }
 
@@ -55,7 +55,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         switch (subCommand) {
             case "reload" -> {
                 module.reload();
-                sender.sendMessage(msg.get("reload-success"));
+                msg.send(sender, "reload-success");
             }
             case "info" -> {
                 if (args.length < 2) {
@@ -105,24 +105,24 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
     private void handleInfo(CommandSender sender, String playerName, GradientMessages msg) {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
         GradientPlayerData data = module.getDataManager().getPlayerData(target.getUniqueId());
 
-        sender.sendMessage(msg.get("info-header", "player", playerName));
-        sender.sendMessage(msg.get("info-prefix", "prefix", data.hasPrefix() ? data.getPrefix() : "нет"));
-        sender.sendMessage(msg.get("info-prefix-enabled", "enabled", data.isPrefixEnabled() ? "да" : "нет"));
-        sender.sendMessage(msg.get("info-colors", "colors", data.hasColors() ? String.join(", ", data.getColors()) : "нет"));
-        sender.sendMessage(msg.get("info-color-enabled", "enabled", data.isColorEnabled() ? "да" : "нет"));
-        sender.sendMessage(msg.get("info-prefix-purchased", "purchased", data.isPrefixPurchased() ? "да" : "нет"));
+        msg.send(sender, "info-header", "player", playerName);
+        msg.send(sender, "info-prefix", "prefix", data.hasPrefix() ? data.getPrefix() : "нет");
+        msg.send(sender, "info-prefix-enabled", "enabled", data.isPrefixEnabled() ? "да" : "нет");
+        msg.send(sender, "info-colors", "colors", data.hasColors() ? String.join(", ", data.getColors()) : "нет");
+        msg.send(sender, "info-color-enabled", "enabled", data.isColorEnabled() ? "да" : "нет");
+        msg.send(sender, "info-prefix-purchased", "purchased", data.isPrefixPurchased() ? "да" : "нет");
     }
 
     private void handleSetColor(CommandSender sender, String[] args, GradientMessages msg) {
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
@@ -130,7 +130,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         for (int i = 2; i < args.length; i++) {
             String color = args[i].startsWith("#") ? args[i] : "#" + args[i];
             if (!GradientUtil.isValidHex(color)) {
-                sender.sendMessage(msg.get("invalid-color", "color", args[i]));
+                msg.send(sender, "invalid-color", "color", args[i]);
                 return;
             }
             colors.add(color.toUpperCase());
@@ -138,7 +138,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         GradientConfig cfg = module.getConfig();
         if (colors.size() > cfg.getMaxColors()) {
-            sender.sendMessage(msg.get("too-many-colors", "max", String.valueOf(cfg.getMaxColors())));
+            msg.send(sender, "too-many-colors", "max", String.valueOf(cfg.getMaxColors()));
             return;
         }
 
@@ -161,7 +161,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
     private void handleSetPrefix(CommandSender sender, String[] args, GradientMessages msg) {
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
@@ -174,7 +174,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         GradientConfig cfg = module.getConfig();
         if (prefix.length() > cfg.getMaxPrefixLength()) {
-            sender.sendMessage(msg.get("prefix-too-long", "max", String.valueOf(cfg.getMaxPrefixLength())));
+            msg.send(sender, "prefix-too-long", "max", String.valueOf(cfg.getMaxPrefixLength()));
             return;
         }
 
@@ -205,7 +205,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
@@ -232,7 +232,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
@@ -265,7 +265,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 
@@ -293,7 +293,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage(msg.get("player-not-found"));
+            msg.send(sender, "player-not-found");
             return;
         }
 

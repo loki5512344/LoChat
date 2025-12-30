@@ -48,17 +48,17 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(module.getMessages().get("only-player"));
+            module.getMessages().send(sender, "only-player");
             return true;
         }
 
         if (!player.hasPermission("gradient.prefix")) {
-            player.sendMessage(module.getMessages().get("no-permission"));
+            module.getMessages().send(player, "no-permission");
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(module.getMessages().get("prefix-help"));
+            module.getMessages().send(player, "prefix-help");
             return true;
         }
 
@@ -76,14 +76,14 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         GradientMessages msg = module.getMessages();
         
         if (!data.hasPrefix()) {
-            player.sendMessage(msg.get("prefix-no-prefix"));
+            msg.send(player, "prefix-no-prefix");
             return true;
         }
         
         data.setPrefixEnabled(true);
         module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
         saveAndUpdate(player, data);
-        player.sendMessage(msg.get("prefix-enabled"));
+        msg.send(player, "prefix-enabled");
         return true;
     }
 
@@ -92,7 +92,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         data.setPrefixEnabled(false);
         module.getLuckPermsHook().removePrefix(player);
         saveAndUpdate(player, data);
-        player.sendMessage(module.getMessages().get("prefix-disabled"));
+        module.getMessages().send(player, "prefix-disabled");
         return true;
     }
 
@@ -101,7 +101,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         GradientMessages msg = module.getMessages();
         
         if (!data.hasPrefix()) {
-            player.sendMessage(msg.get("prefix-no-prefix"));
+            msg.send(player, "prefix-no-prefix");
             return true;
         }
         
@@ -109,7 +109,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         data.setPrefixEnabled(false);
         module.getLuckPermsHook().removePrefix(player);
         saveAndUpdate(player, data);
-        player.sendMessage(msg.get("prefix-reset-success"));
+        msg.send(player, "prefix-reset-success");
         return true;
     }
 
@@ -119,27 +119,27 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         String prefix = String.join(" ", args);
 
         if (prefix.trim().isEmpty()) {
-            player.sendMessage(msg.get("prefix-help"));
+            msg.send(player, "prefix-help");
             return true;
         }
 
         if (COLOR_CODE_PATTERN.matcher(prefix).find()) {
-            player.sendMessage(msg.get("prefix-no-colors"));
+            msg.send(player, "prefix-no-colors");
             return true;
         }
 
         if (!ALLOWED_PREFIX_PATTERN.matcher(prefix).matches()) {
-            player.sendMessage(msg.get("prefix-invalid-chars"));
+            msg.send(player, "prefix-invalid-chars");
             return true;
         }
 
         if (cfg.isPrefixBlacklisted(prefix)) {
-            player.sendMessage(msg.get("prefix-blacklisted"));
+            msg.send(player, "prefix-blacklisted");
             return true;
         }
 
         if (prefix.length() > cfg.getMaxPrefixLength()) {
-            player.sendMessage(msg.get("prefix-too-long", "max", String.valueOf(cfg.getMaxPrefixLength())));
+            msg.send(player, "prefix-too-long", "max", String.valueOf(cfg.getMaxPrefixLength()));
             return true;
         }
 
@@ -172,7 +172,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         long timePassed = System.currentTimeMillis() - lastChange;
         if (timePassed < cooldownMs) {
             long remaining = (cooldownMs - timePassed) / GradientConstants.MILLIS_PER_SECOND;
-            player.sendMessage(module.getMessages().get("cooldown", "time", String.valueOf(remaining)));
+            module.getMessages().send(player, "cooldown", "time", String.valueOf(remaining));
             return false;
         }
         return true;
@@ -185,7 +185,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         }
         int balance = module.getPlayerPointsAPI().look(player.getUniqueId());
         if (balance < price) {
-            player.sendMessage(module.getMessages().get("not-enough-points-prefix", "price", String.valueOf(price)));
+            module.getMessages().send(player, "not-enough-points-prefix", "price", String.valueOf(price));
             return false;
         }
         return true;

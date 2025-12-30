@@ -1,6 +1,8 @@
 package com.loki.lochat.gradient.config;
 
 import com.loki.lochat.utils.ChatFormatter;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,11 +45,17 @@ public class GradientMessages {
         loadMessages();
     }
 
+    /**
+     * Получает сообщение как строку с MiniMessage тегами
+     */
     public String get(String key) {
         String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
         return ChatFormatter.convertAllColors(message);
     }
 
+    /**
+     * Получает сообщение как строку с заменами
+     */
     public String get(String key, String... replacements) {
         String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
         for (int i = 0; i < replacements.length; i += 2) {
@@ -56,5 +64,33 @@ public class GradientMessages {
             }
         }
         return ChatFormatter.convertAllColors(message);
+    }
+
+    /**
+     * Получает сообщение как Component
+     */
+    public Component getComponent(String key) {
+        return ChatFormatter.parse(get(key));
+    }
+
+    /**
+     * Получает сообщение как Component с заменами
+     */
+    public Component getComponent(String key, String... replacements) {
+        return ChatFormatter.parse(get(key, replacements));
+    }
+
+    /**
+     * Отправляет сообщение игроку
+     */
+    public void send(CommandSender sender, String key) {
+        sender.sendMessage(getComponent(key));
+    }
+
+    /**
+     * Отправляет сообщение игроку с заменами
+     */
+    public void send(CommandSender sender, String key, String... replacements) {
+        sender.sendMessage(getComponent(key, replacements));
     }
 }
