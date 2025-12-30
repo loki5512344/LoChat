@@ -40,9 +40,9 @@ mentions:
   sound: true
   sound-type: "BLOCK_NOTE_BLOCK_PLING"
   # Выделение при @ник
-  highlight: "<#04CADF>@{player}</#04CADF>"
+  highlight: "&#04CADF@{player}"
   # Выделение когда твой ник написали (без @)
-  self-highlight: "<#04CADF>{player}</#04CADF>"
+  self-highlight: "&#04CADF{player}"
 
 # Фильтр мата
 filter:
@@ -156,14 +156,14 @@ automessages:
   random: false
 
 formats:
-  announcement: "<#04CADF>[ОБЪЯВЛЕНИЕ]</#04CADF> <message>"
+  announcement: "&#04CADF[ОБЪЯВЛЕНИЕ] <message>"
 
 # Настройки объявлений
 announcements:
   # Показывать title при объявлении
   show-title: true
   # Заголовок title
-  title-header: "<#04CADF>ОБЪЯВЛЕНИЕ</#04CADF>"
+  title-header: "&#04CADFОБЪЯВЛЕНИЕ"
   # Показывать actionbar при объявлении  
   show-actionbar: true
   # Время показа title (в секундах)

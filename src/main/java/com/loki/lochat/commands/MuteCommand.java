@@ -33,7 +33,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
 
         if (args.length < 2) {
             sender.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/mute <игрок> <время> [причина]")));
-            sender.sendMessage(ChatFormatter.parse("<gray>Время: 1m, 1h, 1d, permanent"));
+            sender.sendMessage(ChatFormatter.parse("&#808080Время: 1m, 1h, 1d, permanent"));
             return true;
         }
 

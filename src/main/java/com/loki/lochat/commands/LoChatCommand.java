@@ -30,7 +30,7 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 0) {
             sender.sendMessage(ChatFormatter.parse("<gold>LoChat v" + plugin.getDescription().getVersion() + "</gold>"));
-            sender.sendMessage(ChatFormatter.parse("<gray>Команды:</gray>"));
+            sender.sendMessage(ChatFormatter.parse("&#808080Команды:"));
             sender.sendMessage(ChatFormatter.parse("<yellow>/lochat reload</yellow> - Перезагрузить конфиги"));
             sender.sendMessage(ChatFormatter.parse("<yellow>/lochat commands</yellow> - Список кастомных команд"));
             sender.sendMessage(ChatFormatter.parse("<yellow>/lochat commands reload</yellow> - Перезагрузить кастомные команды"));
@@ -50,9 +50,9 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
                     var commands = plugin.getCustomCommandManager().getCommands();
                     sender.sendMessage(ChatFormatter.parse("<gold>Кастомные команды (" + commands.size() + "):</gold>"));
                     for (var cmd : commands.values()) {
-                        sender.sendMessage(ChatFormatter.parse("<yellow>/" + cmd.name + "</yellow> <gray>(" + cmd.type + ")</gray>"));
+                        sender.sendMessage(ChatFormatter.parse("&e/" + cmd.name + " &#808080(" + cmd.type + ")"));
                         if (!cmd.aliases.isEmpty()) {
-                            sender.sendMessage(ChatFormatter.parse("<gray>  Алиасы: " + String.join(", ", cmd.aliases) + "</gray>"));
+                            sender.sendMessage(ChatFormatter.parse("&#808080  Алиасы: " + String.join(", ", cmd.aliases)));
                         }
                     }
                 }

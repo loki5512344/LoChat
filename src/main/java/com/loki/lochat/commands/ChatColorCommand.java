@@ -37,8 +37,8 @@ public class ChatColorCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 0) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/chatcolor <цвет>")));
-            player.sendMessage(ChatFormatter.parse("<gray>Используйте Minecraft color codes: &a, &b, &c, &d, &e, &f, &0-&9, &k, &l, &m, &n, &o, &r</gray>"));
-            player.sendMessage(ChatFormatter.parse("<gray>Пример: /chatcolor &b</gray>"));
+            player.sendMessage(ChatFormatter.parse("&#808080Используйте Minecraft color codes: &a, &b, &c, &d, &e, &f, &0-&9, &k, &l, &m, &n, &o, &r"));
+            player.sendMessage(ChatFormatter.parse("&#808080Пример: /chatcolor &b"));
             return true;
         }
 

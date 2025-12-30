@@ -196,7 +196,7 @@ command-name:
 #### Простая команда помощи
 ```yaml
 help:
-  message: "<gold>Добро пожаловать на сервер!</gold>\n<gray>Используйте /rules для просмотра правил</gray>"
+  message: "&6Добро пожаловать на сервер!\n&#808080Используйте /rules для просмотра правил"
   aliases: ["помощь", "хелп"]
   type: "chat"
   target: "sender"
@@ -224,7 +224,7 @@ restart-warning:
 #### Команда с title
 ```yaml
 welcome:
-  message: "<gold>Добро пожаловать!</gold>\n<gray>Наслаждайтесь игрой!</gray>"
+  message: "&6Добро пожаловать!\n&#808080Наслаждайтесь игрой!"
   aliases: ["привет"]
   type: "title"
   target: "sender"

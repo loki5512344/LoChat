@@ -2,56 +2,56 @@
 # Сообщения модуля градиентных ников
 
 # Общие
-only-player: "<#04CADF>Эта команда только для игроков!</#04CADF>"
-no-permission: "<#04CADF>У вас нет прав на это действие!</#04CADF>"
-player-not-found: "<#04CADF>Игрок не найден!</#04CADF>"
-reload-success: "<#04CADF>Конфигурация градиентов перезагружена!</#04CADF>"
-cooldown: "<#04CADF>Подождите ещё {time} секунд!</#04CADF>"
+only-player: "&#04CADFЭта команда только для игроков!"
+no-permission: "&#04CADFУ вас нет прав на это действие!"
+player-not-found: "&#04CADFИгрок не найден!"
+reload-success: "&#04CADFКонфигурация градиентов перезагружена!"
+cooldown: "&#04CADFПодождите ещё {time} секунд!"
 
 # Цвета
 color-help: |
-  <#04CADF>=== Команда /color ===</#04CADF>
-  <#04CADF>/color <цвет1> [цвет2] ... <gray>— установить градиент</gray>
-  <#04CADF>/color on <gray>— включить цвет</gray>
-  <#04CADF>/color off <gray>— выключить цвет</gray>
-  <#04CADF>/color reset <gray>— сбросить цвет</gray>
-  <#04CADF>/color copy <игрок> <gray>— скопировать цвет</gray>
-  <gray>Пример: /color #FF0000 #00FF00 #0000FF</gray>
-color-enabled: "<#04CADF>Цвет ника включён!</#04CADF>"
-color-disabled: "<#04CADF>Цвет ника выключен!</#04CADF>"
-color-reset: "<#04CADF>Цвет ника сброшен!</#04CADF>"
-color-no-colors: "<#04CADF>У вас нет установленных цветов!</#04CADF>"
-color-success: "<#04CADF>Цвет успешно установлен! Списано: {price} PP</#04CADF>"
-color-copy-usage: "<#04CADF>Использование: /color copy <игрок></#04CADF>"
-color-copy-no-colors: "<#04CADF>У игрока {player} нет цветов!</#04CADF>"
-invalid-color: "<#04CADF>Неверный формат цвета: {color}. Используйте #RRGGBB</#04CADF>"
-too-many-colors: "<#04CADF>Максимум {max} цветов!</#04CADF>"
-not-enough-colors: "<#04CADF>Минимум {min} цветов!</#04CADF>"
-not-enough-points-color: "<#04CADF>Недостаточно поинтов! Нужно: {price} PP</#04CADF>"
+  &#04CADF=== Команда /color ===
+  &#04CADF/color <цвет1> [цвет2] ... &#808080— установить градиент
+  &#04CADF/color on &#808080— включить цвет
+  &#04CADF/color off &#808080— выключить цвет
+  &#04CADF/color reset &#808080— сбросить цвет
+  &#04CADF/color copy <игрок> &#808080— скопировать цвет
+  &#808080Пример: /color #FF0000 #00FF00 #0000FF
+color-enabled: "&#04CADFЦвет ника включён!"
+color-disabled: "&#04CADFЦвет ника выключен!"
+color-reset: "&#04CADFЦвет ника сброшен!"
+color-no-colors: "&#04CADFУ вас нет установленных цветов!"
+color-success: "&#04CADFЦвет успешно установлен! Списано: {price} PP"
+color-copy-usage: "&#04CADFИспользование: /color copy <игрок>"
+color-copy-no-colors: "&#04CADFУ игрока {player} нет цветов!"
+invalid-color: "&#04CADFНеверный формат цвета: {color}. Используйте #RRGGBB"
+too-many-colors: "&#04CADFМаксимум {max} цветов!"
+not-enough-colors: "&#04CADFМинимум {min} цветов!"
+not-enough-points-color: "&#04CADFНедостаточно поинтов! Нужно: {price} PP"
 
 # Префикс
 prefix-help: |
-  <#04CADF>=== Команда /prefix ===</#04CADF>
-  <#04CADF>/prefix <текст> <gray>— установить префикс</gray>
-  <#04CADF>/prefix on <gray>— включить префикс</gray>
-  <#04CADF>/prefix off <gray>— выключить префикс</gray>
-  <#04CADF>/prefix reset <gray>— сбросить префикс</gray>
-prefix-enabled: "<#04CADF>Префикс включён!</#04CADF>"
-prefix-disabled: "<#04CADF>Префикс выключен!</#04CADF>"
-prefix-reset-success: "<#04CADF>Префикс сброшен!</#04CADF>"
-prefix-no-prefix: "<#04CADF>У вас нет установленного префикса!</#04CADF>"
-prefix-success: "<#04CADF>Префикс успешно установлен! Списано: {price} PP</#04CADF>"
-prefix-success-free: "<#04CADF>Префикс успешно изменён!</#04CADF>"
-prefix-no-colors: "<#04CADF>Префикс не может содержать цветовые коды!</#04CADF>"
-prefix-invalid-chars: "<#04CADF>Префикс содержит недопустимые символы!</#04CADF>"
-prefix-blacklisted: "<#04CADF>Этот префикс запрещён!</#04CADF>"
-prefix-too-long: "<#04CADF>Префикс слишком длинный! Максимум: {max} символов</#04CADF>"
-not-enough-points-prefix: "<#04CADF>Недостаточно поинтов! Нужно: {price} PP</#04CADF>"
+  &#04CADF=== Команда /prefix ===
+  &#04CADF/prefix <текст> &#808080— установить префикс
+  &#04CADF/prefix on &#808080— включить префикс
+  &#04CADF/prefix off &#808080— выключить префикс
+  &#04CADF/prefix reset &#808080— сбросить префикс
+prefix-enabled: "&#04CADFПрефикс включён!"
+prefix-disabled: "&#04CADFПрефикс выключен!"
+prefix-reset-success: "&#04CADFПрефикс сброшен!"
+prefix-no-prefix: "&#04CADFУ вас нет установленного префикса!"
+prefix-success: "&#04CADFПрефикс успешно установлен! Списано: {price} PP"
+prefix-success-free: "&#04CADFПрефикс успешно изменён!"
+prefix-no-colors: "&#04CADFПрефикс не может содержать цветовые коды!"
+prefix-invalid-chars: "&#04CADFПрефикс содержит недопустимые символы!"
+prefix-blacklisted: "&#04CADFЭтот префикс запрещён!"
+prefix-too-long: "&#04CADFПрефикс слишком длинный! Максимум: {max} символов"
+not-enough-points-prefix: "&#04CADFНедостаточно поинтов! Нужно: {price} PP"
 
 # Админ информация
-info-header: "<#04CADF>=== Информация об игроке {player} ===</#04CADF>"
-info-prefix: "<gray>Префикс: <white>{prefix}</white></gray>"
-info-prefix-enabled: "<gray>Префикс включён: <white>{enabled}</white></gray>"
-info-colors: "<gray>Цвета: <white>{colors}</white></gray>"
-info-color-enabled: "<gray>Цвет включён: <white>{enabled}</white></gray>"
-info-prefix-purchased: "<gray>Префикс куплен: <white>{purchased}</white></gray>"
+info-header: "&#04CADF=== Информация об игроке {player} ==="
+info-prefix: "&#808080Префикс: &f{prefix}"
+info-prefix-enabled: "&#808080Префикс включён: &f{enabled}"
+info-colors: "&#808080Цвета: &f{colors}"
+info-color-enabled: "&#808080Цвет включён: &f{enabled}"
+info-prefix-purchased: "&#808080Префикс куплен: &f{purchased}"
