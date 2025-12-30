@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.loki'
-version = '1.5.1'
+version = '1.5.2'
 
 repositories {
     mavenCentral()
@@ -42,7 +42,7 @@ test {
 }
 
 jar {
-    archiveFileName = 'LoChat-1.5.1.jar'
+    archiveFileName = 'LoChat-1.5.2.jar'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }

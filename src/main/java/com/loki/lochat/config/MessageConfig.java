@@ -1,6 +1,7 @@
 package com.loki.lochat.config;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -38,6 +39,8 @@ public class MessageConfig {
         for (int i = 0; i < replacements.length - 1; i += 2) {
             message = message.replace(replacements[i], replacements[i + 1]);
         }
+        // Убираем legacy коды если они есть
+        message = ChatFormatter.convertAllColors(message);
         return message;
     }
 
