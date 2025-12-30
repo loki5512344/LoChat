@@ -16,87 +16,91 @@ commands:
     description: Send global message
     usage: /g <message>
     permission: chat.global.use
+    aliases: [п]
 
   globalchat:
     description: Toggle global chat
     usage: /globalchat toggle
     permission: chat.global.toggle
+    aliases: [пдщифдсрфе]
 
   l:
     description: Send local message
     usage: /l <message>
     permission: chat.local.use
+    aliases: [д]
 
   msg:
     description: Send private message
     usage: /msg <player> <message>
     permission: chat.pm.use
-    aliases: [tell, w, pm, m, ьып]
+    aliases: [tell, w, pm, m, ьып, ееддж, цж, зьж, ьж]
 
   reply:
     description: Reply to last message
     usage: /reply <message>
     permission: chat.pm.use
-    aliases: [r, ответить]
+    aliases: [r, ответить, кузду, к]
 
   ignore:
     description: Ignore player
     usage: /ignore <player>
     permission: chat.pm.ignore
-    aliases: [игнор]
+    aliases: [игнор, шптщку]
 
   unignore:
     description: Unignore player
     usage: /unignore <player>
     permission: chat.pm.ignore
-    aliases: [разигнор]
+    aliases: [разигнор, гтшптщку]
 
   announce:
     description: Send announcement
     usage: /announce <message>
     permission: chat.announce.use
-    aliases: [объявление, анонс]
+    aliases: [объявление, анонс, фттщгтсу]
 
   chatspy:
     description: Toggle chat spy mode
     usage: /chatspy
     permission: chat.spy
-    aliases: [spy]
+    aliases: [spy, шпион, срфезуж, зуж]
 
   clearchat:
     description: Clear chat for all players
     usage: /clearchat
     permission: chat.clear
-    aliases: [cc]
+    aliases: [cc, очиститьчат, сдуфксрфе, сс]
 
   chatcolor:
     description: Set chat color
     usage: /chatcolor <color>
     permission: lochat.chatcolor
-    aliases: [цветчата, chatcolour]
+    aliases: [цветчата, chatcolour, сrfnсщдщк, сrfnсщдщгк]
 
   lochat:
     description: LoChat admin command
     usage: /lochat [reload]
     permission: lochat.admin
+    aliases: [дщсрфе]
 
   color:
     description: Set gradient nick color
     usage: /color <hex1> [hex2] ...
     permission: gradient.color
-    aliases: [gradient, цвет, градиент]
+    aliases: [gradient, цвет, градиент, сщдщк, пкфвшуте]
 
   prefix:
     description: Set custom prefix
     usage: /prefix <text>
     permission: gradient.prefix
-    aliases: [префикс]
+    aliases: [префикс, зкуашч]
 
   aprefix:
     description: Admin gradient commands
     usage: /aprefix <subcommand>
     permission: gradient.admin
-    aliases: [gradientadmin]
+    aliases: [gradientadmin, азкуашч, пкфвшуетефвьшт]
 
 permissions:
   chat.global.use:
