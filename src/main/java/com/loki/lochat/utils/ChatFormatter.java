@@ -17,6 +17,7 @@ public class ChatFormatter {
     // Паттерны для цветов
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
     private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk-orA-FK-OR])");
+    private static final Pattern MINIMESSAGE_HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]{6})>");
 
     private ChatFormatter() {}
 
@@ -25,9 +26,11 @@ public class ChatFormatter {
      * Поддерживает: &коды, &#HEX, MiniMessage теги
      */
     public static String convertAllColors(String message) {
+        if (message == null) return "";
+        
         String result = message;
         
-        // 1. Конвертируем &#RRGGBB -> <#RRGGBB>
+        // 1. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
         result = convertHexColors(result);
         
         // 2. Конвертируем &коды -> MiniMessage теги
@@ -172,10 +175,34 @@ public class ChatFormatter {
     }
 
     public static String stripTags(String message) {
+        if (message == null) return "";
         // Убираем MiniMessage теги и legacy коды
         String result = MINI_MESSAGE.stripTags(message);
         result = stripLegacyColors(result);
         result = HEX_PATTERN.matcher(result).replaceAll("");
+        result = MINIMESSAGE_HEX_PATTERN.matcher(result).replaceAll("");
+        return result;
+    }
+
+    /**
+     * Полностью очищает все цветовые коды из строки
+     */
+    public static String stripAllColors(String message) {
+        if (message == null) return "";
+        String result = message;
+        
+        // Убираем MiniMessage HEX теги <#RRGGBB>
+        result = MINIMESSAGE_HEX_PATTERN.matcher(result).replaceAll("");
+        
+        // Убираем &#RRGGBB
+        result = HEX_PATTERN.matcher(result).replaceAll("");
+        
+        // Убираем &коды
+        result = stripLegacyColors(result);
+        
+        // Убираем MiniMessage теги
+        result = MINI_MESSAGE.stripTags(result);
+        
         return result;
     }
 
