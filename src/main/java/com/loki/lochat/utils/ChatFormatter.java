@@ -39,13 +39,30 @@ public class ChatFormatter {
         // 2. Конвертируем §коды -> &коды (для унификации)
         result = convertSectionToAmpersand(result);
         
-        // 3. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
+        // 3. Нормализуем существующие MiniMessage HEX теги в lowercase
+        result = normalizeMiniMessageHex(result);
+        
+        // 4. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
         result = convertHexColors(result);
         
-        // 4. Конвертируем &коды -> MiniMessage теги
+        // 5. Конвертируем &коды -> MiniMessage теги
         result = convertLegacyColors(result);
         
         return result;
+    }
+    
+    /**
+     * Нормализует существующие MiniMessage HEX теги в lowercase
+     */
+    public static String normalizeMiniMessageHex(String message) {
+        if (message == null) return "";
+        Matcher matcher = MINIMESSAGE_HEX_PATTERN.matcher(message);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            matcher.appendReplacement(result, "<#" + matcher.group(1).toLowerCase() + ">");
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
     
     /**
@@ -83,7 +100,7 @@ public class ChatFormatter {
         Matcher matcher = HEX_PATTERN.matcher(result);
         StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, "<#" + matcher.group(1) + ">");
+            matcher.appendReplacement(sb, "<#" + matcher.group(1).toLowerCase() + ">");
         }
         matcher.appendTail(sb);
         result = sb.toString();
@@ -92,7 +109,7 @@ public class ChatFormatter {
         matcher = HEX_PATTERN_NO_AMPERSAND.matcher(result);
         sb = new StringBuilder();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, "<#" + matcher.group(1) + ">");
+            matcher.appendReplacement(sb, "<#" + matcher.group(1).toLowerCase() + ">");
         }
         matcher.appendTail(sb);
         return sb.toString();

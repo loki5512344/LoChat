@@ -2,6 +2,8 @@ package com.loki.lochat.config;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.ChatFormatter;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -41,6 +43,34 @@ public class MessageConfig {
             message = message.replace(replacements[i], replacements[i + 1]);
         }
         return ChatFormatter.convertAllColors(message);
+    }
+
+    /**
+     * Получает сообщение как Component
+     */
+    public Component getComponent(String path) {
+        return ChatFormatter.parse(get(path));
+    }
+
+    /**
+     * Получает сообщение как Component с заменами
+     */
+    public Component getComponent(String path, String... replacements) {
+        return ChatFormatter.parse(get(path, replacements));
+    }
+
+    /**
+     * Отправляет сообщение игроку
+     */
+    public void send(CommandSender sender, String path) {
+        sender.sendMessage(getComponent(path));
+    }
+
+    /**
+     * Отправляет сообщение игроку с заменами
+     */
+    public void send(CommandSender sender, String path, String... replacements) {
+        sender.sendMessage(getComponent(path, replacements));
     }
 
     // Shortcuts
