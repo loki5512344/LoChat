@@ -29,6 +29,7 @@ public final class LoChat extends JavaPlugin {
     private ChatColorManager chatColorManager;
     private CustomCommandManager customCommandManager;
     private GradientModule gradientModule;
+    private com.loki.lochat.listeners.DisplayNameListener displayNameListener;
 
     @Override
     public void onEnable() {
@@ -63,6 +64,8 @@ public final class LoChat extends JavaPlugin {
         
         // Регистрация листенеров
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        displayNameListener = new com.loki.lochat.listeners.DisplayNameListener(this);
+        getServer().getPluginManager().registerEvents(displayNameListener, this);
         
         // Запуск автосообщений
         autoMessageManager.start();
@@ -187,5 +190,9 @@ public final class LoChat extends JavaPlugin {
 
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
+    }
+
+    public com.loki.lochat.listeners.DisplayNameListener getDisplayNameListener() {
+        return displayNameListener;
     }
 }

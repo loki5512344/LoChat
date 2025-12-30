@@ -53,6 +53,13 @@ public class ChatColorCommand implements CommandExecutor, TabCompleter {
         // Сохраняем цвет чата игрока
         plugin.getChatColorManager().setChatColor(player.getUniqueId(), color);
         
+        // Обновляем display name игрока
+        player.getScheduler().run(plugin, task -> {
+            if (plugin.getDisplayNameListener() != null) {
+                plugin.getDisplayNameListener().updatePlayerDisplayName(player);
+            }
+        }, null);
+        
         // Показываем пример с примененным цветом
         String preview = ChatFormatter.convertAllColors(color + "Пример текста");
         player.sendMessage(ChatFormatter.parse("<green>Цвет чата установлен! Пример: " + preview));
