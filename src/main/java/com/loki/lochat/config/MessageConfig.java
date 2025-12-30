@@ -31,7 +31,7 @@ public class MessageConfig {
     }
 
     public String get(String path) {
-        return messages.getString(path, "<red>Message not found: " + path + "</red>");
+        return messages.getString(path, "&#FF0000Message not found: " + path);
     }
 
     public String get(String path, String... replacements) {

@@ -57,7 +57,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         ));
 
         if (target.isOnline()) {
-            target.sendMessage(ChatFormatter.parse("<green>Вы были размучены!"));
+            target.sendMessage(ChatFormatter.parse("&#00FF00Вы были размучены!"));
         }
 
         return true;

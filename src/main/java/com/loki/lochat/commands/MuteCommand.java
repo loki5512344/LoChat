@@ -50,7 +50,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         // Парсим время
         long duration = parseTime(timeStr);
         if (duration == -1) {
-            sender.sendMessage(ChatFormatter.parse("<red>Неверный формат времени! Используйте: 1m, 1h, 1d, permanent"));
+            sender.sendMessage(ChatFormatter.parse("&#FF0000Неверный формат времени! Используйте: 1m, 1h, 1d, permanent"));
             return true;
         }
 

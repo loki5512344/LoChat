@@ -41,7 +41,7 @@ public class ConfigManager {
         // Добавляем настройки объявлений если их нет
         if (!config.contains("announcements")) {
             config.set("announcements.show-title", true);
-            config.set("announcements.title-header", "<gold>ОБЪЯВЛЕНИЕ</gold>");
+            config.set("announcements.title-header", "&#FFD700ОБЪЯВЛЕНИЕ");
             config.set("announcements.show-actionbar", true);
             config.set("announcements.title-duration", 3);
         }
@@ -55,8 +55,8 @@ public class ConfigManager {
             config.set("mentions.enabled", true);
             config.set("mentions.sound", true);
             config.set("mentions.sound-type", "BLOCK_NOTE_BLOCK_PLING");
-            config.set("mentions.highlight", "<yellow>@{player}</yellow>");
-            config.set("mentions.self-highlight", "<gold><bold>{player}</bold></gold>");
+            config.set("mentions.highlight", "&#FFFF00@{player}");
+            config.set("mentions.self-highlight", "&#FFD700{player}");
         }
         
         if (!config.contains("filter.enabled")) {
@@ -164,11 +164,11 @@ public class ConfigManager {
     }
 
     public String getMentionHighlight() {
-        return config.getString("mentions.highlight", "<yellow>@{player}</yellow>");
+        return config.getString("mentions.highlight", "&#FFFF00@{player}");
     }
 
     public String getSelfMentionHighlight() {
-        return config.getString("mentions.self-highlight", "<gold><bold>{player}</bold></gold>");
+        return config.getString("mentions.self-highlight", "&#FFD700{player}");
     }
 
     // Filter
@@ -220,7 +220,7 @@ public class ConfigManager {
 
     // Formats
     public String getAnnouncementFormat() {
-        return config.getString("formats.announcement", "<gold>[ОБЪЯВЛЕНИЕ]</gold> <message>");
+        return config.getString("formats.announcement", "&#FFD700[ОБЪЯВЛЕНИЕ] <message>");
     }
 
     // Announcements
@@ -229,7 +229,7 @@ public class ConfigManager {
     }
 
     public String getAnnouncementTitleHeader() {
-        return config.getString("announcements.title-header", "<gold>ОБЪЯВЛЕНИЕ</gold>");
+        return config.getString("announcements.title-header", "&#FFD700ОБЪЯВЛЕНИЕ");
     }
 
     public boolean isAnnouncementActionBarEnabled() {

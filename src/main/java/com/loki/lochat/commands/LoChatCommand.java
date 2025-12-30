@@ -29,26 +29,26 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ChatFormatter.parse("<gold>LoChat v" + plugin.getDescription().getVersion() + "</gold>"));
+            sender.sendMessage(ChatFormatter.parse("&#FFD700LoChat v" + plugin.getDescription().getVersion()));
             sender.sendMessage(ChatFormatter.parse("&#808080Команды:"));
-            sender.sendMessage(ChatFormatter.parse("<yellow>/lochat reload</yellow> - Перезагрузить конфиги"));
-            sender.sendMessage(ChatFormatter.parse("<yellow>/lochat commands</yellow> - Список кастомных команд"));
-            sender.sendMessage(ChatFormatter.parse("<yellow>/lochat commands reload</yellow> - Перезагрузить кастомные команды"));
+            sender.sendMessage(ChatFormatter.parse("&#FFFF00/lochat reload - Перезагрузить конфиги"));
+            sender.sendMessage(ChatFormatter.parse("&#FFFF00/lochat commands - Список кастомных команд"));
+            sender.sendMessage(ChatFormatter.parse("&#FFFF00/lochat commands reload - Перезагрузить кастомные команды"));
             return true;
         }
 
         switch (args[0].toLowerCase()) {
             case "reload" -> {
                 plugin.reload();
-                sender.sendMessage(ChatFormatter.parse("<green>Конфигурация перезагружена!</green>"));
+                sender.sendMessage(ChatFormatter.parse("&#00FF00Конфигурация перезагружена!"));
             }
             case "commands" -> {
                 if (args.length > 1 && args[1].equalsIgnoreCase("reload")) {
                     plugin.getCustomCommandManager().reload();
-                    sender.sendMessage(ChatFormatter.parse("<green>Кастомные команды перезагружены!</green>"));
+                    sender.sendMessage(ChatFormatter.parse("&#00FF00Кастомные команды перезагружены!"));
                 } else {
                     var commands = plugin.getCustomCommandManager().getCommands();
-                    sender.sendMessage(ChatFormatter.parse("<gold>Кастомные команды (" + commands.size() + "):</gold>"));
+                    sender.sendMessage(ChatFormatter.parse("&#FFD700Кастомные команды (" + commands.size() + "):"));
                     for (var cmd : commands.values()) {
                         sender.sendMessage(ChatFormatter.parse("&e/" + cmd.name + " &#808080(" + cmd.type + ")"));
                         if (!cmd.aliases.isEmpty()) {
@@ -57,7 +57,7 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
                     }
                 }
             }
-            default -> sender.sendMessage(ChatFormatter.parse("<red>Неизвестная команда. Используйте /lochat для помощи.</red>"));
+            default -> sender.sendMessage(ChatFormatter.parse("&#FF0000Неизвестная команда. Используйте /lochat для помощи."));
         }
 
         return true;

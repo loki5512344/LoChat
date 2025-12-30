@@ -46,7 +46,7 @@ public class ChatColorCommand implements CommandExecutor, TabCompleter {
         
         // Проверяем валидность цвета (формат &X где X - это цветовой код)
         if (!isValidColor(color)) {
-            player.sendMessage(ChatFormatter.parse("<red>Неверный формат цвета! Используйте формат &X, например: &b, &a, &c</red>"));
+            player.sendMessage(ChatFormatter.parse("&#FF0000Неверный формат цвета! Используйте формат &X, например: &b, &a, &c"));
             return true;
         }
 
@@ -62,7 +62,7 @@ public class ChatColorCommand implements CommandExecutor, TabCompleter {
         
         // Показываем пример с примененным цветом
         String preview = ChatFormatter.convertAllColors(color + "Пример текста");
-        player.sendMessage(ChatFormatter.parse("<green>Цвет чата установлен! Пример: " + preview));
+        player.sendMessage(ChatFormatter.parse("&#00FF00Цвет чата установлен! Пример: " + preview));
 
         return true;
     }
