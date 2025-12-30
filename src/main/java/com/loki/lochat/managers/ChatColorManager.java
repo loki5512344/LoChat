@@ -1,6 +1,7 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.gradient.util.FoliaUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -61,9 +62,16 @@ public class ChatColorManager {
         }
     }
 
+    /**
+     * Асинхронное сохранение данных (для Folia совместимости)
+     */
+    private void saveDataAsync() {
+        FoliaUtil.runAsync(plugin, this::saveData);
+    }
+
     public void setChatColor(UUID playerId, String color) {
         chatColors.put(playerId, color);
-        saveData();
+        saveDataAsync();
     }
 
     public String getChatColor(UUID playerId) {
@@ -77,7 +85,7 @@ public class ChatColorManager {
     public void removeChatColor(UUID playerId) {
         chatColors.remove(playerId);
         dataConfig.set(playerId.toString(), null);
-        saveData();
+        saveDataAsync();
     }
 
     /**

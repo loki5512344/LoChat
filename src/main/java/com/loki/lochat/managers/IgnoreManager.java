@@ -1,6 +1,7 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.gradient.util.FoliaUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class IgnoreManager {
     public boolean addIgnore(UUID player, UUID target) {
         Set<UUID> ignored = ignoreMap.computeIfAbsent(player, k -> ConcurrentHashMap.newKeySet());
         boolean added = ignored.add(target);
-        if (added) save();
+        if (added) saveAsync();
         return added;
     }
 
@@ -77,7 +78,7 @@ public class IgnoreManager {
         Set<UUID> ignored = ignoreMap.get(player);
         if (ignored == null) return false;
         boolean removed = ignored.remove(target);
-        if (removed) save();
+        if (removed) saveAsync();
         return removed;
     }
 
@@ -92,6 +93,13 @@ public class IgnoreManager {
 
     public void clearIgnores(UUID player) {
         ignoreMap.remove(player);
-        save();
+        saveAsync();
+    }
+
+    /**
+     * Асинхронное сохранение данных (для Folia совместимости)
+     */
+    private void saveAsync() {
+        FoliaUtil.runAsync(plugin, this::save);
     }
 }
