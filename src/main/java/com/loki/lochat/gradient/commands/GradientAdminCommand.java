@@ -87,6 +87,9 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             case "updateall" -> {
                 handleUpdateAll(sender, msg);
             }
+            case "toggledisplay" -> {
+                handleToggleDisplay(sender, msg);
+            }
             default -> sendHelp(sender);
         }
 
@@ -104,6 +107,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§e/aprefix resetcolor <игрок> §7— сбросить цвет");
         sender.sendMessage("§e/aprefix resetprefix <игрок> §7— сбросить префикс");
         sender.sendMessage("§e/aprefix updateall §7— обновить display names всех игроков");
+        sender.sendMessage("§e/aprefix toggledisplay §7— переключить TextDisplay/обычный режим");
     }
 
     private void handleInfo(CommandSender sender, String playerName, GradientMessages msg) {
@@ -330,6 +334,37 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§aОбновлены display names для §f" + count + " §aигроков");
     }
 
+    private void handleToggleDisplay(CommandSender sender, GradientMessages msg) {
+        // Переключаем режим TextDisplay в конфиге
+        boolean currentMode = module.getConfig().isUseTextDisplay();
+        boolean newMode = !currentMode;
+        
+        // Обновляем конфиг (временно в памяти)
+        module.getConfig().setUseTextDisplay(newMode);
+        
+        if (newMode) {
+            // Переключаемся на TextDisplay
+            sender.sendMessage("§aВключен режим TextDisplay");
+            // Удаляем все обычные display names и создаем TextDisplay
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.displayName(null); // Сбрасываем обычный display name
+                GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
+                FoliaUtil.runEntityTask(module.getPlugin(), player, 
+                        () -> module.getTextDisplayManager().updatePlayerDisplay(player));
+            }
+        } else {
+            // Переключаемся на обычный display name
+            sender.sendMessage("§cВыключен режим TextDisplay");
+            // Удаляем все TextDisplay и обновляем обычные display names
+            module.getTextDisplayManager().removeAllDisplays();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
+                FoliaUtil.runEntityTask(module.getPlugin(), player, 
+                        () -> DisplayNameUtil.updateDisplayName(module, player, data));
+            }
+        }
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                  @NotNull String alias, @NotNull String[] args) {
@@ -337,7 +372,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             return Arrays.asList("reload", "info", "setcolor", "setprefix", "coloron", "coloroff", 
-                    "prefixon", "prefixoff", "resetcolor", "resetprefix", "updateall").stream()
+                    "prefixon", "prefixoff", "resetcolor", "resetprefix", "updateall", "toggledisplay").stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .toList();
         }

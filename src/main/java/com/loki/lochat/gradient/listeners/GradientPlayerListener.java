@@ -48,6 +48,12 @@ public class GradientPlayerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        
+        // Удаляем TextDisplay если есть
+        if (module.getTextDisplayManager() != null) {
+            module.getTextDisplayManager().removePlayerDisplay(player.getUniqueId());
+        }
+        
         FoliaUtil.runAsync(module.getPlugin(), 
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }

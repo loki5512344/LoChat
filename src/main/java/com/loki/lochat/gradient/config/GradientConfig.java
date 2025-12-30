@@ -83,4 +83,12 @@ public class GradientConfig {
     // Display settings
     public boolean isUpdateDisplayName() { return config.getBoolean("display.update-display-name", true); }
     public boolean isUpdateTabList() { return config.getBoolean("display.update-tab-list", true); }
+    public boolean isUseTextDisplay() { return config.getBoolean("display.use-text-display", true); }
+    public double getTextDisplayHeight() { return config.getDouble("display.text-display-height", 2.3); }
+    public float getTextDisplayScale() { return (float) config.getDouble("display.text-display-scale", 0.8); }
+    
+    // Метод для временного изменения настройки TextDisplay
+    public void setUseTextDisplay(boolean useTextDisplay) {
+        config.set("display.use-text-display", useTextDisplay);
+    }
 }
