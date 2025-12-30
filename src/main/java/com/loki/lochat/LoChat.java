@@ -126,6 +126,9 @@ public final class LoChat extends JavaPlugin {
         if (customCommandManager != null) {
             customCommandManager.reload();
         }
+        if (filterManager != null) {
+            filterManager.reload();
+        }
     }
 
     public static LoChat getInstance() {

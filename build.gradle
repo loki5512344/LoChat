@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.loki'
-version = '1.5.3'
+version = '1.5.4'
 
 repositories {
     mavenCentral()
@@ -17,6 +17,7 @@ dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.6'
     compileOnly 'org.black_ixx:playerpoints:3.2.7'
     compileOnly 'net.luckperms:api:5.4'
+    implementation 'com.google.code.gson:gson:2.10.1'
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
@@ -42,7 +43,7 @@ test {
 }
 
 jar {
-    archiveFileName = 'LoChat-1.5.3.jar'
+    archiveFileName = 'LoChat-1.5.4.jar'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
