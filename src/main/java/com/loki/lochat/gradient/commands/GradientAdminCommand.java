@@ -84,6 +84,9 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             case "prefixoff" -> handlePrefixToggle(sender, args, false, msg);
             case "resetcolor" -> handleResetColor(sender, args, msg);
             case "resetprefix" -> handleResetPrefix(sender, args, msg);
+            case "updateall" -> {
+                handleUpdateAll(sender, msg);
+            }
             default -> sendHelp(sender);
         }
 
@@ -100,6 +103,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§e/aprefix prefixon/prefixoff <игрок> §7— вкл/выкл префикс");
         sender.sendMessage("§e/aprefix resetcolor <игрок> §7— сбросить цвет");
         sender.sendMessage("§e/aprefix resetprefix <игрок> §7— сбросить префикс");
+        sender.sendMessage("§e/aprefix updateall §7— обновить display names всех игроков");
     }
 
     private void handleInfo(CommandSender sender, String playerName, GradientMessages msg) {
@@ -315,6 +319,17 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§aПрефикс для игрока §f" + args[1] + " §aсброшен");
     }
 
+    private void handleUpdateAll(CommandSender sender, GradientMessages msg) {
+        int count = 0;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
+            FoliaUtil.runEntityTask(module.getPlugin(), player, 
+                    () -> DisplayNameUtil.updateDisplayName(module, player, data));
+            count++;
+        }
+        sender.sendMessage("§aОбновлены display names для §f" + count + " §aигроков");
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                  @NotNull String alias, @NotNull String[] args) {
@@ -322,7 +337,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1) {
             return Arrays.asList("reload", "info", "setcolor", "setprefix", "coloron", "coloroff", 
-                    "prefixon", "prefixoff", "resetcolor", "resetprefix").stream()
+                    "prefixon", "prefixoff", "resetcolor", "resetprefix", "updateall").stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .toList();
         }

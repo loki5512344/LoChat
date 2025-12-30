@@ -31,9 +31,12 @@ public final class DisplayNameUtil {
         String prefix = null;
         String prefixFormat = cfg.getPrefixFormat();
         
+        // Определяем префикс: сначала кастомный, потом LuckPerms
         if (data.isPrefixEnabled() && data.hasPrefix()) {
+            // Есть кастомный префикс
             prefix = data.getPrefix();
-        } else {
+        } else if (module.getLuckPermsHook().isEnabled()) {
+            // Нет кастомного префикса, проверяем LuckPerms
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 String displayName = buildWithLuckPermsPrefix(
@@ -52,6 +55,7 @@ public final class DisplayNameUtil {
             }
         }
         
+        // Строим display name с кастомным префиксом или без префикса
         String displayName = GradientUtil.buildDisplayName(
                 prefix,
                 player.getName(),
