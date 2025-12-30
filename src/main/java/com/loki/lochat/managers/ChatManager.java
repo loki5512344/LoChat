@@ -5,6 +5,7 @@ import com.loki.lochat.utils.ChatFormatter;
 import com.loki.lochat.utils.DistanceUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -18,37 +19,37 @@ public class ChatManager {
     private final LoChat plugin;
     private final Set<UUID> globalChatDisabled = ConcurrentHashMap.newKeySet();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 
     public ChatManager(LoChat plugin) {
         this.plugin = plugin;
     }
 
-    public void sendGlobalMessage(Player sender, String message) {
+    public void sendGlobalMessage(Player sender, Component message) {
         if (!plugin.getConfigManager().isGlobalEnabled()) {
             sender.sendMessage(plugin.getMessageConfig().getComponent("global.disabled"));
             return;
         }
 
+        // Конвертируем Component в String для обработки упоминаний
+        String messageText = PLAIN.serialize(message);
+
         // Обработка упоминаний @ник
         Set<Player> mentionedPlayers = new HashSet<>();
-        String processedMessage = plugin.getMentionManager().processMentions(message, mentionedPlayers);
+        String processedMessage = plugin.getMentionManager().processMentions(messageText, mentionedPlayers);
 
         String format = plugin.getConfigManager().getGlobalFormat();
         String prefix = plugin.getConfigManager().getGlobalPrefix();
-        boolean hasColor = sender.hasPermission("chat.global.color");
 
         // Получаем отображаемое имя игрока (с градиентом если есть)
         String playerDisplay = getPlayerDisplay(sender);
-        
-        // Обрабатываем сообщение игрока (смайлики, цвета если есть право)
-        String finalMessage = ChatFormatter.processPlayerMessage(processedMessage, sender, hasColor);
 
         // Отправка каждому игроку персонализированное сообщение
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (isGlobalChatDisabled(player.getUniqueId())) continue;
             
             // Персонализируем сообщение для этого игрока (выделяем его ник)
-            String personalizedMsg = plugin.getMentionManager().getPersonalizedMessage(finalMessage, player);
+            String personalizedMsg = plugin.getMentionManager().getPersonalizedMessage(processedMessage, player);
             
             // Формируем итоговую строку
             String formatted = format
@@ -61,34 +62,33 @@ public class ChatManager {
             player.sendMessage(component);
             
             // Проверяем упоминание ника без @ и уведомляем
-            plugin.getMentionManager().notifyIfMentioned(message, player, sender);
+            plugin.getMentionManager().notifyIfMentioned(messageText, player, sender);
         }
 
         // Уведомление упомянутых через @
         plugin.getMentionManager().notifyMentioned(mentionedPlayers);
 
-        plugin.getLogger().info("[G] " + sender.getName() + ": " + ChatFormatter.stripTags(message));
+        plugin.getLogger().info("[G] " + sender.getName() + ": " + ChatFormatter.stripTags(messageText));
     }
 
-    public void sendLocalMessage(Player sender, String message) {
+    public void sendLocalMessage(Player sender, Component message) {
         if (!plugin.getConfigManager().isLocalEnabled()) {
             return;
         }
 
+        // Конвертируем Component в String для обработки упоминаний
+        String messageText = PLAIN.serialize(message);
+
         // Обработка упоминаний @ник
         Set<Player> mentionedPlayers = new HashSet<>();
-        String processedMessage = plugin.getMentionManager().processMentions(message, mentionedPlayers);
+        String processedMessage = plugin.getMentionManager().processMentions(messageText, mentionedPlayers);
 
         int radius = plugin.getConfigManager().getLocalRadius();
         String format = plugin.getConfigManager().getLocalFormat();
         String prefix = plugin.getConfigManager().getLocalPrefix();
-        boolean hasColor = sender.hasPermission("chat.local.color");
 
         // Получаем отображаемое имя игрока (с градиентом если есть)
         String playerDisplay = getPlayerDisplay(sender);
-        
-        // Обрабатываем сообщение игрока (смайлики, цвета если есть право)
-        String finalMessage = ChatFormatter.processPlayerMessage(processedMessage, sender, hasColor);
 
         boolean foundRecipient = false;
         Set<Player> recipients = new HashSet<>();
@@ -96,7 +96,7 @@ public class ChatManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (DistanceUtil.isInRange(sender, player, radius)) {
                 // Персонализируем сообщение для этого игрока
-                String personalizedMsg = plugin.getMentionManager().getPersonalizedMessage(finalMessage, player);
+                String personalizedMsg = plugin.getMentionManager().getPersonalizedMessage(processedMessage, player);
                 
                 // Формируем итоговую строку
                 String formatted = prefix + " " + format
@@ -110,7 +110,7 @@ public class ChatManager {
                 recipients.add(player);
                 
                 // Проверяем упоминание ника без @
-                plugin.getMentionManager().notifyIfMentioned(message, player, sender);
+                plugin.getMentionManager().notifyIfMentioned(messageText, player, sender);
                 
                 if (!player.equals(sender)) {
                     foundRecipient = true;
