@@ -17,26 +17,38 @@ public class ChatFormatter {
     // Паттерны для цветов
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
     private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fk-orA-FK-OR])");
+    private static final Pattern SECTION_COLOR_PATTERN = Pattern.compile("§([0-9a-fk-orA-FK-OR])");
     private static final Pattern MINIMESSAGE_HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]{6})>");
 
     private ChatFormatter() {}
 
     /**
      * Конвертирует все форматы цветов в MiniMessage
-     * Поддерживает: &коды, &#HEX, MiniMessage теги
+     * Поддерживает: &коды, §коды, &#HEX, MiniMessage теги
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
         
         String result = message;
         
-        // 1. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
+        // 1. Конвертируем §коды -> &коды (для унификации)
+        result = convertSectionToAmpersand(result);
+        
+        // 2. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
         result = convertHexColors(result);
         
-        // 2. Конвертируем &коды -> MiniMessage теги
+        // 3. Конвертируем &коды -> MiniMessage теги
         result = convertLegacyColors(result);
         
         return result;
+    }
+    
+    /**
+     * Конвертирует §коды в &коды
+     */
+    public static String convertSectionToAmpersand(String message) {
+        if (message == null) return "";
+        return SECTION_COLOR_PATTERN.matcher(message).replaceAll("&$1");
     }
 
     /**
@@ -152,10 +164,11 @@ public class ChatFormatter {
     }
 
     /**
-     * Убирает &коды из сообщения
+     * Убирает &коды и §коды из сообщения
      */
     public static String stripLegacyColors(String message) {
-        return LEGACY_COLOR_PATTERN.matcher(message).replaceAll("");
+        String result = LEGACY_COLOR_PATTERN.matcher(message).replaceAll("");
+        return SECTION_COLOR_PATTERN.matcher(result).replaceAll("");
     }
 
     public static Component parse(String message) {
