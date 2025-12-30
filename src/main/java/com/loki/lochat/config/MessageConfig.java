@@ -31,17 +31,16 @@ public class MessageConfig {
     }
 
     public String get(String path) {
-        return messages.getString(path, "&#FF0000Message not found: " + path);
+        String message = messages.getString(path, "&#FF0000Message not found: " + path);
+        return ChatFormatter.convertAllColors(message);
     }
 
     public String get(String path, String... replacements) {
-        String message = get(path);
+        String message = messages.getString(path, "&#FF0000Message not found: " + path);
         for (int i = 0; i < replacements.length - 1; i += 2) {
             message = message.replace(replacements[i], replacements[i + 1]);
         }
-        // Убираем все цветовые коды и конвертируем заново
-        message = ChatFormatter.stripAllColors(message);
-        return message;
+        return ChatFormatter.convertAllColors(message);
     }
 
     // Shortcuts

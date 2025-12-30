@@ -1,6 +1,7 @@
 package com.loki.lochat.config;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -97,11 +98,11 @@ public class ConfigManager {
     }
 
     public String getGlobalPrefix() {
-        return config.getString("chat.global.prefix", "[G]");
+        return ChatFormatter.convertAllColors(config.getString("chat.global.prefix", "[G]"));
     }
 
     public String getGlobalFormat() {
-        return config.getString("chat.global.format", "<prefix><player>: <message>");
+        return ChatFormatter.convertAllColors(config.getString("chat.global.format", "<prefix><player>: <message>"));
     }
 
     public String getGlobalSymbol() {
@@ -122,11 +123,11 @@ public class ConfigManager {
     }
 
     public String getLocalPrefix() {
-        return config.getString("chat.local.prefix", "[L]");
+        return ChatFormatter.convertAllColors(config.getString("chat.local.prefix", "[L]"));
     }
 
     public String getLocalFormat() {
-        return config.getString("chat.local.format", "<player>: <message>");
+        return ChatFormatter.convertAllColors(config.getString("chat.local.format", "<player>: <message>"));
     }
 
     public int getLocalCooldown() {
@@ -164,11 +165,11 @@ public class ConfigManager {
     }
 
     public String getMentionHighlight() {
-        return config.getString("mentions.highlight", "&#FFFF00@{player}");
+        return ChatFormatter.convertAllColors(config.getString("mentions.highlight", "&#FFFF00@{player}"));
     }
 
     public String getSelfMentionHighlight() {
-        return config.getString("mentions.self-highlight", "&#FFD700{player}");
+        return ChatFormatter.convertAllColors(config.getString("mentions.self-highlight", "&#FFD700{player}"));
     }
 
     // Filter
@@ -220,7 +221,7 @@ public class ConfigManager {
 
     // Formats
     public String getAnnouncementFormat() {
-        return config.getString("formats.announcement", "&#FFD700[ОБЪЯВЛЕНИЕ] <message>");
+        return ChatFormatter.convertAllColors(config.getString("formats.announcement", "&#FFD700[ОБЪЯВЛЕНИЕ] <message>"));
     }
 
     // Announcements
@@ -229,7 +230,7 @@ public class ConfigManager {
     }
 
     public String getAnnouncementTitleHeader() {
-        return config.getString("announcements.title-header", "&#FFD700ОБЪЯВЛЕНИЕ");
+        return ChatFormatter.convertAllColors(config.getString("announcements.title-header", "&#FFD700ОБЪЯВЛЕНИЕ"));
     }
 
     public boolean isAnnouncementActionBarEnabled() {
