@@ -5,6 +5,9 @@ import com.loki.lochat.managers.AntiSpamManager;
 import com.loki.lochat.managers.FilterManager;
 import com.loki.lochat.utils.ChatFormatter;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class ChatListener implements Listener {
 
     private final LoChat plugin;
+    private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 
     public ChatListener(LoChat plugin) {
         this.plugin = plugin;
@@ -24,12 +28,14 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
-        String message = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-                .plainText().serialize(event.message());
+        Component message = event.message();
+        
+        // Plain текст только для проверок
+        String plainMessage = PLAIN.serialize(message);
 
         // Обработка через RegionScheduler для Folia
         player.getScheduler().run(plugin, task -> {
-            processChat(player, message);
+            processChat(player, plainMessage);
         }, null);
     }
 
@@ -38,11 +44,9 @@ public class ChatListener implements Listener {
         if (plugin.getMuteManager().isMuted(player.getUniqueId())) {
             String timeLeft = plugin.getMuteManager().formatRemainingTime(player.getUniqueId());
             if (timeLeft.equals("навсегда")) {
-                player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("mute.permanent")));
+                player.sendMessage(plugin.getMessageConfig().getComponent("mute.permanent"));
             } else {
-                player.sendMessage(ChatFormatter.parse(
-                    plugin.getMessageConfig().get("mute.you-muted", "{time}", timeLeft)
-                ));
+                player.sendMessage(plugin.getMessageConfig().getComponent("mute.you-muted", "{time}", timeLeft));
             }
             return;
         }
@@ -59,9 +63,7 @@ public class ChatListener implements Listener {
         if (cooldown > 0 && !player.hasPermission("chat.bypass.cooldown")) {
             if (plugin.getCooldownManager().isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
                 int remaining = plugin.getCooldownManager().getRemainingCooldown(player.getUniqueId(), chatType, cooldown);
-                player.sendMessage(ChatFormatter.parse(
-                        plugin.getMessageConfig().get("cooldown.wait", "{time}", String.valueOf(remaining))
-                ));
+                player.sendMessage(plugin.getMessageConfig().getComponent("cooldown.wait", "{time}", String.valueOf(remaining)));
                 return;
             }
         }
@@ -71,15 +73,15 @@ public class ChatListener implements Listener {
             AntiSpamManager.SpamResult spamResult = plugin.getAntiSpamManager().checkMessage(player.getUniqueId(), processedMessage);
             switch (spamResult) {
                 case TOO_MANY_CAPS -> {
-                    player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("antispam.caps")));
+                    player.sendMessage(plugin.getMessageConfig().getComponent("antispam.caps"));
                     return;
                 }
                 case REPEAT_CHARS -> {
-                    player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("antispam.repeat")));
+                    player.sendMessage(plugin.getMessageConfig().getComponent("antispam.repeat"));
                     return;
                 }
                 case SIMILAR_MESSAGE -> {
-                    player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("antispam.similar")));
+                    player.sendMessage(plugin.getMessageConfig().getComponent("antispam.similar"));
                     return;
                 }
             }
@@ -90,12 +92,11 @@ public class ChatListener implements Listener {
             FilterManager.FilterResult filterResult = plugin.getFilterManager().checkMessage(processedMessage);
             switch (filterResult) {
                 case BLOCKED -> {
-                    player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("filter.blocked")));
+                    player.sendMessage(plugin.getMessageConfig().getComponent("filter.blocked"));
                     return;
                 }
                 case WARNED -> {
-                    player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("filter.warned")));
-                    // Продолжаем, но цензурим
+                    player.sendMessage(plugin.getMessageConfig().getComponent("filter.warned"));
                     processedMessage = plugin.getFilterManager().censorMessage(processedMessage);
                 }
                 case CENSORED -> processedMessage = plugin.getFilterManager().censorMessage(processedMessage);

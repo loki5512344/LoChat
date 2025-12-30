@@ -26,23 +26,29 @@ public class ChatFormatter {
 
     /**
      * Конвертирует все форматы цветов в MiniMessage
-     * Поддерживает: &коды, §коды, &#HEX, §x§...HEX, MiniMessage теги
+     * Поддерживает: &коды, §коды, &#HEX, §x§...HEX
+     * Идемпотентный - не конвертирует уже конвертированные теги
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
         
+        // Если уже содержит MiniMessage теги <color:...> - не конвертируем повторно
+        if (message.contains("<color:#")) {
+            return message;
+        }
+        
         String result = message;
         
-        // 1. Конвертируем §x§R§R§G§G§B§B -> <#RRGGBB>
+        // 1. Конвертируем §x§R§R§G§G§B§B -> <color:#rrggbb>
         result = convertSectionHexColors(result);
         
         // 2. Конвертируем §коды -> &коды (для унификации)
         result = convertSectionToAmpersand(result);
         
-        // 3. Нормализуем существующие MiniMessage HEX теги в lowercase
+        // 3. Нормализуем существующие MiniMessage HEX теги <#RRGGBB> -> <color:#rrggbb>
         result = normalizeMiniMessageHex(result);
         
-        // 4. Конвертируем &#RRGGBB -> <#RRGGBB> (только если еще не в MiniMessage формате)
+        // 4. Конвертируем &#RRGGBB -> <color:#rrggbb>
         result = convertHexColors(result);
         
         // 5. Конвертируем &коды -> MiniMessage теги
@@ -232,10 +238,22 @@ public class ChatFormatter {
     }
 
     public static Component parse(String message) {
+        return MINI_MESSAGE.deserialize(message);
+    }
+
+    public static Component parseWithColors(String message) {
         return MINI_MESSAGE.deserialize(convertAllColors(message));
     }
 
     public static Component parse(String message, String... replacements) {
+        String result = message;
+        for (int i = 0; i < replacements.length - 1; i += 2) {
+            result = result.replace(replacements[i], replacements[i + 1]);
+        }
+        return MINI_MESSAGE.deserialize(result);
+    }
+
+    public static Component parseWithColors(String message, String... replacements) {
         String result = message;
         for (int i = 0; i < replacements.length - 1; i += 2) {
             result = result.replace(replacements[i], replacements[i + 1]);
@@ -280,45 +298,6 @@ public class ChatFormatter {
         result = MINI_MESSAGE.stripTags(result);
         
         return result;
-    }
-
-    /**
-     * Форматирует глобальное сообщение с поддержкой LoPreff
-     */
-    public static Component formatGlobalMessage(String format, String prefix, Player player, String message, boolean hasColorPermission) {
-        String playerDisplay = getPlayerDisplay(player);
-        String finalMessage = processPlayerMessage(message, player, hasColorPermission);
-        
-        String formatted = format
-                .replace("<prefix>", prefix)
-                .replace("<player>", playerDisplay)
-                .replace("<message>", finalMessage);
-        
-        return parse(formatted);
-    }
-
-    /**
-     * Форматирует локальное сообщение с поддержкой LoPreff
-     */
-    public static Component formatLocalMessage(String format, String prefix, Player player, String message, boolean hasColorPermission) {
-        String playerDisplay = getPlayerDisplay(player);
-        String finalMessage = processPlayerMessage(message, player, hasColorPermission);
-        
-        String formatted = prefix + " " + format
-                .replace("<player>", playerDisplay)
-                .replace("<message>", finalMessage);
-        
-        return parse(formatted);
-    }
-
-    private static String getPlayerDisplay(Player player) {
-        LoChat plugin = LoChat.getInstance();
-        if (plugin != null && plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
-            String name = plugin.getGradientModule().getFormattedName(player);
-            // Конвертируем §x§... формат в MiniMessage
-            return convertAllColors(name);
-        }
-        return player.getName();
     }
 
     public static Component formatPmSent(String format, String targetName, String message) {
