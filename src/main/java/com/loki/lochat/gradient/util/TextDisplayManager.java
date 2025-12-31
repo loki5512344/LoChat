@@ -61,6 +61,7 @@ public class TextDisplayManager {
 
         double height = module.getConfig().getTextDisplayHeight();
         float scale = module.getConfig().getTextDisplayScale();
+        boolean seeThrough = module.getConfig().isTextDisplaySeeThrough();
 
         // Создаем новый TextDisplay
         TextDisplay display = player.getWorld().spawn(
@@ -70,7 +71,7 @@ public class TextDisplayManager {
                 entity.text(textComponent);
                 entity.setBillboard(org.bukkit.entity.Display.Billboard.CENTER);
                 entity.setViewRange(64.0f); // Видимость на 64 блока
-                entity.setSeeThrough(true); // Видно через стены
+                entity.setSeeThrough(seeThrough); // Настраиваемая видимость через стены
                 entity.setShadowRadius(0.0f); // Без тени
                 entity.setShadowStrength(0.0f); // Без тени
                 
@@ -81,6 +82,9 @@ public class TextDisplayManager {
                     new Vector3f(scale, scale, scale), // Размер текста
                     new AxisAngle4f(0, 0, 0, 1) // Без поворота после масштабирования
                 ));
+                
+                // Отключаем скрытие при приседании
+                entity.setVisibleByDefault(true);
             }
         );
 

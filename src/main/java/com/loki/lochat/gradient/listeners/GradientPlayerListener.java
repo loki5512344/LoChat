@@ -57,4 +57,16 @@ public class GradientPlayerListener implements Listener {
         FoliaUtil.runAsync(module.getPlugin(), 
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }
+
+    @EventHandler
+    public void onPlayerToggleSneak(org.bukkit.event.player.PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+        
+        // Обновляем TextDisplay чтобы он не скрывался при приседании
+        if (module.getTextDisplayManager() != null && module.getTextDisplayManager().hasDisplay(player.getUniqueId())) {
+            FoliaUtil.runEntityTask(module.getPlugin(), player, () -> {
+                module.getTextDisplayManager().updateDisplayPosition(player);
+            });
+        }
+    }
 }

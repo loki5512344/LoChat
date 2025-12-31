@@ -85,9 +85,15 @@ public final class ChatFormatter {
             Player receiver,
             String message
     ) {
+        // Получаем отображаемые имена игроков
+        String senderDisplay = getPlayerDisplayName(sender);
+        String receiverDisplay = getPlayerDisplayName(receiver);
+        
         return parse(format
                 .replace("{sender}", sender.getName())
                 .replace("{receiver}", receiver.getName())
+                .replace("{sender_display}", senderDisplay)
+                .replace("{receiver_display}", receiverDisplay)
                 .replace("{message}", message));
     }
 
@@ -97,10 +103,32 @@ public final class ChatFormatter {
             Player receiver,
             String message
     ) {
+        // Получаем отображаемые имена игроков
+        String senderDisplay = getPlayerDisplayName(sender);
+        String receiverDisplay = getPlayerDisplayName(receiver);
+        
         return parse(format
                 .replace("{sender}", sender.getName())
                 .replace("{receiver}", receiver.getName())
+                .replace("{sender_display}", senderDisplay)
+                .replace("{receiver_display}", receiverDisplay)
                 .replace("{message}", message));
+    }
+
+    /**
+     * Получает отображаемое имя игрока с градиентом
+     */
+    private static String getPlayerDisplayName(Player player) {
+        // Получаем экземпляр плагина
+        com.loki.lochat.LoChat plugin = com.loki.lochat.LoChat.getInstance();
+        
+        // Если градиентный модуль включен, используем его
+        if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
+            return plugin.getGradientModule().getFormattedName(player);
+        }
+        
+        // Иначе просто имя игрока
+        return player.getName();
     }
 
     /* ===================== FORMAT (Component-based) ===================== */
