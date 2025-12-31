@@ -20,8 +20,6 @@ public final class DisplayNameUtil {
             .hexCharacter('#')
             .hexColors()
             .build();
-    
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#([0-9a-fA-F]{6})");
 
     private DisplayNameUtil() {}
 
@@ -52,8 +50,8 @@ public final class DisplayNameUtil {
                         cfg.isUseLegacyRgbFormat(),
                         cfg.isContinuousGradient()
                 );
-                // Конвертируем &#RRGGBB в §x§R§R§G§G§B§B для display name
-                displayName = convertToLegacyFormat(displayName);
+                // Для display name нужен §x формат, конвертируем MiniMessage в legacy
+                displayName = convertMiniMessageToLegacy(displayName);
                 var component = SERIALIZER.deserialize(displayName);
                 player.displayName(component);
                 player.playerListName(component);
@@ -72,20 +70,22 @@ public final class DisplayNameUtil {
                 cfg.isUseLegacyRgbFormat()
         );
         
-        // Конвертируем &#RRGGBB в §x§R§R§G§G§B§B для display name
-        displayName = convertToLegacyFormat(displayName);
+        // Для display name нужен §x формат, конвертируем MiniMessage в legacy
+        displayName = convertMiniMessageToLegacy(displayName);
         var component = SERIALIZER.deserialize(displayName);
         player.displayName(component);
         player.playerListName(component);
     }
 
     /**
-     * Конвертирует &#RRGGBB формат в §x§R§R§G§G§B§B для display name
+     * Конвертирует MiniMessage <#RRGGBB> формат в §x§R§R§G§G§B§B для display name
      */
-    private static String convertToLegacyFormat(String text) {
+    private static String convertMiniMessageToLegacy(String text) {
         if (text == null) return "";
         
-        Matcher matcher = HEX_PATTERN.matcher(text);
+        // Конвертируем <#RRGGBB> в §x§R§R§G§G§B§B
+        Pattern pattern = Pattern.compile("<#([0-9a-fA-F]{6})>");
+        Matcher matcher = pattern.matcher(text);
         StringBuffer sb = new StringBuffer();
         
         while (matcher.find()) {

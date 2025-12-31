@@ -26,11 +26,9 @@ public final class LoChat extends JavaPlugin {
     private MentionManager mentionManager;
     private SpyManager spyManager;
     private EmojiManager emojiManager;
-    private ChatColorManager chatColorManager;
     private CustomCommandManager customCommandManager;
     private MuteManager muteManager;
     private GradientModule gradientModule;
-    private com.loki.lochat.listeners.DisplayNameListener displayNameListener;
 
     @Override
     public void onEnable() {
@@ -49,7 +47,6 @@ public final class LoChat extends JavaPlugin {
         cooldownManager = new CooldownManager();
         mentionManager = new MentionManager(this);
         spyManager = new SpyManager(this);
-        chatColorManager = new ChatColorManager(this);
         customCommandManager = new CustomCommandManager(this);
         muteManager = new MuteManager(this);
         chatManager = new ChatManager(this);
@@ -66,8 +63,6 @@ public final class LoChat extends JavaPlugin {
         
         // Регистрация листенеров
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-        displayNameListener = new com.loki.lochat.listeners.DisplayNameListener(this);
-        getServer().getPluginManager().registerEvents(displayNameListener, this);
         
         // Запуск автосообщений
         autoMessageManager.start();
@@ -88,9 +83,6 @@ public final class LoChat extends JavaPlugin {
         }
         if (ignoreManager != null) {
             ignoreManager.save();
-        }
-        if (chatColorManager != null) {
-            chatColorManager.saveData();
         }
         if (muteManager != null) {
             muteManager.saveData();
@@ -114,7 +106,6 @@ public final class LoChat extends JavaPlugin {
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
         getCommand("mute").setExecutor(new MuteCommand(this));
         getCommand("unmute").setExecutor(new UnmuteCommand(this));
-        getCommand("chatcolor").setExecutor(new ChatColorCommand(this));
         
         LoChatCommand loChatCommand = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCommand);
@@ -194,19 +185,11 @@ public final class LoChat extends JavaPlugin {
         return gradientModule;
     }
 
-    public ChatColorManager getChatColorManager() {
-        return chatColorManager;
-    }
-
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
     }
 
     public MuteManager getMuteManager() {
         return muteManager;
-    }
-
-    public com.loki.lochat.listeners.DisplayNameListener getDisplayNameListener() {
-        return displayNameListener;
     }
 }

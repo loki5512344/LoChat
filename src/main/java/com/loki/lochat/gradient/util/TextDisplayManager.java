@@ -150,18 +150,15 @@ public class TextDisplayManager {
                                           boolean useLegacyFormat,
                                           boolean continuousGradient) {
         if (colors == null || colors.isEmpty()) {
-            return convertToMiniMessageFormat(lpPrefix + nick);
+            return lpPrefix + nick;
         }
         
         if (continuousGradient) {
             String cleanPrefix = stripColors(lpPrefix);
             String fullText = cleanPrefix + nick;
-            String result = GradientUtil.applyGradient(fullText, colors, false); // MiniMessage формат
-            return convertToMiniMessageFormat(result);
+            return GradientUtil.applyGradient(fullText, colors, false); // Всегда MiniMessage формат для TextDisplay
         } else {
-            String result = convertToMiniMessageFormat(lpPrefix) + 
-                           convertToMiniMessageFormat(GradientUtil.applyGradient(nick, colors, false));
-            return result;
+            return lpPrefix + GradientUtil.applyGradient(nick, colors, false); // Всегда MiniMessage формат для TextDisplay
         }
     }
 
@@ -174,25 +171,10 @@ public class TextDisplayManager {
     }
 
     /**
-     * Конвертирует &#RRGGBB в <#RRGGBB> для MiniMessage
+     * Возвращает текст как есть, так как градиенты уже в MiniMessage формате
      */
     private String convertToMiniMessageFormat(String text) {
         if (text == null) return "";
-        // Конвертируем &#RRGGBB в <#RRGGBB>
-        text = text.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
-        // Конвертируем §x§R§R§G§G§B§B в <#RRGGBB> (используем Pattern и Matcher)
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("§x(§[0-9a-fA-F]){6}");
-        java.util.regex.Matcher matcher = pattern.matcher(text);
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-            String hex = matcher.group().replaceAll("§", "").substring(1); // Убираем все § и x
-            matcher.appendReplacement(sb, "<#" + hex + ">");
-        }
-        matcher.appendTail(sb);
-        text = sb.toString();
-        
-        // Конвертируем обычные цветовые коды §a в <green> и т.д.
-        text = text.replaceAll("§([0-9a-fk-or])", "<$1>");
         return text;
     }
 

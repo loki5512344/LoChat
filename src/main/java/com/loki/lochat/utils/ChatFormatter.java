@@ -41,12 +41,11 @@ public final class ChatFormatter {
     /* ===================== COLORS ===================== */
 
     /**
-     * Конвертирует &#RRGGBB формат в MiniMessage <#RRGGBB> формат
+     * Возвращает строку как есть, так как теперь градиенты генерируются в MiniMessage формате
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
-        // Конвертируем &#RRGGBB в <#RRGGBB> для MiniMessage
-        return message.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
+        return message;
     }
 
     /* ===================== EMOJIS ===================== */

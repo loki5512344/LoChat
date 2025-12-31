@@ -84,12 +84,6 @@ commands:
     permission: chat.mute
     aliases: [размут, гтьгеу]
 
-  chatcolor:
-    description: Set chat color
-    usage: /chatcolor <color>
-    permission: lochat.chatcolor
-    aliases: [цветчата, chatcolour, сrfnсщдщк, сrfnсщдщгк]
-
   lochat:
     description: LoChat admin command
     usage: /lochat [reload]
@@ -146,8 +140,6 @@ permissions:
   chat.bypass.antispam:
     default: op
   chat.mention.use:
-    default: true
-  lochat.chatcolor:
     default: true
   gradient.color:
     default: true
