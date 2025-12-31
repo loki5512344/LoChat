@@ -17,7 +17,9 @@ public final class ChatFormatter {
 
     public static Component parse(String message) {
         if (message == null) return Component.empty();
-        return MM.deserialize(message);
+        // Конвертируем legacy форматы в MiniMessage перед парсингом
+        String converted = convertLegacyFormats(message);
+        return MM.deserialize(converted);
     }
 
     public static Component parse(String message, String... replacements) {
@@ -26,7 +28,24 @@ public final class ChatFormatter {
         for (int i = 0; i + 1 < replacements.length; i += 2) {
             result = result.replace(replacements[i], replacements[i + 1]);
         }
-        return MM.deserialize(result);
+        // Конвертируем legacy форматы в MiniMessage перед парсингом
+        String converted = convertLegacyFormats(result);
+        return MM.deserialize(converted);
+    }
+
+    /**
+     * Конвертирует legacy форматы цветов в MiniMessage формат
+     */
+    private static String convertLegacyFormats(String message) {
+        if (message == null) return "";
+        
+        // Конвертируем &#RRGGBB в <#RRGGBB>
+        message = message.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
+        
+        // Конвертируем #RRGGBB в <#RRGGBB> (только если не внутри тегов)
+        message = message.replaceAll("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)", "<#$1>");
+        
+        return message;
     }
 
     public static String stripTags(String message) {
@@ -41,11 +60,11 @@ public final class ChatFormatter {
     /* ===================== COLORS ===================== */
 
     /**
-     * Возвращает строку как есть, так как теперь градиенты генерируются в MiniMessage формате
+     * Конвертирует различные форматы цветов в MiniMessage формат
      */
     public static String convertAllColors(String message) {
         if (message == null) return "";
-        return message;
+        return convertLegacyFormats(message);
     }
 
     /* ===================== EMOJIS ===================== */

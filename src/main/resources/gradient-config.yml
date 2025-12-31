@@ -57,7 +57,12 @@ display:
   text-display-scale: 0.8
   # Видно ли TextDisplay через стены
   text-display-see-through: false
-  # Формат TextDisplay (поддерживает плейсхолдеры)
+  # Формат TextDisplay (поддерживает плейсхолдеры и различные форматы цветов)
+  # Поддерживаемые форматы:
+  # <#RRGGBB> - MiniMessage HEX
+  # &#RRGGBB - Legacy HEX  
+  # #RRGGBB - Простой HEX
+  # <red>, <blue> и т.д. - именованные цвета
   text-display-format: "{prefix}{player}"
 
 # Тип хранилища: YAML или SQLITE

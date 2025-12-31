@@ -123,7 +123,23 @@ public class TextDisplayManager {
                 .replace("{player}", playerName)
                 .replace("{name}", playerName); // Альтернативный плейсхолдер
         
-        return result;
+        // Конвертируем legacy форматы в MiniMessage
+        return convertLegacyFormats(result);
+    }
+
+    /**
+     * Конвертирует legacy форматы цветов в MiniMessage формат
+     */
+    private String convertLegacyFormats(String message) {
+        if (message == null) return "";
+        
+        // Конвертируем &#RRGGBB в <#RRGGBB>
+        message = message.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
+        
+        // Конвертируем #RRGGBB в <#RRGGBB> (только если не внутри тегов)
+        message = message.replaceAll("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)", "<#$1>");
+        
+        return message;
     }
 
     /**
