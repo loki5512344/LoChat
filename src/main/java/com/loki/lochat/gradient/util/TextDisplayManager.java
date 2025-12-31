@@ -111,59 +111,59 @@ public class TextDisplayManager {
      * Получает текст для отображения над игроком
      */
     private String getDisplayText(Player player, GradientPlayerData data) {
-        String prefix = null;
+        String format = module.getConfig().getTextDisplayFormat();
+        
+        // Получаем компоненты
+        String prefix = getPlayerPrefix(player, data);
+        String playerName = getPlayerName(player, data);
+        
+        // Заменяем плейсхолдеры
+        String result = format
+                .replace("{prefix}", prefix != null ? prefix : "")
+                .replace("{player}", playerName)
+                .replace("{name}", playerName); // Альтернативный плейсхолдер
+        
+        return result;
+    }
+
+    /**
+     * Получает префикс игрока
+     */
+    private String getPlayerPrefix(Player player, GradientPlayerData data) {
         String prefixFormat = module.getConfig().getPrefixFormat();
         
         // Определяем префикс: сначала кастомный, потом LuckPerms
         if (data.isPrefixEnabled() && data.hasPrefix()) {
-            prefix = data.getPrefix();
+            String prefix = prefixFormat.replace("{prefix}", data.getPrefix());
+            // Применяем градиент только если цвета включены
+            if (data.isColorEnabled() && data.hasColors() && module.getConfig().isGradientOnPrefix()) {
+                return GradientUtil.applyGradient(prefix, data.getColors(), false); // MiniMessage формат
+            }
+            return prefix;
         } else if (module.getLuckPermsHook().isEnabled()) {
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
-                // Для LuckPerms префикса используем специальную логику
-                return buildWithLuckPermsPrefix(
-                    lpPrefix, 
-                    player.getName(), 
-                    data.isColorEnabled() ? data.getColors() : null, 
-                    module.getConfig().isUseLegacyRgbFormat(),
-                    module.getConfig().isContinuousGradient()
-                );
+                // Для LuckPerms префикса применяем градиент только если включено
+                if (data.isColorEnabled() && data.hasColors() && module.getConfig().isGradientOnLuckPermsPrefix()) {
+                    String cleanPrefix = stripColors(lpPrefix);
+                    return GradientUtil.applyGradient(cleanPrefix, data.getColors(), false);
+                }
+                return lpPrefix;
             }
         }
         
-        // Строим display text с кастомным префиксом или без префикса
-        String displayText = GradientUtil.buildDisplayName(
-            prefix,
-            player.getName(),
-            data.isColorEnabled() ? data.getColors() : null,
-            module.getConfig().isGradientOnPrefix(),
-            module.getConfig().isContinuousGradient(),
-            prefixFormat,
-            false // Используем MiniMessage формат для TextDisplay
-        );
-        
-        // Конвертируем &#RRGGBB в <#RRGGBB> для MiniMessage
-        return convertToMiniMessageFormat(displayText);
+        return "";
     }
 
     /**
-     * Строит текст с LuckPerms префиксом
+     * Получает имя игрока с градиентом
      */
-    private String buildWithLuckPermsPrefix(String lpPrefix, String nick, 
-                                          java.util.List<String> colors, 
-                                          boolean useLegacyFormat,
-                                          boolean continuousGradient) {
-        if (colors == null || colors.isEmpty()) {
-            return lpPrefix + nick;
+    private String getPlayerName(Player player, GradientPlayerData data) {
+        // Применяем градиент только если цвета включены
+        if (data.isColorEnabled() && data.hasColors()) {
+            return GradientUtil.applyGradient(player.getName(), data.getColors(), false); // MiniMessage формат
         }
-        
-        if (continuousGradient) {
-            String cleanPrefix = stripColors(lpPrefix);
-            String fullText = cleanPrefix + nick;
-            return GradientUtil.applyGradient(fullText, colors, false); // Всегда MiniMessage формат для TextDisplay
-        } else {
-            return lpPrefix + GradientUtil.applyGradient(nick, colors, false); // Всегда MiniMessage формат для TextDisplay
-        }
+        return player.getName();
     }
 
     /**
@@ -172,14 +172,6 @@ public class TextDisplayManager {
     private String stripColors(String text) {
         if (text == null) return "";
         return text.replaceAll("(?i)(§x(§[0-9a-f]){6}|§[0-9a-fk-or]|&[0-9a-fk-or]|&#[0-9a-f]{6}|<[^>]+>)", "");
-    }
-
-    /**
-     * Возвращает текст как есть, так как градиенты уже в MiniMessage формате
-     */
-    private String convertToMiniMessageFormat(String text) {
-        if (text == null) return "";
-        return text;
     }
 
     /**

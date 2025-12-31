@@ -57,6 +57,8 @@ display:
   text-display-scale: 0.8
   # Видно ли TextDisplay через стены
   text-display-see-through: false
+  # Формат TextDisplay (поддерживает плейсхолдеры)
+  text-display-format: "{prefix}{player}"
 
 # Тип хранилища: YAML или SQLITE
 storage-type: YAML

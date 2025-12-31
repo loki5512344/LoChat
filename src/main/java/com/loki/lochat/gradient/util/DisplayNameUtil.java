@@ -129,9 +129,13 @@ public final class DisplayNameUtil {
         GradientConfig cfg = module.getConfig();
         String prefix = cfg.getPrefixFormat().replace("{prefix}", data.getPrefix()).stripTrailing();
         
-        return (data.hasColors() && data.isColorEnabled() && cfg.isGradientOnPrefix())
-                ? GradientUtil.applyGradient(prefix, data.getColors(), cfg.isUseLegacyRgbFormat())
-                : prefix;
+        // Применяем градиент только если цвета включены И есть цвета
+        if (data.hasColors() && data.isColorEnabled() && cfg.isGradientOnPrefix()) {
+            return GradientUtil.applyGradient(prefix, data.getColors(), cfg.isUseLegacyRgbFormat());
+        }
+        
+        // Возвращаем префикс без цветов
+        return prefix;
     }
 
     /**

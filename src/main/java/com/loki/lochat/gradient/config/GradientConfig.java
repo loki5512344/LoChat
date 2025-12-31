@@ -87,6 +87,7 @@ public class GradientConfig {
     public double getTextDisplayHeight() { return config.getDouble("display.text-display-height", 2.8); }
     public float getTextDisplayScale() { return (float) config.getDouble("display.text-display-scale", 0.8); }
     public boolean isTextDisplaySeeThrough() { return config.getBoolean("display.text-display-see-through", false); }
+    public String getTextDisplayFormat() { return config.getString("display.text-display-format", "{prefix}{player}"); }
     
     // Метод для временного изменения настройки TextDisplay
     public void setUseTextDisplay(boolean useTextDisplay) {
