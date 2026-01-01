@@ -40,10 +40,26 @@ public final class ChatFormatter {
         if (message == null) return "";
         
         // Конвертируем &#RRGGBB в <#RRGGBB>
-        message = message.replaceAll("&#([0-9a-fA-F]{6})", "<#$1>");
+        java.util.regex.Pattern pattern1 = java.util.regex.Pattern.compile("&#([0-9a-fA-F]{6})");
+        java.util.regex.Matcher matcher1 = pattern1.matcher(message);
+        StringBuffer sb1 = new StringBuffer();
+        while (matcher1.find()) {
+            String hex = matcher1.group(1).toLowerCase();
+            matcher1.appendReplacement(sb1, "<#" + hex + ">");
+        }
+        matcher1.appendTail(sb1);
+        message = sb1.toString();
         
         // Конвертируем #RRGGBB в <#RRGGBB> (только если не внутри тегов)
-        message = message.replaceAll("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)", "<#$1>");
+        java.util.regex.Pattern pattern2 = java.util.regex.Pattern.compile("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)");
+        java.util.regex.Matcher matcher2 = pattern2.matcher(message);
+        StringBuffer sb2 = new StringBuffer();
+        while (matcher2.find()) {
+            String hex = matcher2.group(1).toLowerCase();
+            matcher2.appendReplacement(sb2, "<#" + hex + ">");
+        }
+        matcher2.appendTail(sb2);
+        message = sb2.toString();
         
         // Конвертируем &[0-9a-fk-or] в соответствующие MiniMessage теги
         message = message.replaceAll("&0", "<black>");
