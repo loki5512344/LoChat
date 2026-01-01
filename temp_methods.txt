@@ -1,0 +1,20 @@
+    /**
+     * Скрывает TextDisplay игрока (при приседании)
+     */
+    public void hidePlayerDisplay(UUID playerId) {
+        TextDisplay display = playerDisplays.get(playerId);
+        if (display != null && display.isValid()) {
+            display.setViewRange(0.0f);
+        }
+    }
+
+    /**
+     * Показывает TextDisplay игрока (когда перестает приседать)
+     */
+    public void showPlayerDisplay(UUID playerId) {
+        TextDisplay display = playerDisplays.get(playerId);
+        if (display != null && display.isValid()) {
+            display.setViewRange(64.0f);
+        }
+    }
+}
