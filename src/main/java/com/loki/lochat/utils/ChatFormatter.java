@@ -45,6 +45,32 @@ public final class ChatFormatter {
         // Конвертируем #RRGGBB в <#RRGGBB> (только если не внутри тегов)
         message = message.replaceAll("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)", "<#$1>");
         
+        // Конвертируем &[0-9a-fk-or] в соответствующие MiniMessage теги
+        message = message.replaceAll("&0", "<black>");
+        message = message.replaceAll("&1", "<dark_blue>");
+        message = message.replaceAll("&2", "<dark_green>");
+        message = message.replaceAll("&3", "<dark_aqua>");
+        message = message.replaceAll("&4", "<dark_red>");
+        message = message.replaceAll("&5", "<dark_purple>");
+        message = message.replaceAll("&6", "<gold>");
+        message = message.replaceAll("&7", "<gray>");
+        message = message.replaceAll("&8", "<dark_gray>");
+        message = message.replaceAll("&9", "<blue>");
+        message = message.replaceAll("&a", "<green>");
+        message = message.replaceAll("&b", "<aqua>");
+        message = message.replaceAll("&c", "<red>");
+        message = message.replaceAll("&d", "<light_purple>");
+        message = message.replaceAll("&e", "<yellow>");
+        message = message.replaceAll("&f", "<white>");
+        
+        // Конвертируем форматирование
+        message = message.replaceAll("&k", "<obfuscated>");
+        message = message.replaceAll("&l", "<bold>");
+        message = message.replaceAll("&m", "<strikethrough>");
+        message = message.replaceAll("&n", "<underlined>");
+        message = message.replaceAll("&o", "<italic>");
+        message = message.replaceAll("&r", "<reset>");
+        
         return message;
     }
 

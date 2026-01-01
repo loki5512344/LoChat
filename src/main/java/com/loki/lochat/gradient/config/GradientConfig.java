@@ -18,10 +18,12 @@ public class GradientConfig {
 
     private final JavaPlugin plugin;
     private FileConfiguration config;
+    private FileConfiguration mainConfig;
     private File configFile;
 
     public GradientConfig(JavaPlugin plugin) {
         this.plugin = plugin;
+        this.mainConfig = plugin.getConfig();
         loadConfig();
     }
 
@@ -42,6 +44,7 @@ public class GradientConfig {
     }
 
     public void reload() {
+        this.mainConfig = plugin.getConfig();
         loadConfig();
     }
 
@@ -80,14 +83,55 @@ public class GradientConfig {
                 .anyMatch(blacklisted -> lowerPrefix.contains(blacklisted.toLowerCase()));
     }
 
-    // Display settings
-    public boolean isUpdateDisplayName() { return config.getBoolean("display.update-display-name", true); }
-    public boolean isUpdateTabList() { return config.getBoolean("display.update-tab-list", true); }
-    public boolean isUseTextDisplay() { return config.getBoolean("display.use-text-display", true); }
-    public double getTextDisplayHeight() { return config.getDouble("display.text-display-height", 2.8); }
-    public float getTextDisplayScale() { return (float) config.getDouble("display.text-display-scale", 0.8); }
-    public boolean isTextDisplaySeeThrough() { return config.getBoolean("display.text-display-see-through", false); }
-    public String getTextDisplayFormat() { return config.getString("display.text-display-format", "{prefix}{player}"); }
+    // Display settings - читаем из main config.yml, если есть, иначе из gradient-config.yml
+    public boolean isUpdateDisplayName() { 
+        if (mainConfig.contains("display.update-display-name")) {
+            return mainConfig.getBoolean("display.update-display-name", true);
+        }
+        return config.getBoolean("display.update-display-name", true); 
+    }
+    
+    public boolean isUpdateTabList() { 
+        if (mainConfig.contains("display.update-tab-list")) {
+            return mainConfig.getBoolean("display.update-tab-list", true);
+        }
+        return config.getBoolean("display.update-tab-list", true); 
+    }
+    
+    public boolean isUseTextDisplay() { 
+        if (mainConfig.contains("display.use-text-display")) {
+            return mainConfig.getBoolean("display.use-text-display", true);
+        }
+        return config.getBoolean("display.use-text-display", true); 
+    }
+    
+    public double getTextDisplayHeight() { 
+        if (mainConfig.contains("display.text-display-height")) {
+            return mainConfig.getDouble("display.text-display-height", 2.8);
+        }
+        return config.getDouble("display.text-display-height", 2.8); 
+    }
+    
+    public float getTextDisplayScale() { 
+        if (mainConfig.contains("display.text-display-scale")) {
+            return (float) mainConfig.getDouble("display.text-display-scale", 0.8);
+        }
+        return (float) config.getDouble("display.text-display-scale", 0.8); 
+    }
+    
+    public boolean isTextDisplaySeeThrough() { 
+        if (mainConfig.contains("display.text-display-see-through")) {
+            return mainConfig.getBoolean("display.text-display-see-through", false);
+        }
+        return config.getBoolean("display.text-display-see-through", false); 
+    }
+    
+    public String getTextDisplayFormat() { 
+        if (mainConfig.contains("display.text-display-format")) {
+            return mainConfig.getString("display.text-display-format", "{prefix}{player}");
+        }
+        return config.getString("display.text-display-format", "{prefix}{player}"); 
+    }
     
     // Метод для временного изменения настройки TextDisplay
     public void setUseTextDisplay(boolean useTextDisplay) {

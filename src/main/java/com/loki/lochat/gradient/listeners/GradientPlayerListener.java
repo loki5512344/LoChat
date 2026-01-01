@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * Слушатель событий игроков для градиентного модуля
@@ -62,9 +63,30 @@ public class GradientPlayerListener implements Listener {
     public void onPlayerToggleSneak(org.bukkit.event.player.PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         
-        // Обновляем TextDisplay чтобы он не скрывался при приседании
+        // Скрываем/показываем TextDisplay при приседании
         if (module.getTextDisplayManager() != null && module.getTextDisplayManager().hasDisplay(player.getUniqueId())) {
             FoliaUtil.runEntityTask(module.getPlugin(), player, () -> {
+                if (event.isSneaking()) {
+                    // Игрок начал приседать - скрываем TextDisplay
+                    module.getTextDisplayManager().hidePlayerDisplay(player.getUniqueId());
+                } else {
+                    // Игрок перестал приседать - показываем TextDisplay
+                    module.getTextDisplayManager().showPlayerDisplay(player.getUniqueId());
+                }
+            });
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (event.isCancelled()) return;
+        
+        Player player = event.getPlayer();
+        
+        // Обновляем TextDisplay после телепортации
+        if (module.getTextDisplayManager() != null && module.getTextDisplayManager().hasDisplay(player.getUniqueId())) {
+            FoliaUtil.runEntityTask(module.getPlugin(), player, () -> {
+                if (!player.isOnline()) return;
                 module.getTextDisplayManager().updateDisplayPosition(player);
             });
         }
