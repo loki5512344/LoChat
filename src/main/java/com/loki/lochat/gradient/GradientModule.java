@@ -12,7 +12,6 @@ import com.loki.lochat.gradient.listeners.GradientGUIListener;
 import com.loki.lochat.gradient.listeners.GradientPlayerListener;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.gradient.util.GradientUtil;
-import com.loki.lochat.gradient.util.TextDisplayManager;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
@@ -30,7 +29,6 @@ public class GradientModule {
     private GradientDataManager dataManager;
     private GradientLuckPermsHook luckPermsHook;
     private PlayerPointsAPI playerPointsAPI;
-    private TextDisplayManager textDisplayManager;
     private boolean enabled;
 
     public GradientModule(JavaPlugin plugin) {
@@ -66,8 +64,6 @@ public class GradientModule {
         // Подключение LuckPerms
         luckPermsHook = new GradientLuckPermsHook(plugin);
         
-        // Инициализация TextDisplayManager
-        textDisplayManager = new TextDisplayManager(this);
         
         // Регистрация команд
         registerCommands();
@@ -105,9 +101,6 @@ public class GradientModule {
      * Выключение модуля
      */
     public void shutdown() {
-        if (textDisplayManager != null) {
-            textDisplayManager.removeAllDisplays();
-        }
         if (dataManager != null) {
             dataManager.saveAll();
         }
@@ -268,7 +261,6 @@ public class GradientModule {
     public GradientDataManager getDataManager() { return dataManager; }
     public GradientLuckPermsHook getLuckPermsHook() { return luckPermsHook; }
     public PlayerPointsAPI getPlayerPointsAPI() { return playerPointsAPI; }
-    public TextDisplayManager getTextDisplayManager() { return textDisplayManager; }
     public boolean hasPlayerPoints() { return playerPointsAPI != null; }
     public boolean isEnabled() { return enabled; }
 }

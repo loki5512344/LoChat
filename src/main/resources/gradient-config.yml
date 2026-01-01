@@ -49,21 +49,6 @@ display:
   update-display-name: true
   # Обновлять tab list
   update-tab-list: true
-  # Использовать TextDisplay вместо обычного display name (1.19.4+)
-  use-text-display: true
-  # Высота TextDisplay над игроком (в блоках)
-  text-display-height: 2.8
-  # Размер TextDisplay (от 0.1 до 2.0)
-  text-display-scale: 0.8
-  # Видно ли TextDisplay через стены
-  text-display-see-through: false
-  # Формат TextDisplay (поддерживает плейсхолдеры и различные форматы цветов)
-  # Поддерживаемые форматы:
-  # <#RRGGBB> - MiniMessage HEX
-  # &#RRGGBB - Legacy HEX  
-  # #RRGGBB - Простой HEX
-  # <red>, <blue> и т.д. - именованные цвета
-  text-display-format: "{prefix}{player}"
 
 # Тип хранилища: YAML или SQLITE
 storage-type: YAML

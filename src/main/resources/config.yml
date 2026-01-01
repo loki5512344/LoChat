@@ -40,16 +40,6 @@ display:
   update-display-name: true
   # Обновлять tab list
   update-tab-list: true
-  # Использовать TextDisplay вместо обычного display name (1.19.4+)
-  use-text-display: true
-  # Высота TextDisplay над игроком (в блоках)
-  text-display-height: 2.8
-  # Размер TextDisplay (от 0.1 до 2.0)
-  text-display-scale: 0.8
-  # Видно ли TextDisplay через стены
-  text-display-see-through: false
-  # Формат TextDisplay (поддерживает &b&l и другие коды, &#RRGGBB, #RRGGBB)
-  text-display-format: "{prefix}{player}"
 
 # Упоминания @ник
 mentions:

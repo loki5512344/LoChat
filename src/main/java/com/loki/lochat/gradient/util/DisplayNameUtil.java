@@ -25,13 +25,6 @@ public final class DisplayNameUtil {
 
     public static void updateDisplayName(GradientModule module, Player player, GradientPlayerData data) {
         GradientConfig cfg = module.getConfig();
-        
-        // Если включен TextDisplay, используем его вместо обычного display name
-        if (cfg.isUseTextDisplay()) {
-            module.getTextDisplayManager().updatePlayerDisplay(player);
-            return;
-        }
-        
         String prefix = null;
         String prefixFormat = cfg.getPrefixFormat();
         

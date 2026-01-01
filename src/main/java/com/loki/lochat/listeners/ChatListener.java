@@ -2,7 +2,6 @@ package com.loki.lochat.listeners;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.managers.AntiSpamManager;
-import com.loki.lochat.managers.FilterManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -12,8 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
@@ -40,25 +37,6 @@ public class ChatListener implements Listener {
     }
 
     private void processChat(Player player, Component message, String plainMessage) {
-
-        // ===== MUTE =====
-        if (plugin.getMuteManager().isMuted(player.getUniqueId())) {
-            String timeLeft = plugin.getMuteManager()
-                    .formatRemainingTime(player.getUniqueId());
-
-            if (timeLeft.equals("навсегда")) {
-                player.sendMessage(
-                        plugin.getMessageConfig().getComponent("mute.permanent")
-                );
-            } else {
-                player.sendMessage(
-                        plugin.getMessageConfig()
-                                .getComponent("mute.you-muted", "{time}", timeLeft)
-                );
-            }
-            return;
-        }
-
         // ===== GLOBAL / LOCAL =====
         String globalSymbol = plugin.getConfigManager().getGlobalSymbol();
         boolean isGlobal = plainMessage.startsWith(globalSymbol)
@@ -125,27 +103,6 @@ public class ChatListener implements Listener {
             }
         }
 
-        // ===== FILTER =====
-        if (!player.hasPermission("chat.bypass.filter")) {
-            FilterManager.FilterResult filter =
-                    plugin.getFilterManager().checkMessage(processedPlain);
-
-            switch (filter) {
-                case BLOCKED -> {
-                    player.sendMessage(
-                            plugin.getMessageConfig().getComponent("filter.blocked")
-                    );
-                    return;
-                }
-                case WARNED -> {
-                    player.sendMessage(
-                            plugin.getMessageConfig().getComponent("filter.warned")
-                    );
-                    processedMessage = censor(processedMessage);
-                }
-                case CENSORED -> processedMessage = censor(processedMessage);
-            }
-        }
 
         plugin.getCooldownManager().setCooldown(player.getUniqueId(), chatType);
 
@@ -155,13 +112,6 @@ public class ChatListener implements Listener {
         } else {
             plugin.getChatManager().sendLocalMessage(player, processedMessage);
         }
-    }
-
-    private Component censor(Component component) {
-        return component.replaceText(TextReplacementConfig.builder()
-                .match(Pattern.compile("(?i)badword"))
-                .replacement("***")
-                .build());
     }
 
     @EventHandler
