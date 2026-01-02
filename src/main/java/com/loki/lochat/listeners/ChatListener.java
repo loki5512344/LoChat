@@ -37,11 +37,12 @@ public class ChatListener implements Listener {
     }
 
     private void processChat(Player player, Component message, String plainMessage) {
-        // ===== LIBERTYBANS MUTE CHECK =====
+        // ===== LIBERTYBANS COMPATIBILITY =====
+        // LibertyBans будет сам блокировать чат для замученных игроков
+        // Наша интеграция просто обеспечивает совместимость
         if (plugin.getLibertyBansHook().isPluginPresent()) {
-            // В простой версии без API мы не можем проверить мут автоматически
-            // Пользователи должны полагаться на команды LibertyBans для управления мутами
-            // LibertyBans сам заблокирует чат если игрок замучен
+            // LibertyBans присутствует, он сам обработает муты
+            // Мы просто продолжаем нормальную обработку
         }
         
         // Продолжаем обработку чата
