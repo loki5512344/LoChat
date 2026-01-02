@@ -37,6 +37,18 @@ public class ChatListener implements Listener {
     }
 
     private void processChat(Player player, Component message, String plainMessage) {
+        // ===== LIBERTYBANS MUTE CHECK =====
+        if (plugin.getLibertyBansHook().isPluginPresent()) {
+            // В простой версии без API мы не можем проверить мут автоматически
+            // Пользователи должны полагаться на команды LibertyBans для управления мутами
+            // LibertyBans сам заблокирует чат если игрок замучен
+        }
+        
+        // Продолжаем обработку чата
+        processChatInternal(player, message, plainMessage);
+    }
+
+    private void processChatInternal(Player player, Component message, String plainMessage) {
         // ===== GLOBAL / LOCAL =====
         String globalSymbol = plugin.getConfigManager().getGlobalSymbol();
         boolean isGlobal = plainMessage.startsWith(globalSymbol)

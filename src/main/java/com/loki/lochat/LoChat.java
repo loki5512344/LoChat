@@ -4,6 +4,7 @@ import com.loki.lochat.commands.*;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.gradient.GradientModule;
+import com.loki.lochat.integrations.LibertyBansHook;
 import com.loki.lochat.integrations.PlaceholderAPIHook;
 import com.loki.lochat.listeners.ChatListener;
 import com.loki.lochat.managers.*;
@@ -27,6 +28,7 @@ public final class LoChat extends JavaPlugin {
     private EmojiManager emojiManager;
     private CustomCommandManager customCommandManager;
     private GradientModule gradientModule;
+    private LibertyBansHook libertyBansHook;
 
     @Override
     public void onEnable() {
@@ -53,6 +55,9 @@ public final class LoChat extends JavaPlugin {
         if (gradientModule.init()) {
             getLogger().info("Gradient модуль (LoPreff) загружен!");
         }
+        
+        // Инициализация LibertyBans интеграции
+        libertyBansHook = new LibertyBansHook(this);
         
         // Регистрация команд
         registerCommands();
@@ -172,6 +177,10 @@ public final class LoChat extends JavaPlugin {
 
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
+    }
+
+    public LibertyBansHook getLibertyBansHook() {
+        return libertyBansHook;
     }
 
 }

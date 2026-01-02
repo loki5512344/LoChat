@@ -157,7 +157,9 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         }
 
         GradientConfirmGUI gui = new GradientConfirmGUI(module, player, 
-                GradientConfirmGUI.ConfirmType.PREFIX, data.getColors(), prefix, price);
+                GradientConfirmGUI.ConfirmType.PREFIX, 
+                data.hasColors() && data.isColorEnabled() ? data.getColors() : null, 
+                prefix, price);
         FoliaUtil.runEntityTask(module.getPlugin(), player, gui::open);
         return true;
     }

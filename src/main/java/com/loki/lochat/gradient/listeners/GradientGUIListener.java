@@ -77,6 +77,11 @@ public class GradientGUIListener implements Listener {
                 data.setPrefixEnabled(true);
                 data.setPrefixPurchased(true);
                 data.setLastPrefixChange(System.currentTimeMillis());
+                // Сохраняем существующие цвета если они есть
+                if (gui.getColors() != null && !gui.getColors().isEmpty()) {
+                    data.setColors(gui.getColors());
+                    data.setColorEnabled(true);
+                }
                 module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
                 msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free", 
                         "price", String.valueOf(price));
