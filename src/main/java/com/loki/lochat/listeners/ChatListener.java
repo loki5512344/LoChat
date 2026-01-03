@@ -37,12 +37,20 @@ public class ChatListener implements Listener {
     }
 
     private void processChat(Player player, Component message, String plainMessage) {
-        // ===== LIBERTYBANS COMPATIBILITY =====
-        // LibertyBans будет сам блокировать чат для замученных игроков
-        // Наша интеграция просто обеспечивает совместимость
-        if (plugin.getLibertyBansHook().isPluginPresent()) {
-            // LibertyBans присутствует, он сам обработает муты
-            // Мы просто продолжаем нормальную обработку
+        // ===== MUTE CHECK =====
+        if (plugin.getMuteManager().isMuted(player.getUniqueId())) {
+            var muteData = plugin.getMuteManager().getMuteData(player.getUniqueId());
+            if (muteData != null) {
+                if (muteData.isPermanent()) {
+                    player.sendMessage(plugin.getMessageConfig().getComponent("mute.permanent"));
+                } else {
+                    long remaining = plugin.getMuteManager().getRemainingTime(player.getUniqueId());
+                    String timeStr = plugin.getMuteManager().formatTime(remaining);
+                    player.sendMessage(plugin.getMessageConfig().getComponent("mute.you-muted", 
+                            "{time}", timeStr));
+                }
+            }
+            return;
         }
         
         // Продолжаем обработку чата

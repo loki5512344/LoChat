@@ -97,6 +97,18 @@ commands:
     permission: gradient.admin
     aliases: [gradientadmin, азкуашч, пкфвшуетефвьшт]
 
+  lmute:
+    description: Mute a player
+    usage: /lmute <player> <time> [-s] [reason]
+    permission: lochat.mute
+    aliases: [дьгеу]
+
+  lunmute:
+    description: Unmute a player
+    usage: /lunmute <player> [-s]
+    permission: lochat.unmute
+    aliases: [дгтьгеу]
+
 permissions:
   chat.global.use:
     default: true
@@ -139,4 +151,8 @@ permissions:
   gradient.bypass.cost:
     default: op
   lochat.admin:
+    default: op
+  lochat.mute:
+    default: op
+  lochat.unmute:
     default: op

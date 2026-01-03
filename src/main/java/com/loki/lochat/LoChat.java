@@ -29,6 +29,7 @@ public final class LoChat extends JavaPlugin {
     private CustomCommandManager customCommandManager;
     private GradientModule gradientModule;
     private LibertyBansHook libertyBansHook;
+    private MuteManager muteManager;
 
     @Override
     public void onEnable() {
@@ -47,6 +48,7 @@ public final class LoChat extends JavaPlugin {
         mentionManager = new MentionManager(this);
         spyManager = new SpyManager(this);
         customCommandManager = new CustomCommandManager(this);
+        muteManager = new MuteManager(this);
         chatManager = new ChatManager(this);
         autoMessageManager = new AutoMessageManager(this);
         
@@ -88,6 +90,9 @@ public final class LoChat extends JavaPlugin {
         if (gradientModule != null) {
             gradientModule.shutdown();
         }
+        if (muteManager != null) {
+            muteManager.save();
+        }
         getLogger().info("LoChat отключен!");
     }
     
@@ -106,6 +111,15 @@ public final class LoChat extends JavaPlugin {
         LoChatCommand loChatCommand = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCommand);
         getCommand("lochat").setTabCompleter(loChatCommand);
+        
+        // Команды мутов
+        MuteCommand muteCommand = new MuteCommand(this);
+        getCommand("lmute").setExecutor(muteCommand);
+        getCommand("lmute").setTabCompleter(muteCommand);
+        
+        UnmuteCommand unmuteCommand = new UnmuteCommand(this);
+        getCommand("lunmute").setExecutor(unmuteCommand);
+        getCommand("lunmute").setTabCompleter(unmuteCommand);
     }
     
     public void reload() {
@@ -181,6 +195,10 @@ public final class LoChat extends JavaPlugin {
 
     public LibertyBansHook getLibertyBansHook() {
         return libertyBansHook;
+    }
+
+    public MuteManager getMuteManager() {
+        return muteManager;
     }
 
 }
