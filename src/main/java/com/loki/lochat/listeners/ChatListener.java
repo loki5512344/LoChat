@@ -41,14 +41,18 @@ public class ChatListener implements Listener {
         if (plugin.getMuteManager().isMuted(player.getUniqueId())) {
             var muteData = plugin.getMuteManager().getMuteData(player.getUniqueId());
             if (muteData != null) {
+                String msg;
                 if (muteData.isPermanent()) {
-                    player.sendMessage(plugin.getMessageConfig().getComponent("mute.permanent"));
+                    msg = plugin.getConfigManager().getString("mute.messages.cannot-chat-permanent", 
+                            "§cВы замучены навсегда!");
                 } else {
                     long remaining = plugin.getMuteManager().getRemainingTime(player.getUniqueId());
                     String timeStr = plugin.getMuteManager().formatTime(remaining);
-                    player.sendMessage(plugin.getMessageConfig().getComponent("mute.you-muted", 
-                            "{time}", timeStr));
+                    msg = plugin.getConfigManager().getString("mute.messages.cannot-chat", 
+                            "§cВы замучены! Осталось: %duration%");
+                    msg = msg.replace("%duration%", timeStr);
                 }
+                player.sendMessage(com.loki.lochat.utils.ChatFormatter.parse(msg));
             }
             return;
         }

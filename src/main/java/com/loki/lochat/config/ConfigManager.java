@@ -92,6 +92,41 @@ public class ConfigManager {
         this.config = plugin.getConfig();
     }
 
+    /**
+     * Получить строку из конфига с дефолтным значением
+     */
+    public String getString(String path, String defaultValue) {
+        return config.getString(path, defaultValue);
+    }
+
+    /**
+     * Получить строку из конфига
+     */
+    public String getString(String path) {
+        return config.getString(path);
+    }
+
+    /**
+     * Получить int из конфига
+     */
+    public int getInt(String path, int defaultValue) {
+        return config.getInt(path, defaultValue);
+    }
+
+    /**
+     * Получить boolean из конфига
+     */
+    public boolean getBoolean(String path, boolean defaultValue) {
+        return config.getBoolean(path, defaultValue);
+    }
+
+    /**
+     * Получить список строк из конфига
+     */
+    public List<String> getStringList(String path) {
+        return config.getStringList(path);
+    }
+
     // Global chat
     public boolean isGlobalEnabled() {
         return config.getBoolean("chat.global.enabled", true);

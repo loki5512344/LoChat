@@ -316,6 +316,74 @@ public class MuteManager {
     }
 
     /**
+     * Получить историю мутов выданных модератором
+     */
+    public List<MuteHistoryEntry> getMutesByOperator(String operatorName) {
+        List<MuteHistoryEntry> result = new ArrayList<>();
+        for (List<MuteHistoryEntry> playerHistory : history.values()) {
+            for (MuteHistoryEntry entry : playerHistory) {
+                if (entry.mutedBy != null && entry.mutedBy.equalsIgnoreCase(operatorName)) {
+                    result.add(entry);
+                }
+            }
+        }
+        // Сортируем по дате (новые первые)
+        result.sort((a, b) -> Long.compare(b.mutedAt, a.mutedAt));
+        return result;
+    }
+
+    /**
+     * Получить максимальную доступную длительность для игрока
+     * @param player игрок (модератор)
+     * @return длительность в миллисекундах, 0 = перманентный, -1 = нет прав
+     */
+    public long getMaxDuration(org.bukkit.entity.Player player) {
+        if (player.hasPermission("lochat.mute.dur.perm")) {
+            return 0; // Перманентный
+        }
+        
+        // Проверяем права от большего к меньшему
+        String[] durations = {"30d", "14d", "7d", "3d", "1d", "12h", "6h", "1h", "30m", "10m"};
+        for (String dur : durations) {
+            if (player.hasPermission("lochat.mute.dur." + dur)) {
+                return parseTime(dur);
+            }
+        }
+        
+        return -1; // Нет прав
+    }
+
+    /**
+     * Проверить, может ли игрок выдать мут на указанную длительность
+     */
+    public boolean canMuteForDuration(org.bukkit.entity.Player player, long duration) {
+        if (player.hasPermission("lochat.mute.dur.perm")) {
+            return true; // Может всё
+        }
+        
+        if (duration == 0) {
+            return false; // Перманентный мут требует lochat.mute.dur.perm
+        }
+        
+        long maxDuration = getMaxDuration(player);
+        if (maxDuration == -1) return false;
+        if (maxDuration == 0) return true; // Перманентный = может всё
+        
+        return duration <= maxDuration;
+    }
+
+    /**
+     * Форматировать сообщение с плейсхолдерами
+     */
+    public String formatMessage(String message, String player, String operator, String duration, String reason) {
+        return message
+                .replace("%player%", player != null ? player : "")
+                .replace("%operator%", operator != null ? operator : "")
+                .replace("%duration%", duration != null ? duration : "")
+                .replace("%reason%", reason != null ? reason : "");
+    }
+
+    /**
      * Данные о муте
      */
     public static class MuteData {

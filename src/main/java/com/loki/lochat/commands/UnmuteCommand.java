@@ -1,6 +1,7 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Команда /lunmute nick [-s]
+ * Команда /unmute nick [-s]
  */
 public class UnmuteCommand implements CommandExecutor, TabCompleter {
 
@@ -33,46 +34,74 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§cИспользование: /lunmute <ник> [-s]");
+            sender.sendMessage("§cИспользование: /unmute <ник> [-s]");
             return true;
         }
 
-        String targetName = args[0];
-        boolean silent = args.length > 1 && args[1].equalsIgnoreCase("-s");
+        // Парсим аргументы
+        String targetName = null;
+        boolean silent = false;
+
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("-s")) {
+                silent = true;
+            } else if (targetName == null) {
+                targetName = arg;
+            }
+        }
+
+        // Проверка права на тихий размут
+        if (silent && !sender.hasPermission("lochat.mute.silent")) {
+            sender.sendMessage("§cУ вас нет права на тихий размут!");
+            return true;
+        }
 
         // Ищем игрока
         Player target = Bukkit.getPlayer(targetName);
+        String finalTargetName = targetName;
+        java.util.UUID targetUUID;
+
         if (target == null) {
-            // Пробуем найти оффлайн игрока
             @SuppressWarnings("deprecation")
             var offlinePlayer = Bukkit.getOfflinePlayer(targetName);
             if (!offlinePlayer.hasPlayedBefore() && !offlinePlayer.isOnline()) {
                 sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
                 return true;
             }
-            
-            // Размучиваем оффлайн игрока
-            if (plugin.getMuteManager().unmute(offlinePlayer.getUniqueId(), sender.getName())) {
-                sender.sendMessage("§aИгрок §e" + targetName + " §aразмучен");
-                
-                if (!silent) {
-                    Bukkit.broadcast(plugin.getMessageConfig().getComponent("mute.unmuted", 
-                            "{player}", targetName));
-                }
-            } else {
-                sender.sendMessage("§cИгрок не замучен!");
-            }
-            return true;
+            targetUUID = offlinePlayer.getUniqueId();
+            finalTargetName = offlinePlayer.getName() != null ? offlinePlayer.getName() : targetName;
+        } else {
+            targetUUID = target.getUniqueId();
+            finalTargetName = target.getName();
         }
 
-        // Размучиваем онлайн игрока
-        if (plugin.getMuteManager().unmute(target.getUniqueId(), sender.getName())) {
-            sender.sendMessage("§aИгрок §e" + target.getName() + " §aразмучен");
-            target.sendMessage("§aВы были размучены!");
-            
-            if (!silent) {
-                Bukkit.broadcast(plugin.getMessageConfig().getComponent("mute.unmuted", 
-                        "{player}", target.getName()));
+        String operatorName = sender.getName();
+
+        // Размучиваем
+        if (plugin.getMuteManager().unmute(targetUUID, operatorName)) {
+            sender.sendMessage("§aИгрок §e" + finalTargetName + " §aразмучен");
+
+            // Уведомляем игрока (если онлайн)
+            if (target != null) {
+                target.sendMessage("§aВы были размучены!");
+            }
+
+            // Broadcast
+            if (silent) {
+                String silentMsg = plugin.getConfigManager().getString("mute.messages.silent-unmuted",
+                        "§8[Тихо] §a%player% §7размучен (%operator%)");
+                silentMsg = plugin.getMuteManager().formatMessage(silentMsg, finalTargetName, operatorName, null, null);
+
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.hasPermission("lochat.mute.see-silent")) {
+                        p.sendMessage(ChatFormatter.parse(silentMsg));
+                    }
+                }
+            } else {
+                String broadcastMsg = plugin.getConfigManager().getString("mute.messages.unmuted",
+                        "§a%player% §7был размучен модератором §a%operator%");
+                broadcastMsg = plugin.getMuteManager().formatMessage(broadcastMsg, finalTargetName, operatorName, null, null);
+                Bukkit.broadcast(ChatFormatter.parse(broadcastMsg));
             }
         } else {
             sender.sendMessage("§cИгрок не замучен!");
@@ -85,7 +114,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                  @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
-        
+
         if (args.length == 1) {
             String prefix = args[0].toLowerCase();
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -96,7 +125,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         } else if (args.length == 2) {
             completions.add("-s");
         }
-        
+
         return completions;
     }
 }

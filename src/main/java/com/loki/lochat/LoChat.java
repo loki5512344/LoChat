@@ -126,6 +126,10 @@ public final class LoChat extends JavaPlugin {
         MuteHistoryCommand muteHistoryCommand = new MuteHistoryCommand(this);
         getCommand("lmutehistory").setExecutor(muteHistoryCommand);
         getCommand("lmutehistory").setTabCompleter(muteHistoryCommand);
+        
+        MuteBlameCommand muteBlameCommand = new MuteBlameCommand(this);
+        getCommand("lmuteblame").setExecutor(muteBlameCommand);
+        getCommand("lmuteblame").setTabCompleter(muteBlameCommand);
     }
     
     public void reload() {
