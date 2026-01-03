@@ -120,6 +120,12 @@ public final class LoChat extends JavaPlugin {
         UnmuteCommand unmuteCommand = new UnmuteCommand(this);
         getCommand("lunmute").setExecutor(unmuteCommand);
         getCommand("lunmute").setTabCompleter(unmuteCommand);
+        
+        getCommand("lmutelist").setExecutor(new MuteListCommand(this));
+        
+        MuteHistoryCommand muteHistoryCommand = new MuteHistoryCommand(this);
+        getCommand("lmutehistory").setExecutor(muteHistoryCommand);
+        getCommand("lmutehistory").setTabCompleter(muteHistoryCommand);
     }
     
     public void reload() {

@@ -109,6 +109,18 @@ commands:
     permission: lochat.unmute
     aliases: [дгтьгеу]
 
+  lmutelist:
+    description: List all active mutes
+    usage: /lmutelist
+    permission: lochat.mutelist
+    aliases: [дьгеудшые]
+
+  lmutehistory:
+    description: View mute history of a player
+    usage: /lmutehistory <player>
+    permission: lochat.mutehistory
+    aliases: [дьгеершыещку]
+
 permissions:
   chat.global.use:
     default: true
@@ -155,4 +167,8 @@ permissions:
   lochat.mute:
     default: op
   lochat.unmute:
+    default: op
+  lochat.mutelist:
+    default: op
+  lochat.mutehistory:
     default: op

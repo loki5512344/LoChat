@@ -76,7 +76,8 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             }
             
             // Мутим оффлайн игрока
-            plugin.getMuteManager().mute(offlinePlayer.getUniqueId(), duration, reason, sender.getName());
+            String offlineName = offlinePlayer.getName() != null ? offlinePlayer.getName() : targetName;
+            plugin.getMuteManager().mute(offlinePlayer.getUniqueId(), offlineName, duration, reason, sender.getName());
             
             String timeDisplay = duration == 0 ? "навсегда" : plugin.getMuteManager().formatTime(duration);
             sender.sendMessage("§aИгрок §e" + targetName + " §aзамучен на §e" + timeDisplay);
@@ -102,7 +103,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         }
 
         // Мутим игрока
-        plugin.getMuteManager().mute(target.getUniqueId(), duration, reason, sender.getName());
+        plugin.getMuteManager().mute(target.getUniqueId(), target.getName(), duration, reason, sender.getName());
 
         String timeDisplay = duration == 0 ? "навсегда" : plugin.getMuteManager().formatTime(duration);
         

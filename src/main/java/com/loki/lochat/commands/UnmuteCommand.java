@@ -52,7 +52,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
             }
             
             // Размучиваем оффлайн игрока
-            if (plugin.getMuteManager().unmute(offlinePlayer.getUniqueId())) {
+            if (plugin.getMuteManager().unmute(offlinePlayer.getUniqueId(), sender.getName())) {
                 sender.sendMessage("§aИгрок §e" + targetName + " §aразмучен");
                 
                 if (!silent) {
@@ -66,7 +66,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         }
 
         // Размучиваем онлайн игрока
-        if (plugin.getMuteManager().unmute(target.getUniqueId())) {
+        if (plugin.getMuteManager().unmute(target.getUniqueId(), sender.getName())) {
             sender.sendMessage("§aИгрок §e" + target.getName() + " §aразмучен");
             target.sendMessage("§aВы были размучены!");
             
