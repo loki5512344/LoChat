@@ -122,12 +122,6 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         } else {
             targetUUID = target.getUniqueId();
             finalTargetName = target.getName();
-
-            // Проверка на себя
-            if (sender instanceof Player && ((Player) sender).getUniqueId().equals(targetUUID)) {
-                sender.sendMessage("§cВы не можете замутить себя!");
-                return true;
-            }
         }
 
         // Проверяем, не замучен ли уже

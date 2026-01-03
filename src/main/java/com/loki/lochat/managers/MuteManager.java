@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loki.lochat.LoChat;
+import com.loki.lochat.gradient.util.FoliaUtil;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -234,11 +235,11 @@ public class MuteManager {
     }
 
     private void saveHistoryAsync() {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, this::saveHistory);
+        FoliaUtil.runAsync(plugin, this::saveHistory);
     }
 
     private void saveAsync() {
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        FoliaUtil.runAsync(plugin, () -> {
             save();
             saveHistory();
         });
