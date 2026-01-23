@@ -25,10 +25,11 @@ public class ClearChatCommand implements CommandExecutor {
                 player.sendMessage("");
             }
             
-            // Уведомление
-            player.sendMessage(ChatFormatter.parse(
-                    plugin.getMessageConfig().get("clearchat.cleared", "{player}", sender.getName())
-            ));
+            // Уведомление (если включено)
+            if (plugin.getConfigManager().isClearChatMessageEnabled()) {
+                String message = plugin.getConfigManager().getClearChatMessage();
+                player.sendMessage(ChatFormatter.parse(message.replace("{player}", sender.getName())));
+            }
         }
 
         return true;

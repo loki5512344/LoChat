@@ -98,6 +98,13 @@ public class ChatListener implements Listener {
         // ===== SPY =====
         plugin.getSpyManager().sendToSpies(player, processedMessage, isGlobal);
 
+        // ===== HEAD EMOJI =====
+        // Обрабатываем головы игроков, если функция включена
+        if (plugin.getHeadEmojiManager().isHeadEmojiEnabled() && 
+            plugin.getHeadEmojiManager().canUseHeadEmoji(player)) {
+            processedMessage = plugin.getHeadEmojiManager().processHeads(processedMessage, player);
+        }
+
         // ===== SEND =====
         if (isGlobal) {
             plugin.getChatManager().sendGlobalMessage(player, processedMessage);

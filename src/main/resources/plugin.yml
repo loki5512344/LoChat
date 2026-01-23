@@ -11,6 +11,7 @@ softdepend:
   - PlayerPoints
   - LuckPerms
   - LibertyBans
+  - SkinsRestorer
 
 commands:
   g:
@@ -72,6 +73,12 @@ commands:
     usage: /clearchat
     permission: chat.clear
     aliases: [cc, очиститьчат, сдуфксрфе, сс]
+
+  clearchatconfig:
+    description: Configure clear chat message
+    usage: /clearchatconfig <enable|disable|message|status> [text]
+    permission: lochat.clearchat.config
+    aliases: [ccc, настройкаочистки]
 
   lochat:
     description: LoChat admin command
@@ -219,3 +226,9 @@ permissions:
   lochat.mute.dur.perm:
     description: Can mute permanently
     default: op
+  lochat.clearchat.config:
+    description: Can configure clear chat message
+    default: op
+  lochat.heademoji.use:
+    description: Can use head emojis in chat
+    default: true

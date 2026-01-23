@@ -1,57 +1,156 @@
-# LoChat Gradient Module Messages
-# Сообщения модуля градиентных ников
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                         LoChat Gradient Messages                            ║
+# ║                      Сообщения градиентного модуля                         ║
+# ║                              Версия: 1.5.5-1.20.1                          ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 
-# Общие
-only-player: "&#04CADFЭта команда только для игроков!"
-no-permission: "&#04CADFУ вас нет прав на это действие!"
-player-not-found: "&#04CADFИгрок не найден!"
-reload-success: "&#04CADFКонфигурация градиентов перезагружена!"
-cooldown: "&#04CADFПодождите ещё {time} секунд!"
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            ОСНОВНЫЕ СООБЩЕНИЯ                              │
+# └─────────────────────────────────────────────────────────────────────────────┘
 
-# Цвета
-color-help: |
-  &#04CADF=== Команда /color ===
-  &#04CADF/color <цвет1> [цвет2] ... &#808080— установить градиент
-  &#04CADF/color on &#808080— включить цвет
-  &#04CADF/color off &#808080— выключить цвет
-  &#04CADF/color reset &#808080— сбросить цвет
-  &#04CADF/color copy <игрок> &#808080— скопировать цвет
-  &#808080Пример: /color #FF0000 #00FF00 #0000FF
-color-enabled: "&#04CADFЦвет ника включён!"
-color-disabled: "&#04CADFЦвет ника выключен!"
-color-reset: "&#04CADFЦвет ника сброшен!"
-color-no-colors: "&#04CADFУ вас нет установленных цветов!"
-color-success: "&#04CADFЦвет успешно установлен! Списано: {price} PP"
-color-copy-usage: "&#04CADFИспользование: /color copy <игрок>"
-color-copy-no-colors: "&#04CADFУ игрока {player} нет цветов!"
-invalid-color: "&#04CADFНеверный формат цвета: {color}. Используйте #RRGGBB"
-too-many-colors: "&#04CADFМаксимум {max} цветов!"
-not-enough-colors: "&#04CADFМинимум {min} цветов!"
-not-enough-points-color: "&#04CADFНедостаточно поинтов! Нужно: {price} PP"
+# Префикс градиентного модуля
+prefix: "<gradient:#9370DB:#8A2BE2>[Gradient]</gradient>"
 
-# Префикс
-prefix-help: |
-  &#04CADF=== Команда /prefix ===
-  &#04CADF/prefix <текст> &#808080— установить префикс
-  &#04CADF/prefix on &#808080— включить префикс
-  &#04CADF/prefix off &#808080— выключить префикс
-  &#04CADF/prefix reset &#808080— сбросить префикс
-prefix-enabled: "&#04CADFПрефикс включён!"
-prefix-disabled: "&#04CADFПрефикс выключен!"
-prefix-reset-success: "&#04CADFПрефикс сброшен!"
-prefix-no-prefix: "&#04CADFУ вас нет установленного префикса!"
-prefix-success: "&#04CADFПрефикс успешно установлен! Списано: {price} PP"
-prefix-success-free: "&#04CADFПрефикс успешно изменён!"
-prefix-no-colors: "&#04CADFПрефикс не может содержать цветовые коды!"
-prefix-invalid-chars: "&#04CADFПрефикс содержит недопустимые символы!"
-prefix-blacklisted: "&#04CADFЭтот префикс запрещён!"
-prefix-too-long: "&#04CADFПрефикс слишком длинный! Максимум: {max} символов"
-not-enough-points-prefix: "&#04CADFНедостаточно поинтов! Нужно: {price} PP"
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            КОМАНДА /color                                  │
+# └─────────────────────────────────────────────────────────────────────────────┘
 
-# Админ информация
-info-header: "&#04CADF=== Информация об игроке {player} ==="
-info-prefix: "&#808080Префикс: &f{prefix}"
-info-prefix-enabled: "&#808080Префикс включён: &f{enabled}"
-info-colors: "&#808080Цвета: &f{colors}"
-info-color-enabled: "&#808080Цвет включён: &f{enabled}"
-info-prefix-purchased: "&#808080Префикс куплен: &f{purchased}"
+color:
+  # Успешные действия
+  set: "<gradient:#6BCB77:#4ECDC4>Градиент установлен!</gradient>"
+  enabled: "<gradient:#6BCB77:#4ECDC4>Градиентный ник включен</gradient>"
+  disabled: "<gradient:#FF6B6B:#FF4757>Градиентный ник отключен</gradient>"
+  reset: "<gradient:#FFA726:#FF9800>Градиент сброшен</gradient>"
+  copied: "<gradient:#6BCB77:#4ECDC4>Градиент скопирован с игрока {player}</gradient>"
+  
+  # Ошибки
+  invalid-hex: "<gradient:#FF6B6B:#FF4757>Неверный HEX цвет: {color}</gradient>"
+  too-many-colors: "<gradient:#FF6B6B:#FF4757>Слишком много цветов! Максимум: {max}</gradient>"
+  too-few-colors: "<gradient:#FF6B6B:#FF4757>Слишком мало цветов! Минимум: {min}</gradient>"
+  no-permission: "<gradient:#FF6B6B:#FF4757>Нет прав на использование градиентов</gradient>"
+  cooldown: "<gradient:#FFA726:#FF9800>Подождите {time} сек перед изменением цвета</gradient>"
+  not-enough-points: "<gradient:#FF6B6B:#FF4757>Недостаточно поинтов! Нужно: {price}, у вас: {balance}</gradient>"
+  player-not-found: "<gradient:#FF6B6B:#FF4757>Игрок не найден</gradient>"
+  no-gradient: "<gradient:#FFA726:#FF9800>У игрока нет градиента для копирования</gradient>"
+  
+  # Помощь
+  help:
+    - "<gradient:#FFD700:#FFA500>═══════ Команды градиента ═══════</gradient>"
+    - "<gradient:#87CEEB:#4682B4>/color <hex1> [hex2] ...</gradient> <gray>- установить градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/color on/off</gradient> <gray>- включить/выключить градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/color reset</gradient> <gray>- сбросить градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/color copy <игрок></gradient> <gray>- скопировать градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/color preset <название></gradient> <gray>- использовать предустановку</gray>"
+    - ""
+    - "<gradient:#FFA726:#FF9800>Предустановки:</gradient> <white>fire, ocean, forest, sunset, rainbow, ice, gold, purple, pink, green</white>"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            КОМАНДА /prefix                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+prefix:
+  # Успешные действия
+  set: "<gradient:#6BCB77:#4ECDC4>Префикс установлен!</gradient>"
+  enabled: "<gradient:#6BCB77:#4ECDC4>Префикс включен</gradient>"
+  disabled: "<gradient:#FF6B6B:#FF4757>Префикс отключен</gradient>"
+  reset: "<gradient:#FFA726:#FF9800>Префикс сброшен</gradient>"
+  
+  # Ошибки
+  too-long: "<gradient:#FF6B6B:#FF4757>Префикс слишком длинный! Максимум: {max} символов</gradient>"
+  no-permission: "<gradient:#FF6B6B:#FF4757>Нет прав на использование префиксов</gradient>"
+  cooldown: "<gradient:#FFA726:#FF9800>Подождите {time} сек перед изменением префикса</gradient>"
+  not-enough-points: "<gradient:#FF6B6B:#FF4757>Недостаточно поинтов! Нужно: {price}, у вас: {balance}</gradient>"
+  
+  # Помощь
+  help:
+    - "<gradient:#FFD700:#FFA500>═══════ Команды префикса ═══════</gradient>"
+    - "<gradient:#87CEEB:#4682B4>/prefix <текст></gradient> <gray>- установить префикс</gray>"
+    - "<gradient:#87CEEB:#4682B4>/prefix on/off</gradient> <gray>- включить/выключить префикс</gray>"
+    - "<gradient:#87CEEB:#4682B4>/prefix reset</gradient> <gray>- сбросить префикс</gray>"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                          АДМИНСКИЕ КОМАНДЫ                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+admin:
+  # Успешные действия
+  reloaded: "<gradient:#6BCB77:#4ECDC4>Конфигурация градиентов перезагружена</gradient>"
+  color-set: "<gradient:#6BCB77:#4ECDC4>Градиент установлен игроку {player}</gradient>"
+  prefix-set: "<gradient:#6BCB77:#4ECDC4>Префикс установлен игроку {player}</gradient>"
+  color-enabled: "<gradient:#6BCB77:#4ECDC4>Градиент включен для {player}</gradient>"
+  color-disabled: "<gradient:#FF6B6B:#FF4757>Градиент отключен для {player}</gradient>"
+  prefix-enabled: "<gradient:#6BCB77:#4ECDC4>Префикс включен для {player}</gradient>"
+  prefix-disabled: "<gradient:#FF6B6B:#FF4757>Префикс отключен для {player}</gradient>"
+  color-reset: "<gradient:#FFA726:#FF9800>Градиент сброшен для {player}</gradient>"
+  prefix-reset: "<gradient:#FFA726:#FF9800>Префикс сброшен для {player}</gradient>"
+  updated-all: "<gradient:#6BCB77:#4ECDC4>Обновлены все игроки ({count})</gradient>"
+  
+  # Информация об игроке
+  info:
+    - "<gradient:#FFD700:#FFA500>═══════ Информация о {player} ═══════</gradient>"
+    - "<gradient:#87CEEB:#4682B4>Градиент:</gradient> <white>{gradient_status}</white>"
+    - "<gradient:#87CEEB:#4682B4>Цвета:</gradient> <white>{colors}</white>"
+    - "<gradient:#87CEEB:#4682B4>Префикс:</gradient> <white>{prefix_status}</white>"
+    - "<gradient:#87CEEB:#4682B4>Текст префикса:</gradient> <white>{prefix_text}</white>"
+    - "<gradient:#87CEEB:#4682B4>Отображаемое имя:</gradient> {display_name}"
+  
+  # Ошибки
+  player-not-found: "<gradient:#FF6B6B:#FF4757>Игрок не найден</gradient>"
+  invalid-hex: "<gradient:#FF6B6B:#FF4757>Неверный HEX цвет: {color}</gradient>"
+  
+  # Помощь
+  help:
+    - "<gradient:#FFD700:#FFA500>═══════ Админские команды ═══════</gradient>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix reload</gradient> <gray>- перезагрузить конфиг</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix info <игрок></gradient> <gray>- информация об игроке</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix setcolor <игрок> <цвета></gradient> <gray>- установить градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix setprefix <игрок> <текст></gradient> <gray>- установить префикс</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix coloron/coloroff <игрок></gradient> <gray>- вкл/выкл градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix prefixon/prefixoff <игрок></gradient> <gray>- вкл/выкл префикс</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix resetcolor <игрок></gradient> <gray>- сбросить градиент</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix resetprefix <игрок></gradient> <gray>- сбросить префикс</gray>"
+    - "<gradient:#87CEEB:#4682B4>/aprefix updateall</gradient> <gray>- обновить всех игроков</gray>"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                              GUI СООБЩЕНИЯ                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+gui:
+  # Заголовки
+  confirm-title: "<gradient:#FFD700:#FFA500>Подтверждение покупки</gradient>"
+  
+  # Кнопки
+  confirm-button: "<gradient:#6BCB77:#4ECDC4>✓ Подтвердить покупку</gradient>"
+  cancel-button: "<gradient:#FF6B6B:#FF4757>✗ Отменить</gradient>"
+  
+  # Описания
+  confirm-lore:
+    - "<gray>Цена: <yellow>{price} поинтов</yellow>"
+    - "<gray>Цвета: <white>{colors}</white>"
+    - ""
+    - "<gray>Ваш баланс: <yellow>{balance}</yellow>"
+    - ""
+    - "<gradient:#6BCB77:#4ECDC4>Нажмите для подтверждения</gradient>"
+  
+  cancel-lore:
+    - "<gradient:#FF6B6B:#FF4757>Нажмите для отмены</gradient>"
+  
+  # Результаты
+  purchase-success: "<gradient:#6BCB77:#4ECDC4>Градиент успешно куплен!</gradient>"
+  purchase-cancelled: "<gradient:#FFA726:#FF9800>Покупка отменена</gradient>"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                              ОБЩИЕ СООБЩЕНИЯ                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+general:
+  # Статусы
+  enabled: "<gradient:#6BCB77:#4ECDC4>Включено</gradient>"
+  disabled: "<gradient:#FF6B6B:#FF4757>Отключено</gradient>"
+  none: "<gray>Нет</gray>"
+  
+  # Единицы времени
+  seconds: "сек"
+  minutes: "мин"
+  hours: "ч"
+  days: "д"

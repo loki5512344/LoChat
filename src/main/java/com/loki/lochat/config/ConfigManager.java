@@ -80,6 +80,17 @@ public class ConfigManager {
             config.set("automessages.random", false);
         }
         
+        if (!config.contains("clearchat.message.enabled")) {
+            config.set("clearchat.message.enabled", true);
+            config.set("clearchat.message.text", "&#04CADFЧат очищен администратором {player}");
+        }
+        
+        if (!config.contains("head-emoji.enabled")) {
+            config.set("head-emoji.enabled", true);
+            config.set("head-emoji.allow-player-heads", true);
+            config.set("head-emoji.max-heads-per-message", 3);
+        }
+        
         if (!config.contains("lopreff.enabled")) {
             config.set("lopreff.enabled", true);
             config.set("lopreff.use-gradient-name", true);
@@ -222,6 +233,25 @@ public class ConfigManager {
 
     public String getFilterReplacement() {
         return config.getString("filter.replacement", "***");
+    }
+    
+    // Clear chat
+    public boolean isClearChatMessageEnabled() {
+        return config.getBoolean("clearchat.message.enabled", true);
+    }
+    
+    public void setClearChatMessageEnabled(boolean enabled) {
+        config.set("clearchat.message.enabled", enabled);
+        plugin.saveConfig();
+    }
+    
+    public String getClearChatMessage() {
+        return config.getString("clearchat.message.text", "&#04CADFЧат очищен администратором {player}");
+    }
+    
+    public void setClearChatMessage(String message) {
+        config.set("clearchat.message.text", message);
+        plugin.saveConfig();
     }
 
     // Anti-spam

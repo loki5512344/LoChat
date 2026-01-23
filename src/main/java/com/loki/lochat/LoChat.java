@@ -30,6 +30,8 @@ public final class LoChat extends JavaPlugin {
     private GradientModule gradientModule;
     private LibertyBansHook libertyBansHook;
     private MuteManager muteManager;
+    private HeadEmojiManager headEmojiManager;
+    private com.loki.lochat.integrations.SkinsRestorerHook skinsRestorerHook;
 
     @Override
     public void onEnable() {
@@ -51,6 +53,10 @@ public final class LoChat extends JavaPlugin {
         muteManager = new MuteManager(this);
         chatManager = new ChatManager(this);
         autoMessageManager = new AutoMessageManager(this);
+        
+        // Инициализация интеграций
+        skinsRestorerHook = new com.loki.lochat.integrations.SkinsRestorerHook(this);
+        headEmojiManager = new com.loki.lochat.managers.HeadEmojiManager(this);
         
         // Инициализация модуля градиентов (интегрированный LoPreff)
         gradientModule = new GradientModule(this);
@@ -130,6 +136,14 @@ public final class LoChat extends JavaPlugin {
         MuteBlameCommand muteBlameCommand = new MuteBlameCommand(this);
         getCommand("lmuteblame").setExecutor(muteBlameCommand);
         getCommand("lmuteblame").setTabCompleter(muteBlameCommand);
+        
+        // Команда настройки очистки чата
+        ClearChatConfigCommand clearChatConfigCommand = new ClearChatConfigCommand(this);
+        getCommand("clearchatconfig").setExecutor(clearChatConfigCommand);
+        getCommand("clearchatconfig").setTabCompleter(clearChatConfigCommand);
+        
+        // Внутренняя команда для информации об игроке
+        getCommand("lochat").setExecutor(new PlayerInfoCommand(this));
     }
     
     public void reload() {
@@ -209,6 +223,14 @@ public final class LoChat extends JavaPlugin {
 
     public MuteManager getMuteManager() {
         return muteManager;
+    }
+
+    public HeadEmojiManager getHeadEmojiManager() {
+        return headEmojiManager;
+    }
+
+    public com.loki.lochat.integrations.SkinsRestorerHook getSkinsRestorerHook() {
+        return skinsRestorerHook;
     }
 
 }
