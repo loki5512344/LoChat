@@ -2,12 +2,12 @@ package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.ChatFormatter;
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -18,7 +18,7 @@ public class AutoMessageManager {
     private final LoChat plugin;
     private final Random random = new Random();
     private final AtomicInteger currentIndex = new AtomicInteger(0);
-    private ScheduledTask task;
+    private BukkitTask task;
     
     private Map<String, List<String>> messages;
     private List<String> messageOrder;
@@ -108,9 +108,10 @@ public class AutoMessageManager {
         int intervalSeconds = plugin.getConfigManager().getAutoMessagesInterval();
         long intervalTicks = intervalSeconds * 20L;
 
-        task = plugin.getServer().getGlobalRegionScheduler().runAtFixedRate(
+        // Используем FoliaUtil для совместимости с Paper и Folia
+        task = Bukkit.getScheduler().runTaskTimer(
                 plugin,
-                scheduledTask -> broadcastNextMessage(),
+                this::broadcastNextMessage,
                 intervalTicks,
                 intervalTicks
         );

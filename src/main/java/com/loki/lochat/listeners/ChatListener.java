@@ -1,6 +1,7 @@
 package com.loki.lochat.listeners;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.gradient.util.FoliaUtil;
 import com.loki.lochat.managers.AntiSpamManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -30,10 +31,10 @@ public class ChatListener implements Listener {
         Component originalMessage = event.message();
         String plainMessage = PLAIN.serialize(originalMessage);
 
-        // Folia-safe
-        player.getScheduler().run(plugin, task -> {
+        // Paper/Folia-safe
+        FoliaUtil.runEntityTask(plugin, player, () -> {
             processChat(player, originalMessage, plainMessage);
-        }, null);
+        });
     }
 
     private void processChat(Player player, Component message, String plainMessage) {
@@ -124,6 +125,9 @@ public class ChatListener implements Listener {
                             plugin.getMessageConfig().getComponent("antispam.similar")
                     );
                     return;
+                }
+                case ALLOWED -> {
+                    // Сообщение прошло проверку, продолжаем
                 }
             }
         }

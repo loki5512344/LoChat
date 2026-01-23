@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.loki'
-version = '1.5.5'
+version = '1.5.5-1.20.1'
 
 repositories {
     mavenCentral()
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'dev.folia:folia-api:1.21.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
     compileOnly 'me.clip:placeholderapi:2.11.6'
     compileOnly 'org.black_ixx:playerpoints:3.2.7'
     compileOnly 'net.luckperms:api:5.4'
@@ -44,7 +44,7 @@ test {
 }
 
 jar {
-    archiveFileName = 'LoChat-1.5.5.jar'
+    archiveFileName = 'LoChat-1.5.5-1.20.1.jar'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
