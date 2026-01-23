@@ -1,0 +1,221 @@
+name: LoChat
+version: '1.5.5'
+main: com.loki.lochat.LoChat
+api-version: '1.21'
+folia-supported: true
+author: loki
+description: Advanced chat plugin for Folia with gradient nicks
+
+softdepend:
+  - PlaceholderAPI
+  - PlayerPoints
+  - LuckPerms
+  - LibertyBans
+
+commands:
+  g:
+    description: Send global message
+    usage: /g <message>
+    permission: chat.global.use
+    aliases: [п]
+
+  globalchat:
+    description: Toggle global chat
+    usage: /globalchat toggle
+    permission: chat.global.toggle
+    aliases: [пдщифдсрфе]
+
+  l:
+    description: Send local message
+    usage: /l <message>
+    permission: chat.local.use
+    aliases: [д]
+
+  msg:
+    description: Send private message
+    usage: /msg <player> <message>
+    permission: chat.pm.use
+    aliases: [tell, w, pm, m, ьып, ееддж, цж, зьж, ьж]
+
+  reply:
+    description: Reply to last message
+    usage: /reply <message>
+    permission: chat.pm.use
+    aliases: [r, ответить, кузду, к]
+
+  ignore:
+    description: Ignore player
+    usage: /ignore <player>
+    permission: chat.pm.ignore
+    aliases: [игнор, шптщку]
+
+  unignore:
+    description: Unignore player
+    usage: /unignore <player>
+    permission: chat.pm.ignore
+    aliases: [разигнор, гтшптщку]
+
+  announce:
+    description: Send announcement
+    usage: /announce <message>
+    permission: chat.announce.use
+    aliases: [объявление, анонс, фттщгтсу]
+
+  chatspy:
+    description: Toggle chat spy mode
+    usage: /chatspy
+    permission: chat.spy
+    aliases: [spy, шпион, срфезуж, зуж]
+
+  clearchat:
+    description: Clear chat for all players
+    usage: /clearchat
+    permission: chat.clear
+    aliases: [cc, очиститьчат, сдуфксрфе, сс]
+
+  lochat:
+    description: LoChat admin command
+    usage: /lochat [reload]
+    permission: lochat.admin
+    aliases: [дщсрфе]
+
+  color:
+    description: Set gradient nick color
+    usage: /color <hex1> [hex2] ...
+    permission: gradient.color
+    aliases: [gradient, цвет, градиент, сщдщк, пкфвшуте]
+
+  prefix:
+    description: Set custom prefix
+    usage: /prefix <text>
+    permission: gradient.prefix
+    aliases: [префикс, зкуашч]
+
+  aprefix:
+    description: Admin gradient commands
+    usage: /aprefix <subcommand>
+    permission: gradient.admin
+    aliases: [gradientadmin, азкуашч, пкфвшуетефвьшт]
+
+  lmute:
+    description: Mute a player
+    usage: /lmute <player> [time] [-s] [reason]
+    permission: lochat.mute
+    aliases: [mute, мут, ьгеу]
+
+  lunmute:
+    description: Unmute a player
+    usage: /lunmute <player> [-s]
+    permission: lochat.unmute
+    aliases: [unmute, размут, гтьгеу]
+
+  lmutelist:
+    description: List all active mutes
+    usage: /lmutelist
+    permission: lochat.mutelist
+    aliases: [mutelist, мутлист, ьгеудшые]
+
+  lmutehistory:
+    description: View mute history of a player
+    usage: /lmutehistory <player>
+    permission: lochat.mutehistory
+    aliases: [mutehistory, мутистория, ьгеершыещку]
+
+  lmuteblame:
+    description: View mutes issued by a moderator
+    usage: /lmuteblame <moderator>
+    permission: lochat.muteblame
+    aliases: [muteblame, мутблейм, ьгеуидфьу]
+
+permissions:
+  chat.global.use:
+    default: true
+  chat.global.toggle:
+    default: true
+  chat.global.color:
+    default: op
+  chat.local.use:
+    default: true
+  chat.local.color:
+    default: op
+  chat.pm.use:
+    default: true
+  chat.pm.ignore:
+    default: true
+  chat.announce.use:
+    default: op
+  chat.announce.reload:
+    default: op
+  chat.spy:
+    default: op
+  chat.clear:
+    default: op
+  chat.bypass.cooldown:
+    default: op
+  chat.bypass.filter:
+    default: op
+  chat.bypass.antispam:
+    default: op
+  chat.mention.use:
+    default: true
+  gradient.color:
+    default: true
+  gradient.prefix:
+    default: true
+  gradient.admin:
+    default: op
+  gradient.bypass.cooldown:
+    default: op
+  gradient.bypass.cost:
+    default: op
+  lochat.admin:
+    default: op
+  lochat.mute:
+    default: op
+  lochat.unmute:
+    default: op
+  lochat.mutelist:
+    default: op
+  lochat.mutehistory:
+    default: op
+  lochat.muteblame:
+    default: op
+  lochat.mute.silent:
+    description: Can use silent mute (-s flag)
+    default: op
+  lochat.mute.see-silent:
+    description: Can see silent mute notifications
+    default: op
+  lochat.mute.dur.10m:
+    description: Can mute for 10 minutes
+    default: false
+  lochat.mute.dur.30m:
+    description: Can mute for 30 minutes
+    default: false
+  lochat.mute.dur.1h:
+    description: Can mute for 1 hour
+    default: false
+  lochat.mute.dur.6h:
+    description: Can mute for 6 hours
+    default: false
+  lochat.mute.dur.12h:
+    description: Can mute for 12 hours
+    default: false
+  lochat.mute.dur.1d:
+    description: Can mute for 1 day
+    default: false
+  lochat.mute.dur.3d:
+    description: Can mute for 3 days
+    default: false
+  lochat.mute.dur.7d:
+    description: Can mute for 7 days
+    default: op
+  lochat.mute.dur.14d:
+    description: Can mute for 14 days
+    default: false
+  lochat.mute.dur.30d:
+    description: Can mute for 30 days
+    default: false
+  lochat.mute.dur.perm:
+    description: Can mute permanently
+    default: op

@@ -1,0 +1,69 @@
+prefix: "&#04CADF[LoChat]"
+
+global:
+  disabled: "&#04CADFГлобальный чат отключен"
+  toggled-on: "&#04CADFГлобальный чат включен"
+  toggled-off: "&#04CADFГлобальный чат отключен"
+
+local:
+  no-players: "&#04CADFРядом нет игроков"
+
+pm:
+  # Форматы личных сообщений
+  # {sender} - ник отправителя, {receiver} - ник получателя
+  # {sender_display} - отправитель с градиентом, {receiver_display} - получатель с градиентом
+  # {message} - текст сообщения
+  format-sent: "&#808080[PM] Ты → {receiver_display}&#808080: {message}"
+  format-received: "&#808080[PM] {sender_display}&#808080 → Ты: {message}"
+  # Использовать градиентные ники в PM
+  use-gradient-names: true
+  # Старые форматы (для совместимости)
+  sent: "&#808080[PM] Ты → {player}: {message}"
+  received: "&#808080[PM] {player} → Ты: {message}"
+  no-reply: "&#04CADFНекому ответить"
+  ignored: "&#04CADFЭтот игрок вас игнорирует"
+  player-offline: "&#04CADFИгрок не в сети"
+  self: "&#04CADFНельзя писать самому себе"
+
+ignore:
+  added: "&#04CADFИгрок {player} добавлен в игнор"
+  removed: "&#04CADFИгрок {player} убран из игнора"
+  already-ignored: "&#04CADFИгрок уже в игноре"
+  not-ignored: "&#04CADFИгрок не в игноре"
+  self: "&#04CADFНельзя игнорировать себя"
+
+announce:
+  reloaded: "&#04CADFКонфигурация перезагружена"
+
+spy:
+  enabled: "&#04CADFШпион режим включен"
+  disabled: "&#04CADFШпион режим выключен"
+  format: "&#808080[SPY] {sender} → {receiver}: {message}"
+
+filter:
+  blocked: "&#04CADFСообщение заблокировано (мат)"
+  warned: "&#04CADFПредупреждение: не используйте мат!"
+
+cooldown:
+  wait: "&#04CADFПодождите {time} сек перед следующим сообщением"
+
+antispam:
+  caps: "&#04CADFСлишком много заглавных букв!"
+  repeat: "&#04CADFНе повторяйте символы!"
+  similar: "&#04CADFНе отправляйте одинаковые сообщения!"
+
+clearchat:
+  cleared: "&#04CADFЧат очищен администратором {player}"
+
+errors:
+  no-permission: "&#04CADFНет прав!"
+  player-not-found: "&#04CADFИгрок не найден"
+  invalid-usage: "&#04CADFИспользование: {usage}"
+
+mute:
+  muted: "&#04CADFИгрок {player} замучен на {time}"
+  unmuted: "&#04CADFИгрок {player} размучен"
+  already-muted: "&#04CADFИгрок уже замучен"
+  not-muted: "&#04CADFИгрок не замучен"
+  you-muted: "&#04CADFВы замучены! Осталось: {time}"
+  permanent: "&#04CADFВы замучены навсегда!"
