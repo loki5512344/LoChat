@@ -1,7 +1,6 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.integrations.SkinsRestorerHook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -9,8 +8,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,27 +18,13 @@ import java.util.regex.Pattern;
 public class HeadEmojiManager {
 
     private final LoChat plugin;
-    private final SkinsRestorerHook skinsHook;
     
     // Паттерны для поиска голов игроков
     private static final Pattern HEAD_PATTERN = Pattern.compile(":head_([a-zA-Z0-9_]{3,16}):");
     private static final Pattern PLAYER_HEAD_PATTERN = Pattern.compile("@head\\s+([a-zA-Z0-9_]{3,16})");
-    
-    // ASCII арт для головы игрока (8x8 пикселей)
-    private static final String[] HEAD_TEMPLATE = {
-        "████████",
-        "██░░░░██", 
-        "██░██░██",
-        "██░░░░██",
-        "██░██░██",
-        "██░░░░██",
-        "██████████",
-        "████████"
-    };
 
     public HeadEmojiManager(LoChat plugin) {
         this.plugin = plugin;
-        this.skinsHook = new SkinsRestorerHook(plugin);
     }
 
     /**
@@ -132,8 +115,6 @@ public class HeadEmojiManager {
      * Создает кликабельную голову игрока
      */
     private String createClickableHead(Player target, Player sender) {
-        String headUrl = skinsHook.getPlayerHeadUrl(target.getName());
-        
         // Создаем компонент с hover и click событиями
         return "§6[§e" + target.getName() + " Head§6]§r";
     }
@@ -161,8 +142,6 @@ public class HeadEmojiManager {
      * Создает Component с hover эффектом для головы игрока
      */
     public Component createHeadComponent(Player target) {
-        String headUrl = skinsHook.getPlayerHeadUrl(target.getName());
-        
         Component headText = Component.text("[" + target.getName() + " Head]")
                 .color(NamedTextColor.GOLD)
                 .hoverEvent(HoverEvent.showText(
