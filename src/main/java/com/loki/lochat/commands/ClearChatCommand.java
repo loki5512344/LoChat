@@ -19,9 +19,9 @@ public class ClearChatCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        // Отправляем 100 пустых строк всем игрокам
+        // Отправляем пустые строки всем игрокам для очистки чата
         for (Player player : Bukkit.getOnlinePlayers()) {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < com.loki.lochat.utils.Constants.CLEAR_CHAT_LINES; i++) {
                 player.sendMessage("");
             }
             

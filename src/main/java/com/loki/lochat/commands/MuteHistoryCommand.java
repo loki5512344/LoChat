@@ -43,22 +43,12 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
         }
 
         String targetName = args[0];
-        UUID targetUUID = null;
 
         // Ищем игрока
-        Player target = Bukkit.getPlayer(targetName);
-        if (target != null) {
-            targetUUID = target.getUniqueId();
-        } else {
-            // Пробуем найти оффлайн игрока
-            @SuppressWarnings("deprecation")
-            var offlinePlayer = Bukkit.getOfflinePlayer(targetName);
-            if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
-                targetUUID = offlinePlayer.getUniqueId();
-            } else {
-                // Пробуем найти по имени в истории
-                targetUUID = plugin.getMuteManager().getUUIDByName(targetName);
-            }
+        UUID targetUUID = com.loki.lochat.utils.PlayerUtil.findPlayerUUID(targetName);
+        if (targetUUID == null) {
+            // Пробуем найти по имени в истории
+            targetUUID = plugin.getMuteManager().getUUIDByName(targetName);
         }
 
         if (targetUUID == null) {

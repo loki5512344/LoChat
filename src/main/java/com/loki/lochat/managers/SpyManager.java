@@ -46,6 +46,25 @@ public class SpyManager {
         }
     }
 
+    public void sendToSpies(Player sender, net.kyori.adventure.text.Component message, boolean isGlobal) {
+        if (spyEnabled.isEmpty()) return;
+        
+        String chatType = isGlobal ? "Global" : "Local";
+        String plainMessage = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(message);
+        String format = plugin.getMessageConfig().get("spy.chat-format", 
+                "§7[SPY] §e{type} §7{sender}: §f{message}");
+
+        for (UUID spyUuid : spyEnabled) {
+            Player spy = Bukkit.getPlayer(spyUuid);
+            if (spy != null && spy.isOnline() && !spy.equals(sender)) {
+                spy.sendMessage(ChatFormatter.parse(format
+                        .replace("{type}", chatType)
+                        .replace("{sender}", sender.getName())
+                        .replace("{message}", plainMessage)));
+            }
+        }
+    }
+
     public void removeSpy(UUID player) {
         spyEnabled.remove(player);
     }

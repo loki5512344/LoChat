@@ -39,10 +39,11 @@ spy:
   enabled: "&#04CADFШпион режим включен"
   disabled: "&#04CADFШпион режим выключен"
   format: "&#808080[SPY] {sender} → {receiver}: {message}"
+  chat-format: "&#808080[SPY] {type} {sender}: {message}"
 
 filter:
   blocked: "&#04CADFСообщение заблокировано (мат)"
-  warned: "&#04CADFПредупреждение: не используйте мат!"
+  warning: "&#04CADFПредупреждение: не используйте мат!"
 
 cooldown:
   wait: "&#04CADFПодождите {time} сек перед следующим сообщением"

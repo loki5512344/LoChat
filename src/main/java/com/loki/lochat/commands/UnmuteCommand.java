@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Команда /unmute nick [-s]
@@ -57,23 +58,14 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         }
 
         // Ищем игрока
-        Player target = Bukkit.getPlayer(targetName);
-        String finalTargetName = targetName;
-        java.util.UUID targetUUID;
-
-        if (target == null) {
-            @SuppressWarnings("deprecation")
-            var offlinePlayer = Bukkit.getOfflinePlayer(targetName);
-            if (!offlinePlayer.hasPlayedBefore() && !offlinePlayer.isOnline()) {
-                sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
-                return true;
-            }
-            targetUUID = offlinePlayer.getUniqueId();
-            finalTargetName = offlinePlayer.getName() != null ? offlinePlayer.getName() : targetName;
-        } else {
-            targetUUID = target.getUniqueId();
-            finalTargetName = target.getName();
+        UUID targetUUID = com.loki.lochat.utils.PlayerUtil.findPlayerUUID(targetName);
+        if (targetUUID == null) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
+            return true;
         }
+
+        Player target = Bukkit.getPlayer(targetUUID);
+        String finalTargetName = com.loki.lochat.utils.PlayerUtil.getPlayerName(targetUUID);
 
         String operatorName = sender.getName();
 

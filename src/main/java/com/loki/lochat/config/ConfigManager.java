@@ -154,7 +154,7 @@ public class ConfigManager {
     }
 
     public int getLocalRadius() {
-        return config.getInt("chat.local.radius", 100);
+        return config.getInt("chat.local.radius", com.loki.lochat.utils.Constants.DEFAULT_LOCAL_RADIUS);
     }
 
     public String getLocalPrefix() {

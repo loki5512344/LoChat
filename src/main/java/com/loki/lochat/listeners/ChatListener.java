@@ -81,59 +81,22 @@ public class ChatListener implements Listener {
         String processedPlain = PLAIN.serialize(processedMessage).trim();
         if (processedPlain.isEmpty()) return;
 
+        // ===== FILTER =====
+        processedMessage = applyMessageFilter(player, processedMessage, processedPlain);
+        if (processedMessage == null) return; // Сообщение заблокировано
+
+        processedPlain = PLAIN.serialize(processedMessage);
+
         // ===== COOLDOWN =====
-        int cooldown = isGlobal
-                ? plugin.getConfigManager().getGlobalCooldown()
-                : plugin.getConfigManager().getLocalCooldown();
-
-        if (cooldown > 0 && !player.hasPermission("chat.bypass.cooldown")) {
-            if (plugin.getCooldownManager()
-                    .isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
-
-                int remaining = plugin.getCooldownManager()
-                        .getRemainingCooldown(player.getUniqueId(), chatType, cooldown);
-
-                player.sendMessage(
-                        plugin.getMessageConfig()
-                                .getComponent("cooldown.wait", "{time}", String.valueOf(remaining))
-                );
-                return;
-            }
-        }
+        if (!checkCooldown(player, chatType)) return;
 
         // ===== ANTI SPAM =====
-        if (!player.hasPermission("chat.bypass.antispam")) {
-            AntiSpamManager.SpamResult result =
-                    plugin.getAntiSpamManager()
-                            .checkMessage(player.getUniqueId(), processedPlain);
-
-            switch (result) {
-                case TOO_MANY_CAPS -> {
-                    player.sendMessage(
-                            plugin.getMessageConfig().getComponent("antispam.caps")
-                    );
-                    return;
-                }
-                case REPEAT_CHARS -> {
-                    player.sendMessage(
-                            plugin.getMessageConfig().getComponent("antispam.repeat")
-                    );
-                    return;
-                }
-                case SIMILAR_MESSAGE -> {
-                    player.sendMessage(
-                            plugin.getMessageConfig().getComponent("antispam.similar")
-                    );
-                    return;
-                }
-                case ALLOWED -> {
-                    // Сообщение прошло проверку, продолжаем
-                }
-            }
-        }
-
+        if (!checkAntiSpam(player, processedPlain)) return;
 
         plugin.getCooldownManager().setCooldown(player.getUniqueId(), chatType);
+
+        // ===== SPY =====
+        plugin.getSpyManager().sendToSpies(player, processedMessage, isGlobal);
 
         // ===== SEND =====
         if (isGlobal) {
@@ -141,6 +104,98 @@ public class ChatListener implements Listener {
         } else {
             plugin.getChatManager().sendLocalMessage(player, processedMessage);
         }
+    }
+
+    private Component applyMessageFilter(Player player, Component message, String plainMessage) {
+        if (!plugin.getConfigManager().isFilterEnabled() || player.hasPermission("chat.bypass.filter")) {
+            return message;
+        }
+
+        String filteredMessage = applyFilter(plainMessage);
+        if (!filteredMessage.equals(plainMessage)) {
+            String action = plugin.getConfigManager().getFilterAction();
+            switch (action.toLowerCase()) {
+                case "block" -> {
+                    player.sendMessage(plugin.getMessageConfig().getComponent("filter.blocked"));
+                    return null;
+                }
+                case "warn" -> {
+                    player.sendMessage(plugin.getMessageConfig().getComponent("filter.warning"));
+                    return null;
+                }
+                case "censor" -> {
+                    return Component.text(filteredMessage);
+                }
+            }
+        }
+        return message;
+    }
+
+    private boolean checkCooldown(Player player, String chatType) {
+        int cooldown = chatType.equals("global")
+                ? plugin.getConfigManager().getGlobalCooldown()
+                : plugin.getConfigManager().getLocalCooldown();
+
+        if (cooldown > 0 && !player.hasPermission("chat.bypass.cooldown")) {
+            if (plugin.getCooldownManager().isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
+                int remaining = plugin.getCooldownManager()
+                        .getRemainingCooldown(player.getUniqueId(), chatType, cooldown);
+
+                player.sendMessage(
+                        plugin.getMessageConfig()
+                                .getComponent("cooldown.wait", "{time}", String.valueOf(remaining))
+                );
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkAntiSpam(Player player, String message) {
+        if (player.hasPermission("chat.bypass.antispam")) {
+            return true;
+        }
+
+        AntiSpamManager.SpamResult result = plugin.getAntiSpamManager()
+                .checkMessage(player.getUniqueId(), message);
+
+        switch (result) {
+            case TOO_MANY_CAPS -> {
+                player.sendMessage(plugin.getMessageConfig().getComponent("antispam.caps"));
+                return false;
+            }
+            case REPEAT_CHARS -> {
+                player.sendMessage(plugin.getMessageConfig().getComponent("antispam.repeat"));
+                return false;
+            }
+            case SIMILAR_MESSAGE -> {
+                player.sendMessage(plugin.getMessageConfig().getComponent("antispam.similar"));
+                return false;
+            }
+            case ALLOWED -> {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private String applyFilter(String message) {
+        if (!plugin.getConfigManager().isFilterEnabled()) {
+            return message;
+        }
+
+        String filtered = message;
+        String replacement = plugin.getConfigManager().getFilterReplacement();
+        
+        for (String word : plugin.getConfigManager().getFilterWords()) {
+            if (word == null || word.trim().isEmpty()) continue;
+            
+            // Заменяем слово с учетом регистра и границ слов
+            String pattern = "(?i)\\b" + java.util.regex.Pattern.quote(word.trim()) + "\\b";
+            filtered = filtered.replaceAll(pattern, replacement);
+        }
+        
+        return filtered;
     }
 
     @EventHandler
