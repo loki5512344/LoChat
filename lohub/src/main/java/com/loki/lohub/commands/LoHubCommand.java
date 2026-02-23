@@ -29,6 +29,12 @@ public class LoHubCommand implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("reload")) {
             plugin.getConfigManager().reload();
+            plugin.getHotbarManager().reload();
+            plugin.getAnnouncementManager().reload();
+            plugin.getScoreboardManager().stop();
+            plugin.getTablistManager().stop();
+            plugin.getScoreboardManager().start();
+            plugin.getTablistManager().start();
             sender.sendMessage(TextUtil.colorize("&aConfiguration reloaded!"));
             return true;
         }

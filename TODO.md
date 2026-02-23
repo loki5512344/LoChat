@@ -20,7 +20,7 @@
 ---
 
 ### 2. LoHub - Hub плагин (Paper/Folia)
-**Статус:** 🔄 В разработке (21% готово)
+**Статус:** ✅ Готов к использованию (100% готово)
 
 #### ✅ Готово
 - ✅ Spawn система с телепортом
@@ -28,49 +28,62 @@
 - ✅ Защита мира (блоки, PvP, мобы)
 - ✅ Команды /hub, /sethub, /lohub
 - ✅ Базовые утилиты (ItemBuilder, TextUtil, PlaceholderUtil)
+- ✅ **ЭТАП 2: Action система**
+  - ✅ Action интерфейс и ActionType enum
+  - ✅ MessageAction, BroadcastAction, TitleAction, ActionbarAction
+  - ✅ SoundAction, CommandAction, ConsoleAction
+  - ✅ GamemodeAction, EffectAction, CloseAction
+  - ✅ ActionManager с regex парсингом
+- ✅ **ЭТАП 3: Join система**
+  - ✅ PlayerJoinListener (join/quit/respawn/death)
+  - ✅ Телепорт на спавн при входе
+  - ✅ Хил и очистка эффектов
+  - ✅ Кастомные сообщения входа/выхода
+  - ✅ Фейерверки при первом входе
+  - ✅ Интеграция с Action системой
+- ✅ **ЭТАП 4: Custom Join Items**
+  - ✅ HotbarManager - управление предметами
+  - ✅ Выдача предметов при входе
+  - ✅ HotbarListener - обработка кликов
+  - ✅ Защита от выбрасывания предметов
+  - ✅ Интеграция с Action системой
+- ✅ **ЭТАП 5: Launchpad**
+  - ✅ LaunchpadListener - прыжковые площадки
+  - ✅ Проверка блоков (плита + редстоун)
+  - ✅ Настраиваемая сила прыжка
+  - ✅ Интеграция с Action системой
+- ✅ **ЭТАП 6: Double Jump**
+  - ✅ DoubleJumpListener - двойной прыжок
+  - ✅ Интеграция с CooldownManager
+  - ✅ Настраиваемая сила и кулдаун
+  - ✅ Интеграция с Action системой
+- ✅ **ЭТАП 7: Player Hider**
+  - ✅ PlayerHiderManager - управление видимостью
+  - ✅ Скрытие/показ игроков
+  - ✅ Предмет для переключения
+  - ✅ Кулдаун на использование
+- ✅ **ЭТАП 8: Scoreboard**
+  - ✅ ScoreboardManager - управление скорбордом
+  - ✅ Настраиваемый заголовок и строки
+  - ✅ Автообновление с настраиваемым интервалом
+  - ✅ PlaceholderAPI интеграция
+- ✅ **ЭТАП 9: Tablist**
+  - ✅ TablistManager - управление табом
+  - ✅ Настраиваемый header и footer
+  - ✅ Автообновление с настраиваемым интервалом
+  - ✅ PlaceholderAPI интеграция
+- ✅ **ЭТАП 10: Announcements**
+  - ✅ AnnouncementManager - система объявлений
+  - ✅ Множественные объявления с ротацией
+  - ✅ Настраиваемый интервал и звук
+  - ✅ Минимальное количество игроков
+  - ✅ PlaceholderAPI интеграция
 
-#### 🔄 В работе - ЭТАП 2: Action система
-- [ ] Action интерфейс и ActionType enum
-- [ ] MessageAction - отправка сообщений
-- [ ] SoundAction - звуки
-- [ ] TitleAction - title/subtitle
-- [ ] CommandAction - команды от игрока
-- [ ] ConsoleAction - команды от консоли
-- [ ] GamemodeAction - смена режима
-- [ ] EffectAction - эффекты
-- [ ] ActionManager - парсинг и выполнение
-
-#### 📋 Запланировано
-**ЭТАП 3: Join система**
-- [ ] PlayerJoinListener
-- [ ] Телепорт на спавн при входе
-- [ ] Хил и очистка эффектов
-- [ ] Кастомные сообщения входа/выхода
-- [ ] Интеграция с Action системой
-
-**ЭТАП 4: Custom Join Items**
-- [ ] HotbarManager
-- [ ] Выдача предметов при входе
-- [ ] Обработка кликов (actions)
-- [ ] Защита от выбрасывания
-
-**ЭТАП 5: Launchpad**
-- [ ] LaunchpadListener
-- [ ] Прыжковые площадки (плита + редстоун)
-
-**ЭТАП 6: Double Jump**
-- [ ] DoubleJumpListener
-- [ ] CooldownManager
-- [ ] Двойной прыжок в воздухе
-
-**ЭТАП 7: Player Hider**
-- [ ] PlayerHiderManager
-- [ ] Скрытие/показ игроков
-- [ ] Предмет для переключения
-
-**ЭТАП 8-10: Опционально**
-- [ ] Scoreboard модуль
-- [ ] Tablist модуль
+#### 📋 Дополнительно
+- Все основные функции реализованы
+- Конфигурация полностью настраиваема через config.yml
+- Поддержка PlaceholderAPI для всех текстовых элементов
+- Команда /lohub reload для перезагрузки конфигурации
 - [ ] Announcements модуль
 
 ---

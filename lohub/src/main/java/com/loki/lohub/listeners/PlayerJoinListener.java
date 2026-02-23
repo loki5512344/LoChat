@@ -65,6 +65,9 @@ public class PlayerJoinListener implements Listener {
         handleJoinSettings(player);
         handleJoinEvents(player);
         handleFirework(player);
+
+        plugin.getScoreboardManager().setScoreboard(player, true);
+        plugin.getTablistManager().setTablist(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -74,6 +77,9 @@ public class PlayerJoinListener implements Listener {
         if (isWorldDisabled(player.getWorld().getName())) {
             return;
         }
+
+        plugin.getPlayerHiderManager().removePlayer(player);
+        plugin.getScoreboardManager().removePlayer(player);
 
         if (plugin.getConfig().getBoolean("join_leave_messages.enabled", true)) {
             String quitMessage = plugin.getConfig().getString("join_leave_messages.quit_message", "");
@@ -144,6 +150,9 @@ public class PlayerJoinListener implements Listener {
         if (plugin.getConfig().getBoolean("join_settings.clear_inventory", false)) {
             player.getInventory().clear();
         }
+
+        plugin.getHotbarManager().giveItems(player);
+        plugin.getPlayerHiderManager().giveItem(player);
     }
 
     private void handleJoinEvents(Player player) {
