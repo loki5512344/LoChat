@@ -30,7 +30,7 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(MM.deserialize("&#FFD700LoChat v" + plugin.getDescription().getVersion()));
+            sender.sendMessage(MM.deserialize("&#FFD700LoChat v" + plugin.getPluginMeta().getVersion()));
             sender.sendMessage(MM.deserialize("&#808080Команды:"));
             sender.sendMessage(MM.deserialize("&#FFFF00/lochat reload - Перезагрузить конфиги"));
             sender.sendMessage(MM.deserialize("&#FFFF00/lochat commands - Список кастомных команд"));

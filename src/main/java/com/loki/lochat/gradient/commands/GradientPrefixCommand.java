@@ -84,7 +84,9 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         }
         
         data.setPrefixEnabled(true);
-        module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
+        if (module.getLuckPermsHook() != null) {
+            module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
+        }
         saveAndUpdate(player, data);
         msg.send(player, "prefix-enabled");
         return true;
@@ -93,7 +95,9 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     private boolean handleOff(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         data.setPrefixEnabled(false);
-        module.getLuckPermsHook().removePrefix(player);
+        if (module.getLuckPermsHook() != null) {
+            module.getLuckPermsHook().removePrefix(player);
+        }
         saveAndUpdate(player, data);
         module.getMessages().send(player, "prefix-disabled");
         return true;
@@ -110,7 +114,9 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         
         data.setPrefix(null);
         data.setPrefixEnabled(false);
-        module.getLuckPermsHook().removePrefix(player);
+        if (module.getLuckPermsHook() != null) {
+            module.getLuckPermsHook().removePrefix(player);
+        }
         saveAndUpdate(player, data);
         msg.send(player, "prefix-reset-success");
         return true;

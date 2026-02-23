@@ -37,22 +37,15 @@ public class MessageServiceImpl implements MessageService {
         // Создаем объект сообщения
         ChatMessage message = ChatMessage.create(player, rawMessage);
         
-        // Применяем фильтры
+        // Применяем фильтры (мут, кулдаун)
         for (MessageFilter filter : filters) {
             if (!filter.apply(player, message)) {
                 return false; // Сообщение заблокировано
             }
         }
         
-        // Отправляем сообщение
-        Component formattedMessage = ChatFormatter.parse(message.getContent());
-        
-        if (message.isGlobal()) {
-            chatService.sendGlobalMessage(player, formattedMessage);
-        } else {
-            chatService.sendLocalMessage(player, formattedMessage);
-        }
-        
+        // Возвращаем true - сообщение разрешено
+        // Рендерер сам отправит его
         return true;
     }
 }

@@ -188,7 +188,9 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         data.setPrefixEnabled(true);
         data.setPrefixPurchased(true);
 
-        module.getLuckPermsHook().setPrefix(target.getUniqueId(), DisplayNameUtil.buildColoredPrefix(module, data));
+        if (module.getLuckPermsHook() != null) {
+            module.getLuckPermsHook().setPrefix(target.getUniqueId(), DisplayNameUtil.buildColoredPrefix(module, data));
+        }
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
@@ -244,10 +246,12 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         GradientPlayerData data = module.getDataManager().getPlayerData(target.getUniqueId());
         data.setPrefixEnabled(enable);
 
-        if (enable && data.hasPrefix()) {
-            module.getLuckPermsHook().setPrefix(target.getUniqueId(), DisplayNameUtil.buildColoredPrefix(module, data));
-        } else {
-            module.getLuckPermsHook().removePrefix(target.getUniqueId());
+        if (module.getLuckPermsHook() != null) {
+            if (enable && data.hasPrefix()) {
+                module.getLuckPermsHook().setPrefix(target.getUniqueId(), DisplayNameUtil.buildColoredPrefix(module, data));
+            } else {
+                module.getLuckPermsHook().removePrefix(target.getUniqueId());
+            }
         }
 
         Player onlineTarget = target.getPlayer();
@@ -306,7 +310,9 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         data.setPrefix(null);
         data.setPrefixEnabled(false);
 
-        module.getLuckPermsHook().removePrefix(target.getUniqueId());
+        if (module.getLuckPermsHook() != null) {
+            module.getLuckPermsHook().removePrefix(target.getUniqueId());
+        }
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {

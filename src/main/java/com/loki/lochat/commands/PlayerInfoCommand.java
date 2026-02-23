@@ -37,7 +37,7 @@ public class PlayerInfoCommand implements CommandExecutor {
         // Показываем информацию об игроке
         sender.sendMessage(ChatFormatter.parse("§6=== Информация об игроке ==="));
         sender.sendMessage(ChatFormatter.parse("§eИмя: §f" + target.getName()));
-        sender.sendMessage(ChatFormatter.parse("§eОтображаемое имя: §f" + target.getDisplayName()));
+        sender.sendMessage(ChatFormatter.parse("§eОтображаемое имя: §f" + target.displayName()));
         sender.sendMessage(ChatFormatter.parse("§eУровень: §f" + target.getLevel()));
         sender.sendMessage(ChatFormatter.parse("§eЗдоровье: §f" + Math.round(target.getHealth()) + "/20"));
         sender.sendMessage(ChatFormatter.parse("§eМир: §f" + target.getWorld().getName()));

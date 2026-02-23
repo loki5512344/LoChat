@@ -34,11 +34,13 @@ public class ChatServiceImpl implements ChatService {
             ? (Component) message 
             : ChatFormatter.parse(message.toString());
         
-        String formatted = format
-            .replace("{prefix}", prefix)
-            .replace("{player}", sender.getName());
+        // Используем displayName игрока (с градиентом если есть)
+        Component playerName = sender.displayName();
+        
+        String formatted = format.replace("{prefix}", prefix);
         
         Component finalComponent = ChatFormatter.parse(formatted)
+            .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
             .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
         
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -58,9 +60,11 @@ public class ChatServiceImpl implements ChatService {
             ? (Component) message 
             : ChatFormatter.parse(message.toString());
         
-        String formatted = format.replace("{player}", sender.getName());
+        // Используем displayName игрока (с градиентом если есть)
+        Component playerName = sender.displayName();
         
-        Component finalComponent = ChatFormatter.parse(formatted)
+        Component finalComponent = ChatFormatter.parse(format)
+            .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
             .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
         
         for (Player player : Bukkit.getOnlinePlayers()) {

@@ -48,6 +48,7 @@ public class ServiceRegistry {
         register(IgnoreService.class, new IgnoreServiceImpl(plugin));
         register(SpyService.class, new SpyServiceImpl(plugin, messageConfig));
         register(MentionService.class, new MentionServiceImpl(configManager));
+        register(NickService.class, new NickServiceImpl(plugin));
     }
     
     public <T> void register(Class<T> serviceClass, T implementation) {

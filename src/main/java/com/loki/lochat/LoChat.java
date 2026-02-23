@@ -2,6 +2,7 @@ package com.loki.lochat;
 
 import com.loki.lochat.api.service.IgnoreService;
 import com.loki.lochat.api.service.MuteService;
+import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.commands.*;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
@@ -33,7 +34,7 @@ public final class LoChat extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        getLogger().info("Загрузка LoChat v" + getDescription().getVersion() + " для Paper/Folia " + Bukkit.getMinecraftVersion() + "...");
+        getLogger().info("Загрузка LoChat v" + getPluginMeta().getVersion() + " для Paper/Folia " + Bukkit.getMinecraftVersion() + "...");
         
         // Конфиги
         configManager = new ConfigManager(this);
@@ -71,6 +72,9 @@ public final class LoChat extends JavaPlugin {
         MuteService muteService = serviceRegistry.get(MuteService.class);
         if (muteService != null) muteService.save();
         
+        NickService nickService = serviceRegistry.get(NickService.class);
+        if (nickService != null) nickService.save();
+        
         if (gradientModule != null) gradientModule.shutdown();
         getLogger().info("LoChat отключен!");
     }
@@ -102,6 +106,10 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
+        
+        NickCommand nickCmd = new NickCommand(this);
+        getCommand("nick").setExecutor(nickCmd);
+        getCommand("nick").setTabCompleter(nickCmd);
         
         LoChatCommand loChatCmd = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCmd);

@@ -82,7 +82,9 @@ public class GradientGUIListener implements Listener {
                     data.setColors(gui.getColors());
                     data.setColorEnabled(true);
                 }
-                module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
+                if (module.getLuckPermsHook() != null) {
+                    module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
+                }
                 msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free", 
                         "price", String.valueOf(price));
             }

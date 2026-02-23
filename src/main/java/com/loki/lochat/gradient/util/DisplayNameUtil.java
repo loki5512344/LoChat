@@ -32,7 +32,7 @@ public final class DisplayNameUtil {
         if (data.isPrefixEnabled() && data.hasPrefix()) {
             // Есть кастомный префикс
             prefix = data.getPrefix();
-        } else if (module.getLuckPermsHook().isEnabled()) {
+        } else if (module.getLuckPermsHook() != null && module.getLuckPermsHook().isEnabled()) {
             // Нет кастомного префикса, проверяем LuckPerms
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
