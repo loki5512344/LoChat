@@ -122,6 +122,23 @@ public final class ChatFormatter {
     public static String toPlain(Component component) {
         return component == null ? "" : PLAIN.serialize(component);
     }
+    
+    public static String toPlain(Object obj) {
+        if (obj == null) return "";
+        if (obj instanceof Component component) {
+            return PLAIN.serialize(component);
+        }
+        return obj.toString();
+    }
+    
+    /**
+     * Отправляет сообщение игроку
+     */
+    public static void sendMessage(Player player, Component component) {
+        if (player != null && component != null) {
+            player.sendMessage(component);
+        }
+    }
 
     /* ===================== COLORS ===================== */
 
@@ -133,14 +150,14 @@ public final class ChatFormatter {
         return convertLegacyFormats(message);
     }
 
-    /* ===================== EMOJIS ===================== */
+    /* ===================== EMOJIS (REMOVED) ===================== */
 
     public static String replaceEmojis(String message) {
-        return message;
+        return message; // Эмодзи удалены
     }
 
     public static String replaceEmojis(String message, Player player) {
-        return message;
+        return message; // Эмодзи удалены
     }
 
     /* ===================== CHAT ===================== */

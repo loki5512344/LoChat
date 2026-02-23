@@ -1,6 +1,7 @@
 package com.loki.lochat.integrations;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MuteService;
 import org.bukkit.entity.Player;
 
 /**
@@ -10,9 +11,11 @@ import org.bukkit.entity.Player;
 public class LibertyBansHook {
 
     private final LoChat plugin;
+    private final MuteService muteService;
 
     public LibertyBansHook(LoChat plugin) {
         this.plugin = plugin;
+        this.muteService = plugin.getServiceRegistry().get(MuteService.class);
         
         // Проверяем наличие LibertyBans
         if (plugin.getServer().getPluginManager().getPlugin("LibertyBans") != null) {
@@ -24,7 +27,7 @@ public class LibertyBansHook {
      * Проверяет, замучен ли игрок через встроенную систему LoChat
      */
     public boolean isMuted(Player player) {
-        return plugin.getMuteManager().isMuted(player.getUniqueId());
+        return muteService.isMuted(player.getUniqueId());
     }
 
     public boolean isEnabled() {

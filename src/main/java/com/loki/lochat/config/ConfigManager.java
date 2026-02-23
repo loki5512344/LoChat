@@ -60,20 +60,6 @@ public class ConfigManager {
             config.set("mentions.self-highlight", "&#FFD700{player}");
         }
         
-        if (!config.contains("filter.enabled")) {
-            config.set("filter.enabled", true);
-            config.set("filter.words", java.util.Arrays.asList("хуй", "пизд", "блять", "ебать", "сука"));
-            config.set("filter.action", "censor");
-            config.set("filter.replacement", "***");
-        }
-        
-        if (!config.contains("antispam.enabled")) {
-            config.set("antispam.enabled", true);
-            config.set("antispam.max-caps-percent", 70);
-            config.set("antispam.max-repeat-chars", 5);
-            config.set("antispam.similar-message-delay", 30);
-        }
-        
         if (!config.contains("automessages.enabled")) {
             config.set("automessages.enabled", true);
             config.set("automessages.interval", 300);
@@ -83,12 +69,6 @@ public class ConfigManager {
         if (!config.contains("clearchat.message.enabled")) {
             config.set("clearchat.message.enabled", true);
             config.set("clearchat.message.text", "&#04CADFЧат очищен администратором {player}");
-        }
-        
-        if (!config.contains("head-emoji.enabled")) {
-            config.set("head-emoji.enabled", true);
-            config.set("head-emoji.allow-player-heads", true);
-            config.set("head-emoji.max-heads-per-message", 3);
         }
         
         if (!config.contains("lopreff.enabled")) {
@@ -217,23 +197,6 @@ public class ConfigManager {
     public String getSelfMentionHighlight() {
         return ChatFormatter.convertAllColors(config.getString("mentions.self-highlight", "&#FFD700{player}"));
     }
-
-    // Filter
-    public boolean isFilterEnabled() {
-        return config.getBoolean("filter.enabled", true);
-    }
-
-    public List<String> getFilterWords() {
-        return config.getStringList("filter.words");
-    }
-
-    public String getFilterAction() {
-        return config.getString("filter.action", "censor");
-    }
-
-    public String getFilterReplacement() {
-        return config.getString("filter.replacement", "***");
-    }
     
     // Clear chat
     public boolean isClearChatMessageEnabled() {
@@ -252,23 +215,6 @@ public class ConfigManager {
     public void setClearChatMessage(String message) {
         config.set("clearchat.message.text", message);
         plugin.saveConfig();
-    }
-
-    // Anti-spam
-    public boolean isAntiSpamEnabled() {
-        return config.getBoolean("antispam.enabled", true);
-    }
-
-    public int getMaxCapsPercent() {
-        return config.getInt("antispam.max-caps-percent", 70);
-    }
-
-    public int getMaxRepeatChars() {
-        return config.getInt("antispam.max-repeat-chars", 5);
-    }
-
-    public int getSimilarMessageDelay() {
-        return config.getInt("antispam.similar-message-delay", 30);
     }
 
     // Auto messages

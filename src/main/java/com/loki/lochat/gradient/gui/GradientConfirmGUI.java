@@ -3,7 +3,6 @@ package com.loki.lochat.gradient.gui;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.util.GradientConstants;
 import com.loki.lochat.gradient.util.GradientUtil;
-import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

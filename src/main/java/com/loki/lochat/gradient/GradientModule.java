@@ -10,7 +10,6 @@ import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.hooks.GradientLuckPermsHook;
 import com.loki.lochat.gradient.listeners.GradientGUIListener;
 import com.loki.lochat.gradient.listeners.GradientPlayerListener;
-import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.gradient.util.GradientUtil;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;

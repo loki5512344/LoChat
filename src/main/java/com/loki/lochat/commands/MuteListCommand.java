@@ -1,7 +1,8 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.managers.MuteManager;
+import com.loki.lochat.api.service.MuteService;
+import com.loki.lochat.data.model.MuteData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -20,10 +21,12 @@ import java.util.UUID;
 public class MuteListCommand implements CommandExecutor {
 
     private final LoChat plugin;
+    private final MuteService muteService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public MuteListCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.muteService = plugin.getServiceRegistry().get(MuteService.class);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class MuteListCommand implements CommandExecutor {
             return true;
         }
 
-        Map<UUID, MuteManager.MuteData> activeMutes = plugin.getMuteManager().getActiveMutes();
+        Map<UUID, MuteData> activeMutes = muteService.getActiveMutes();
 
         if (activeMutes.isEmpty()) {
             sender.sendMessage("§aНет активных мутов");
@@ -44,12 +47,12 @@ public class MuteListCommand implements CommandExecutor {
         sender.sendMessage("§6§l=== Активные муты (" + activeMutes.size() + ") ===");
         
         int index = 1;
-        for (Map.Entry<UUID, MuteManager.MuteData> entry : activeMutes.entrySet()) {
+        for (Map.Entry<UUID, MuteData> entry : activeMutes.entrySet()) {
             UUID uuid = entry.getKey();
-            MuteManager.MuteData data = entry.getValue();
+            MuteData data = entry.getValue();
             
             // Получаем имя игрока
-            String playerName = data.playerName;
+            String playerName = data.getPlayerName();
             if (playerName == null) {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
                 playerName = offlinePlayer.getName() != null ? offlinePlayer.getName() : uuid.toString().substring(0, 8);
@@ -60,13 +63,13 @@ public class MuteListCommand implements CommandExecutor {
             if (data.isPermanent()) {
                 timeStr = "§4Навсегда";
             } else {
-                long remaining = data.endTime - System.currentTimeMillis();
-                timeStr = "§e" + plugin.getMuteManager().formatTime(remaining);
+                long remaining = data.getEndTime() - System.currentTimeMillis();
+                timeStr = "§e" + muteService.formatTime(remaining);
             }
             
             sender.sendMessage("§7" + index + ". §f" + playerName + " §7- " + timeStr);
-            sender.sendMessage("   §7Причина: §f" + (data.reason != null ? data.reason : "Не указана"));
-            sender.sendMessage("   §7Выдал: §f" + data.mutedBy + " §7(" + dateFormat.format(new Date(data.mutedAt)) + ")");
+            sender.sendMessage("   §7Причина: §f" + (data.getReason() != null ? data.getReason() : "Не указана"));
+            sender.sendMessage("   §7Выдал: §f" + data.getMutedBy() + " §7(" + dateFormat.format(new Date(data.getMutedAt())) + ")");
             
             index++;
         }

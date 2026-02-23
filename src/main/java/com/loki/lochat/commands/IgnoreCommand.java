@@ -1,6 +1,7 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.IgnoreService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -9,12 +10,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Команда для добавления игрока в список игнорируемых
+ * /ignore <ник>
+ */
 public class IgnoreCommand implements CommandExecutor {
 
     private final LoChat plugin;
+    private final IgnoreService ignoreService;
 
     public IgnoreCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.ignoreService = plugin.getServiceRegistry().get(IgnoreService.class);
     }
 
     @Override
@@ -40,12 +47,12 @@ public class IgnoreCommand implements CommandExecutor {
             return true;
         }
 
-        if (plugin.getIgnoreManager().isIgnoring(player.getUniqueId(), target.getUniqueId())) {
+        if (ignoreService.isIgnoring(player.getUniqueId(), target.getUniqueId())) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.already-ignored")));
             return true;
         }
 
-        plugin.getIgnoreManager().addIgnore(player.getUniqueId(), target.getUniqueId());
+        ignoreService.addIgnore(player.getUniqueId(), target.getUniqueId());
         player.sendMessage(ChatFormatter.parse(
                 plugin.getMessageConfig().get("ignore.added", "{player}", target.getName())
         ));

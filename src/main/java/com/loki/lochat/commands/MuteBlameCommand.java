@@ -1,7 +1,8 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.managers.MuteManager;
+import com.loki.lochat.api.service.MuteService;
+import com.loki.lochat.data.model.MuteData;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,15 +18,17 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Команда /muteblame <модератор> - история выдачи мутов модератором
+ * Команда /lmuteblame <модератор> - история мутов выданных модератором
  */
 public class MuteBlameCommand implements CommandExecutor, TabCompleter {
 
     private final LoChat plugin;
+    private final MuteService muteService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     public MuteBlameCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.muteService = plugin.getServiceRegistry().get(MuteService.class);
     }
 
     @Override
@@ -37,12 +40,13 @@ public class MuteBlameCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§cИспользование: /muteblame <модератор>");
+            sender.sendMessage("§cИспользование: /lmuteblame <модератор>");
             return true;
         }
 
         String operatorName = args[0];
-        List<MuteManager.MuteHistoryEntry> mutes = plugin.getMuteManager().getMutesByOperator(operatorName);
+
+        List<MuteData.MuteHistoryEntry> mutes = muteService.getMutesByOperator(operatorName);
 
         if (mutes.isEmpty()) {
             sender.sendMessage("§aМодератор §e" + operatorName + " §aне выдавал мутов");
@@ -52,13 +56,13 @@ public class MuteBlameCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§6§l=== Муты выданные " + operatorName + " (" + mutes.size() + ") ===");
 
         int index = 1;
-        for (MuteManager.MuteHistoryEntry entry : mutes) {
+        for (MuteData.MuteHistoryEntry entry : mutes) {
             // Статус
             String status;
             if (entry.unmuted) {
                 status = "§aРазмучен";
             } else {
-                if (entry.isPermanent()) {
+                if (entry.duration == 0) {
                     status = "§cАктивен (навсегда)";
                 } else {
                     long endTime = entry.mutedAt + entry.duration;
@@ -66,12 +70,13 @@ public class MuteBlameCommand implements CommandExecutor, TabCompleter {
                         status = "§7Истёк";
                     } else {
                         long remaining = endTime - System.currentTimeMillis();
-                        status = "§cАктивен (" + plugin.getMuteManager().formatTime(remaining) + ")";
+                        status = "§cАктивен (" + muteService.formatTime(remaining) + ")";
                     }
                 }
             }
 
-            String durationStr = entry.isPermanent() ? "Навсегда" : plugin.getMuteManager().formatTime(entry.duration);
+            String durationStr = entry.duration == 0 ? "Навсегда" : muteService.formatTime(entry.duration);
+
             String playerName = entry.playerName != null ? entry.playerName : "???";
 
             sender.sendMessage("§7" + index + ". §f" + playerName + " §7- " + status);

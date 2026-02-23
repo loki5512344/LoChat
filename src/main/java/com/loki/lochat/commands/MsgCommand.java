@@ -1,6 +1,9 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.IgnoreService;
+import com.loki.lochat.api.service.PMService;
+import com.loki.lochat.api.service.SpyService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -10,12 +13,22 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Команда для отправки личных сообщений
+ * /msg <ник> <сообщение>
+ */
 public class MsgCommand implements CommandExecutor {
 
     private final LoChat plugin;
+    private final PMService pmService;
+    private final IgnoreService ignoreService;
+    private final SpyService spyService;
 
     public MsgCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.pmService = plugin.getServiceRegistry().get(PMService.class);
+        this.ignoreService = plugin.getServiceRegistry().get(IgnoreService.class);
+        this.spyService = plugin.getServiceRegistry().get(SpyService.class);
     }
 
     @Override
@@ -46,7 +59,7 @@ public class MsgCommand implements CommandExecutor {
         }
 
         // Проверка игнора
-        if (plugin.getIgnoreManager().isIgnoring(target.getUniqueId(), player.getUniqueId())) {
+        if (ignoreService.isIgnoring(target.getUniqueId(), player.getUniqueId())) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored")));
             return true;
         }
@@ -83,11 +96,11 @@ public class MsgCommand implements CommandExecutor {
         }
 
         // Шпион
-        plugin.getSpyManager().broadcastPM(player, target, message);
+        spyService.broadcastPM(player, target, message);
 
         // Сохраняем последнего собеседника
-        plugin.getPmManager().setLastConversation(player.getUniqueId(), target.getUniqueId());
-        plugin.getPmManager().setLastConversation(target.getUniqueId(), player.getUniqueId());
+        pmService.setLastConversation(player.getUniqueId(), target.getUniqueId());
+        pmService.setLastConversation(target.getUniqueId(), player.getUniqueId());
 
         // Логирование
         if (plugin.getConfigManager().isPmLogEnabled()) {

@@ -13,7 +13,6 @@ public class MessageConfig {
 
     private final LoChat plugin;
     private FileConfiguration messages;
-    private File messagesFile;
 
     public MessageConfig(LoChat plugin) {
         this.plugin = plugin;
@@ -21,7 +20,7 @@ public class MessageConfig {
     }
 
     private void loadMessages() {
-        messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+        File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
             plugin.saveResource("messages.yml", false);
         }

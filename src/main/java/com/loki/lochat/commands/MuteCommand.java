@@ -1,6 +1,7 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -22,9 +23,11 @@ import java.util.UUID;
 public class MuteCommand implements CommandExecutor, TabCompleter {
 
     private final LoChat plugin;
+    private final MuteService muteService;
 
     public MuteCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.muteService = plugin.getServiceRegistry().get(MuteService.class);
     }
 
     @Override
@@ -76,12 +79,10 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         // Определяем длительность
         long duration;
         if (timeStr == null || timeStr.isEmpty()) {
-            // Используем максимальное доступное время из прав
             if (sender instanceof Player player) {
-                duration = plugin.getMuteManager().getMaxDuration(player);
+                duration = muteService.getMaxDuration(player);
                 if (duration == -1) {
-                    // Нет прав на длительность - используем дефолт
-                    duration = plugin.getMuteManager().parseTime(defaultDuration);
+                    duration = muteService.parseTime(defaultDuration);
                 }
             } else {
                 duration = 0; // Консоль = перманентный
@@ -89,7 +90,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         } else if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
             duration = 0; // Перманентный
         } else {
-            duration = plugin.getMuteManager().parseTime(timeStr);
+            duration = muteService.parseTime(timeStr);
             if (duration < 0) {
                 sender.sendMessage("§cНеверный формат времени! Используйте: 1d, 2h, 30m, 60s, perm");
                 return true;
@@ -98,9 +99,9 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
 
         // Проверяем право на длительность
         if (sender instanceof Player player) {
-            if (!plugin.getMuteManager().canMuteForDuration(player, duration)) {
-                long maxDur = plugin.getMuteManager().getMaxDuration(player);
-                String maxStr = maxDur == 0 ? "перманентный" : plugin.getMuteManager().formatTime(maxDur);
+            if (!muteService.canMuteForDuration(player, duration)) {
+                long maxDur = muteService.getMaxDuration(player);
+                String maxStr = maxDur == 0 ? "перманентный" : muteService.formatTime(maxDur);
                 sender.sendMessage("§cВы не можете мутить на такой срок! Максимум: " + maxStr);
                 return true;
             }
@@ -117,16 +118,16 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         String finalTargetName = com.loki.lochat.utils.PlayerUtil.getPlayerName(targetUUID);
 
         // Проверяем, не замучен ли уже
-        if (plugin.getMuteManager().isMuted(targetUUID)) {
+        if (muteService.isMuted(targetUUID)) {
             sender.sendMessage("§cИгрок уже замучен!");
             return true;
         }
 
         // Мутим игрока
         String operatorName = sender.getName();
-        plugin.getMuteManager().mute(targetUUID, finalTargetName, duration, reason, operatorName);
+        muteService.mute(targetUUID, finalTargetName, duration, reason, operatorName);
 
-        String timeDisplay = duration == 0 ? "навсегда" : plugin.getMuteManager().formatTime(duration);
+        String timeDisplay = duration == 0 ? "навсегда" : muteService.formatTime(duration);
 
         // Уведомляем отправителя
         sender.sendMessage("§aИгрок §e" + finalTargetName + " §aзамучен на §e" + timeDisplay);
@@ -137,16 +138,15 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             String msgKey = duration == 0 ? "mute.messages.you-muted-permanent" : "mute.messages.you-muted";
             String msg = plugin.getConfigManager().getString(msgKey, 
                     duration == 0 ? "§cВы замучены навсегда! Причина: %reason%" : "§cВы замучены на %duration%! Причина: %reason%");
-            msg = plugin.getMuteManager().formatMessage(msg, finalTargetName, operatorName, timeDisplay, reason);
+            msg = muteService.formatMessage(msg, finalTargetName, operatorName, timeDisplay, reason);
             target.sendMessage(ChatFormatter.parse(msg));
         }
 
         // Broadcast
         if (silent) {
-            // Тихий мут - только тем кто видит
             String silentMsg = plugin.getConfigManager().getString("mute.messages.silent-muted",
                     "§8[Тихо] §c%player% §7замучен на §c%duration% §7(%operator%). Причина: %reason%");
-            silentMsg = plugin.getMuteManager().formatMessage(silentMsg, finalTargetName, operatorName, timeDisplay, reason);
+            silentMsg = muteService.formatMessage(silentMsg, finalTargetName, operatorName, timeDisplay, reason);
             
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.hasPermission("lochat.mute.see-silent")) {
@@ -154,10 +154,9 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
                 }
             }
         } else {
-            // Обычный broadcast
             String broadcastMsg = plugin.getConfigManager().getString("mute.messages.muted",
                     "§c%player% §7был замучен на §c%duration% §7модератором §c%operator%§7. Причина: §c%reason%");
-            broadcastMsg = plugin.getMuteManager().formatMessage(broadcastMsg, finalTargetName, operatorName, timeDisplay, reason);
+            broadcastMsg = muteService.formatMessage(broadcastMsg, finalTargetName, operatorName, timeDisplay, reason);
             Bukkit.broadcast(ChatFormatter.parse(broadcastMsg));
         }
 

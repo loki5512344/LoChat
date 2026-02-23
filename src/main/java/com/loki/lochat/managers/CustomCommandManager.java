@@ -23,8 +23,6 @@ public class CustomCommandManager {
 
     private final LoChat plugin;
     private final Map<String, CustomCommandData> commands;
-    private File commandsFile;
-    private FileConfiguration commandsConfig;
 
     public CustomCommandManager(LoChat plugin) {
         this.plugin = plugin;
@@ -33,12 +31,12 @@ public class CustomCommandManager {
     }
 
     private void loadCommands() {
-        commandsFile = new File(plugin.getDataFolder(), "custom-commands.yml");
+        File commandsFile = new File(plugin.getDataFolder(), "custom-commands.yml");
         if (!commandsFile.exists()) {
             plugin.saveResource("custom-commands.yml", false);
         }
-        
-        commandsConfig = YamlConfiguration.loadConfiguration(commandsFile);
+
+        FileConfiguration commandsConfig = YamlConfiguration.loadConfiguration(commandsFile);
         
         // Очищаем старые команды
         commands.clear();
@@ -117,7 +115,6 @@ public class CustomCommandManager {
         
         // Выполняем команду в зависимости от типа
         switch (data.type.toLowerCase()) {
-            case "chat" -> sendChatMessage(data.target, player, message);
             case "broadcast" -> sendBroadcast(data.target, message);
             case "title" -> sendTitle(data.target, player, message);
             case "actionbar" -> sendActionBar(data.target, player, message);
@@ -186,20 +183,17 @@ public class CustomCommandManager {
 
     private void sendBroadcast(String target, String message) {
         Component component = ChatFormatter.parse(message);
-        
-        switch (target.toLowerCase()) {
-            case "all" -> {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendMessage(component);
-                }
+
+        if (target.equalsIgnoreCase("all")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(component);
             }
-            default -> {
-                if (target.startsWith("permission:")) {
-                    String permission = target.substring(11);
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.hasPermission(permission)) {
-                            player.sendMessage(component);
-                        }
+        } else {
+            if (target.startsWith("permission:")) {
+                String permission = target.substring(11);
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.hasPermission(permission)) {
+                        player.sendMessage(component);
                     }
                 }
             }

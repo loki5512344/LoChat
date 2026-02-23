@@ -145,11 +145,8 @@ public class AutoMessageManager {
 
         boolean isFirstLine = true;
         for (String line : lines) {
-            // Заменяем смайлики через EmojiManager
-            String processed = ChatFormatter.replaceEmojis(line);
-            
             // Заменяем плейсхолдеры
-            processed = processed.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size()));
+            String processed = line.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size()));
             
             // Добавляем префикс к первой непустой строке
             Component formatted;

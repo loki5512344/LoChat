@@ -1,6 +1,7 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,9 +22,11 @@ import java.util.UUID;
 public class UnmuteCommand implements CommandExecutor, TabCompleter {
 
     private final LoChat plugin;
+    private final MuteService muteService;
 
     public UnmuteCommand(LoChat plugin) {
         this.plugin = plugin;
+        this.muteService = plugin.getServiceRegistry().get(MuteService.class);
     }
 
     @Override
@@ -70,7 +73,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         String operatorName = sender.getName();
 
         // Размучиваем
-        if (plugin.getMuteManager().unmute(targetUUID, operatorName)) {
+        if (muteService.unmute(targetUUID, operatorName)) {
             sender.sendMessage("§aИгрок §e" + finalTargetName + " §aразмучен");
 
             // Уведомляем игрока (если онлайн)
@@ -82,7 +85,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
             if (silent) {
                 String silentMsg = plugin.getConfigManager().getString("mute.messages.silent-unmuted",
                         "§8[Тихо] §a%player% §7размучен (%operator%)");
-                silentMsg = plugin.getMuteManager().formatMessage(silentMsg, finalTargetName, operatorName, null, null);
+                silentMsg = muteService.formatMessage(silentMsg, finalTargetName, operatorName, null, null);
 
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (p.hasPermission("lochat.mute.see-silent")) {
@@ -92,7 +95,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
             } else {
                 String broadcastMsg = plugin.getConfigManager().getString("mute.messages.unmuted",
                         "§a%player% §7был размучен модератором §a%operator%");
-                broadcastMsg = plugin.getMuteManager().formatMessage(broadcastMsg, finalTargetName, operatorName, null, null);
+                broadcastMsg = muteService.formatMessage(broadcastMsg, finalTargetName, operatorName, null, null);
                 Bukkit.broadcast(ChatFormatter.parse(broadcastMsg));
             }
         } else {
