@@ -1,13 +1,13 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.util.FoliaUtil;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -18,7 +18,7 @@ public class AutoMessageManager {
     private final LoChat plugin;
     private final Random random = new Random();
     private final AtomicInteger currentIndex = new AtomicInteger(0);
-    private BukkitTask task;
+    private boolean running = false;
     
     private Map<String, List<String>> messages;
     private List<String> messageOrder;
@@ -109,21 +109,14 @@ public class AutoMessageManager {
         long intervalTicks = intervalSeconds * 20L;
 
         // Используем FoliaUtil для совместимости с Paper и Folia
-        task = Bukkit.getScheduler().runTaskTimer(
-                plugin,
-                this::broadcastNextMessage,
-                intervalTicks,
-                intervalTicks
-        );
+        FoliaUtil.runTimerAsync(plugin, this::broadcastNextMessage, intervalTicks, intervalTicks);
+        running = true;
 
         plugin.getLogger().info("Автосообщения запущены (интервал: " + intervalSeconds + " сек, режим: " + mode + ")");
     }
 
     public void stop() {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
-            task = null;
-        }
+        running = false;
     }
 
     private void broadcastNextMessage() {
