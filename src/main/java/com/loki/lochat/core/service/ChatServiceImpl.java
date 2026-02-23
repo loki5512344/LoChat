@@ -27,7 +27,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void sendGlobalMessage(Player sender, Object message) {
         String format = plugin.getConfig().getString("chat.global.format", 
-            "<prefix><player>: <message>");
+            "{prefix} {player}: {message}");
         String prefix = plugin.getConfig().getString("chat.global.prefix", "[G]");
         
         Component messageComponent = (message instanceof Component) 
@@ -35,11 +35,11 @@ public class ChatServiceImpl implements ChatService {
             : ChatFormatter.parse(message.toString());
         
         String formatted = format
-            .replace("<prefix>", prefix)
-            .replace("<player>", sender.getName());
+            .replace("{prefix}", prefix)
+            .replace("{player}", sender.getName());
         
         Component finalComponent = ChatFormatter.parse(formatted)
-            .replaceText(builder -> builder.matchLiteral("<message>").replacement(messageComponent));
+            .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
         
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!isGlobalChatDisabled(player.getUniqueId())) {
@@ -52,16 +52,16 @@ public class ChatServiceImpl implements ChatService {
     public void sendLocalMessage(Player sender, Object message) {
         int radius = plugin.getConfig().getInt("chat.local.radius", 100);
         String format = plugin.getConfig().getString("chat.local.format", 
-            "<player>: <message>");
+            "{player}: {message}");
         
         Component messageComponent = (message instanceof Component) 
             ? (Component) message 
             : ChatFormatter.parse(message.toString());
         
-        String formatted = format.replace("<player>", sender.getName());
+        String formatted = format.replace("{player}", sender.getName());
         
         Component finalComponent = ChatFormatter.parse(formatted)
-            .replaceText(builder -> builder.matchLiteral("<message>").replacement(messageComponent));
+            .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
         
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (DistanceUtil.isInRange(sender, player, radius)) {
