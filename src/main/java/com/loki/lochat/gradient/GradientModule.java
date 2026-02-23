@@ -60,8 +60,17 @@ public class GradientModule {
         // Инициализация хранилища
         dataManager = new GradientDataManager(plugin, config);
         
-        // Подключение LuckPerms
-        luckPermsHook = new GradientLuckPermsHook(plugin);
+        // Подключение LuckPerms (опционально)
+        try {
+            if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
+                luckPermsHook = new GradientLuckPermsHook(plugin);
+                plugin.getLogger().info("Gradient: LuckPerms подключен!");
+            } else {
+                plugin.getLogger().info("Gradient: LuckPerms не найден. Префиксы LuckPerms будут недоступны.");
+            }
+        } catch (NoClassDefFoundError e) {
+            plugin.getLogger().info("Gradient: LuckPerms не найден. Префиксы LuckPerms будут недоступны.");
+        }
         
         
         // Регистрация команд
