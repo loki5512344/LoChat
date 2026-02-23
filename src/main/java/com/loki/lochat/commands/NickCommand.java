@@ -14,9 +14,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Команда /nick для установки кастомного ника
- */
 public class NickCommand implements CommandExecutor, TabCompleter {
     private final LoChat plugin;
     private final NickService nickService;
@@ -38,17 +35,14 @@ public class NickCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
-        // /nick - показать текущий ник
         if (args.length == 0) {
             return showCurrentNick(player);
         }
         
-        // /nick reset - сбросить ник
         if (args[0].equalsIgnoreCase("reset")) {
             return resetNick(player);
         }
         
-        // /nick <ник> - установить ник
         String nickname = String.join(" ", args);
         return setNick(player, nickname);
     }
@@ -87,27 +81,23 @@ public class NickCommand implements CommandExecutor, TabCompleter {
     }
     
     private boolean setNick(Player player, String nickname) {
-        // Валидация
         if (!nickService.isValidNickname(nickname)) {
             player.sendMessage(Component.text("Невалидный ник!", NamedTextColor.RED));
             player.sendMessage(Component.text("Требования:", NamedTextColor.GRAY));
             player.sendMessage(Component.text("• Длина: 3-16 символов", NamedTextColor.GRAY));
             player.sendMessage(Component.text("• Разрешены: буквы, цифры, _, русские буквы", NamedTextColor.GRAY));
-            player.sendMessage(Component.text("• Поддержка цветов: <red>текст</red>, <gradient:#FF0000:#00FF00>текст</gradient>", NamedTextColor.GRAY));
+            player.sendMessage(Component.text("• Поддержка цветов: &#FF0000текст, <gradient:&#FF0000:&#00FF00>текст</gradient>", NamedTextColor.GRAY));
             return true;
         }
         
-        // Проверка уникальности
         if (nickService.isNicknameTaken(nickname)) {
             var currentNick = nickService.getNickname(player.getUniqueId());
-            // Если это не свой текущий ник
             if (currentNick.isEmpty() || !currentNick.get().equals(nickname)) {
                 player.sendMessage(Component.text("Этот ник уже занят!", NamedTextColor.RED));
                 return true;
             }
         }
         
-        // Устанавливаем ник
         boolean success = nickService.setNickname(player.getUniqueId(), nickname);
         
         if (success) {
@@ -126,8 +116,22 @@ public class NickCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
         
         if (args.length == 1) {
-            completions.add("reset");
-            completions.add("<ник>");
+            String input = args[0].toLowerCase();
+            
+            if ("reset".startsWith(input)) {
+                completions.add("reset");
+            }
+            
+            if (sender instanceof Player player) {
+                var currentNick = nickService.getNickname(player.getUniqueId());
+                if (currentNick.isPresent()) {
+                    completions.add(currentNick.get());
+                }
+            }
+            
+            completions.add("&#FF0000Красный");
+            completions.add("&#00FF00Зелёный");
+            completions.add("Русский_Ник");
         }
         
         return completions;

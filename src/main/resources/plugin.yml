@@ -241,3 +241,18 @@ permissions:
   lochat.nick:
     description: Can use custom nicknames
     default: true
+  lochat.mention.everyone:
+    description: Can mention @everyone
+    default: op
+  lochat.mention.here:
+    description: Can mention @here
+    default: op
+  lochat.mention.role:
+    description: Can mention @role:<permission>
+    default: op
+  lochat.bypass.urlfilter:
+    description: Bypass URL filter
+    default: op
+  lochat.bypass.ipfilter:
+    description: Bypass IP filter
+    default: op

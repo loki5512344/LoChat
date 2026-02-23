@@ -12,7 +12,7 @@ config-version: 3
 # └─────────────────────────────────────────────────────────────────────────────┘
 
 # Префикс плагина в сообщениях
-prefix: "<gradient:#00D4FF:#0099CC>[LoChat]</gradient>"
+prefix: "&#00D4FF[&#00D4FFL&#00CAF7o&#00C0EEC&#00B7E6h&#00ADDDa&#00A3D5t&#0099CC]"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                              НАСТРОЙКИ ЧАТА                                │
@@ -30,9 +30,8 @@ chat:
     # Кулдаун между сообщениями (секунды)
     cooldown: 3
     # Префикс глобального чата
-    prefix: "<gradient:#FFD700:#FFA500>[G]</gradient>"
-    # Формат сообщения: {prefix} {player} {message}
-    format: "{prefix} <gradient:#00FF88:#00CC66>{player}</gradient><dark_gray>:</dark_gray> {message}"
+    prefix: "&#FFD700[G]"
+    format: "{prefix} &#00FF88{player}&#555555: {message}"
 
   # ═══════════════════════════════════════════════════════════════════════════
   #                            ЛОКАЛЬНЫЙ ЧАТ
@@ -45,9 +44,8 @@ chat:
     # Кулдаун между сообщениями (секунды)
     cooldown: 1
     # Префикс локального чата
-    prefix: "<gradient:#87CEEB:#4682B4>[L]</gradient>"
-    # Формат сообщения
-    format: "{prefix} <gradient:#00FF88:#00CC66>{player}</gradient><dark_gray>:</dark_gray> {message}"
+    prefix: "&#87CEEB[L]"
+    format: "{prefix} &#00FF88{player}&#555555: {message}"
 
   # ═══════════════════════════════════════════════════════════════════════════
   #                            ЛИЧНЫЕ СООБЩЕНИЯ
@@ -111,9 +109,8 @@ mentions:
   # Тип звука
   sound-type: "BLOCK_NOTE_BLOCK_PLING"
   # Подсветка упоминания в чате
-  highlight: "<gradient:#FFFF00:#FFD700>@{player}</gradient>"
-  # Подсветка собственного ника
-  self-highlight: "<gradient:#FFD700:#FFA500>{player}</gradient>"
+  highlight: "&#FFFF00@{player}"
+  self-highlight: "&#FFD700{player}"
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                            АВТОСООБЩЕНИЯ                                   │
 # └─────────────────────────────────────────────────────────────────────────────┘
@@ -134,7 +131,7 @@ announcements:
   # Показывать title при объявлении
   show-title: true
   # Заголовок title
-  title-header: "<gradient:#FF6B6B:#FF4757>ОБЪЯВЛЕНИЕ</gradient>"
+  title-header: "&#FF6B6BОБЪЯВЛЕНИЕ"
   # Показывать actionbar при объявлении  
   show-actionbar: true
   # Время показа title (в секундах)
@@ -142,7 +139,7 @@ announcements:
 
 # Формат объявления
 formats:
-  announcement: "<gradient:#FF6B6B:#FF4757>[ОБЪЯВЛЕНИЕ]</gradient> <message>"
+  announcement: "&#FF6B6B[ОБЪЯВЛЕНИЕ] <message>"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                            ОЧИСТКА ЧАТА                                    │
@@ -153,7 +150,7 @@ clearchat:
     # Показывать сообщение после очистки чата
     enabled: true
     # Текст сообщения ({player} - имя администратора)
-    text: "<gradient:#FF6B6B:#FF4757>Чат очищен администратором {player}</gradient>"
+    text: "&#FF6B6BЧат очищен администратором {player}"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                            ГОЛОВЫ ИГРОКОВ                                  │
@@ -179,20 +176,14 @@ mute:
   # %operator% - модератор
   
   messages:
-    # Сообщение при муте (broadcast)
-    muted: "<gradient:#FF6B6B:#FF4757>%player%</gradient> <gray>был замучен на</gray> <gradient:#FF6B6B:#FF4757>%duration%</gradient> <gray>модератором</gray> <gradient:#FF6B6B:#FF4757>%operator%</gradient><gray>. Причина:</gray> <gradient:#FF6B6B:#FF4757>%reason%</gradient>"
-    # Сообщение при размуте (broadcast)
-    unmuted: "<gradient:#6BCB77:#4ECDC4>%player%</gradient> <gray>был размучен модератором</gray> <gradient:#6BCB77:#4ECDC4>%operator%</gradient>"
-    # Сообщение замученному игроку
-    you-muted: "<gradient:#FF6B6B:#FF4757>Вы замучены на %duration%! Причина: %reason%</gradient>"
-    # Сообщение при перманентном муте
-    you-muted-permanent: "<gradient:#FF6B6B:#FF4757>Вы замучены навсегда! Причина: %reason%</gradient>"
-    # Сообщение при попытке написать в чат
-    cannot-chat: "<gradient:#FF6B6B:#FF4757>Вы замучены! Осталось: %duration%</gradient>"
-    cannot-chat-permanent: "<gradient:#FF6B6B:#FF4757>Вы замучены навсегда!</gradient>"
-    # Тихий мут (только для тех кто видит)
-    silent-muted: "<gray>[Тихо]</gray> <gradient:#FF6B6B:#FF4757>%player%</gradient> <gray>замучен на</gray> <gradient:#FF6B6B:#FF4757>%duration%</gradient> <gray>(%operator%). Причина: %reason%</gray>"
-    silent-unmuted: "<gray>[Тихо]</gray> <gradient:#6BCB77:#4ECDC4>%player%</gradient> <gray>размучен (%operator%)</gray>"
+    muted: "&#FF6B6B%player% &#888888был замучен на &#FF6B6B%duration% &#888888модератором &#FF6B6B%operator%&#888888. Причина: &#FF6B6B%reason%"
+    unmuted: "&#6BCB77%player% &#888888был размучен модератором &#6BCB77%operator%"
+    you-muted: "&#FF6B6BВы замучены на %duration%! Причина: %reason%"
+    you-muted-permanent: "&#FF6B6BВы замучены навсегда! Причина: %reason%"
+    cannot-chat: "&#FF6B6BВы замучены! Осталось: %duration%"
+    cannot-chat-permanent: "&#FF6B6BВы замучены навсегда!"
+    silent-muted: "&#888888[Тихо] &#FF6B6B%player% &#888888замучен на &#FF6B6B%duration% &#888888(%operator%). Причина: %reason%"
+    silent-unmuted: "&#888888[Тихо] &#6BCB77%player% &#888888размучен (%operator%)"
   
   # Причина по умолчанию если не указана
   default-reason: "Нарушение правил"
@@ -213,3 +204,45 @@ mute:
     - "14d"
     - "30d"
     - "perm"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            ФИЛЬТРЫ СООБЩЕНИЙ                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+filters:
+  url:
+    enabled: true
+    whitelist:
+      - "youtube.com"
+      - "youtu.be"
+      - "discord.gg"
+      - "twitch.tv"
+    blacklist:
+      - "scam-site.com"
+    blocked-message: "&#FF6B6BС&#FF5F5Fс&#FF5353ы&#FF4747л&#FF3B3Bк&#FF2F2Fи &#FF2323з&#FF1717а&#FF0B0Bп&#FF0000р&#FF0000е&#FF0000щ&#FF0000е&#FF0000н&#FF0000ы!"
+  
+  ip:
+    enabled: true
+    block: false
+    replacement: "[IP скрыт]"
+    blocked-message: "&#FF6B6BI&#FF5F5FP &#FF5353а&#FF4747д&#FF3B3Bр&#FF2F2Fе&#FF2323с&#FF1717а &#FF0B0Bз&#FF0000а&#FF0000п&#FF0000р&#FF0000е&#FF0000щ&#FF0000е&#FF0000н&#FF0000ы!"
+  
+  repeat:
+    enabled: true
+    max-repeats: 3
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            УПОМИНАНИЯ                                      │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+advanced-mentions:
+  enabled: true
+  everyone:
+    enabled: true
+    permission: "lochat.mention.everyone"
+  here:
+    enabled: true
+    permission: "lochat.mention.here"
+  role:
+    enabled: true
+    permission: "lochat.mention.role"

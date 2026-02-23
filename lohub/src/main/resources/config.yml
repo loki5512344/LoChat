@@ -1,0 +1,343 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                              LoHub Configuration                            ║
+# ║                    Hub plugin for Paper/Folia 1.20.1+                      ║
+# ║                              Version: 1.5.5-1.20.1                          ║
+# ║                    Compatible with DeluxeHub config format                 ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# BUILT-IN PLACEHOLDERS:
+#   %player% - Player name
+#   %player_displayname% - Player display name
+#   %location% - Player location (x, y, z)
+#   %world% - World name
+#   %online% - Online players count
+#   %online_max% - Max players
+#
+# ACTIONS (for join_events, custom_join_items, etc):
+#   [MESSAGE] text - Send message to player
+#   [BROADCAST] text - Broadcast to all players
+#   [TITLE] title;subtitle;fadeIn;stay;fadeOut - Send title
+#   [ACTIONBAR] text - Send actionbar message
+#   [SOUND] sound - Play sound
+#   [COMMAND] command - Execute as player
+#   [CONSOLE] command - Execute as console
+#   [GAMEMODE] mode - Change gamemode (survival/creative/adventure/spectator)
+#   [EFFECT] effect;level - Give potion effect
+#   [CLOSE] - Close inventory
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | GENERAL SETTINGS                         |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Check for updates (recommended)
+check-updates: false
+
+# Disable plugin in specific worlds
+disabled-worlds:
+  invert: false
+  worlds:
+    - world_nether
+    - world_the_end
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | SPAWN SETTINGS                           |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+spawn:
+  # Teleport players to spawn on join
+  teleport-on-join: true
+  
+  # Teleport players to spawn on respawn
+  teleport-on-respawn: true
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | WORLDGUARD INTEGRATION                   |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+worldguard:
+  # Auto-create WorldGuard region around spawn
+  auto-create-region: true
+  
+  # Region radius in blocks
+  region-radius: 100
+  
+  # Region name (don't change unless you know what you're doing)
+  region-name: "lohub_spawn"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | WORLD PROTECTION                         |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+world_settings:
+  # Player
+  disable_hunger_loss: true
+  disable_fall_damage: true
+  disable_player_pvp: true
+  disable_void_death: true
+  disable_fire_damage: true
+  disable_drowning: true
+  disable_off_hand_swap: true
+
+  # Misc
+  disable_weather_change: true
+  disable_death_message: true
+  disable_mob_spawning: true
+
+  # Item entities
+  disable_item_drop: true
+  disable_item_pickup: true
+
+  # Blocks
+  disable_block_break: true
+  disable_block_place: true
+  disable_block_interact: true
+  disable_block_burn: true
+  disable_block_fire_spread: true
+  disable_block_leaf_decay: true
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | LAUNCHPAD                                |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+launchpad:
+  enabled: true
+  launch_power: 3.0
+  launch_power_y: 1.0
+  
+  # Blocks required: pressure plate on top of redstone block
+  top_block: STONE_PRESSURE_PLATE
+  bottom_block: REDSTONE_BLOCK
+  
+  actions:
+    - '[SOUND] ENTITY_BAT_TAKEOFF'
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | DOUBLE JUMP                              |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+double_jump:
+  enabled: true
+  launch_power: 1.0
+  launch_power_y: 0.9
+  cooldown: 3
+  
+  actions:
+    - '[SOUND] ENTITY_BAT_TAKEOFF'
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | COMMAND BLOCKER                          |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+command_block:
+  enabled: true
+  blocked_commands:
+    - /pl
+    - /plugins
+    - /?
+    - /bukkit:?
+    - /bukkit:plugins
+    - /bukkit:pl
+    - /bukkit:help
+    - /ver
+    - /version
+    - /bukkit:version
+    - /bukkit:ver
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | ANTI-SWEAR                               |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+anti_swear:
+  enabled: false
+  blocked_words:
+    - fuck
+    - shit
+    - bitch
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | PLAYER JOIN                              |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+join_leave_messages:
+  enabled: true
+  join_message: "&#6BCB77+ &#FFD700%player% &#AAAAAAconnected"
+  quit_message: "&#FF6B6B- &#FFD700%player% &#AAAAAAdisconnected"
+
+join_events:
+  - "[MESSAGE] &#FFD700╔═══════════════════════════════╗"
+  - "[MESSAGE] &r"
+  - "[MESSAGE] &r    &#6BCB77Welcome, &#FFD700%player%&#6BCB77!"
+  - "[MESSAGE] &r"
+  - "[MESSAGE] &r  &#00D4FFWebsite: &#FFFFFFwww.example.net"
+  - "[MESSAGE] &r  &#FF6B6BStore: &#FFFFFFstore.example.net"
+  - "[MESSAGE] &r  &#9B59B6Discord: &#FFFFFFdiscord.example.net"
+  - "[MESSAGE] &r"
+  - "[MESSAGE] &#FFD700╚═══════════════════════════════╝"
+  - "[TITLE] &#6BCB77W&#62C973E&#5AC76FL&#51C56BC&#49C367O&#40C163M&#38BF5FE;&#FFD700%player%;10;40;10"
+  - "[SOUND] ENTITY_PLAYER_LEVELUP"
+  - "[GAMEMODE] survival"
+
+join_settings:
+  spawn_join: true
+  heal: true
+  extinguish: true
+  clear_inventory: false
+  
+  firework:
+    enabled: true
+    first_join_only: true
+    type: BALL_LARGE
+    power: 1
+    flicker: true
+    trail: true
+    colors:
+      - AQUA
+      - RED
+      - TEAL
+      - WHITE
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | CUSTOM JOIN ITEMS                        |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+custom_join_items:
+  enabled: true
+  disable_inventory_movement: true
+  
+  items:
+    info:
+      material: BOOK
+      amount: 1
+      slot: 0
+      display_name: "&#FFD700I&#FFC700n&#FFB700f&#FFA700o&#FF9700r&#FF8700m&#FF7700a&#FF6700t&#FF5700i&#FF4700o&#FF3700n"
+      lore:
+        - "&#AAAAAARight-click for server info!"
+      actions:
+        - "[MESSAGE] &r"
+        - "[MESSAGE] &#FFD700╔═══ Server Information ═══╗"
+        - "[MESSAGE] &r"
+        - "[MESSAGE] &#00D4FFWebsite: &#FFFFFFwww.example.net"
+        - "[MESSAGE] &#FF6B6BStore: &#FFFFFFstore.example.net"
+        - "[MESSAGE] &#9B59B6Discord: &#FFFFFFdiscord.example.net"
+        - "[MESSAGE] &r"
+        - "[MESSAGE] &#FFD700╚═══════════════════════════╝"
+        - "[SOUND] BLOCK_NOTE_BLOCK_PLING"
+    
+    compass:
+      material: COMPASS
+      amount: 1
+      slot: 4
+      display_name: "&#6BCB77S&#62C973e&#5AC76Fr&#51C56Bv&#49C367e&#40C163r &#38BF5FS&#2FBD5Be&#27BB57l&#1EB953e&#16B74Fc&#0DB54Bt&#05B347o&#05B347r"
+      lore:
+        - "&#AAAAAARight-click to choose server!"
+      actions:
+        - "[MESSAGE] &#FF6B6BServer selector not implemented yet!"
+        - "[SOUND] ENTITY_VILLAGER_NO"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | PLAYER HIDER                             |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+player_hider:
+  enabled: true
+  slot: 8
+  disable_inventory_movement: true
+  cooldown: 3
+  
+  not_hidden:
+    material: LIME_DYE
+    amount: 1
+    display_name: '&#6BCB77Players &#AAAAAA> &#6BCB77Shown &#888888(Right-Click)'
+    lore:
+      - '&#AAAAAAClick to hide all players!'
+  
+  hidden:
+    material: GRAY_DYE
+    amount: 1
+    display_name: '&#FF6B6BPlayers &#AAAAAA> &#FF6B6BHidden &#888888(Right-Click)'
+    lore:
+      - '&#AAAAAAClick to show all players!'
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | SCOREBOARD                               |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+scoreboard:
+  enabled: false
+  
+  display_delay:
+    server_enter: 60
+    world_change: 40
+  
+  refresh:
+    enabled: true
+    rate: 200
+  
+  title: "&#FFD700L&#FFC700o&#FFB700H&#FFA700u&#FF9700b &#888888(%online%/%online_max%)"
+  lines:
+    - "&#AAAAAA━━━━━━━━━━━━━━━━━━━━━"
+    - "&#6BCB77Player:"
+    - "  &#FFFFFF%player%"
+    - ""
+    - "&#6BCB77Rank:"
+    - "  &#FFFFFF%vault_rank%"
+    - "&#AAAAAA━━━━━━━━━━━━━━━━━━━━━"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | TABLIST                                  |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+tablist:
+  enabled: false
+  
+  refresh:
+    enabled: true
+    rate: 400
+  
+  header:
+    - ""
+    - "&#FFD700L&#FFC700o&#FFB700H&#FFA700u&#FF9700b &#888888(%online%/%online_max%)"
+    - ""
+  
+  footer:
+    - ""
+    - "&#00D4FFWebsite &#FFFFFFwww.example.net"
+    - "&#FF6B6BStore &#FFFFFFstore.example.net"
+    - ""
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | ANNOUNCEMENTS                            |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+announcements:
+  enabled: false
+  delay: 60
+  required_players: 1
+  
+  sound:
+    enabled: true
+    value: BLOCK_NOTE_BLOCK_PLING
+    volume: 1.0
+    pitch: 1.0
+  
+  announcements:
+    welcome:
+      - "&r"
+      - "&#FFD700╔═══ Announcement ═══╗"
+      - "&#AAAAAAWelcome to our server!"
+      - "&#FFD700╚═══════════════════════╝"
+      - "&r"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | MESSAGES                                 |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+messages:
+  prefix: "&#00D4FF[&#00D4FFL&#00CAF7o&#00C0EEH&#00B7E6u&#00ADDDb&#0099CC]"
+  spawn-set: "&#6BCB77Spawn set successfully!"
+  spawn-teleport: "&#6BCB77Teleporting to spawn..."
+  no-spawn: "&#FF6B6BSpawn not set! Use /sethub"
+  no-permission: "&#FF6B6BYou don't have permission!"
+  players-only: "&#FF6B6BThis command is only for players!"
+  config-reloaded: "&#6BCB77Configuration reloaded!"
+  usage: "&#FFD700Usage: /lohub reload"

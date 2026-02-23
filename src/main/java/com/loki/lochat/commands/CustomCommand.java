@@ -16,6 +16,10 @@ public class CustomCommand extends Command {
     public CustomCommand(String name, CustomCommandManager manager) {
         super(name);
         this.manager = manager;
+        init(name);
+    }
+    
+    private void init(String name) {
         this.setDescription("Кастомная команда LoChat");
         this.setUsage("/" + name);
     }

@@ -1,304 +1,188 @@
-# LoChat
+# 🎮 Loki Network Plugins
 
-**Продвинутый чат-плагин для Minecraft Paper 1.20.1 с интегрированным модулем градиентных ников**
+Набор плагинов для Minecraft серверов: чат, хаб и прокси.
 
-**Автор:** loki  
-**Версия:** 1.5.5-1.20.1
+## 📦 Модули
 
----
+### 1. LoChat - Чат плагин (Paper/Folia)
+Продвинутый чат с градиентными никами, модерацией и фильтрами.
 
-## 🚀 Установка
+**Основные функции:**
+- Глобальный/локальный чат
+- PM система с игнором
+- Мут система с историей
+- Фильтры (мат, спам, CAPS, URL, IP)
+- Градиентные ники (LuckPerms)
+- Markdown форматирование
+- Упоминания (@player, @everyone, @here, @role)
+- 300+ эмодзи
 
-1. Скачайте `LoChat-1.5.5-1.20.1.jar` из папки `build/libs/`
-2. Поместите файл в папку `plugins/` вашего сервера
-3. Перезапустите сервер
-4. Настройте конфигурацию в файлах `config.yml` и других
+### 2. LoHub - Hub плагин (Paper/Folia)
+Плагин для лобби сервера с защитой мира и интерактивными элементами.
 
----
+**Основные функции:**
+- Spawn система с телепортом
+- WorldGuard регионы (авто-создание)
+- Защита мира (блоки, PvP, мобы)
+- Launchpad и Double Jump
+- Player Hider
+- Custom Join Items
+- Action система для гибкой настройки
 
-## ✨ Основной функционал
+### 3. LoVelocity - Velocity плагин
+Простой плагин для прокси с командой /hub.
 
-### 💬 Система чата
-- **Глобальный чат** - `!сообщение` или `/g <сообщение>`
-- **Локальный чат** - радиус 100 блоков (настраивается)
-- **Личные сообщения** - `/msg`, `/reply` с поддержкой игнорирования
-- **Автосообщения** - многострочные сообщения с настраиваемым порядком
-- **Смайлики** - 200+ эмодзи для украшения сообщений
+**Основные функции:**
+- Команда /hub для телепорта на lobby
+- Кастомные сообщения
+- PlaceholderAPI поддержка
 
-### 🛡️ Модерация
-- **Система мутов** - `/lmute`, `/lunmute` с поддержкой времени и причин
-- **Фильтр мата** - умная система с обходом символов (censor/block/warn)
-- **Анти-спам** - защита от CAPS, повторов и похожих сообщений
-- **Кулдауны** - настраиваемые задержки между сообщениями
-- **Шпион режим** - `/chatspy` для мониторинга всех сообщений
-- **Очистка чата** - `/clearchat` с настраиваемым сообщением
+## 🏗️ Структура проекта
 
-### 🌈 Градиентные ники (встроенный LoPreff)
-- **Кастомные градиенты** - `/color <hex1> [hex2] ...` до 7 цветов
-- **Кастомные префиксы** - `/prefix <текст>` с поддержкой цветов
-- **Предустановки** - fire, ocean, forest, sunset, rainbow и другие
-- **Интеграция с LuckPerms** - автоматическое обновление префиксов
-- **Покупка за PlayerPoints** - опциональная система оплаты
-- **GUI подтверждения** - красивый интерфейс для покупок
-
-### 🎭 Дополнительные возможности
-- **Головы игроков** - `:head_nickname:` и `@head nickname` в чате
-- **Кастомные команды** - создание собственных команд через конфиг
-- **Упоминания** - @nickname с звуковыми уведомлениями
-- **Интеграция с SkinsRestorer** - поддержка кастомных скинов
-
----
-
-## 📋 Команды
-
-### Чат
-| Команда | Описание | Право |
-|---------|----------|-------|
-| `!<сообщение>` | Глобальный чат | `chat.global.use` |
-| `/g <сообщение>` | Глобальный чат | `chat.global.use` |
-| `/globalchat toggle` | Переключить глобальный чат | `chat.global.toggle` |
-| `/l <сообщение>` | Локальный чат | `chat.local.use` |
-| `/msg <ник> <сообщение>` | Личное сообщение | `chat.pm.use` |
-| `/reply <сообщение>` | Ответить на последнее PM | `chat.pm.use` |
-| `/ignore <ник>` | Добавить в игнор | `chat.pm.ignore` |
-| `/unignore <ник>` | Убрать из игнора | `chat.pm.ignore` |
-| `/announce <сообщение>` | Объявление | `chat.announce.use` |
-
-### Модерация
-| Команда | Описание | Право |
-|---------|----------|-------|
-| `/chatspy` | Включить/выключить шпион режим | `chat.spy` |
-| `/clearchat` | Очистить чат | `chat.clear` |
-| `/clearchatconfig <действие>` | Настроить сообщение очистки | `lochat.clearchat.config` |
-| `/lmute <ник> [время] [-s] [причина]` | Замутить игрока | `lochat.mute` |
-| `/lunmute <ник> [-s]` | Размутить игрока | `lochat.unmute` |
-| `/lmutelist` | Список замученных | `lochat.mutelist` |
-| `/lmutehistory <ник>` | История мутов игрока | `lochat.mutehistory` |
-| `/lmuteblame <модератор>` | Муты выданные модератором | `lochat.muteblame` |
-
-### Градиентные ники
-| Команда | Описание | Право |
-|---------|----------|-------|
-| `/color <hex1> [hex2] ...` | Установить градиент | `gradient.color` |
-| `/color on/off/reset` | Управление градиентом | `gradient.color` |
-| `/color copy <ник>` | Скопировать градиент | `gradient.color` |
-| `/color preset <название>` | Использовать предустановку | `gradient.color` |
-| `/prefix <текст>` | Установить префикс | `gradient.prefix` |
-| `/prefix on/off/reset` | Управление префиксом | `gradient.prefix` |
-
-### Админские команды
-| Команда | Описание | Право |
-|---------|----------|-------|
-| `/lochat reload` | Перезагрузить конфиг | `lochat.admin` |
-| `/aprefix <подкоманда>` | Админские команды градиентов | `gradient.admin` |
-
----
-
-## 🔐 Права доступа
-
-### Чат
-| Право | По умолчанию | Описание |
-|-------|--------------|----------|
-| `chat.global.use` | `true` | Использование глобального чата |
-| `chat.global.toggle` | `true` | Переключение глобального чата |
-| `chat.local.use` | `true` | Использование локального чата |
-| `chat.pm.use` | `true` | Личные сообщения |
-| `chat.pm.ignore` | `true` | Игнорирование игроков |
-| `chat.mention.use` | `true` | Упоминания @nickname |
-
-### Модерация
-| Право | По умолчанию | Описание |
-|-------|--------------|----------|
-| `chat.announce.use` | `op` | Объявления |
-| `chat.spy` | `op` | Шпион режим |
-| `chat.clear` | `op` | Очистка чата |
-| `chat.bypass.cooldown` | `op` | Обход кулдаунов |
-| `chat.bypass.filter` | `op` | Обход фильтра мата |
-| `chat.bypass.antispam` | `op` | Обход анти-спама |
-| `lochat.mute` | `op` | Выдача мутов |
-| `lochat.unmute` | `op` | Снятие мутов |
-| `lochat.clearchat.config` | `op` | Настройка очистки чата |
-
-### Градиенты
-| Право | По умолчанию | Описание |
-|-------|--------------|----------|
-| `gradient.color` | `true` | Градиентные ники |
-| `gradient.prefix` | `true` | Кастомные префиксы |
-| `gradient.admin` | `op` | Админские команды |
-| `gradient.bypass.cooldown` | `op` | Обход кулдаунов |
-| `gradient.bypass.cost` | `op` | Бесплатные градиенты |
-
-### Дополнительные
-| Право | По умолчанию | Описание |
-|-------|--------------|----------|
-| `lochat.heademoji.use` | `true` | Головы игроков в чате |
-| `lochat.admin` | `op` | Админские команды |
-
----
-
-## 🎨 PlaceholderAPI
-
-### Основные плейсхолдеры
 ```
-%lochat_muted%           — замучен (true/false)
-%lochat_mute_time%       — оставшееся время мута
-%lochat_mute_reason%     — причина мута
-%lochat_ignored_count%   — количество игнорируемых
-%lochat_global_enabled%  — глобальный чат включен
-%lochat_spy_enabled%     — шпион режим включен
+LoChat/                          # Root проекта
+│
+├── src/main/                    # LoChat (основной модуль)
+│   ├── java/com/loki/lochat/
+│   │   ├── api/                 # API интерфейсы
+│   │   │   ├── filter/          # Фильтры сообщений
+│   │   │   └── service/         # Сервисы (Chat, Mute, PM и т.д.)
+│   │   ├── commands/            # Команды плагина
+│   │   ├── config/              # Конфигурация
+│   │   ├── core/                # Реализации
+│   │   │   ├── filter/          # Реализации фильтров
+│   │   │   ├── registry/        # ServiceRegistry (DI)
+│   │   │   └── service/         # Реализации сервисов
+│   │   ├── gradient/            # Градиентные ники
+│   │   │   ├── commands/        # Команды градиентов
+│   │   │   ├── config/          # Конфиг градиентов
+│   │   │   ├── hook/            # LuckPerms интеграция
+│   │   │   └── util/            # Утилиты градиентов
+│   │   ├── listener/            # Слушатели событий
+│   │   ├── util/                # Утилиты (Folia)
+│   │   ├── utils/               # Утилиты (Formatter, Mention)
+│   │   └── LoChat.java          # Главный класс
+│   └── resources/               # Конфиги
+│       ├── config.yml           # Основной конфиг
+│       ├── messages.yml         # Сообщения
+│       ├── chat.yml             # Настройки чата
+│       ├── gradient-config.yml  # Конфиг градиентов
+│       ├── gradient-messages.yml
+│       ├── custom-commands.yml
+│       ├── automessages.yml
+│       └── plugin.yml
+│
+├── lohub/                       # LoHub модуль
+│   ├── src/main/
+│   │   ├── java/com/loki/lohub/
+│   │   │   ├── actions/         # Action система
+│   │   │   │   ├── impl/        # Реализации действий
+│   │   │   │   ├── Action.java
+│   │   │   │   └── ActionType.java
+│   │   │   ├── commands/        # Команды
+│   │   │   │   ├── HubCommand.java
+│   │   │   │   ├── SetHubCommand.java
+│   │   │   │   └── LoHubCommand.java
+│   │   │   ├── config/          # Конфигурация
+│   │   │   │   └── ConfigManager.java
+│   │   │   ├── listeners/       # Слушатели
+│   │   │   │   ├── HubProtectionListener.java
+│   │   │   │   ├── PlayerJoinListener.java
+│   │   │   │   ├── LaunchpadListener.java
+│   │   │   │   └── DoubleJumpListener.java
+│   │   │   ├── managers/        # Менеджеры
+│   │   │   │   ├── SpawnManager.java
+│   │   │   │   ├── RegionManager.java
+│   │   │   │   ├── ActionManager.java
+│   │   │   │   ├── CooldownManager.java
+│   │   │   │   ├── HotbarManager.java
+│   │   │   │   └── PlayerHiderManager.java
+│   │   │   ├── utils/           # Утилиты
+│   │   │   │   ├── ItemBuilder.java
+│   │   │   │   ├── TextUtil.java
+│   │   │   │   └── PlaceholderUtil.java
+│   │   │   └── LoHub.java       # Главный класс
+│   │   └── resources/           # Конфиги
+│   │       ├── config.yml
+│   │       └── plugin.yml
+│   └── build.gradle.kts         # Gradle конфиг
+│
+├── lovelocity/                  # LoVelocity модуль
+│   ├── src/main/
+│   │   ├── java/com/loki/lovelocity/
+│   │   │   ├── commands/
+│   │   │   │   └── HubCommand.java
+│   │   │   └── LoVelocity.java
+│   │   └── resources/
+│   │       └── velocity-plugin.json
+│   └── build.gradle.kts
+│
+├── build.gradle.kts             # Root Gradle (Kotlin DSL)
+├── settings.gradle.kts          # Настройки проектов
+├── gradle.properties            # Gradle свойства
+├── TODO.md                      # Список задач
+└── README.md                    # Этот файл
 ```
 
-### Градиентные плейсхолдеры
-```
-%lochat_gradient_full%   — полное имя (префикс + ник)
-%lochat_gradient_name%   — только градиентный ник
-%lochat_gradient_prefix% — только префикс
-%lochat_full%            — алиас для gradient_full
-%lochat_name%            — алиас для gradient_name
-%lochat_prefix%          — алиас для gradient_prefix
-```
+## 🚀 Сборка
 
----
+```bash
+# Собрать все модули
+./gradlew build
 
-## 📁 Конфигурационные файлы
+# Собрать только LoChat
+./gradlew :build
 
-| Файл | Описание |
-|------|----------|
-| `config.yml` | Основные настройки плагина |
-| `messages.yml` | Сообщения плагина |
-| `automessages.yml` | Настройки автосообщений |
-| `emojis.yml` | Список смайликов |
-| `custom-commands.yml` | Кастомные команды |
-| `gradient-config.yml` | Настройки градиентов |
-| `gradient-messages.yml` | Сообщения градиентного модуля |
-| `ignores.yml` | Сохранённые игноры (создается автоматически) |
-| `mutes.yml` | Активные муты (создается автоматически) |
-| `gradient-data.yml` | Данные градиентов (создается автоматически) |
+# Собрать только LoHub
+./gradlew :lohub:build
 
----
+# Собрать только LoVelocity
+./gradlew :lovelocity:build
 
-## 🎯 Кастомные команды
-
-LoChat позволяет создавать собственные команды через `custom-commands.yml`. После изменения файла выполните `/lochat reload`.
-
-### Структура команды
-```yaml
-command-name:
-  permission: "право.для.использования"  # Опционально
-  message: "Текст сообщения"             # Обязательно
-  aliases: ["alias1", "alias2"]          # Опционально
-  type: "chat"                           # chat, broadcast, title, actionbar
-  target: "sender"                       # sender, all, permission:право
+# Без тестов
+./gradlew build -x test
 ```
 
-### Типы команд
-- **chat** — отправляет сообщение в чат
-- **broadcast** — отправляет сообщение всем игрокам
-- **title** — показывает title (разделение строк через `\n`)
-- **actionbar** — показывает сообщение в actionbar
+## 📦 Артефакты
 
-### Целевая аудитория
-- **sender** — только отправителю команды
-- **all** — всем игрокам на сервере
-- **permission:право** — только игрокам с указанным правом
-
-### Плейсхолдеры в командах
-- `{player}` — имя игрока
-- `{x}`, `{y}`, `{z}` — координаты игрока
-- `{world}` — название мира
-- `{arg0}`, `{arg1}`, `{arg2}` — аргументы команды
-- `{args}` — все аргументы через пробел
-- Все плейсхолдеры PlaceholderAPI
-
----
-
-## 🎭 Головы игроков
-
-### Использование
-- `:head_nickname:` — показать ASCII голову игрока
-- `@head nickname` — показать интерактивную голову с информацией
-
-### Требования
-- Право `lochat.heademoji.use`
-- Включенная настройка `head-emoji.enabled: true`
-
----
-
-## 🎨 Форматирование цветов
-
-### MiniMessage (рекомендуется)
-```
-<red>Красный текст</red>
-<gradient:red:blue>Градиент от красного к синему</gradient>
-<rainbow>Радужный текст</rainbow>
-<bold>Жирный</bold>
-<italic>Курсив</italic>
-```
-
-### HEX цвета
-```
-<#FF0000>Красный через HEX</color>
-<gradient:#FF0000:#0000FF>HEX градиент</gradient>
-```
-
-### Legacy коды (поддерживаются)
-```
-&cКрасный
-&aЗеленый
-&lЖирный
-&nПодчеркнутый
-```
-
----
+После сборки jar файлы находятся в:
+- `build/libs/LoChat-1.5.5-1.20.1.jar`
+- `lohub/build/libs/LoHub-1.5.5-1.20.1.jar`
+- `lovelocity/build/libs/LoVelocity-1.5.5.jar`
 
 ## 🔧 Требования
 
-### Обязательные
-- **Paper 1.20.1** или новее
-- **Java 21**
+- **Java 21+**
+- **Paper 1.20.1+** (для LoChat и LoHub)
+- **Velocity 3.3.0+** (для LoVelocity)
+- **Gradle 9.1+**
 
-### Опциональные
-- **PlaceholderAPI** — для плейсхолдеров
-- **PlayerPoints** — для покупки градиентов за поинты
-- **LuckPerms** — для интеграции с префиксами
-- **SkinsRestorer** — для поддержки кастомных скинов
-- **LibertyBans** — для интеграции с банами
+## 📝 Зависимости
 
----
+### LoChat
+- PlaceholderAPI (опционально)
+- LuckPerms (опционально)
+- PlayerPoints (опционально)
 
-## 🏗️ Сборка
+### LoHub
+- WorldGuard 7.0.9+ (опционально)
+- PlaceholderAPI (опционально)
 
-```bash
-./gradlew clean build
-```
+### LoVelocity
+- Нет зависимостей
 
-Готовый jar файл: `build/libs/LoChat-1.5.5-1.20.1.jar`
+## 🎯 Статус разработки
 
----
+- ✅ **LoChat** - Готов к использованию
+- 🔄 **LoHub** - В разработке (21% готово)
+- ✅ **LoVelocity** - Готов к использованию
 
-## 📝 Changelog
+Подробности в [TODO.md](TODO.md)
 
-### v1.5.5-1.20.1
-- ✅ Адаптация для Minecraft 1.20.1 Paper
-- ✅ Исправлен фильтр мата с поддержкой обходов
-- ✅ Исправлена команда spy для мониторинга всех сообщений
-- ✅ Добавлена поддержка голов игроков в чате
-- ✅ Добавлена команда настройки сообщения очистки чата
-- ✅ Интеграция с SkinsRestorer
-- ✅ Улучшено качество кода (SOLID, DRY, KISS)
-- ✅ Обновлены все конфиги в едином стиле
-- ✅ Исправлены все предупреждения компилятора
+## 📄 Лицензия
 
----
+Proprietary - Все права защищены
 
-## 🤝 Поддержка
+## 👥 Авторы
 
-Если у вас возникли проблемы или вопросы:
-1. Проверьте конфигурационные файлы
-2. Убедитесь в совместимости версий
-3. Проверьте права доступа игроков
-4. Создайте issue в репозитории
-
----
-
-**© 2024 loki. Все права защищены.**
+Loki Development Team

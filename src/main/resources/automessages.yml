@@ -10,7 +10,7 @@
 
 settings:
   # Префикс автосообщений
-  prefix: "<gradient:#00D4FF:#0099CC>[INFO]</gradient>"
+  prefix: "&#00D4FF[&#00D4FFI&#00CAF7N&#00C0EEF&#00B7E6O&#0099CC]"
   
   # Режим отправки: sequential (по порядку), random (случайно), custom (свой порядок)
   mode: "sequential"

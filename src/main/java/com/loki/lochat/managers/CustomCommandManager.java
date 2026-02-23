@@ -27,6 +27,10 @@ public class CustomCommandManager {
     public CustomCommandManager(LoChat plugin) {
         this.plugin = plugin;
         this.commands = new HashMap<>();
+        init();
+    }
+    
+    private void init() {
         loadCommands();
     }
 
