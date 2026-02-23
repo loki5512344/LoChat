@@ -22,7 +22,7 @@ public class GradientLuckPermsHook {
 
     public GradientLuckPermsHook(JavaPlugin plugin) {
         this.enabled = false;
-        
+
         if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
             try {
                 this.luckPerms = LuckPermsProvider.get();
@@ -40,12 +40,12 @@ public class GradientLuckPermsHook {
 
     public void setPrefix(Player player, String prefix) {
         if (!isEnabled()) return;
-        
+
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         if (user == null) return;
 
-        user.data().clear(node -> 
-            node instanceof PrefixNode && ((PrefixNode) node).getPriority() == GradientConstants.LUCKPERMS_PREFIX_PRIORITY
+        user.data().clear(node ->
+                node instanceof PrefixNode && ((PrefixNode) node).getPriority() == GradientConstants.LUCKPERMS_PREFIX_PRIORITY
         );
 
         if (prefix != null && !prefix.isEmpty()) {
@@ -58,12 +58,12 @@ public class GradientLuckPermsHook {
 
     public void setPrefix(UUID uuid, String prefix) {
         if (!isEnabled()) return;
-        
+
         luckPerms.getUserManager().loadUser(uuid).thenAccept(user -> {
             if (user == null) return;
 
-            user.data().clear(node -> 
-                node instanceof PrefixNode && ((PrefixNode) node).getPriority() == GradientConstants.LUCKPERMS_PREFIX_PRIORITY
+            user.data().clear(node ->
+                    node instanceof PrefixNode && ((PrefixNode) node).getPriority() == GradientConstants.LUCKPERMS_PREFIX_PRIORITY
             );
 
             if (prefix != null && !prefix.isEmpty()) {
@@ -85,10 +85,10 @@ public class GradientLuckPermsHook {
 
     public String getActivePrefix(Player player) {
         if (!isEnabled()) return null;
-        
+
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         if (user == null) return null;
-        
+
         CachedMetaData metaData = user.getCachedData().getMetaData();
         return metaData.getPrefix();
     }

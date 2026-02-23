@@ -12,7 +12,7 @@ public enum ActionType {
     EFFECT,
     CLOSE,
     UNKNOWN;
-    
+
     public static ActionType fromString(String type) {
         try {
             return valueOf(type.toUpperCase());

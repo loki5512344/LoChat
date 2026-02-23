@@ -9,7 +9,10 @@ import java.util.UUID;
  */
 public interface ChatService {
     void sendGlobalMessage(Player sender, Object message);
+
     void sendLocalMessage(Player sender, Object message);
+
     boolean toggleGlobalChat(UUID player);
+
     boolean isGlobalChatDisabled(UUID player);
 }

@@ -35,9 +35,9 @@ public class SkinsRestorerHook {
             Class<?> apiClass = Class.forName("net.skinsrestorer.api.SkinsRestorerAPI");
             Method getApiMethod = apiClass.getMethod("getApi");
             skinsAPI = getApiMethod.invoke(null);
-            
+
             getSkinDataMethod = skinsAPI.getClass().getMethod("getSkinData", String.class);
-            
+
             enabled = true;
             plugin.getLogger().info("SkinsRestorer подключен!");
         } catch (Exception e) {
@@ -52,6 +52,7 @@ public class SkinsRestorerHook {
 
     /**
      * Получает текстуру скина игрока
+     *
      * @param player игрок
      * @return URL текстуры или null
      */
@@ -72,6 +73,7 @@ public class SkinsRestorerHook {
 
     /**
      * Получает URL головы игрока для отображения
+     *
      * @param playerName имя игрока
      * @return URL головы
      */

@@ -19,61 +19,61 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatServiceImpl implements ChatService {
     private final JavaPlugin plugin;
     private final Set<UUID> globalChatDisabled = ConcurrentHashMap.newKeySet();
-    
+
     public ChatServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
         this.plugin = plugin;
     }
-    
+
     @Override
     public void sendGlobalMessage(Player sender, Object message) {
-        String format = plugin.getConfig().getString("chat.global.format", 
-            "{prefix} {player}: {message}");
+        String format = plugin.getConfig().getString("chat.global.format",
+                "{prefix} {player}: {message}");
         String prefix = plugin.getConfig().getString("chat.global.prefix", "[G]");
-        
-        Component messageComponent = (message instanceof Component) 
-            ? (Component) message 
-            : ChatFormatter.parse(message.toString());
-        
+
+        Component messageComponent = (message instanceof Component)
+                ? (Component) message
+                : ChatFormatter.parse(message.toString());
+
         // Используем displayName игрока (с градиентом если есть)
         Component playerName = sender.displayName();
-        
+
         String formatted = format.replace("{prefix}", prefix);
-        
+
         Component finalComponent = ChatFormatter.parse(formatted)
-            .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
-            .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
-        
+                .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
+                .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!isGlobalChatDisabled(player.getUniqueId())) {
                 player.sendMessage(finalComponent);
             }
         }
     }
-    
+
     @Override
     public void sendLocalMessage(Player sender, Object message) {
         int radius = plugin.getConfig().getInt("chat.local.radius", 100);
-        String format = plugin.getConfig().getString("chat.local.format", 
-            "{player}: {message}");
-        
-        Component messageComponent = (message instanceof Component) 
-            ? (Component) message 
-            : ChatFormatter.parse(message.toString());
-        
+        String format = plugin.getConfig().getString("chat.local.format",
+                "{player}: {message}");
+
+        Component messageComponent = (message instanceof Component)
+                ? (Component) message
+                : ChatFormatter.parse(message.toString());
+
         // Используем displayName игрока (с градиентом если есть)
         Component playerName = sender.displayName();
-        
+
         Component finalComponent = ChatFormatter.parse(format)
-            .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
-            .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
-        
+                .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
+                .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (DistanceUtil.isInRange(sender, player, radius)) {
                 player.sendMessage(finalComponent);
             }
         }
     }
-    
+
     @Override
     public boolean toggleGlobalChat(UUID player) {
         if (globalChatDisabled.contains(player)) {
@@ -84,7 +84,7 @@ public class ChatServiceImpl implements ChatService {
             return false;
         }
     }
-    
+
     @Override
     public boolean isGlobalChatDisabled(UUID player) {
         return globalChatDisabled.contains(player);

@@ -73,7 +73,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         // Получаем настройки из конфига
         String defaultReason = plugin.getConfigManager().getString("mute.default-reason", "Нету.");
         String defaultDuration = plugin.getConfigManager().getString("mute.default-duration", "7d");
-        
+
         String reason = reasonBuilder.length() > 0 ? reasonBuilder.toString() : defaultReason;
 
         // Определяем длительность
@@ -136,7 +136,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         // Уведомляем замученного (если онлайн)
         if (target != null) {
             String msgKey = duration == 0 ? "mute.messages.you-muted-permanent" : "mute.messages.you-muted";
-            String msg = plugin.getConfigManager().getString(msgKey, 
+            String msg = plugin.getConfigManager().getString(msgKey,
                     duration == 0 ? "§cВы замучены навсегда! Причина: %reason%" : "§cВы замучены на %duration%! Причина: %reason%");
             msg = muteService.formatMessage(msg, finalTargetName, operatorName, timeDisplay, reason);
             target.sendMessage(ChatFormatter.parse(msg));
@@ -147,7 +147,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             String silentMsg = plugin.getConfigManager().getString("mute.messages.silent-muted",
                     "§8[Тихо] §c%player% §7замучен на §c%duration% §7(%operator%). Причина: %reason%");
             silentMsg = muteService.formatMessage(silentMsg, finalTargetName, operatorName, timeDisplay, reason);
-            
+
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.hasPermission("lochat.mute.see-silent")) {
                     p.sendMessage(ChatFormatter.parse(silentMsg));
@@ -170,7 +170,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {

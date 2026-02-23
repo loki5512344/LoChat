@@ -18,127 +18,127 @@ commands:
     description: Send global message
     usage: /g <message>
     permission: chat.global.use
-    aliases: [п]
+    aliases: [ п ]
 
   globalchat:
     description: Toggle global chat
     usage: /globalchat toggle
     permission: chat.global.toggle
-    aliases: [пдщифдсрфе]
+    aliases: [ пдщифдсрфе ]
 
   l:
     description: Send local message
     usage: /l <message>
     permission: chat.local.use
-    aliases: [д]
+    aliases: [ д ]
 
   msg:
     description: Send private message
     usage: /msg <player> <message>
     permission: chat.pm.use
-    aliases: [tell, w, pm, m, ьып, ееддж, цж, зьж, ьж]
+    aliases: [ tell, w, pm, m, ьып, ееддж, цж, зьж, ьж ]
 
   reply:
     description: Reply to last message
     usage: /reply <message>
     permission: chat.pm.use
-    aliases: [r, ответить, кузду, к]
+    aliases: [ r, ответить, кузду, к ]
 
   ignore:
     description: Ignore player
     usage: /ignore <player>
     permission: chat.pm.ignore
-    aliases: [игнор, шптщку]
+    aliases: [ игнор, шптщку ]
 
   unignore:
     description: Unignore player
     usage: /unignore <player>
     permission: chat.pm.ignore
-    aliases: [разигнор, гтшптщку]
+    aliases: [ разигнор, гтшптщку ]
 
   announce:
     description: Send announcement
     usage: /announce <message>
     permission: chat.announce.use
-    aliases: [объявление, анонс, фттщгтсу]
+    aliases: [ объявление, анонс, фттщгтсу ]
 
   nick:
     description: Set custom nickname
     usage: /nick [nickname|reset]
     permission: lochat.nick
-    aliases: [ник, тшсл]
+    aliases: [ ник, тшсл ]
 
   chatspy:
     description: Toggle chat spy mode
     usage: /chatspy
     permission: chat.spy
-    aliases: [spy, шпион, срфезуж, зуж]
+    aliases: [ spy, шпион, срфезуж, зуж ]
 
   clearchat:
     description: Clear chat for all players
     usage: /clearchat
     permission: chat.clear
-    aliases: [cc, очиститьчат, сдуфксрфе, сс]
+    aliases: [ cc, очиститьчат, сдуфксрфе, сс ]
 
   clearchatconfig:
     description: Configure clear chat message
     usage: /clearchatconfig <enable|disable|message|status> [text]
     permission: lochat.clearchat.config
-    aliases: [ccc, настройкаочистки]
+    aliases: [ ccc, настройкаочистки ]
 
   lochat:
     description: LoChat admin command
     usage: /lochat [reload]
     permission: lochat.admin
-    aliases: [дщсрфе]
+    aliases: [ дщсрфе ]
 
   color:
     description: Set gradient nick color
     usage: /color <hex1> [hex2] ...
     permission: gradient.color
-    aliases: [gradient, цвет, градиент, сщдщк, пкфвшуте]
+    aliases: [ gradient, цвет, градиент, сщдщк, пкфвшуте ]
 
   prefix:
     description: Set custom prefix
     usage: /prefix <text>
     permission: gradient.prefix
-    aliases: [префикс, зкуашч]
+    aliases: [ префикс, зкуашч ]
 
   aprefix:
     description: Admin gradient commands
     usage: /aprefix <subcommand>
     permission: gradient.admin
-    aliases: [gradientadmin, азкуашч, пкфвшуетефвьшт]
+    aliases: [ gradientadmin, азкуашч, пкфвшуетефвьшт ]
 
   lmute:
     description: Mute a player
     usage: /lmute <player> [time] [-s] [reason]
     permission: lochat.mute
-    aliases: [mute, мут, ьгеу]
+    aliases: [ mute, мут, ьгеу ]
 
   lunmute:
     description: Unmute a player
     usage: /lunmute <player> [-s]
     permission: lochat.unmute
-    aliases: [unmute, размут, гтьгеу]
+    aliases: [ unmute, размут, гтьгеу ]
 
   lmutelist:
     description: List all active mutes
     usage: /lmutelist
     permission: lochat.mutelist
-    aliases: [mutelist, мутлист, ьгеудшые]
+    aliases: [ mutelist, мутлист, ьгеудшые ]
 
   lmutehistory:
     description: View mute history of a player
     usage: /lmutehistory <player>
     permission: lochat.mutehistory
-    aliases: [mutehistory, мутистория, ьгеершыещку]
+    aliases: [ mutehistory, мутистория, ьгеершыещку ]
 
   lmuteblame:
     description: View mutes issued by a moderator
     usage: /lmuteblame <moderator>
     permission: lochat.muteblame
-    aliases: [muteblame, мутблейм, ьгеуидфьу]
+    aliases: [ muteblame, мутблейм, ьгеуидфьу ]
 
 permissions:
   chat.global.use:

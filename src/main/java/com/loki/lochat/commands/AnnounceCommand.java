@@ -42,20 +42,20 @@ public class AnnounceCommand implements CommandExecutor {
         // Отправка в чат
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(formatted);
-            
+
             // ActionBar (если включен)
             if (plugin.getConfigManager().isAnnouncementActionBarEnabled()) {
                 player.sendActionBar(formatted);
             }
-            
+
             // Title (если включен)
             if (plugin.getConfigManager().isAnnouncementTitleEnabled()) {
                 Title title = Title.title(
                         ChatFormatter.parse(plugin.getConfigManager().getAnnouncementTitleHeader()),
                         ChatFormatter.parse(message),
                         Title.Times.times(
-                                Duration.ofMillis(500), 
-                                Duration.ofSeconds(plugin.getConfigManager().getAnnouncementTitleDuration()), 
+                                Duration.ofMillis(500),
+                                Duration.ofSeconds(plugin.getConfigManager().getAnnouncementTitleDuration()),
                                 Duration.ofMillis(500)
                         )
                 );

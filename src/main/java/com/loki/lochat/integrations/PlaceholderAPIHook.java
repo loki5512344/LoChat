@@ -1,7 +1,10 @@
 package com.loki.lochat.integrations;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.*;
+import com.loki.lochat.api.service.ChatService;
+import com.loki.lochat.api.service.IgnoreService;
+import com.loki.lochat.api.service.PMService;
+import com.loki.lochat.api.service.SpyService;
 import com.loki.lochat.gradient.GradientModule;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
@@ -66,25 +69,25 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                 yield lastPlayer.getName() != null ? lastPlayer.getName() : "";
             }
             case "spy_enabled" -> String.valueOf(spyService.isSpying(uuid));
-            
+
             // Gradient placeholders (совместимость с LoPreff)
             // Используем TAB формат §x§R§R§G§G§B§B для совместимости с TAB плагином
             case "gradient_full", "full" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
-                
+
                 // Если gradient модуль выключен — берём только LuckPerms префикс + ник
                 if (gradient == null || !gradient.isEnabled()) {
                     yield player.getName() != null ? player.getName() : "";
                 }
-                
+
                 // Используем TAB формат для плейсхолдеров
                 yield gradient.getFormattedNameForTab(onlinePlayer);
             }
             case "gradient_name", "name" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
-                
+
                 if (gradient == null || !gradient.isEnabled()) {
                     yield player.getName();
                 }
@@ -93,14 +96,14 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             case "gradient_prefix", "prefix" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield "";
-                
+
                 if (gradient == null || !gradient.isEnabled()) yield "";
                 yield gradient.getPrefix(onlinePlayer);
             }
             case "lp_prefix" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) yield "";
-                
+
                 if (gradient == null || !gradient.isEnabled()) yield "";
                 yield gradient.getLuckPermsPrefix(onlinePlayer);
             }

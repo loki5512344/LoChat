@@ -31,7 +31,7 @@ public class GradientPlayerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }
 }

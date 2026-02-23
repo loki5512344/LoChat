@@ -17,9 +17,14 @@ public class EmojiManager {
     private boolean enabled;
     private boolean requirePermission;
 
-    public EmojiManager(LoChat plugin) {
+    private EmojiManager(LoChat plugin) {
         this.plugin = plugin;
-        load();
+    }
+
+    public static EmojiManager create(LoChat plugin) {
+        EmojiManager manager = new EmojiManager(plugin);
+        manager.load();
+        return manager;
     }
 
     public void load() {

@@ -24,14 +24,15 @@ public class CustomCommandManager {
     private final LoChat plugin;
     private final Map<String, CustomCommandData> commands;
 
-    public CustomCommandManager(LoChat plugin) {
+    private CustomCommandManager(LoChat plugin) {
         this.plugin = plugin;
         this.commands = new HashMap<>();
-        init();
     }
-    
-    private void init() {
-        loadCommands();
+
+    public static CustomCommandManager create(LoChat plugin) {
+        CustomCommandManager manager = new CustomCommandManager(plugin);
+        manager.loadCommands();
+        return manager;
     }
 
     private void loadCommands() {
@@ -41,15 +42,15 @@ public class CustomCommandManager {
         }
 
         FileConfiguration commandsConfig = YamlConfiguration.loadConfiguration(commandsFile);
-        
+
         // Очищаем старые команды
         commands.clear();
-        
+
         // Загружаем команды из конфига
         for (String commandName : commandsConfig.getKeys(false)) {
             ConfigurationSection section = commandsConfig.getConfigurationSection(commandName);
             if (section == null) continue;
-            
+
             CustomCommandData data = new CustomCommandData(
                     commandName,
                     section.getString("permission"),
@@ -58,13 +59,13 @@ public class CustomCommandManager {
                     section.getString("type", "chat"),
                     section.getString("target", "sender")
             );
-            
+
             commands.put(commandName, data);
-            
+
             // Регистрируем команду
             registerCommand(data);
         }
-        
+
         plugin.getLogger().info("Загружено " + commands.size() + " кастомных команд");
     }
 
@@ -74,17 +75,17 @@ public class CustomCommandManager {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
             CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
-            
+
             // Создаем и регистрируем команду
             CustomCommand command = new CustomCommand(data.name, this);
             commandMap.register("lochat", command);
-            
+
             // Регистрируем алиасы
             for (String alias : data.aliases) {
                 CustomCommand aliasCommand = new CustomCommand(alias, this);
                 commandMap.register("lochat", aliasCommand);
             }
-            
+
         } catch (Exception e) {
             plugin.getLogger().severe("Ошибка регистрации команды " + data.name + ": " + e.getMessage());
         }
@@ -105,18 +106,18 @@ public class CustomCommandManager {
                 }
             }
         }
-        
+
         if (data == null) return false;
-        
+
         // Проверяем права
         if (data.permission != null && !player.hasPermission(data.permission)) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getNoPermission()));
             return true;
         }
-        
+
         // Обрабатываем плейсхолдеры
         String message = processPlaceholders(data.message, player, args);
-        
+
         // Выполняем команду в зависимости от типа
         switch (data.type.toLowerCase()) {
             case "broadcast" -> sendBroadcast(data.target, message);
@@ -124,26 +125,26 @@ public class CustomCommandManager {
             case "actionbar" -> sendActionBar(data.target, player, message);
             default -> sendChatMessage(data.target, player, message);
         }
-        
+
         return true;
     }
 
     private String processPlaceholders(String message, Player player, String[] args) {
         String result = message;
-        
+
         // Базовые плейсхолдеры
         result = result.replace("{player}", player.getName());
         result = result.replace("{x}", String.valueOf(player.getLocation().getBlockX()));
         result = result.replace("{y}", String.valueOf(player.getLocation().getBlockY()));
         result = result.replace("{z}", String.valueOf(player.getLocation().getBlockZ()));
         result = result.replace("{world}", player.getWorld().getName());
-        
+
         // Аргументы команды
         for (int i = 0; i < args.length; i++) {
             result = result.replace("{arg" + i + "}", args[i]);
         }
         result = result.replace("{args}", String.join(" ", args));
-        
+
         // PlaceholderAPI если доступен
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             try {
@@ -156,13 +157,13 @@ public class CustomCommandManager {
                 plugin.getLogger().warning("Ошибка при обработке PlaceholderAPI плейсхолдеров: " + e.getMessage());
             }
         }
-        
+
         return result;
     }
 
     private void sendChatMessage(String target, Player sender, String message) {
         Component component = ChatFormatter.parse(message);
-        
+
         switch (target.toLowerCase()) {
             case "sender" -> sender.sendMessage(component);
             case "all" -> {
@@ -208,10 +209,10 @@ public class CustomCommandManager {
         String[] parts = message.split("\\n", 2);
         Component title = ChatFormatter.parse(parts[0]);
         Component subtitle = parts.length > 1 ? ChatFormatter.parse(parts[1]) : Component.empty();
-        
-        Title titleObj = Title.title(title, subtitle, 
+
+        Title titleObj = Title.title(title, subtitle,
                 Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofMillis(500)));
-        
+
         switch (target.toLowerCase()) {
             case "sender" -> sender.showTitle(titleObj);
             case "all" -> {
@@ -236,7 +237,7 @@ public class CustomCommandManager {
 
     private void sendActionBar(String target, Player sender, String message) {
         Component component = ChatFormatter.parse(message);
-        
+
         switch (target.toLowerCase()) {
             case "sender" -> sender.sendActionBar(component);
             case "all" -> {
@@ -263,22 +264,7 @@ public class CustomCommandManager {
         return commands;
     }
 
-    public static class CustomCommandData {
-        public final String name;
-        public final String permission;
-        public final String message;
-        public final List<String> aliases;
-        public final String type;
-        public final String target;
-
-        public CustomCommandData(String name, String permission, String message, 
-                               List<String> aliases, String type, String target) {
-            this.name = name;
-            this.permission = permission;
-            this.message = message;
-            this.aliases = aliases;
-            this.type = type;
-            this.target = target;
-        }
+    public record CustomCommandData(String name, String permission, String message, List<String> aliases, String type,
+                                    String target) {
     }
 }

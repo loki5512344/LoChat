@@ -11,16 +11,16 @@ import java.util.UUID;
  */
 public class PlayerDataServiceImpl implements PlayerDataService {
     private final CooldownService cooldownService;
-    
+
     public PlayerDataServiceImpl(JavaPlugin plugin) {
         this.cooldownService = new CooldownServiceImpl();
     }
-    
+
     @Override
     public void clearPlayerData(UUID player) {
         cooldownService.removeCooldown(player);
     }
-    
+
     @Override
     public void saveAll() {
         // Сохранение всех данных при выключении

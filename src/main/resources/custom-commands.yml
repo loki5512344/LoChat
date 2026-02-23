@@ -28,7 +28,7 @@ help:
     <gradient:#87CEEB:#4682B4>/website</gradient> <gray>- официальный сайт</gray>
     <gradient:#87CEEB:#4682B4>/coords</gradient> <gray>- ваши координаты</gray>
     <gradient:#87CEEB:#4682B4>/time</gradient> <gray>- время на сервере</gray>
-  aliases: ["помощь", "хелп"]
+  aliases: [ "помощь", "хелп" ]
   type: "chat"
   target: "sender"
 
@@ -42,7 +42,7 @@ rules:
     <white>5.</white> <gray>Не используйте мат и оскорбления</gray>
     
     <gradient:#FFA726:#FF9800>Нарушение правил карается мутом или баном!</gradient>
-  aliases: ["правила", "rule"]
+  aliases: [ "правила", "rule" ]
   type: "chat"
   target: "sender"
 
@@ -57,7 +57,7 @@ discord:
     <white>•</white> <gray>Общаться с игроками</gray>
     <white>•</white> <gray>Получать новости сервера</gray>
     <white>•</white> <gray>Участвовать в событиях</gray>
-  aliases: ["дискорд", "ds"]
+  aliases: [ "дискорд", "ds" ]
   type: "chat"
   target: "sender"
 
@@ -70,7 +70,7 @@ website:
     <white>•</white> <gray>Карта сервера</gray>
     <white>•</white> <gray>Статистика игроков</gray>
     <white>•</white> <gray>Форум и новости</gray>
-  aliases: ["сайт", "site"]
+  aliases: [ "сайт", "site" ]
   type: "chat"
   target: "sender"
 
@@ -85,7 +85,7 @@ coords:
     <gradient:#87CEEB:#4682B4>Y:</gradient> <white>{y}</white>
     <gradient:#87CEEB:#4682B4>Z:</gradient> <white>{z}</white>
     <gradient:#87CEEB:#4682B4>Мир:</gradient> <white>{world}</white>
-  aliases: ["координаты", "pos", "position"]
+  aliases: [ "координаты", "pos", "position" ]
   type: "actionbar"
   target: "sender"
 
@@ -94,7 +94,7 @@ time:
     <gradient:#87CEEB:#4682B4>Время на сервере:</gradient> <white>%server_time_24%</white>
     <gradient:#87CEEB:#4682B4>Дата:</gradient> <white>%server_date%</white>
     <gradient:#87CEEB:#4682B4>Онлайн:</gradient> <white>%server_online%</white> <gray>игроков</gray>
-  aliases: ["время", "дата"]
+  aliases: [ "время", "дата" ]
   type: "chat"
   target: "sender"
 
@@ -108,7 +108,7 @@ restart-warning:
     <gradient:#FF6B6B:#FF4757>⚠ ВНИМАНИЕ! ⚠</gradient>
     <gradient:#FFA726:#FF9800>Сервер будет перезагружен через 5 минут!</gradient>
     <gray>Сохраните свой прогресс и подготовьтесь к перезагрузке.</gray>
-  aliases: ["рестарт", "reboot"]
+  aliases: [ "рестарт", "reboot" ]
   type: "title"
   target: "all"
 
@@ -117,7 +117,7 @@ maintenance:
   message: |
     <gradient:#FF6B6B:#FF4757>Сервер переходит в режим технических работ</gradient>
     <gray>Ожидаемое время: 30 минут</gray>
-  aliases: ["тех-работы", "maintenance"]
+  aliases: [ "тех-работы", "maintenance" ]
   type: "broadcast"
   target: "all"
 
@@ -146,7 +146,7 @@ welcome:
   message: |
     <gradient:#FFD700:#FFA500>Добро пожаловать на сервер!</gradient>
     <gradient:#87CEEB:#4682B4>Игрок {player} присоединился к игре</gradient>
-  aliases: ["привет", "hello"]
+  aliases: [ "привет", "hello" ]
   type: "title"
   target: "sender"
 

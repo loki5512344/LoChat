@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
  */
 public class MuteFilter implements MessageFilter {
     private final MuteService muteService;
-    
+
     public MuteFilter(MuteService muteService) {
         this.muteService = muteService;
     }
-    
+
     @Override
     public boolean apply(Player player, ChatMessage message) {
         if (muteService.isMuted(player.getUniqueId())) {
@@ -23,7 +23,7 @@ public class MuteFilter implements MessageFilter {
         }
         return true;
     }
-    
+
     private void sendMuteNotification(Player player) {
         long remaining = muteService.getRemainingTime(player.getUniqueId());
         String timeStr = muteService.formatTime(remaining);

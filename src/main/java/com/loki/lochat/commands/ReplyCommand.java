@@ -5,6 +5,7 @@ import com.loki.lochat.api.service.IgnoreService;
 import com.loki.lochat.api.service.PMService;
 import com.loki.lochat.api.service.SpyService;
 import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -88,10 +89,10 @@ public class ReplyCommand implements CommandExecutor {
 
         // Звук для получателя
         if (plugin.getConfigManager().isPmSoundEnabled()) {
-            try {
-                Sound sound = Sound.valueOf(plugin.getConfigManager().getPmSoundType());
+            Sound sound = PlayerUtil.parseSound(plugin.getConfigManager().getPmSoundType(), null);
+            if (sound != null) {
                 target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
-            } catch (IllegalArgumentException ignored) {}
+            }
         }
 
         // Шпион

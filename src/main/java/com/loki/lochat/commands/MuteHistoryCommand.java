@@ -72,7 +72,7 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
         // Выводим от новых к старым
         for (int i = history.size() - 1; i >= 0; i--) {
             MuteData.MuteHistoryEntry entry = history.get(i);
-            
+
             // Статус
             String status;
             if (entry.unmuted) {
@@ -99,13 +99,13 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("   §7Длительность: §f" + durationStr);
             sender.sendMessage("   §7Причина: §f" + (entry.reason != null ? entry.reason : "Не указана"));
             sender.sendMessage("   §7Выдал: §f" + entry.mutedBy);
-            
+
             if (entry.unmuted && entry.unmutedBy != null) {
                 sender.sendMessage("   §7Размутил: §f" + entry.unmutedBy + " §7(" + dateFormat.format(new Date(entry.unmutedAt)) + ")");
             }
 
             index++;
-            
+
             // Ограничиваем вывод
             if (index > 10) {
                 sender.sendMessage("§7... и ещё " + (history.size() - 10) + " записей");
@@ -118,7 +118,7 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {

@@ -32,7 +32,7 @@ public class GradientMessages {
             plugin.saveResource("gradient-messages.yml", false);
         }
         messages = YamlConfiguration.loadConfiguration(messagesFile);
-        
+
         InputStream defStream = plugin.getResource("gradient-messages.yml");
         if (defStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(

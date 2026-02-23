@@ -7,7 +7,10 @@ import org.bukkit.entity.Player;
  */
 public interface ChatService {
     void sendGlobalMessage(Player sender, Object message);
+
     void sendLocalMessage(Player sender, Object message);
+
     boolean toggleGlobalChat(java.util.UUID player);
+
     boolean isGlobalChatDisabled(java.util.UUID player);
 }

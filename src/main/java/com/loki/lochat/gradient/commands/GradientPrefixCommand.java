@@ -28,13 +28,12 @@ import java.util.regex.Pattern;
  */
 public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
 
-    private final GradientModule module;
-    private final Map<String, BiFunction<Player, String[], Boolean>> subCommands = new HashMap<>();
-    
     private static final Pattern COLOR_CODE_PATTERN = Pattern.compile(
             "(?i)(&[0-9a-fk-or]|§[0-9a-fk-or]|#[0-9a-f]{6}|&#[0-9a-f]{6}|<#[0-9a-f]{6}>)");
     private static final Pattern ALLOWED_PREFIX_PATTERN = Pattern.compile("^[a-zA-Zа-яА-ЯёЁ0-9 _\\-]+$");
     private static final Set<String> SUB_COMMANDS = Set.of("on", "off", "reset");
+    private final GradientModule module;
+    private final Map<String, BiFunction<Player, String[], Boolean>> subCommands = new HashMap<>();
 
     public GradientPrefixCommand(GradientModule module) {
         this.module = module;
@@ -77,12 +76,12 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     private boolean handleOn(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         GradientMessages msg = module.getMessages();
-        
+
         if (!data.hasPrefix()) {
             msg.send(player, "prefix-no-prefix");
             return true;
         }
-        
+
         data.setPrefixEnabled(true);
         if (module.getLuckPermsHook() != null) {
             module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
@@ -106,12 +105,12 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     private boolean handleReset(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         GradientMessages msg = module.getMessages();
-        
+
         if (!data.hasPrefix()) {
             msg.send(player, "prefix-no-prefix");
             return true;
         }
-        
+
         data.setPrefix(null);
         data.setPrefixEnabled(false);
         if (module.getLuckPermsHook() != null) {
@@ -154,7 +153,7 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
 
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
 
-        if (!player.hasPermission("gradient.bypass.cooldown") && 
+        if (!player.hasPermission("gradient.bypass.cooldown") &&
                 !checkCooldown(player, cfg.getPrefixCooldown(), data.getLastPrefixChange())) {
             return true;
         }
@@ -165,9 +164,9 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        GradientConfirmGUI gui = new GradientConfirmGUI(module, player, 
-                GradientConfirmGUI.ConfirmType.PREFIX, 
-                data.hasColors() && data.isColorEnabled() ? data.getColors() : null, 
+        GradientConfirmGUI gui = new GradientConfirmGUI(module, player,
+                GradientConfirmGUI.ConfirmType.PREFIX,
+                data.hasColors() && data.isColorEnabled() ? data.getColors() : null,
                 prefix, price);
         FoliaUtil.runEntityTask(module.getPlugin(), player, gui::open);
         return true;
@@ -203,15 +202,15 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     }
 
     private void saveAndUpdate(Player player, GradientPlayerData data) {
-        FoliaUtil.runEntityTask(module.getPlugin(), player, 
+        FoliaUtil.runEntityTask(module.getPlugin(), player,
                 () -> DisplayNameUtil.updateDisplayName(module, player, data));
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             return SUB_COMMANDS.stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))

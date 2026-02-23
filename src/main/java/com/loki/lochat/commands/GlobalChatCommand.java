@@ -18,9 +18,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GlobalChatCommand implements CommandExecutor {
 
+    private static final MiniMessage MM = MiniMessage.miniMessage();
     private final LoChat plugin;
     private final ChatService chatService;
-    private static final MiniMessage MM = MiniMessage.miniMessage();
 
     public GlobalChatCommand(LoChat plugin) {
         this.plugin = plugin;
@@ -53,10 +53,10 @@ public class GlobalChatCommand implements CommandExecutor {
         }
 
         String message = String.join(" ", args);
-        
+
         // Конвертируем String в Component для новой сигнатуры ChatService
         Component messageComponent = MM.deserialize(message);
-        
+
         chatService.sendGlobalMessage(player, messageComponent);
         return true;
     }

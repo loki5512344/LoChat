@@ -14,8 +14,8 @@ import java.util.List;
 
 public class LoChatCommand implements CommandExecutor, TabCompleter {
 
-    private final LoChat plugin;
     private static final MiniMessage MM = MiniMessage.miniMessage();
+    private final LoChat plugin;
 
     public LoChatCommand(LoChat plugin) {
         this.plugin = plugin;
@@ -51,14 +51,15 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
                     var commands = plugin.getCustomCommandManager().getCommands();
                     sender.sendMessage(MM.deserialize("&#FFD700Кастомные команды (" + commands.size() + "):"));
                     for (var cmd : commands.values()) {
-                        sender.sendMessage(MM.deserialize("&e/" + cmd.name + " &#808080(" + cmd.type + ")"));
-                        if (!cmd.aliases.isEmpty()) {
-                            sender.sendMessage(MM.deserialize("&#808080  Алиасы: " + String.join(", ", cmd.aliases)));
+                        sender.sendMessage(MM.deserialize("&e/" + cmd.name() + " &#808080(" + cmd.type() + ")"));
+                        if (!cmd.aliases().isEmpty()) {
+                            sender.sendMessage(MM.deserialize("&#808080  Алиасы: " + String.join(", ", cmd.aliases())));
                         }
                     }
                 }
             }
-            default -> sender.sendMessage(MM.deserialize("&#FF0000Неизвестная команда. Используйте /lochat для помощи."));
+            default ->
+                    sender.sendMessage(MM.deserialize("&#FF0000Неизвестная команда. Используйте /lochat для помощи."));
         }
 
         return true;
@@ -66,7 +67,7 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         if (!sender.hasPermission("lochat.admin")) {
             return new ArrayList<>();
         }
@@ -74,7 +75,7 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
             String input = args[0].toLowerCase();
-            
+
             for (String cmd : List.of("reload", "commands")) {
                 if (cmd.startsWith(input)) {
                     completions.add(cmd);
@@ -82,11 +83,11 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
             }
             return completions;
         }
-        
+
         if (args.length == 2 && args[0].equalsIgnoreCase("commands")) {
             List<String> completions = new ArrayList<>();
             String input = args[1].toLowerCase();
-            
+
             if ("reload".startsWith(input)) {
                 completions.add("reload");
             }

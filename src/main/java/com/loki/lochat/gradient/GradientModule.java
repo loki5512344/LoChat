@@ -37,18 +37,19 @@ public class GradientModule {
 
     /**
      * Инициализация модуля
+     *
      * @return true если модуль успешно инициализирован
      */
     public boolean init() {
         // Загружаем конфиги
         config = new GradientConfig(plugin);
         messages = new GradientMessages(plugin);
-        
+
         if (!config.isEnabled()) {
             plugin.getLogger().info("Gradient модуль отключен в конфиге.");
             return false;
         }
-        
+
         // Проверяем PlayerPoints (опционально теперь)
         if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
             playerPointsAPI = PlayerPoints.getInstance().getAPI();
@@ -56,10 +57,10 @@ public class GradientModule {
         } else {
             plugin.getLogger().warning("Gradient: PlayerPoints не найден. Покупки будут бесплатными.");
         }
-        
+
         // Инициализация хранилища
         dataManager = new GradientDataManager(plugin, config);
-        
+
         // Подключение LuckPerms (опционально)
         try {
             if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
@@ -71,15 +72,15 @@ public class GradientModule {
         } catch (NoClassDefFoundError e) {
             plugin.getLogger().info("Gradient: LuckPerms не найден. Префиксы LuckPerms будут недоступны.");
         }
-        
-        
+
+
         // Регистрация команд
         registerCommands();
-        
+
         // Регистрация слушателей
         Bukkit.getPluginManager().registerEvents(new GradientPlayerListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new GradientGUIListener(this), plugin);
-        
+
         enabled = true;
         plugin.getLogger().info("Gradient модуль успешно загружен!");
         return true;
@@ -91,13 +92,13 @@ public class GradientModule {
             plugin.getCommand("color").setExecutor(colorCommand);
             plugin.getCommand("color").setTabCompleter(colorCommand);
         }
-        
+
         GradientPrefixCommand prefixCommand = new GradientPrefixCommand(this);
         if (plugin.getCommand("prefix") != null) {
             plugin.getCommand("prefix").setExecutor(prefixCommand);
             plugin.getCommand("prefix").setTabCompleter(prefixCommand);
         }
-        
+
         GradientAdminCommand adminCommand = new GradientAdminCommand(this);
         if (plugin.getCommand("aprefix") != null) {
             plugin.getCommand("aprefix").setExecutor(adminCommand);
@@ -141,22 +142,23 @@ public class GradientModule {
 
     /**
      * Получает отформатированное имя игрока с градиентом и LuckPerms префиксом
+     *
      * @param useTabFormat true для §x§... формата (TAB), false для &#RRGGBB
      */
     private String getFormattedName(Player player, boolean useTabFormat) {
         if (!enabled) return player.getName();
-        
+
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
-        
+
         // Собираем полную строку: префикс + ник
         StringBuilder fullText = new StringBuilder();
-        
+
         // LuckPerms префикс
         String lpPrefix = null;
         if (luckPermsHook.isEnabled()) {
             lpPrefix = luckPermsHook.getActivePrefix(player);
         }
-        
+
         // Определяем какой префикс использовать
         if (data.hasPrefix() && data.isPrefixEnabled()) {
             // Кастомный префикс
@@ -167,21 +169,21 @@ public class GradientModule {
                 fullText.append(stripColors(lpPrefix));
             } else {
                 // LP префикс со своими цветами, ник отдельно
-                String nick = data.hasColors() && data.isColorEnabled() 
-                    ? applyGradientWithFormat(player.getName(), data.getColors(), useTabFormat)
-                    : player.getName();
+                String nick = data.hasColors() && data.isColorEnabled()
+                        ? applyGradientWithFormat(player.getName(), data.getColors(), useTabFormat)
+                        : player.getName();
                 return lpPrefix + nick;
             }
         }
-        
+
         // Добавляем ник
         fullText.append(player.getName());
-        
+
         // Применяем единый градиент на всю строку
         if (data.hasColors() && data.isColorEnabled()) {
             return applyGradientWithFormat(fullText.toString(), data.getColors(), useTabFormat);
         }
-        
+
         return fullText.toString();
     }
 
@@ -211,12 +213,12 @@ public class GradientModule {
      */
     public String getGradientNick(Player player) {
         if (!enabled) return player.getName();
-        
+
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         if (!data.hasColors() || !data.isColorEnabled()) {
             return player.getName();
         }
-        
+
         return GradientUtil.applyGradient(player.getName(), data.getColors(), config.isUseLegacyRgbFormat());
     }
 
@@ -226,9 +228,9 @@ public class GradientModule {
      */
     public String getPrefix(Player player) {
         if (!enabled) return "";
-        
+
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
-        
+
         // Кастомный префикс
         if (data.hasPrefix() && data.isPrefixEnabled()) {
             String prefix = config.getPrefixFormat().replace("{prefix}", data.getPrefix());
@@ -237,7 +239,7 @@ public class GradientModule {
             }
             return prefix;
         }
-        
+
         // LuckPerms префикс
         if (luckPermsHook.isEnabled()) {
             String lpPrefix = luckPermsHook.getActivePrefix(player);
@@ -249,7 +251,7 @@ public class GradientModule {
                 return lpPrefix;
             }
         }
-        
+
         return "";
     }
 
@@ -263,12 +265,35 @@ public class GradientModule {
     }
 
     // Геттеры
-    public JavaPlugin getPlugin() { return plugin; }
-    public GradientConfig getConfig() { return config; }
-    public GradientMessages getMessages() { return messages; }
-    public GradientDataManager getDataManager() { return dataManager; }
-    public GradientLuckPermsHook getLuckPermsHook() { return luckPermsHook; }
-    public PlayerPointsAPI getPlayerPointsAPI() { return playerPointsAPI; }
-    public boolean hasPlayerPoints() { return playerPointsAPI != null; }
-    public boolean isEnabled() { return enabled; }
+    public JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    public GradientConfig getConfig() {
+        return config;
+    }
+
+    public GradientMessages getMessages() {
+        return messages;
+    }
+
+    public GradientDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public GradientLuckPermsHook getLuckPermsHook() {
+        return luckPermsHook;
+    }
+
+    public PlayerPointsAPI getPlayerPointsAPI() {
+        return playerPointsAPI;
+    }
+
+    public boolean hasPlayerPoints() {
+        return playerPointsAPI != null;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

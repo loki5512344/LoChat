@@ -8,19 +8,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class BroadcastAction implements Action {
-    
+
     private final String message;
-    
+
     public BroadcastAction(String message) {
         this.message = message;
     }
-    
+
     @Override
     public void execute(Player player) {
         String parsed = PlaceholderUtil.parse(message, player);
         Bukkit.broadcastMessage(TextUtil.colorize(parsed));
     }
-    
+
     @Override
     public ActionType getType() {
         return ActionType.BROADCAST;

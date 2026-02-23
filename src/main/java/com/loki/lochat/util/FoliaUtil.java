@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class FoliaUtil {
     private static boolean isFolia;
-    
+
     static {
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
@@ -18,11 +18,11 @@ public class FoliaUtil {
             isFolia = false;
         }
     }
-    
+
     public static boolean isFolia() {
         return isFolia;
     }
-    
+
     public static void runAsync(JavaPlugin plugin, Runnable task) {
         if (isFolia) {
             Bukkit.getAsyncScheduler().runNow(plugin, scheduledTask -> task.run());
@@ -30,7 +30,7 @@ public class FoliaUtil {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
         }
     }
-    
+
     public static void runEntityTask(JavaPlugin plugin, Entity entity, Runnable task) {
         if (isFolia) {
             entity.getScheduler().run(plugin, scheduledTask -> task.run(), null);
@@ -38,12 +38,13 @@ public class FoliaUtil {
             Bukkit.getScheduler().runTask(plugin, task);
         }
     }
-    
+
     /**
      * Запускает глобальную повторяющуюся задачу
-     * @param plugin плагин
-     * @param task задача
-     * @param delayTicks задержка перед первым запуском (в тиках)
+     *
+     * @param plugin      плагин
+     * @param task        задача
+     * @param delayTicks  задержка перед первым запуском (в тиках)
      * @param periodTicks период повторения (в тиках)
      */
     public static void runTimerAsync(JavaPlugin plugin, Runnable task, long delayTicks, long periodTicks) {

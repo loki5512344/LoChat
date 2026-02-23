@@ -23,27 +23,22 @@ import java.util.List;
 /**
  * GUI подтверждения для градиентного модуля
  */
-public class GradientConfirmGUI implements InventoryHolder {
-
-    public enum ConfirmType {
-        COLOR, PREFIX
-    }
+public final class GradientConfirmGUI implements InventoryHolder {
 
     private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
             .character('&')
             .hexCharacter('#')
             .hexColors()
             .build();
-
     private final GradientModule module;
     private final Player player;
-    private final Inventory inventory;
+    private Inventory inventory;
     private final ConfirmType type;
     private final List<String> colors;
     private final String prefix;
     private final int price;
 
-    public GradientConfirmGUI(GradientModule module, Player player, ConfirmType type, 
+    public GradientConfirmGUI(GradientModule module, Player player, ConfirmType type,
                               List<String> colors, String prefix, int price) {
         this.module = module;
         this.player = player;
@@ -51,7 +46,11 @@ public class GradientConfirmGUI implements InventoryHolder {
         this.colors = colors;
         this.prefix = prefix;
         this.price = price;
-        this.inventory = Bukkit.createInventory(this, 27, 
+    }
+
+    private void initInventory() {
+        if (inventory != null) return;
+        this.inventory = Bukkit.createInventory(this, 27,
                 Component.text("Подтверждение", NamedTextColor.DARK_GRAY));
         setupItems();
     }
@@ -65,12 +64,12 @@ public class GradientConfirmGUI implements InventoryHolder {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
         skullMeta.setOwningPlayer(player);
-        
+
         String preview = buildPreview();
         // Для GUI используем LegacyComponentSerializer с поддержкой HEX
         Component previewComponent = SERIALIZER.deserialize(preview);
         skullMeta.displayName(previewComponent.decoration(TextDecoration.ITALIC, false));
-        
+
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
         lore.add(Component.text("Так будет выглядеть ваш ник", NamedTextColor.GRAY)
@@ -134,7 +133,7 @@ public class GradientConfirmGUI implements InventoryHolder {
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 // Конвертируем LP префикс в legacy формат
                 lpPrefix = convertToLegacy(lpPrefix);
-                
+
                 // Если градиент на LP префикс включен - применяем градиент на всю строку
                 if (colorsToUse != null && !colorsToUse.isEmpty() && module.getConfig().isGradientOnLuckPermsPrefix()) {
                     String cleanLpPrefix = stripColors(lpPrefix);
@@ -187,14 +186,37 @@ public class GradientConfirmGUI implements InventoryHolder {
     }
 
     public void open() {
+        initInventory();
         player.openInventory(inventory);
     }
 
     @Override
-    public @NotNull Inventory getInventory() { return inventory; }
-    public Player getPlayer() { return player; }
-    public ConfirmType getType() { return type; }
-    public List<String> getColors() { return colors; }
-    public String getPrefix() { return prefix; }
-    public int getPrice() { return price; }
+    public @NotNull Inventory getInventory() {
+        initInventory();
+        return inventory;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public ConfirmType getType() {
+        return type;
+    }
+
+    public List<String> getColors() {
+        return colors;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public enum ConfirmType {
+        COLOR, PREFIX
+    }
 }

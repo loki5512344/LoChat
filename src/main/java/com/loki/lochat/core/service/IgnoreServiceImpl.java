@@ -2,14 +2,13 @@ package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.IgnoreService;
 import com.loki.lochat.gradient.util.FoliaUtil;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * Реализация сервиса игнорирования
@@ -39,13 +38,15 @@ public class IgnoreServiceImpl implements IgnoreService {
                 for (String ignoredStr : ignoredList) {
                     try {
                         ignored.add(UUID.fromString(ignoredStr));
-                    } catch (Exception ignored2) {}
+                    } catch (Exception ignored2) {
+                    }
                 }
 
                 if (!ignored.isEmpty()) {
                     ignoreMap.put(uuid, ignored);
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 

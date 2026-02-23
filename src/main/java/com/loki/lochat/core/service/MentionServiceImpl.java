@@ -2,6 +2,7 @@ package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.MentionService;
 import com.loki.lochat.config.ConfigManager;
+import com.loki.lochat.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,9 +18,8 @@ import java.util.regex.Pattern;
  * Реализация сервиса упоминаний
  */
 public class MentionServiceImpl implements MentionService {
-    private final ConfigManager configManager;
     private static final Pattern MENTION_PATTERN = Pattern.compile("@(\\w+)");
-    
+    private final ConfigManager configManager;
     // Хранит для какого игрока какие части сообщения выделить
     private final Map<Player, Set<String>> highlightedNicks = new HashMap<>();
 
@@ -46,7 +46,7 @@ public class MentionServiceImpl implements MentionService {
                 mentionedPlayers.add(mentioned);
                 String replacement = highlight.replace("{player}", mentioned.getName());
                 matcher.appendReplacement(result, replacement);
-                
+
                 // Запоминаем что этот игрок упомянут
                 highlightedNicks.computeIfAbsent(mentioned, k -> new HashSet<>()).add(mentioned.getName());
             }
@@ -64,23 +64,23 @@ public class MentionServiceImpl implements MentionService {
 
         String viewerName = viewer.getName();
         String result = message;
-        
+
         // Проверяем упоминание через @ник
         String highlight = configManager.getMentionHighlight();
         String highlightedName = highlight.replace("{player}", viewerName);
-        
+
         // Если в сообщении есть выделенный ник этого игрока — добавляем дополнительное выделение
         if (result.contains(highlightedName)) {
             // Уже выделено через processMentions, добавляем эффект
             String extraHighlight = "<bold>" + highlightedName + "</bold>";
             result = result.replace(highlightedName, extraHighlight);
         }
-        
+
         // Также проверяем просто ник в сообщении (без @)
         // Регистронезависимый поиск
         Pattern nickPattern = Pattern.compile("(?i)\\b" + Pattern.quote(viewerName) + "\\b");
         Matcher nickMatcher = nickPattern.matcher(result);
-        
+
         if (nickMatcher.find()) {
             // Ник найден в сообщении — выделяем для этого игрока
             String selfHighlight = configManager.getSelfMentionHighlight();
@@ -104,12 +104,7 @@ public class MentionServiceImpl implements MentionService {
         }
 
         String soundName = configManager.getMentionSoundType();
-        Sound sound;
-        try {
-            sound = Sound.valueOf(soundName);
-        } catch (IllegalArgumentException e) {
-            sound = Sound.BLOCK_NOTE_BLOCK_PLING;
-        }
+        Sound sound = PlayerUtil.parseSound(soundName, Sound.BLOCK_NOTE_BLOCK_PLING);
 
         for (Player player : players) {
             player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
@@ -120,13 +115,13 @@ public class MentionServiceImpl implements MentionService {
     public void notifyIfMentioned(String message, Player viewer, Player sender) {
         if (viewer.equals(sender)) return;
         if (!configManager.isMentionSoundEnabled()) return;
-        
+
         if (isPlayerMentioned(message, viewer)) {
             String soundName = configManager.getMentionSoundType();
-            try {
-                Sound sound = Sound.valueOf(soundName);
+            Sound sound = PlayerUtil.parseSound(soundName, null);
+            if (sound != null) {
                 viewer.playSound(viewer.getLocation(), sound, 1.0f, 1.0f);
-            } catch (IllegalArgumentException ignored) {}
+            }
         }
     }
 }

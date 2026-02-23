@@ -26,14 +26,13 @@ import java.util.function.BiFunction;
  */
 public class GradientColorCommand implements CommandExecutor, TabCompleter {
 
-    private final GradientModule module;
-    private final Map<String, BiFunction<Player, String[], Boolean>> subCommands = new HashMap<>();
-    
     private static final List<String> PRESET_COLORS = List.of(
             "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3",
             "#FF69B4", "#00FFFF", "#FFD700", "#FFFFFF", "#000000"
     );
     private static final Set<String> SUB_COMMANDS = Set.of("on", "off", "reset", "copy");
+    private final GradientModule module;
+    private final Map<String, BiFunction<Player, String[], Boolean>> subCommands = new HashMap<>();
 
     public GradientColorCommand(GradientModule module) {
         this.module = module;
@@ -77,12 +76,12 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     private boolean handleOn(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         GradientMessages msg = module.getMessages();
-        
+
         if (!data.hasColors()) {
             msg.send(player, "color-no-colors");
             return true;
         }
-        
+
         data.setColorEnabled(true);
         saveAndUpdate(player, data);
         msg.send(player, "color-enabled");
@@ -100,12 +99,12 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     private boolean handleReset(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         GradientMessages msg = module.getMessages();
-        
+
         if (!data.hasColors()) {
             msg.send(player, "color-no-colors");
             return true;
         }
-        
+
         data.setColors(new ArrayList<>());
         data.setColorEnabled(false);
         saveAndUpdate(player, data);
@@ -116,18 +115,18 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     private boolean handleCopy(Player player, String[] args) {
         GradientMessages msg = module.getMessages();
         GradientConfig cfg = module.getConfig();
-        
+
         if (args.length < 2) {
             msg.send(player, "color-copy-usage");
             return true;
         }
-        
+
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
             msg.send(player, "player-not-found");
             return true;
         }
-        
+
         GradientPlayerData targetData = module.getDataManager().getPlayerData(target.getUniqueId());
         if (!targetData.hasColors()) {
             msg.send(player, "color-copy-no-colors", "player", target.getName());
@@ -135,8 +134,8 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         }
 
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
-        
-        if (!player.hasPermission("gradient.bypass.cooldown") && 
+
+        if (!player.hasPermission("gradient.bypass.cooldown") &&
                 !checkCooldown(player, cfg.getColorCooldown(), data.getLastColorChange())) {
             return true;
         }
@@ -148,7 +147,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        GradientConfirmGUI gui = new GradientConfirmGUI(module, player, 
+        GradientConfirmGUI gui = new GradientConfirmGUI(module, player,
                 GradientConfirmGUI.ConfirmType.COLOR, colors, data.getPrefix(), price);
         FoliaUtil.runEntityTask(module.getPlugin(), player, gui::open);
         return true;
@@ -170,7 +169,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
 
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
 
-        if (!player.hasPermission("gradient.bypass.cooldown") && 
+        if (!player.hasPermission("gradient.bypass.cooldown") &&
                 !checkCooldown(player, cfg.getColorCooldown(), data.getLastColorChange())) {
             return true;
         }
@@ -191,7 +190,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        GradientConfirmGUI gui = new GradientConfirmGUI(module, player, 
+        GradientConfirmGUI gui = new GradientConfirmGUI(module, player,
                 GradientConfirmGUI.ConfirmType.COLOR, colors, data.getPrefix(), price);
         FoliaUtil.runEntityTask(module.getPlugin(), player, gui::open);
         return true;
@@ -222,35 +221,35 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     }
 
     private void saveAndUpdate(Player player, GradientPlayerData data) {
-        FoliaUtil.runEntityTask(module.getPlugin(), player, 
+        FoliaUtil.runEntityTask(module.getPlugin(), player,
                 () -> DisplayNameUtil.updateDisplayName(module, player, data));
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             String input = args[0].toLowerCase();
             List<String> completions = new ArrayList<>(SUB_COMMANDS);
             completions.addAll(PRESET_COLORS);
             return completions.stream().filter(s -> s.toLowerCase().startsWith(input)).toList();
         }
-        
+
         String firstArg = args[0].toLowerCase();
-        
+
         if (args.length == 2 && firstArg.equals("copy")) {
             return Bukkit.getOnlinePlayers().stream().map(Player::getName)
                     .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).toList();
         }
-        
+
         if (!SUB_COMMANDS.contains(firstArg) && args.length <= module.getConfig().getMaxColors()) {
             return PRESET_COLORS.stream()
                     .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
                     .toList();
         }
-        
+
         return List.of();
     }
 }

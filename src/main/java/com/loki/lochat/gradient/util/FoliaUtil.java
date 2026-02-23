@@ -17,7 +17,8 @@ public final class FoliaUtil {
         IS_FOLIA = checkFolia();
     }
 
-    private FoliaUtil() {}
+    private FoliaUtil() {
+    }
 
     private static boolean checkFolia() {
         try {

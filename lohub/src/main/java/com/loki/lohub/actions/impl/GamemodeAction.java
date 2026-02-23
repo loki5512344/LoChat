@@ -6,9 +6,9 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public class GamemodeAction implements Action {
-    
+
     private final GameMode gameMode;
-    
+
     public GamemodeAction(String mode) {
         GameMode parsed;
         try {
@@ -24,12 +24,12 @@ public class GamemodeAction implements Action {
         }
         this.gameMode = parsed;
     }
-    
+
     @Override
     public void execute(Player player) {
         player.setGameMode(gameMode);
     }
-    
+
     @Override
     public ActionType getType() {
         return ActionType.GAMEMODE;

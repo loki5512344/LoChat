@@ -45,19 +45,19 @@ public class MuteListCommand implements CommandExecutor {
         }
 
         sender.sendMessage("§6§l=== Активные муты (" + activeMutes.size() + ") ===");
-        
+
         int index = 1;
         for (Map.Entry<UUID, MuteData> entry : activeMutes.entrySet()) {
             UUID uuid = entry.getKey();
             MuteData data = entry.getValue();
-            
+
             // Получаем имя игрока
             String playerName = data.getPlayerName();
             if (playerName == null) {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
                 playerName = offlinePlayer.getName() != null ? offlinePlayer.getName() : uuid.toString().substring(0, 8);
             }
-            
+
             // Форматируем время
             String timeStr;
             if (data.isPermanent()) {
@@ -66,11 +66,11 @@ public class MuteListCommand implements CommandExecutor {
                 long remaining = data.getEndTime() - System.currentTimeMillis();
                 timeStr = "§e" + muteService.formatTime(remaining);
             }
-            
+
             sender.sendMessage("§7" + index + ". §f" + playerName + " §7- " + timeStr);
             sender.sendMessage("   §7Причина: §f" + (data.getReason() != null ? data.getReason() : "Не указана"));
             sender.sendMessage("   §7Выдал: §f" + data.getMutedBy() + " §7(" + dateFormat.format(new Date(data.getMutedAt())) + ")");
-            
+
             index++;
         }
 

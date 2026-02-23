@@ -19,7 +19,7 @@ public class AutoMessageManager {
     private final Random random = new Random();
     private final AtomicInteger currentIndex = new AtomicInteger(0);
     private boolean running = false;
-    
+
     private Map<String, List<String>> messages;
     private List<String> messageOrder;
     private String prefix;
@@ -35,21 +35,21 @@ public class AutoMessageManager {
         if (!file.exists()) {
             plugin.saveResource("automessages.yml", false);
         }
-        
+
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        
+
         // Настройки
         prefix = config.getString("settings.prefix", "&6[&eINFO&6]&r");
         mode = config.getString("settings.mode", "sequential").toLowerCase();
-        
+
         // Загружаем сообщения
         messages = new LinkedHashMap<>();
         ConfigurationSection msgSection = config.getConfigurationSection("messages");
-        
+
         if (msgSection != null) {
             for (String key : msgSection.getKeys(false)) {
                 List<String> lines = new ArrayList<>();
-                
+
                 if (msgSection.isList(key)) {
                     lines.addAll(msgSection.getStringList(key));
                 } else {
@@ -58,16 +58,16 @@ public class AutoMessageManager {
                         lines.add(single);
                     }
                 }
-                
+
                 if (!lines.isEmpty()) {
                     messages.put(key, lines);
                 }
             }
         }
-        
+
         // Определяем порядок
         messageOrder = new ArrayList<>();
-        
+
         if (mode.equals("custom")) {
             String orderStr = config.getString("settings.order", "");
             for (String item : orderStr.split(",")) {
@@ -87,11 +87,11 @@ public class AutoMessageManager {
                 }
             }
         }
-        
+
         if (messageOrder.isEmpty()) {
             messageOrder.addAll(messages.keySet());
         }
-        
+
         plugin.getLogger().info("Загружено " + messages.size() + " автосообщений");
     }
 
@@ -125,14 +125,14 @@ public class AutoMessageManager {
         }
 
         String messageKey;
-        
+
         if (mode.equals("random")) {
             messageKey = messageOrder.get(random.nextInt(messageOrder.size()));
         } else {
             int index = currentIndex.getAndUpdate(i -> (i + 1) % messageOrder.size());
             messageKey = messageOrder.get(index);
         }
-        
+
         List<String> lines = messages.get(messageKey);
         if (lines == null || lines.isEmpty()) return;
 
@@ -140,7 +140,7 @@ public class AutoMessageManager {
         for (String line : lines) {
             // Заменяем плейсхолдеры
             String processed = line.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size()));
-            
+
             // Добавляем префикс к первой непустой строке
             Component formatted;
             if (isFirstLine && !line.trim().isEmpty()) {
@@ -149,7 +149,7 @@ public class AutoMessageManager {
             } else {
                 formatted = ChatFormatter.parse(processed);
             }
-            
+
             for (var player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(formatted);
             }

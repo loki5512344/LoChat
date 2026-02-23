@@ -2,6 +2,7 @@ package com.loki.lochat.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -11,10 +12,32 @@ import java.util.UUID;
  */
 public final class PlayerUtil {
 
-    private PlayerUtil() {}
+    private PlayerUtil() {
+    }
+
+    /**
+     * Safely parses a sound name from config.
+     * Uses deprecated Sound.valueOf() for backward compatibility with string-based config values.
+     *
+     * @param soundName the sound name to parse
+     * @param defaultSound the default sound to return if parsing fails
+     * @return the parsed Sound or the default if invalid
+     */
+    @SuppressWarnings("deprecation")
+    public static Sound parseSound(String soundName, Sound defaultSound) {
+        if (soundName == null || soundName.isEmpty()) {
+            return defaultSound;
+        }
+        try {
+            return Sound.valueOf(soundName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return defaultSound;
+        }
+    }
 
     /**
      * Находит игрока по имени (онлайн или оффлайн)
+     *
      * @param name имя игрока
      * @return UUID игрока или null если не найден
      */
@@ -36,6 +59,7 @@ public final class PlayerUtil {
 
     /**
      * Проверяет, существует ли игрок (играл на сервере)
+     *
      * @param name имя игрока
      * @return true если игрок существует
      */
@@ -45,6 +69,7 @@ public final class PlayerUtil {
 
     /**
      * Получает имя игрока по UUID
+     *
      * @param uuid UUID игрока
      * @return имя игрока или null
      */
@@ -60,6 +85,7 @@ public final class PlayerUtil {
 
     /**
      * Проверяет, онлайн ли игрок
+     *
      * @param uuid UUID игрока
      * @return true если игрок онлайн
      */

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public interface MessageFilter {
     /**
      * Применить фильтр к сообщению
+     *
      * @return отфильтрованное сообщение или null если заблокировано
      */
     Object apply(Player player, Object message, String plainMessage);

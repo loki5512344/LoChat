@@ -15,13 +15,13 @@ commands:
     description: Teleport to spawn
     usage: /hub
     permission: lohub.hub
-    aliases: [spawn, хаб, спавн]
+    aliases: [ spawn, хаб, спавн ]
   
   sethub:
     description: Set hub spawn location
     usage: /sethub
     permission: lohub.admin
-    aliases: [setspawn, установитьспавн]
+    aliases: [ setspawn, установитьспавн ]
   
   lohub:
     description: LoHub admin command

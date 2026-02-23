@@ -6,15 +6,16 @@ import java.util.UUID;
  * Модель данных мута (Value Object)
  */
 public class MuteData {
-    private UUID uuid;
-    private String playerName;
     public long endTime; // 0 = перманентный (public for JSON serialization)
     public String reason;
     public String mutedBy;
     public long mutedAt;
-    
-    public MuteData() {} // For JSON deserialization
-    
+    private UUID uuid;
+    private String playerName;
+
+    public MuteData() {
+    } // For JSON deserialization
+
     public MuteData(UUID uuid, String playerName, long endTime, String reason, String mutedBy) {
         this.uuid = uuid;
         this.playerName = playerName;
@@ -23,7 +24,7 @@ public class MuteData {
         this.mutedBy = mutedBy;
         this.mutedAt = System.currentTimeMillis();
     }
-    
+
     public MuteData(long endTime, String reason, String mutedBy, long mutedAt, String playerName) {
         this.endTime = endTime;
         this.reason = reason;
@@ -31,15 +32,35 @@ public class MuteData {
         this.mutedAt = mutedAt;
         this.playerName = playerName;
     }
-    
-    public UUID getUuid() { return uuid; }
-    public String getPlayerName() { return playerName; }
-    public long getEndTime() { return endTime; }
-    public String getReason() { return reason; }
-    public String getMutedBy() { return mutedBy; }
-    public long getMutedAt() { return mutedAt; }
-    public boolean isPermanent() { return endTime == 0; }
-    
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public String getMutedBy() {
+        return mutedBy;
+    }
+
+    public long getMutedAt() {
+        return mutedAt;
+    }
+
+    public boolean isPermanent() {
+        return endTime == 0;
+    }
+
     /**
      * Запись истории мута
      */
@@ -52,12 +73,13 @@ public class MuteData {
         public boolean unmuted;
         public String unmutedBy;
         public long unmutedAt;
-        
-        public MuteHistoryEntry() {} // For JSON deserialization
-        
-        public MuteHistoryEntry(String playerName, long duration, String reason, 
-                               String mutedBy, long mutedAt, boolean unmuted, 
-                               String unmutedBy, long unmutedAt) {
+
+        public MuteHistoryEntry() {
+        } // For JSON deserialization
+
+        public MuteHistoryEntry(String playerName, long duration, String reason,
+                                String mutedBy, long mutedAt, boolean unmuted,
+                                String unmutedBy, long unmutedAt) {
             this.playerName = playerName;
             this.duration = duration;
             this.reason = reason;

@@ -12,28 +12,29 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Реализация сервиса кастомных ников
  */
 public class NickServiceImpl implements NickService {
+    // Настройки
+    private static final int MIN_LENGTH = 3;
+    private static final int MAX_LENGTH = 16;
     private final JavaPlugin plugin;
     private final Map<UUID, String> nicknames = new ConcurrentHashMap<>();
     private final File dataFile;
     private FileConfiguration data;
-    
-    // Настройки
-    private static final int MIN_LENGTH = 3;
-    private static final int MAX_LENGTH = 16;
-    
+
     public NickServiceImpl(JavaPlugin plugin) {
         this.plugin = plugin;
         this.dataFile = new File(plugin.getDataFolder(), "nicknames.yml");
         load();
     }
-    
+
     private void load() {
         if (!dataFile.exists()) {
             try {
@@ -43,9 +44,9 @@ public class NickServiceImpl implements NickService {
                 plugin.getLogger().warning("Не удалось создать nicknames.yml: " + e.getMessage());
             }
         }
-        
+
         data = YamlConfiguration.loadConfiguration(dataFile);
-        
+
         // Загружаем ники
         if (data.contains("nicknames")) {
             for (String key : data.getConfigurationSection("nicknames").getKeys(false)) {
@@ -54,10 +55,10 @@ public class NickServiceImpl implements NickService {
                 nicknames.put(uuid, nickname);
             }
         }
-        
+
         plugin.getLogger().info("Загружено " + nicknames.size() + " кастомных ников");
     }
-    
+
     @Override
     public void save() {
         // Сохраняем ники
@@ -65,21 +66,21 @@ public class NickServiceImpl implements NickService {
         for (Map.Entry<UUID, String> entry : nicknames.entrySet()) {
             data.set("nicknames." + entry.getKey().toString(), entry.getValue());
         }
-        
+
         try {
             data.save(dataFile);
         } catch (IOException e) {
             plugin.getLogger().warning("Не удалось сохранить nicknames.yml: " + e.getMessage());
         }
     }
-    
+
     @Override
     public boolean setNickname(UUID player, String nickname) {
         // Валидация
         if (!isValidNickname(nickname)) {
             return false;
         }
-        
+
         // Проверка уникальности
         if (isNicknameTaken(nickname)) {
             // Проверяем не свой ли это ник
@@ -88,23 +89,23 @@ public class NickServiceImpl implements NickService {
                 return false;
             }
         }
-        
+
         // Устанавливаем ник
         nicknames.put(player, nickname);
-        
+
         // Обновляем display
         Player onlinePlayer = Bukkit.getPlayer(player);
         if (onlinePlayer != null) {
             updatePlayerDisplay(onlinePlayer);
         }
-        
+
         return true;
     }
-    
+
     @Override
     public void resetNickname(UUID player) {
         nicknames.remove(player);
-        
+
         // Сбрасываем display
         Player onlinePlayer = Bukkit.getPlayer(player);
         if (onlinePlayer != null) {
@@ -112,59 +113,55 @@ public class NickServiceImpl implements NickService {
             onlinePlayer.playerListName(Component.text(onlinePlayer.getName()));
         }
     }
-    
+
     @Override
     public Optional<String> getNickname(UUID player) {
         return Optional.ofNullable(nicknames.get(player));
     }
-    
+
     @Override
     public boolean isNicknameTaken(String nickname) {
         String cleanNick = stripColors(nickname).toLowerCase();
-        
+
         // Проверяем существующие ники
         for (String existingNick : nicknames.values()) {
             if (stripColors(existingNick).equalsIgnoreCase(cleanNick)) {
                 return true;
             }
         }
-        
+
         // Проверяем реальные ники онлайн игроков
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(cleanNick)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     @Override
     public boolean isValidNickname(String nickname) {
         if (nickname == null || nickname.isEmpty()) {
             return false;
         }
-        
+
         // Убираем цвета для проверки длины
         String cleanNick = stripColors(nickname);
-        
+
         // Проверка длины
         if (cleanNick.length() < MIN_LENGTH || cleanNick.length() > MAX_LENGTH) {
             return false;
         }
-        
+
         // Проверка символов (разрешены буквы, цифры, _, русские буквы)
-        if (!cleanNick.matches("[a-zA-Zа-яА-Я0-9_]+")) {
-            return false;
-        }
-        
-        return true;
+        return cleanNick.matches("[a-zA-Zа-яА-Я0-9_]+");
     }
-    
+
     @Override
     public void updatePlayerDisplay(Player player) {
         Optional<String> nickname = getNickname(player.getUniqueId());
-        
+
         if (nickname.isPresent()) {
             // Парсим ник с цветами
             Component nickComponent = ChatFormatter.parse(nickname.get());
@@ -176,7 +173,7 @@ public class NickServiceImpl implements NickService {
             player.playerListName(Component.text(player.getName()));
         }
     }
-    
+
     /**
      * Убирает цвета из строки
      */

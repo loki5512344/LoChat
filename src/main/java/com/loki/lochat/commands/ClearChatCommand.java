@@ -24,7 +24,7 @@ public class ClearChatCommand implements CommandExecutor {
             for (int i = 0; i < com.loki.lochat.utils.Constants.CLEAR_CHAT_LINES; i++) {
                 player.sendMessage("");
             }
-            
+
             // Уведомление (если включено)
             if (plugin.getConfigManager().isClearChatMessageEnabled()) {
                 String message = plugin.getConfigManager().getClearChatMessage();

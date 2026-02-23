@@ -28,7 +28,7 @@ public class GradientDataManager {
         this.plugin = plugin;
         this.config = config;
         this.useSqlite = config.getStorageType().equalsIgnoreCase("SQLITE");
-        
+
         if (useSqlite) {
             initSqlite();
         } else {
@@ -40,20 +40,20 @@ public class GradientDataManager {
         try {
             File dbFile = new File(plugin.getDataFolder(), config.getSqliteFile());
             sqliteConnection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
-            
+
             try (Statement stmt = sqliteConnection.createStatement()) {
                 stmt.executeUpdate("""
-                    CREATE TABLE IF NOT EXISTS gradient_data (
-                        uuid TEXT PRIMARY KEY,
-                        prefix TEXT,
-                        colors TEXT,
-                        color_enabled INTEGER DEFAULT 1,
-                        prefix_enabled INTEGER DEFAULT 1,
-                        prefix_purchased INTEGER DEFAULT 0,
-                        last_color_change INTEGER DEFAULT 0,
-                        last_prefix_change INTEGER DEFAULT 0
-                    )
-                """);
+                            CREATE TABLE IF NOT EXISTS gradient_data (
+                                uuid TEXT PRIMARY KEY,
+                                prefix TEXT,
+                                colors TEXT,
+                                color_enabled INTEGER DEFAULT 1,
+                                prefix_enabled INTEGER DEFAULT 1,
+                                prefix_purchased INTEGER DEFAULT 0,
+                                last_color_change INTEGER DEFAULT 0,
+                                last_prefix_change INTEGER DEFAULT 0
+                            )
+                        """);
             }
             plugin.getLogger().info("Gradient SQLite база данных инициализирована.");
         } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class GradientDataManager {
     private void loadYamlData() {
         File dataFile = new File(plugin.getDataFolder(), "gradient-data.yml");
         if (!dataFile.exists()) return;
-        
+
         FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
         for (String uuidStr : data.getKeys(false)) {
             try {
@@ -79,7 +79,8 @@ public class GradientDataManager {
                 playerData.setLastColorChange(data.getLong(uuidStr + ".last-color-change", 0));
                 playerData.setLastPrefixChange(data.getLong(uuidStr + ".last-prefix-change", 0));
                 cache.put(uuid, playerData);
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
     }
 
@@ -89,7 +90,7 @@ public class GradientDataManager {
 
     private GradientPlayerData loadPlayerData(UUID uuid) {
         GradientPlayerData data = new GradientPlayerData(uuid);
-        
+
         if (useSqlite && sqliteConnection != null) {
             try (PreparedStatement stmt = sqliteConnection.prepareStatement(
                     "SELECT prefix, colors, color_enabled, prefix_enabled, prefix_purchased, last_color_change, last_prefix_change FROM gradient_data WHERE uuid = ?")) {
@@ -111,14 +112,14 @@ public class GradientDataManager {
                 plugin.getLogger().warning("Ошибка загрузки gradient данных: " + e.getMessage());
             }
         }
-        
+
         return data;
     }
 
     public void savePlayerData(UUID uuid) {
         GradientPlayerData data = cache.get(uuid);
         if (data == null) return;
-        
+
         if (useSqlite && sqliteConnection != null) {
             try (PreparedStatement stmt = sqliteConnection.prepareStatement(
                     "INSERT OR REPLACE INTO gradient_data (uuid, prefix, colors, color_enabled, prefix_enabled, prefix_purchased, last_color_change, last_prefix_change) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
@@ -150,7 +151,7 @@ public class GradientDataManager {
     private void saveYamlData() {
         File dataFile = new File(plugin.getDataFolder(), "gradient-data.yml");
         FileConfiguration data = new YamlConfiguration();
-        
+
         for (Map.Entry<UUID, GradientPlayerData> entry : cache.entrySet()) {
             String path = entry.getKey().toString();
             GradientPlayerData pd = entry.getValue();
@@ -162,7 +163,7 @@ public class GradientDataManager {
             data.set(path + ".last-color-change", pd.getLastColorChange());
             data.set(path + ".last-prefix-change", pd.getLastPrefixChange());
         }
-        
+
         try {
             data.save(dataFile);
         } catch (IOException e) {

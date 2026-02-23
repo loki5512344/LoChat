@@ -11,7 +11,8 @@ public final class ChatFormatter {
     private static final PlainTextComponentSerializer PLAIN =
             PlainTextComponentSerializer.plainText();
 
-    private ChatFormatter() {}
+    private ChatFormatter() {
+    }
 
     /* ===================== BASIC ===================== */
 
@@ -38,7 +39,7 @@ public final class ChatFormatter {
      */
     private static String convertLegacyFormats(String message) {
         if (message == null) return "";
-        
+
         // Конвертируем &#RRGGBB в <#RRGGBB>
         java.util.regex.Pattern pattern1 = java.util.regex.Pattern.compile("&#([0-9a-fA-F]{6})");
         java.util.regex.Matcher matcher1 = pattern1.matcher(message);
@@ -49,7 +50,7 @@ public final class ChatFormatter {
         }
         matcher1.appendTail(sb1);
         message = sb1.toString();
-        
+
         // Конвертируем #RRGGBB в <#RRGGBB> (только если не внутри тегов)
         java.util.regex.Pattern pattern2 = java.util.regex.Pattern.compile("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)");
         java.util.regex.Matcher matcher2 = pattern2.matcher(message);
@@ -60,7 +61,7 @@ public final class ChatFormatter {
         }
         matcher2.appendTail(sb2);
         message = sb2.toString();
-        
+
         // Конвертируем §[0-9a-fk-or] в соответствующие MiniMessage теги
         message = message.replaceAll("§0", "<black>");
         message = message.replaceAll("§1", "<dark_blue>");
@@ -84,7 +85,7 @@ public final class ChatFormatter {
         message = message.replaceAll("§n", "<underlined>");
         message = message.replaceAll("§o", "<italic>");
         message = message.replaceAll("§r", "<reset>");
-        
+
         // Конвертируем &[0-9a-fk-or] в соответствующие MiniMessage теги
         message = message.replaceAll("&0", "<black>");
         message = message.replaceAll("&1", "<dark_blue>");
@@ -102,7 +103,7 @@ public final class ChatFormatter {
         message = message.replaceAll("&d", "<light_purple>");
         message = message.replaceAll("&e", "<yellow>");
         message = message.replaceAll("&f", "<white>");
-        
+
         // Конвертируем форматирование
         message = message.replaceAll("&k", "<obfuscated>");
         message = message.replaceAll("&l", "<bold>");
@@ -110,7 +111,7 @@ public final class ChatFormatter {
         message = message.replaceAll("&n", "<underlined>");
         message = message.replaceAll("&o", "<italic>");
         message = message.replaceAll("&r", "<reset>");
-        
+
         return message;
     }
 
@@ -122,7 +123,7 @@ public final class ChatFormatter {
     public static String toPlain(Component component) {
         return component == null ? "" : PLAIN.serialize(component);
     }
-    
+
     public static String toPlain(Object obj) {
         if (obj == null) return "";
         if (obj instanceof Component component) {
@@ -130,7 +131,7 @@ public final class ChatFormatter {
         }
         return obj.toString();
     }
-    
+
     /**
      * Отправляет сообщение игроку
      */
@@ -190,7 +191,7 @@ public final class ChatFormatter {
         // Получаем отображаемые имена игроков
         String senderDisplay = getPlayerDisplayName(sender);
         String receiverDisplay = getPlayerDisplayName(receiver);
-        
+
         return parse(format
                 .replace("{sender}", sender.getName())
                 .replace("{receiver}", receiver.getName())
@@ -208,7 +209,7 @@ public final class ChatFormatter {
         // Получаем отображаемые имена игроков
         String senderDisplay = getPlayerDisplayName(sender);
         String receiverDisplay = getPlayerDisplayName(receiver);
-        
+
         return parse(format
                 .replace("{sender}", sender.getName())
                 .replace("{receiver}", receiver.getName())
@@ -223,12 +224,12 @@ public final class ChatFormatter {
     private static String getPlayerDisplayName(Player player) {
         // Получаем экземпляр плагина
         com.loki.lochat.LoChat plugin = com.loki.lochat.LoChat.getInstance();
-        
+
         // Если градиентный модуль включен, используем его
         if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
             return plugin.getGradientModule().getFormattedName(player);
         }
-        
+
         // Иначе просто имя игрока
         return player.getName();
     }

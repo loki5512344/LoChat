@@ -56,7 +56,7 @@ public class ClearChatConfigCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatFormatter.parse("&cУкажите текст сообщения!"));
                     return true;
                 }
-                
+
                 String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                 plugin.getConfigManager().setClearChatMessage(message);
                 sender.sendMessage(ChatFormatter.parse("&aСообщение установлено: &f" + message));
@@ -64,7 +64,7 @@ public class ClearChatConfigCommand implements CommandExecutor, TabCompleter {
             case "status" -> {
                 boolean enabled = plugin.getConfigManager().isClearChatMessageEnabled();
                 String message = plugin.getConfigManager().getClearChatMessage();
-                
+
                 sender.sendMessage(ChatFormatter.parse("&6Статус сообщения очистки чата:"));
                 sender.sendMessage(ChatFormatter.parse("&eВключено: " + (enabled ? "&aДа" : "&cНет")));
                 sender.sendMessage(ChatFormatter.parse("&eСообщение: &f" + message));

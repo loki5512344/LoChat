@@ -1,9 +1,10 @@
 plugins {
     java
+    checkstyle
 }
 
 group = "com.loki"
-version = "1.5.5-1.20.1"
+version = "1.5.5-1.21.8"
 
 repositories {
     mavenCentral()
@@ -15,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("org.black_ixx:playerpoints:3.2.7")
     compileOnly("net.luckperms:api:5.4")
@@ -24,7 +25,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.0")
     testImplementation("org.mockito:mockito-core:5.11.0")
-    testImplementation("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
 }
 
@@ -48,7 +49,21 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("LoChat-1.5.5-1.20.1.jar")
+    archiveFileName.set("LoChat-1.5.5-1.21.8.jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = true
+    maxWarnings = 999
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
 }

@@ -31,71 +31,76 @@ public final class LoChat extends JavaPlugin {
     private AutoMessageManager autoMessageManager;
     private CustomCommandManager customCommandManager;
 
+    // Геттеры
+    public static LoChat getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
         getLogger().info("Загрузка LoChat v" + getPluginMeta().getVersion() + " для Paper/Folia " + Bukkit.getMinecraftVersion() + "...");
-        
+
         // Конфиги
         configManager = new ConfigManager(this);
         messageConfig = new MessageConfig(this);
-        
+
         // Service Registry (SOLID DI) - с зависимостями
-        serviceRegistry = new ServiceRegistry(this, configManager, messageConfig);
+        serviceRegistry = ServiceRegistry.createWithDeps(this, configManager, messageConfig);
         getLogger().info("ServiceRegistry инициализирован (SOLID DI)");
-        
+
         // Менеджеры
-        customCommandManager = new CustomCommandManager(this);
+        customCommandManager = CustomCommandManager.create(this);
         autoMessageManager = new AutoMessageManager(this);
-        
+
         // Интеграции
         initIntegrations();
-        
+
         // Команды и слушатели
         registerCommands();
         registerListeners();
-        
+
         // Автосообщения
         autoMessageManager.start();
-        
+
         getLogger().info("LoChat успешно запущен!");
     }
 
     @Override
     public void onDisable() {
         if (autoMessageManager != null) autoMessageManager.stop();
-        
+
         // Сохранение данных через сервисы
         IgnoreService ignoreService = serviceRegistry.get(IgnoreService.class);
         if (ignoreService != null) ignoreService.save();
-        
+
         MuteService muteService = serviceRegistry.get(MuteService.class);
         if (muteService != null) muteService.save();
-        
+
         NickService nickService = serviceRegistry.get(NickService.class);
         if (nickService != null) nickService.save();
-        
+
         if (gradientModule != null) gradientModule.shutdown();
         getLogger().info("LoChat отключен!");
     }
-    
+
     private void initIntegrations() {
         // Gradient модуль
         gradientModule = new GradientModule(this);
         if (gradientModule.init()) {
             getLogger().info("Gradient модуль (LoPreff) загружен!");
         }
-        
+
         // LibertyBans
         new LibertyBansHook(this);
-        
+
         // PlaceholderAPI
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PlaceholderAPIHook(this).register();
             getLogger().info("PlaceholderAPI подключен!");
         }
     }
-    
+
     private void registerCommands() {
         getCommand("g").setExecutor(new GlobalChatCommand(this));
         getCommand("l").setExecutor(new LocalChatCommand(this));
@@ -106,44 +111,44 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
-        
+
         NickCommand nickCmd = new NickCommand(this);
         getCommand("nick").setExecutor(nickCmd);
         getCommand("nick").setTabCompleter(nickCmd);
-        
+
         LoChatCommand loChatCmd = new LoChatCommand(this);
         getCommand("lochat").setExecutor(loChatCmd);
         getCommand("lochat").setTabCompleter(loChatCmd);
-        
+
         MuteCommand muteCmd = new MuteCommand(this);
         getCommand("lmute").setExecutor(muteCmd);
         getCommand("lmute").setTabCompleter(muteCmd);
-        
+
         UnmuteCommand unmuteCmd = new UnmuteCommand(this);
         getCommand("lunmute").setExecutor(unmuteCmd);
         getCommand("lunmute").setTabCompleter(unmuteCmd);
-        
+
         getCommand("lmutelist").setExecutor(new MuteListCommand(this));
-        
+
         MuteHistoryCommand historyCmd = new MuteHistoryCommand(this);
         getCommand("lmutehistory").setExecutor(historyCmd);
         getCommand("lmutehistory").setTabCompleter(historyCmd);
-        
+
         MuteBlameCommand blameCmd = new MuteBlameCommand(this);
         getCommand("lmuteblame").setExecutor(blameCmd);
         getCommand("lmuteblame").setTabCompleter(blameCmd);
-        
+
         ClearChatConfigCommand clearCfgCmd = new ClearChatConfigCommand(this);
         getCommand("clearchatconfig").setExecutor(clearCfgCmd);
         getCommand("clearchatconfig").setTabCompleter(clearCfgCmd);
     }
-    
+
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatEventListener(this, serviceRegistry), this);
         getServer().getPluginManager().registerEvents(new PlayerEventListener(serviceRegistry), this);
         getLogger().info("Слушатели зарегистрированы (новая архитектура)");
     }
-    
+
     public void reload() {
         configManager.reload();
         messageConfig.reload();
@@ -152,11 +157,23 @@ public final class LoChat extends JavaPlugin {
         if (customCommandManager != null) customCommandManager.reload();
     }
 
-    // Геттеры
-    public static LoChat getInstance() { return instance; }
-    public ServiceRegistry getServiceRegistry() { return serviceRegistry; }
-    public ConfigManager getConfigManager() { return configManager; }
-    public MessageConfig getMessageConfig() { return messageConfig; }
-    public GradientModule getGradientModule() { return gradientModule; }
-    public CustomCommandManager getCustomCommandManager() { return customCommandManager; }
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public MessageConfig getMessageConfig() {
+        return messageConfig;
+    }
+
+    public GradientModule getGradientModule() {
+        return gradientModule;
+    }
+
+    public CustomCommandManager getCustomCommandManager() {
+        return customCommandManager;
+    }
 }

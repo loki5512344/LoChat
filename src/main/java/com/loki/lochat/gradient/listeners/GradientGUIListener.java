@@ -19,12 +19,11 @@ import java.util.Map;
  */
 public class GradientGUIListener implements Listener {
 
-    private final GradientModule module;
-    
     private static final Map<GradientConfirmGUI.ConfirmType, String> PRICE_MSG_KEYS = Map.of(
             GradientConfirmGUI.ConfirmType.COLOR, "not-enough-points-color",
             GradientConfirmGUI.ConfirmType.PREFIX, "not-enough-points-prefix"
     );
+    private final GradientModule module;
 
     public GradientGUIListener(GradientModule module) {
         this.module = module;
@@ -33,9 +32,9 @@ public class GradientGUIListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof GradientConfirmGUI gui)) return;
-        
+
         event.setCancelled(true);
-        
+
         if (!(event.getWhoClicked() instanceof Player player) || !player.equals(gui.getPlayer())) return;
 
         switch (event.getRawSlot()) {
@@ -46,10 +45,10 @@ public class GradientGUIListener implements Listener {
 
     private void handleConfirm(Player player, GradientConfirmGUI gui) {
         player.closeInventory();
-        
+
         GradientMessages msg = module.getMessages();
         int price = gui.getPrice();
-        
+
         if (price > 0 && !player.hasPermission("gradient.bypass.cost")) {
             if (!module.hasPlayerPoints()) {
                 player.sendMessage("§cPlayerPoints не установлен!");
@@ -85,14 +84,14 @@ public class GradientGUIListener implements Listener {
                 if (module.getLuckPermsHook() != null) {
                     module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
                 }
-                msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free", 
+                msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free",
                         "price", String.valueOf(price));
             }
         }
 
-        FoliaUtil.runEntityTask(module.getPlugin(), player, 
+        FoliaUtil.runEntityTask(module.getPlugin(), player,
                 () -> DisplayNameUtil.updateDisplayName(module, player, data));
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(player.getUniqueId()));
     }
 

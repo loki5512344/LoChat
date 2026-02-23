@@ -11,7 +11,8 @@ public final class GradientUtil {
 
     private static final Pattern HEX_PATTERN = Pattern.compile("^#[0-9A-Fa-f]{6}$");
 
-    private GradientUtil() {}
+    private GradientUtil() {
+    }
 
     public static boolean isValidHex(String color) {
         return HEX_PATTERN.matcher(color).matches();
@@ -50,7 +51,7 @@ public final class GradientUtil {
                 // Вычисляем позицию символа от 0.0 до 1.0
                 double ratio = length > 1 ? (double) i / (length - 1) : 0.0;
                 Color interpolated = interpolateMultiColor(colors, ratio);
-                String hex = String.format("#%02x%02x%02x", 
+                String hex = String.format("#%02x%02x%02x",
                         interpolated.getRed(), interpolated.getGreen(), interpolated.getBlue());
                 result.append(formatHex(hex, useLegacyFormat)).append(chars[i]);
             }
@@ -142,7 +143,7 @@ public final class GradientUtil {
             for (int i = 0; i < length; i++) {
                 double ratio = length > 1 ? (double) i / (length - 1) : 0.0;
                 Color interpolated = interpolateMultiColor(colors, ratio);
-                String hex = String.format("#%02x%02x%02x", 
+                String hex = String.format("#%02x%02x%02x",
                         interpolated.getRed(), interpolated.getGreen(), interpolated.getBlue());
                 result.append(formatHexForTab(hex)).append(chars[i]);
             }
@@ -151,8 +152,8 @@ public final class GradientUtil {
         return result.toString();
     }
 
-    public static String buildDisplayName(String prefix, String nick, List<String> colors, 
-                                          boolean gradientOnPrefix, boolean continuousGradient, 
+    public static String buildDisplayName(String prefix, String nick, List<String> colors,
+                                          boolean gradientOnPrefix, boolean continuousGradient,
                                           String prefixFormat, boolean useLegacyFormat) {
         if (colors == null || colors.isEmpty()) {
             if (prefix != null && !prefix.isEmpty()) {

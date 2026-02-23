@@ -15,12 +15,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerEventListener implements Listener {
     private final PlayerDataService playerDataService;
     private final NickService nickService;
-    
+
     public PlayerEventListener(ServiceRegistry registry) {
         this.playerDataService = registry.get(PlayerDataService.class);
         this.nickService = registry.get(NickService.class);
     }
-    
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -29,7 +29,7 @@ public class PlayerEventListener implements Listener {
             nickService.updatePlayerDisplay(player);
         }
     }
-    
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();

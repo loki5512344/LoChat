@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 public interface MessageFilter {
     /**
      * Применить фильтр к сообщению
+     *
      * @return true если сообщение прошло фильтр, false если заблокировано
      */
     boolean apply(Player player, ChatMessage message);

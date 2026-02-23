@@ -26,10 +26,10 @@ import java.util.List;
  */
 public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
-    private final GradientModule module;
     private static final List<String> PRESET_COLORS = Arrays.asList(
             "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"
     );
+    private final GradientModule module;
 
     public GradientAdminCommand(GradientModule module) {
         this.module = module;
@@ -153,11 +153,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aЦвет для игрока §f" + args[1] + " §aустановлен: §f" + String.join(" ", colors));
@@ -194,11 +194,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aПрефикс для игрока §f" + args[1] + " §aустановлен: §f" + prefix);
@@ -209,7 +209,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cИспользование: /aprefix " + (enable ? "coloron" : "coloroff") + " <игрок>");
             return;
         }
-        
+
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
             msg.send(sender, "player-not-found");
@@ -221,11 +221,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aЦвет для игрока §f" + args[1] + (enable ? " §aвключён" : " §cвыключен"));
@@ -236,7 +236,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cИспользование: /aprefix " + (enable ? "prefixon" : "prefixoff") + " <игрок>");
             return;
         }
-        
+
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
             msg.send(sender, "player-not-found");
@@ -256,11 +256,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aПрефикс для игрока §f" + args[1] + (enable ? " §aвключён" : " §cвыключен"));
@@ -271,7 +271,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cИспользование: /aprefix resetcolor <игрок>");
             return;
         }
-        
+
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
             msg.send(sender, "player-not-found");
@@ -284,11 +284,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aЦвет для игрока §f" + args[1] + " §aсброшен");
@@ -299,7 +299,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cИспользование: /aprefix resetprefix <игрок>");
             return;
         }
-        
+
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         if (!target.hasPlayedBefore() && !target.isOnline()) {
             msg.send(sender, "player-not-found");
@@ -316,11 +316,11 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
         Player onlineTarget = target.getPlayer();
         if (onlineTarget != null) {
-            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget, 
+            FoliaUtil.runEntityTask(module.getPlugin(), onlineTarget,
                     () -> DisplayNameUtil.updateDisplayName(module, onlineTarget, data));
         }
 
-        FoliaUtil.runAsync(module.getPlugin(), 
+        FoliaUtil.runAsync(module.getPlugin(),
                 () -> module.getDataManager().savePlayerData(target.getUniqueId()));
 
         sender.sendMessage("§aПрефикс для игрока §f" + args[1] + " §aсброшен");
@@ -330,7 +330,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         int count = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
             GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
-            FoliaUtil.runEntityTask(module.getPlugin(), player, 
+            FoliaUtil.runEntityTask(module.getPlugin(), player,
                     () -> DisplayNameUtil.updateDisplayName(module, player, data));
             count++;
         }
@@ -340,19 +340,19 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                                 @NotNull String alias, @NotNull String[] args) {
+                                                @NotNull String alias, @NotNull String[] args) {
         if (!sender.hasPermission("gradient.admin")) return new ArrayList<>();
 
         if (args.length == 1) {
-            return Arrays.asList("reload", "info", "setcolor", "setprefix", "coloron", "coloroff", 
-                    "prefixon", "prefixoff", "resetcolor", "resetprefix", "updateall").stream()
+            return Arrays.asList("reload", "info", "setcolor", "setprefix", "coloron", "coloroff",
+                            "prefixon", "prefixoff", "resetcolor", "resetprefix", "updateall").stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .toList();
         }
 
         if (args.length == 2) {
             String sub = args[0].toLowerCase();
-            if (Arrays.asList("info", "setcolor", "setprefix", "coloron", "coloroff", 
+            if (Arrays.asList("info", "setcolor", "setprefix", "coloron", "coloroff",
                     "prefixon", "prefixoff", "resetcolor", "resetprefix").contains(sub)) {
                 return Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName)

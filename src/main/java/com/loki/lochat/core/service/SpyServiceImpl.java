@@ -60,10 +60,10 @@ public class SpyServiceImpl implements SpyService {
     @Override
     public void sendToSpies(Player sender, Component message, boolean isGlobal) {
         if (spyEnabled.isEmpty()) return;
-        
+
         String chatType = isGlobal ? "Global" : "Local";
         String plainMessage = PlainTextComponentSerializer.plainText().serialize(message);
-        String format = messageConfig.get("spy.chat-format", 
+        String format = messageConfig.get("spy.chat-format",
                 "§7[SPY] §e{type} §7{sender}: §f{message}");
 
         for (UUID spyUuid : spyEnabled) {

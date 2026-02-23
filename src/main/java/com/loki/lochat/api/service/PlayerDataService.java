@@ -7,5 +7,6 @@ import java.util.UUID;
  */
 public interface PlayerDataService {
     void clearPlayerData(UUID player);
+
     void saveAll();
 }

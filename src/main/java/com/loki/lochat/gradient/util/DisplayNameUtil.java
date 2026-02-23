@@ -21,13 +21,14 @@ public final class DisplayNameUtil {
             .hexColors()
             .build();
 
-    private DisplayNameUtil() {}
+    private DisplayNameUtil() {
+    }
 
     public static void updateDisplayName(GradientModule module, Player player, GradientPlayerData data) {
         GradientConfig cfg = module.getConfig();
         String prefix = null;
         String prefixFormat = cfg.getPrefixFormat();
-        
+
         // Определяем префикс: сначала кастомный, потом LuckPerms
         if (data.isPrefixEnabled() && data.hasPrefix()) {
             // Есть кастомный префикс
@@ -37,9 +38,9 @@ public final class DisplayNameUtil {
             String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 String displayName = buildWithLuckPermsPrefix(
-                        lpPrefix, 
-                        player.getName(), 
-                        data.isColorEnabled() ? data.getColors() : null, 
+                        lpPrefix,
+                        player.getName(),
+                        data.isColorEnabled() ? data.getColors() : null,
                         cfg.isUseLegacyRgbFormat(),
                         cfg.isContinuousGradient()
                 );
@@ -51,7 +52,7 @@ public final class DisplayNameUtil {
                 return;
             }
         }
-        
+
         // Строим display name с кастомным префиксом или без префикса
         String displayName = GradientUtil.buildDisplayName(
                 prefix,
@@ -62,7 +63,7 @@ public final class DisplayNameUtil {
                 prefixFormat,
                 cfg.isUseLegacyRgbFormat()
         );
-        
+
         // Для display name нужен §x формат, конвертируем MiniMessage в legacy
         displayName = convertMiniMessageToLegacy(displayName);
         var component = SERIALIZER.deserialize(displayName);
@@ -75,12 +76,12 @@ public final class DisplayNameUtil {
      */
     private static String convertMiniMessageToLegacy(String text) {
         if (text == null) return "";
-        
+
         // Конвертируем <#RRGGBB> в §x§R§R§G§G§B§B
         Pattern pattern = Pattern.compile("<#([0-9a-fA-F]{6})>");
         Matcher matcher = pattern.matcher(text);
         StringBuffer sb = new StringBuffer();
-        
+
         while (matcher.find()) {
             String hex = matcher.group(1).toLowerCase();
             StringBuilder replacement = new StringBuilder("§x");
@@ -90,18 +91,18 @@ public final class DisplayNameUtil {
             matcher.appendReplacement(sb, replacement.toString());
         }
         matcher.appendTail(sb);
-        
+
         return sb.toString();
     }
 
-    private static String buildWithLuckPermsPrefix(String lpPrefix, String nick, 
-                                                    List<String> colors, 
-                                                    boolean useLegacyFormat,
-                                                    boolean continuousGradient) {
+    private static String buildWithLuckPermsPrefix(String lpPrefix, String nick,
+                                                   List<String> colors,
+                                                   boolean useLegacyFormat,
+                                                   boolean continuousGradient) {
         if (colors == null || colors.isEmpty()) {
             return lpPrefix + nick;
         }
-        
+
         if (continuousGradient) {
             String cleanPrefix = stripColors(lpPrefix);
             String fullText = cleanPrefix + nick;
@@ -118,15 +119,15 @@ public final class DisplayNameUtil {
 
     public static String buildColoredPrefix(GradientModule module, GradientPlayerData data) {
         if (!data.hasPrefix() || !data.isPrefixEnabled()) return null;
-        
+
         GradientConfig cfg = module.getConfig();
         String prefix = cfg.getPrefixFormat().replace("{prefix}", data.getPrefix()).stripTrailing();
-        
+
         // Применяем градиент только если цвета включены И есть цвета
         if (data.hasColors() && data.isColorEnabled() && cfg.isGradientOnPrefix()) {
             return GradientUtil.applyGradient(prefix, data.getColors(), cfg.isUseLegacyRgbFormat());
         }
-        
+
         // Возвращаем префикс без цветов
         return prefix;
     }
@@ -137,12 +138,12 @@ public final class DisplayNameUtil {
     public static String getFullDisplayName(GradientModule module, Player player) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         GradientConfig cfg = module.getConfig();
-        
+
         String prefix = null;
         if (data.isPrefixEnabled() && data.hasPrefix()) {
             prefix = data.getPrefix();
         }
-        
+
         return GradientUtil.buildDisplayName(
                 prefix,
                 player.getName(),

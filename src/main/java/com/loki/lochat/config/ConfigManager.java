@@ -15,7 +15,7 @@ public class ConfigManager {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         this.config = plugin.getConfig();
-        
+
         // Проверяем версию конфига и обновляем при необходимости
         updateConfig();
     }
@@ -23,17 +23,17 @@ public class ConfigManager {
     private void updateConfig() {
         int currentVersion = config.getInt("config-version", 1);
         int requiredVersion = 2; // Текущая версия конфига
-        
+
         if (currentVersion < requiredVersion) {
             plugin.getLogger().info("Обновление конфига с версии " + currentVersion + " до " + requiredVersion);
-            
+
             // Добавляем новые настройки если их нет
             addMissingConfigOptions();
-            
+
             // Обновляем версию
             config.set("config-version", requiredVersion);
             plugin.saveConfig();
-            
+
             plugin.getLogger().info("Конфиг успешно обновлен!");
         }
     }
@@ -46,12 +46,12 @@ public class ConfigManager {
             config.set("announcements.show-actionbar", true);
             config.set("announcements.title-duration", 3);
         }
-        
+
         // Можно добавить другие недостающие настройки
         if (!config.contains("chat.pm.enabled")) {
             config.set("chat.pm.enabled", true);
         }
-        
+
         if (!config.contains("mentions.enabled")) {
             config.set("mentions.enabled", true);
             config.set("mentions.sound", true);
@@ -59,18 +59,18 @@ public class ConfigManager {
             config.set("mentions.highlight", "&#FFFF00@{player}");
             config.set("mentions.self-highlight", "&#FFD700{player}");
         }
-        
+
         if (!config.contains("automessages.enabled")) {
             config.set("automessages.enabled", true);
             config.set("automessages.interval", 300);
             config.set("automessages.random", false);
         }
-        
+
         if (!config.contains("clearchat.message.enabled")) {
             config.set("clearchat.message.enabled", true);
             config.set("clearchat.message.text", "&#04CADFЧат очищен администратором {player}");
         }
-        
+
         if (!config.contains("lopreff.enabled")) {
             config.set("lopreff.enabled", true);
             config.set("lopreff.use-gradient-name", true);
@@ -197,21 +197,21 @@ public class ConfigManager {
     public String getSelfMentionHighlight() {
         return ChatFormatter.convertAllColors(config.getString("mentions.self-highlight", "&#FFD700{player}"));
     }
-    
+
     // Clear chat
     public boolean isClearChatMessageEnabled() {
         return config.getBoolean("clearchat.message.enabled", true);
     }
-    
+
     public void setClearChatMessageEnabled(boolean enabled) {
         config.set("clearchat.message.enabled", enabled);
         plugin.saveConfig();
     }
-    
+
     public String getClearChatMessage() {
         return config.getString("clearchat.message.text", "&#04CADFЧат очищен администратором {player}");
     }
-    
+
     public void setClearChatMessage(String message) {
         config.set("clearchat.message.text", message);
         plugin.saveConfig();

@@ -9,17 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomCommand extends Command {
+public final class CustomCommand extends Command {
 
     private final CustomCommandManager manager;
 
     public CustomCommand(String name, CustomCommandManager manager) {
         super(name);
         this.manager = manager;
-        init(name);
-    }
-    
-    private void init(String name) {
         this.setDescription("Кастомная команда LoChat");
         this.setUsage("/" + name);
     }

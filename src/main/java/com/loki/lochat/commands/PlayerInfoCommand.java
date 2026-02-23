@@ -41,7 +41,7 @@ public class PlayerInfoCommand implements CommandExecutor {
         sender.sendMessage(ChatFormatter.parse("§eУровень: §f" + target.getLevel()));
         sender.sendMessage(ChatFormatter.parse("§eЗдоровье: §f" + Math.round(target.getHealth()) + "/20"));
         sender.sendMessage(ChatFormatter.parse("§eМир: §f" + target.getWorld().getName()));
-        
+
         // Если есть градиентный модуль, показываем градиентное имя
         if (plugin.getGradientModule() != null) {
             String gradientName = plugin.getGradientModule().getFormattedName(target);

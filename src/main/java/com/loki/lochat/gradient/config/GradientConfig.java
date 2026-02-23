@@ -33,7 +33,7 @@ public class GradientConfig {
             plugin.saveResource("gradient-config.yml", false);
         }
         config = YamlConfiguration.loadConfiguration(configFile);
-        
+
         // Загружаем дефолты
         InputStream defStream = plugin.getResource("gradient-config.yml");
         if (defStream != null) {
@@ -56,23 +56,70 @@ public class GradientConfig {
         }
     }
 
-    public boolean isEnabled() { return config.getBoolean("enabled", true); }
-    public int getMaxColors() { return config.getInt("max-colors", 7); }
-    public int getMinColors() { return config.getInt("min-colors", 1); }
-    public int getPricePerColor() { return config.getInt("price-per-color", 50); }
-    public int getPrefixPrice() { return config.getInt("prefix-price", 500); }
-    public boolean isPrefixOneTimePurchase() { return config.getBoolean("prefix-one-time-purchase", true); }
-    public int getColorCooldown() { return config.getInt("color-cooldown", 60); }
-    public int getPrefixCooldown() { return config.getInt("prefix-cooldown", 300); }
-    public int getMaxPrefixLength() { return config.getInt("max-prefix-length", 7); }
-    public String getPrefixFormat() { return config.getString("prefix-format", "[{prefix}] "); }
-    public boolean isGradientOnPrefix() { return config.getBoolean("gradient-on-prefix", true); }
-    public boolean isGradientOnLuckPermsPrefix() { return config.getBoolean("gradient-on-luckperms-prefix", true); }
-    public boolean isContinuousGradient() { return config.getBoolean("continuous-gradient", true); }
-    public boolean isUseLegacyRgbFormat() { return config.getBoolean("use-legacy-rgb-format", true); }
-    public String getStorageType() { return config.getString("storage-type", "YAML"); }
-    public String getSqliteFile() { return config.getString("sqlite-file", "gradient-data.db"); }
-    
+    public boolean isEnabled() {
+        return config.getBoolean("enabled", true);
+    }
+
+    public int getMaxColors() {
+        return config.getInt("max-colors", 7);
+    }
+
+    public int getMinColors() {
+        return config.getInt("min-colors", 1);
+    }
+
+    public int getPricePerColor() {
+        return config.getInt("price-per-color", 50);
+    }
+
+    public int getPrefixPrice() {
+        return config.getInt("prefix-price", 500);
+    }
+
+    public boolean isPrefixOneTimePurchase() {
+        return config.getBoolean("prefix-one-time-purchase", true);
+    }
+
+    public int getColorCooldown() {
+        return config.getInt("color-cooldown", 60);
+    }
+
+    public int getPrefixCooldown() {
+        return config.getInt("prefix-cooldown", 300);
+    }
+
+    public int getMaxPrefixLength() {
+        return config.getInt("max-prefix-length", 7);
+    }
+
+    public String getPrefixFormat() {
+        return config.getString("prefix-format", "[{prefix}] ");
+    }
+
+    public boolean isGradientOnPrefix() {
+        return config.getBoolean("gradient-on-prefix", true);
+    }
+
+    public boolean isGradientOnLuckPermsPrefix() {
+        return config.getBoolean("gradient-on-luckperms-prefix", true);
+    }
+
+    public boolean isContinuousGradient() {
+        return config.getBoolean("continuous-gradient", true);
+    }
+
+    public boolean isUseLegacyRgbFormat() {
+        return config.getBoolean("use-legacy-rgb-format", true);
+    }
+
+    public String getStorageType() {
+        return config.getString("storage-type", "YAML");
+    }
+
+    public String getSqliteFile() {
+        return config.getString("sqlite-file", "gradient-data.db");
+    }
+
     public List<String> getPrefixBlacklist() {
         return config.getStringList("prefix-blacklist");
     }
@@ -83,17 +130,17 @@ public class GradientConfig {
                 .anyMatch(blacklisted -> lowerPrefix.contains(blacklisted.toLowerCase()));
     }
 
-    public boolean isUpdateDisplayName() { 
+    public boolean isUpdateDisplayName() {
         if (mainConfig.contains("display.update-display-name")) {
             return mainConfig.getBoolean("display.update-display-name", true);
         }
-        return config.getBoolean("display.update-display-name", true); 
+        return config.getBoolean("display.update-display-name", true);
     }
-    
-    public boolean isUpdateTabList() { 
+
+    public boolean isUpdateTabList() {
         if (mainConfig.contains("display.update-tab-list")) {
             return mainConfig.getBoolean("display.update-tab-list", true);
         }
-        return config.getBoolean("display.update-tab-list", true); 
+        return config.getBoolean("display.update-tab-list", true);
     }
 }
