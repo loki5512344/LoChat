@@ -2,7 +2,7 @@ name: LoChat
 version: '1.5.5-1.20.1'
 main: com.loki.lochat.LoChat
 api-version: '1.20'
-folia-supported: false
+folia-supported: true
 author: loki
 description: Advanced chat plugin for Paper 1.20.1 with gradient nicks
 
