@@ -329,15 +329,13 @@ announcements:
       - "&r"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | CUSTOM COMMANDS                          |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# All custom commands are now in commands.yml
+# You can create custom commands with actions there
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | MESSAGES                                 |
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-
-messages:
-  prefix: "&#00D4FF[&#00D4FFL&#00CAF7o&#00C0EEH&#00B7E6u&#00ADDDb&#0099CC]"
-  spawn-set: "&#6BCB77Spawn set successfully!"
-  spawn-teleport: "&#6BCB77Teleporting to spawn..."
-  no-spawn: "&#FF6B6BSpawn not set! Use /sethub"
-  no-permission: "&#FF6B6BYou don't have permission!"
-  players-only: "&#FF6B6BThis command is only for players!"
-  config-reloaded: "&#6BCB77Configuration reloaded!"
-  usage: "&#FFD700Usage: /lohub reload"
+# All messages are now in messages.yml
+# You can customize the plugin prefix and all messages there

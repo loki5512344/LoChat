@@ -27,6 +27,12 @@ commands:
     description: LoHub admin command
     usage: /lohub [reload]
     permission: lohub.admin
+  
+  chatlock:
+    description: Lock/unlock chat
+    usage: /chatlock
+    permission: lohub.chatlock
+    aliases: [ lockchat, чатлок ]
 
 permissions:
   lohub.hub:
@@ -37,4 +43,10 @@ permissions:
     default: op
   lohub.bypass.protection:
     description: Bypass world protection
+    default: op
+  lohub.chatlock:
+    description: Can lock/unlock chat
+    default: op
+  lohub.chatlock.bypass:
+    description: Can bypass chat lock
     default: op

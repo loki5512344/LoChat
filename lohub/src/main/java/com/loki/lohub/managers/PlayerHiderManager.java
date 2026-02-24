@@ -14,6 +14,10 @@ import java.util.UUID;
 
 public class PlayerHiderManager {
 
+    private static final String CONFIG_PATH = "player_hider";
+    private static final String HIDDEN_PATH = CONFIG_PATH + ".hidden";
+    private static final String NOT_HIDDEN_PATH = CONFIG_PATH + ".not_hidden";
+
     private final LoHub plugin;
     private final Set<UUID> hiddenPlayers = new HashSet<>();
 
@@ -22,23 +26,18 @@ public class PlayerHiderManager {
     }
 
     public void giveItem(Player player) {
-        if (!plugin.getConfig().getBoolean("player_hider.enabled", true)) {
+        if (!isEnabled()) {
             return;
         }
 
-        int slot = plugin.getConfig().getInt("player_hider.slot", 8);
-        player.getInventory().setItem(slot, getItem(player));
+        player.getInventory().setItem(getSlot(), getItem(player));
     }
 
     public ItemStack getItem(Player player) {
-        boolean hidden = hiddenPlayers.contains(player.getUniqueId());
-        String path = hidden ? "player_hider.hidden" : "player_hider.not_hidden";
+        boolean hidden = isHidden(player);
+        String path = hidden ? HIDDEN_PATH : NOT_HIDDEN_PATH;
 
-        Material material = Material.getMaterial(plugin.getConfig().getString(path + ".material", "LIME_DYE"));
-        if (material == null) {
-            material = Material.LIME_DYE;
-        }
-
+        Material material = getMaterial(path);
         int amount = plugin.getConfig().getInt(path + ".amount", 1);
         String displayName = plugin.getConfig().getString(path + ".display_name", "");
         List<String> lore = plugin.getConfig().getStringList(path + ".lore");
@@ -51,7 +50,7 @@ public class PlayerHiderManager {
     }
 
     public void toggle(Player player) {
-        if (hiddenPlayers.contains(player.getUniqueId())) {
+        if (isHidden(player)) {
             showPlayers(player);
         } else {
             hidePlayers(player);
@@ -62,33 +61,53 @@ public class PlayerHiderManager {
 
     private void hidePlayers(Player player) {
         hiddenPlayers.add(player.getUniqueId());
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            if (!online.equals(player)) {
-                player.hidePlayer(plugin, online);
-            }
-        }
+        applyVisibility(player, false);
     }
 
     private void showPlayers(Player player) {
         hiddenPlayers.remove(player.getUniqueId());
+        applyVisibility(player, true);
+    }
+
+    private void applyVisibility(Player player, boolean visible) {
         for (Player online : Bukkit.getOnlinePlayers()) {
             if (!online.equals(player)) {
-                player.showPlayer(plugin, online);
+                if (visible) {
+                    player.showPlayer(plugin, online);
+                } else {
+                    player.hidePlayer(plugin, online);
+                }
             }
         }
     }
 
     private void updateItem(Player player) {
-        int slot = plugin.getConfig().getInt("player_hider.slot", 8);
-        player.getInventory().setItem(slot, getItem(player));
+        player.getInventory().setItem(getSlot(), getItem(player));
     }
 
     public boolean isPlayerHiderSlot(int slot) {
-        return plugin.getConfig().getBoolean("player_hider.enabled", true)
-                && slot == plugin.getConfig().getInt("player_hider.slot", 8);
+        return isEnabled() && slot == getSlot();
     }
 
     public void removePlayer(Player player) {
         hiddenPlayers.remove(player.getUniqueId());
+    }
+
+    private boolean isEnabled() {
+        return plugin.getConfig().getBoolean(CONFIG_PATH + ".enabled", true);
+    }
+
+    private int getSlot() {
+        return plugin.getConfig().getInt(CONFIG_PATH + ".slot", 8);
+    }
+
+    private boolean isHidden(Player player) {
+        return hiddenPlayers.contains(player.getUniqueId());
+    }
+
+    private Material getMaterial(String path) {
+        String materialName = plugin.getConfig().getString(path + ".material", "LIME_DYE");
+        Material material = Material.getMaterial(materialName);
+        return material != null ? material : Material.LIME_DYE;
     }
 }

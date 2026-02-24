@@ -1,8 +1,8 @@
 package com.loki.lohub.managers;
 
 import com.loki.lohub.LoHub;
-import com.loki.lohub.utils.PlaceholderUtil;
-import com.loki.lohub.utils.TextUtil;
+import com.loki.lohub.common.ConfigHelper;
+import com.loki.lohub.common.TextFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnnouncementManager {
+
+    private static final String CONFIG_PATH = "announcements";
 
     private final LoHub plugin;
     private final List<Announcement> announcements = new ArrayList<>();
@@ -26,21 +28,21 @@ public class AnnouncementManager {
 
     private void loadAnnouncements() {
         announcements.clear();
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("announcements.announcements");
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection(CONFIG_PATH + ".announcements");
         if (section == null) {
             return;
         }
 
-        for (String key : section.getKeys(false)) {
+        section.getKeys(false).forEach(key -> {
             List<String> messages = section.getStringList(key);
             if (!messages.isEmpty()) {
                 announcements.add(new Announcement(key, messages));
             }
-        }
+        });
     }
 
     public void start() {
-        if (!plugin.getConfig().getBoolean("announcements.enabled", false)) {
+        if (!ConfigHelper.isEnabled(plugin.getConfig(), CONFIG_PATH)) {
             return;
         }
 
@@ -48,7 +50,7 @@ public class AnnouncementManager {
             return;
         }
 
-        int delay = plugin.getConfig().getInt("announcements.delay", 60) * 20;
+        int delay = plugin.getConfig().getInt(CONFIG_PATH + ".delay", 60) * 20;
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::broadcast, delay, delay);
     }
 
@@ -60,8 +62,7 @@ public class AnnouncementManager {
     }
 
     private void broadcast() {
-        int requiredPlayers = plugin.getConfig().getInt("announcements.required_players", 1);
-        if (Bukkit.getOnlinePlayers().size() < requiredPlayers) {
+        if (!hasEnoughPlayers()) {
             return;
         }
 
@@ -69,25 +70,40 @@ public class AnnouncementManager {
             return;
         }
 
+        Announcement announcement = getNextAnnouncement();
+        Bukkit.getOnlinePlayers().forEach(player -> sendAnnouncement(player, announcement));
+    }
+
+    private boolean hasEnoughPlayers() {
+        int required = plugin.getConfig().getInt(CONFIG_PATH + ".required_players", 1);
+        return Bukkit.getOnlinePlayers().size() >= required;
+    }
+
+    private Announcement getNextAnnouncement() {
         Announcement announcement = announcements.get(currentIndex);
         currentIndex = (currentIndex + 1) % announcements.size();
+        return announcement;
+    }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            for (String message : announcement.messages()) {
-                String formatted = PlaceholderUtil.parse(message, player);
-                player.sendMessage(Component.text(TextUtil.colorize(formatted)));
-            }
+    private void sendAnnouncement(Player player, Announcement announcement) {
+        announcement.messages().forEach(message -> {
+            String formatted = TextFormatter.format(message, player);
+            player.sendMessage(Component.text(formatted));
+        });
 
-            if (plugin.getConfig().getBoolean("announcements.sound.enabled", true)) {
-                playSound(player);
-            }
+        if (shouldPlaySound()) {
+            playSound(player);
         }
     }
 
+    private boolean shouldPlaySound() {
+        return plugin.getConfig().getBoolean(CONFIG_PATH + ".sound.enabled", true);
+    }
+
     private void playSound(Player player) {
-        String soundStr = plugin.getConfig().getString("announcements.sound.value", "BLOCK_NOTE_BLOCK_PLING");
-        float volume = (float) plugin.getConfig().getDouble("announcements.sound.volume", 1.0);
-        float pitch = (float) plugin.getConfig().getDouble("announcements.sound.pitch", 1.0);
+        String soundStr = plugin.getConfig().getString(CONFIG_PATH + ".sound.value", "BLOCK_NOTE_BLOCK_PLING");
+        float volume = (float) plugin.getConfig().getDouble(CONFIG_PATH + ".sound.volume", 1.0);
+        float pitch = (float) plugin.getConfig().getDouble(CONFIG_PATH + ".sound.pitch", 1.0);
 
         try {
             Sound sound = Sound.valueOf(soundStr);

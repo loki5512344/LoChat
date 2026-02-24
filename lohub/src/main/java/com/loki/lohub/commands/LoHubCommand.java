@@ -17,13 +17,13 @@ public class LoHubCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("lohub.admin")) {
-            sender.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.no-permission")));
+            sender.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("general.no-permission")));
             return true;
         }
 
         if (args.length == 0) {
             sender.sendMessage(TextUtil.colorize("&7LoHub v" + plugin.getDescription().getVersion()));
-            sender.sendMessage(TextUtil.colorize("&7Use: &e/lohub reload"));
+            sender.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("commands.usage-lohub")));
             return true;
         }
 
@@ -35,7 +35,7 @@ public class LoHubCommand implements CommandExecutor {
             plugin.getTablistManager().stop();
             plugin.getScoreboardManager().start();
             plugin.getTablistManager().start();
-            sender.sendMessage(TextUtil.colorize("&aConfiguration reloaded!"));
+            sender.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("general.config-reloaded")));
             return true;
         }
 

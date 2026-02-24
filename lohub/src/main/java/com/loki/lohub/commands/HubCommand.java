@@ -18,17 +18,17 @@ public class HubCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(TextUtil.colorize("&cThis command is only for players!"));
+            sender.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("general.players-only")));
             return true;
         }
 
         if (plugin.getSpawnManager().getSpawn() == null) {
-            player.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.no-spawn")));
+            player.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("spawn.no-spawn")));
             return true;
         }
 
         plugin.getSpawnManager().teleportToSpawn(player);
-        player.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.spawn-teleport")));
+        player.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("spawn.teleport")));
 
         return true;
     }

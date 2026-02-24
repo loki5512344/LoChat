@@ -1,8 +1,8 @@
 package com.loki.lohub.managers;
 
 import com.loki.lohub.LoHub;
-import com.loki.lohub.utils.PlaceholderUtil;
-import com.loki.lohub.utils.TextUtil;
+import com.loki.lohub.common.ConfigHelper;
+import com.loki.lohub.common.TextFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,6 +18,9 @@ import java.util.UUID;
 
 public class ScoreboardManager {
 
+    private static final String CONFIG_PATH = "scoreboard";
+    private static final String OBJECTIVE_NAME = "lohub";
+
     private final LoHub plugin;
     private final Map<UUID, Scoreboard> scoreboards = new HashMap<>();
     private int taskId = -1;
@@ -27,12 +30,12 @@ public class ScoreboardManager {
     }
 
     public void start() {
-        if (!plugin.getConfig().getBoolean("scoreboard.enabled", false)) {
+        if (!ConfigHelper.isEnabled(plugin.getConfig(), CONFIG_PATH)) {
             return;
         }
 
-        if (plugin.getConfig().getBoolean("scoreboard.refresh.enabled", true)) {
-            int rate = plugin.getConfig().getInt("scoreboard.refresh.rate", 200);
+        if (shouldRefresh()) {
+            int rate = plugin.getConfig().getInt(CONFIG_PATH + ".refresh.rate", 200);
             taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::updateAll, 0L, rate);
         }
     }
@@ -46,12 +49,12 @@ public class ScoreboardManager {
     }
 
     public void setScoreboard(Player player, boolean delayed) {
-        if (!plugin.getConfig().getBoolean("scoreboard.enabled", false)) {
+        if (!ConfigHelper.isEnabled(plugin.getConfig(), CONFIG_PATH)) {
             return;
         }
 
         if (delayed) {
-            int delay = plugin.getConfig().getInt("scoreboard.display_delay.server_enter", 60);
+            int delay = plugin.getConfig().getInt(CONFIG_PATH + ".display_delay.server_enter", 60);
             Bukkit.getScheduler().runTaskLater(plugin, () -> createScoreboard(player), delay);
         } else {
             createScoreboard(player);
@@ -60,7 +63,7 @@ public class ScoreboardManager {
 
     private void createScoreboard(Player player) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("lohub", "dummy", Component.text(""));
+        Objective objective = scoreboard.registerNewObjective(OBJECTIVE_NAME, "dummy", Component.text(""));
 
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         updateScoreboard(player, scoreboard, objective);
@@ -70,43 +73,56 @@ public class ScoreboardManager {
     }
 
     private void updateScoreboard(Player player, Scoreboard scoreboard, Objective objective) {
-        String title = plugin.getConfig().getString("scoreboard.title", "");
-        title = PlaceholderUtil.parse(title, player);
-        objective.displayName(Component.text(TextUtil.colorize(title)));
+        updateTitle(player, objective);
+        updateLines(player, scoreboard, objective);
+    }
 
-        List<String> lines = plugin.getConfig().getStringList("scoreboard.lines");
+    private void updateTitle(Player player, Objective objective) {
+        String title = plugin.getConfig().getString(CONFIG_PATH + ".title", "");
+        objective.displayName(Component.text(TextFormatter.format(title, player)));
+    }
+
+    private void updateLines(Player player, Scoreboard scoreboard, Objective objective) {
+        List<String> lines = plugin.getConfig().getStringList(CONFIG_PATH + ".lines");
         int score = lines.size();
 
         for (String line : lines) {
-            line = PlaceholderUtil.parse(line, player);
-            line = TextUtil.colorize(line);
-
+            String formatted = TextFormatter.format(line, player);
             String teamName = "line_" + score;
-            Team team = scoreboard.getTeam(teamName);
-            if (team == null) {
-                team = scoreboard.registerNewTeam(teamName);
-                team.addEntry(teamName);
-            }
 
-            team.prefix(Component.text(line));
+            Team team = getOrCreateTeam(scoreboard, teamName);
+            team.prefix(Component.text(formatted));
             objective.getScore(teamName).setScore(score);
             score--;
         }
     }
 
+    private Team getOrCreateTeam(Scoreboard scoreboard, String teamName) {
+        Team team = scoreboard.getTeam(teamName);
+        if (team == null) {
+            team = scoreboard.registerNewTeam(teamName);
+            team.addEntry(teamName);
+        }
+        return team;
+    }
+
     private void updateAll() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            Scoreboard scoreboard = scoreboards.get(player.getUniqueId());
-            if (scoreboard != null) {
-                Objective objective = scoreboard.getObjective("lohub");
+        scoreboards.forEach((uuid, scoreboard) -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                Objective objective = scoreboard.getObjective(OBJECTIVE_NAME);
                 if (objective != null) {
                     updateScoreboard(player, scoreboard, objective);
                 }
             }
-        }
+        });
     }
 
     public void removePlayer(Player player) {
         scoreboards.remove(player.getUniqueId());
+    }
+
+    private boolean shouldRefresh() {
+        return plugin.getConfig().getBoolean(CONFIG_PATH + ".refresh.enabled", true);
     }
 }

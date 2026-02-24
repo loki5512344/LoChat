@@ -1,0 +1,84 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                           LoHub Messages Configuration                      ║
+# ║                         All plugin messages in one place                    ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# Plugin prefix (used in all messages with {prefix} placeholder)
+prefix: "&#00D4FF[&#00D4FFL&#00CAF7o&#00C0EEH&#00B7E6u&#00ADDDb&#0099CC] "
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | GENERAL MESSAGES                         |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+general:
+  no-permission: "{prefix}&#FF6B6BYou don't have permission!"
+  players-only: "{prefix}&#FF6B6BThis command is only for players!"
+  config-reloaded: "{prefix}&#6BCB77Configuration reloaded!"
+  invalid-player: "{prefix}&#FF6B6BPlayer %player% not found!"
+  cooldown-active: "{prefix}&#FF6B6BPlease wait %time%s before using this again!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | SPAWN MESSAGES                           |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+spawn:
+  set: "{prefix}&#6BCB77Spawn set successfully!"
+  teleport: "{prefix}&#6BCB77Teleporting to spawn..."
+  no-spawn: "{prefix}&#FF6B6BSpawn not set! Use /sethub"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | CHAT LOCK MESSAGES                       |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+chat:
+  locked: "{prefix}&#FF6B6BChat is currently locked!"
+  lock-enabled: "{prefix}&#6BCB77Chat has been locked!"
+  lock-disabled: "{prefix}&#FF6B6BChat has been unlocked!"
+  lock-broadcast-enabled: "{prefix}&#FFD700%player% &#AAAAAAhas locked the chat!"
+  lock-broadcast-disabled: "{prefix}&#FFD700%player% &#AAAAAAhas unlocked the chat!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | PLAYER HIDER MESSAGES                    |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+player-hider:
+  hidden: "{prefix}&#FF6B6BPlayers are now hidden!"
+  shown: "{prefix}&#6BCB77Players are now visible!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | WORLD PROTECTION MESSAGES                |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+protection:
+  item-drop: "{prefix}&#FF6B6BYou cannot drop items here!"
+  item-pickup: "{prefix}&#FF6B6BYou cannot pickup items here!"
+  block-place: "{prefix}&#FF6B6BYou cannot place blocks here!"
+  block-break: "{prefix}&#FF6B6BYou cannot break blocks here!"
+  block-interact: "{prefix}&#FF6B6BYou cannot interact with this!"
+  player-pvp: "{prefix}&#FF6B6BPVP is disabled here!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | DOUBLE JUMP MESSAGES                     |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+double-jump:
+  cooldown: "{prefix}&#FF6B6BWait %time%s before double jumping again!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | COMMAND MESSAGES                         |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+commands:
+  usage-lohub: "{prefix}&#FFD700Usage: /lohub reload"
+  usage-hub: "{prefix}&#FFD700Usage: /hub"
+  usage-sethub: "{prefix}&#FFD700Usage: /sethub"
+  usage-chatlock: "{prefix}&#FFD700Usage: /chatlock"
+  command-blocked: "{prefix}&#FF6B6BThis command is blocked!"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | ANTI-SWEAR MESSAGES                      |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+anti-swear:
+  blocked: "{prefix}&#FF6B6BYour message contains inappropriate language!"
+  admin-notify: "{prefix}&#FFD700%player% &#AAAAAAattempted to say: &#FF6B6B%word%"

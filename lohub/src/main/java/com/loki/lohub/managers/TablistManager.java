@@ -1,8 +1,8 @@
 package com.loki.lohub.managers;
 
 import com.loki.lohub.LoHub;
-import com.loki.lohub.utils.PlaceholderUtil;
-import com.loki.lohub.utils.TextUtil;
+import com.loki.lohub.common.ConfigHelper;
+import com.loki.lohub.common.TextFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class TablistManager {
+
+    private static final String CONFIG_PATH = "tablist";
 
     private final LoHub plugin;
     private int taskId = -1;
@@ -19,12 +21,12 @@ public class TablistManager {
     }
 
     public void start() {
-        if (!plugin.getConfig().getBoolean("tablist.enabled", false)) {
+        if (!ConfigHelper.isEnabled(plugin.getConfig(), CONFIG_PATH)) {
             return;
         }
 
-        if (plugin.getConfig().getBoolean("tablist.refresh.enabled", true)) {
-            int rate = plugin.getConfig().getInt("tablist.refresh.rate", 400);
+        if (shouldRefresh()) {
+            int rate = plugin.getConfig().getInt(CONFIG_PATH + ".refresh.rate", 400);
             taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::updateAll, 0L, rate);
         }
     }
@@ -37,7 +39,7 @@ public class TablistManager {
     }
 
     public void setTablist(Player player) {
-        if (!plugin.getConfig().getBoolean("tablist.enabled", false)) {
+        if (!ConfigHelper.isEnabled(plugin.getConfig(), CONFIG_PATH)) {
             return;
         }
 
@@ -45,36 +47,25 @@ public class TablistManager {
     }
 
     private void updateTablist(Player player) {
-        List<String> headerLines = plugin.getConfig().getStringList("tablist.header");
-        List<String> footerLines = plugin.getConfig().getStringList("tablist.footer");
-
-        StringBuilder header = new StringBuilder();
-        for (int i = 0; i < headerLines.size(); i++) {
-            String line = PlaceholderUtil.parse(headerLines.get(i), player);
-            header.append(TextUtil.colorize(line));
-            if (i < headerLines.size() - 1) {
-                header.append("\n");
-            }
-        }
-
-        StringBuilder footer = new StringBuilder();
-        for (int i = 0; i < footerLines.size(); i++) {
-            String line = PlaceholderUtil.parse(footerLines.get(i), player);
-            footer.append(TextUtil.colorize(line));
-            if (i < footerLines.size() - 1) {
-                footer.append("\n");
-            }
-        }
+        String header = formatLines(CONFIG_PATH + ".header", player);
+        String footer = formatLines(CONFIG_PATH + ".footer", player);
 
         player.sendPlayerListHeaderAndFooter(
-                Component.text(header.toString()),
-                Component.text(footer.toString())
+                Component.text(header),
+                Component.text(footer)
         );
     }
 
+    private String formatLines(String path, Player player) {
+        List<String> lines = plugin.getConfig().getStringList(path);
+        return TextFormatter.joinLines(lines, player, "\n");
+    }
+
     private void updateAll() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            updateTablist(player);
-        }
+        Bukkit.getOnlinePlayers().forEach(this::updateTablist);
+    }
+
+    private boolean shouldRefresh() {
+        return plugin.getConfig().getBoolean(CONFIG_PATH + ".refresh.enabled", true);
     }
 }

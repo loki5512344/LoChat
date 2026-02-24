@@ -18,24 +18,20 @@ public class SetHubCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(TextUtil.colorize("&cThis command is only for players!"));
+            sender.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("general.players-only")));
             return true;
         }
 
         if (!player.hasPermission("lohub.admin")) {
-            player.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.no-permission")));
+            player.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("general.no-permission")));
             return true;
         }
 
         plugin.getSpawnManager().setSpawn(player.getLocation());
-        player.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.spawn-set")));
+        player.sendMessage(TextUtil.colorize(plugin.getConfigManager().getMessage("spawn.set")));
 
         plugin.getRegionManager().deleteHubRegion();
         plugin.getRegionManager().createHubRegion();
-
-        if (plugin.getConfig().getBoolean("worldguard.auto-create-region")) {
-            player.sendMessage(TextUtil.colorize(plugin.getConfig().getString("messages.region-created")));
-        }
 
         return true;
     }

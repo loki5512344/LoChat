@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class HotbarManager {
 
+    private static final String CONFIG_PATH = "custom_join_items";
+
     private final LoHub plugin;
     private final Map<Integer, HotbarItem> items = new HashMap<>();
 
@@ -23,46 +25,56 @@ public class HotbarManager {
 
     private void loadItems() {
         items.clear();
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("custom_join_items.items");
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection(CONFIG_PATH + ".items");
         if (section == null) {
             return;
         }
 
         for (String key : section.getKeys(false)) {
-            ConfigurationSection itemSection = section.getConfigurationSection(key);
-            if (itemSection == null) {
-                continue;
-            }
-
-            Material material = Material.getMaterial(itemSection.getString("material", "STONE"));
-            if (material == null) {
-                continue;
-            }
-
-            int slot = itemSection.getInt("slot", 0);
-            int amount = itemSection.getInt("amount", 1);
-            String displayName = itemSection.getString("display_name", "");
-            List<String> lore = itemSection.getStringList("lore");
-            List<String> actions = itemSection.getStringList("actions");
-
-            ItemStack item = new ItemBuilder(material)
-                    .amount(amount)
-                    .name(displayName)
-                    .lore(lore)
-                    .build();
-
-            items.put(slot, new HotbarItem(item, actions));
+            loadItem(section.getConfigurationSection(key));
         }
     }
 
-    public void giveItems(Player player) {
-        if (!plugin.getConfig().getBoolean("custom_join_items.enabled", false)) {
+    private void loadItem(ConfigurationSection itemSection) {
+        if (itemSection == null) {
             return;
         }
 
-        for (Map.Entry<Integer, HotbarItem> entry : items.entrySet()) {
-            player.getInventory().setItem(entry.getKey(), entry.getValue().item());
+        Material material = getMaterial(itemSection);
+        if (material == null) {
+            return;
         }
+
+        int slot = itemSection.getInt("slot", 0);
+        ItemStack item = buildItem(itemSection, material);
+        List<String> actions = itemSection.getStringList("actions");
+
+        items.put(slot, new HotbarItem(item, actions));
+    }
+
+    private Material getMaterial(ConfigurationSection section) {
+        String materialName = section.getString("material", "STONE");
+        return Material.getMaterial(materialName);
+    }
+
+    private ItemStack buildItem(ConfigurationSection section, Material material) {
+        int amount = section.getInt("amount", 1);
+        String displayName = section.getString("display_name", "");
+        List<String> lore = section.getStringList("lore");
+
+        return new ItemBuilder(material)
+                .amount(amount)
+                .name(displayName)
+                .lore(lore)
+                .build();
+    }
+
+    public void giveItems(Player player) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        items.forEach((slot, item) -> player.getInventory().setItem(slot, item.item()));
     }
 
     public void handleClick(Player player, int slot) {
@@ -80,6 +92,10 @@ public class HotbarManager {
 
     public void reload() {
         loadItems();
+    }
+
+    private boolean isEnabled() {
+        return plugin.getConfig().getBoolean(CONFIG_PATH + ".enabled", false);
     }
 
     private record HotbarItem(ItemStack item, List<String> actions) {

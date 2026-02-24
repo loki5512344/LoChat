@@ -8,9 +8,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class HubProtectionListener implements Listener {
 
@@ -128,6 +130,40 @@ public class HubProtectionListener implements Listener {
         }
 
         if (plugin.getConfigManager().isFoodLevelProtected()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        if (!plugin.getConfig().getBoolean("world_settings.disable_off_hand_swap", true)) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        if (player.hasPermission("lohub.bypass.protection")) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!plugin.getConfig().getBoolean("world_settings.disable_off_hand_swap", true)) {
+            return;
+        }
+
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) event.getWhoClicked();
+        if (player.hasPermission("lohub.bypass.protection")) {
+            return;
+        }
+
+        if (event.getRawSlot() != event.getSlot() && event.getSlot() == 40) {
             event.setCancelled(true);
         }
     }
