@@ -55,6 +55,7 @@ public class LoHub extends JavaPlugin {
 
         registerListeners();
         registerCommands();
+        registerPluginChannels();
 
         regionManager.createHubRegion();
 
@@ -88,6 +89,15 @@ public class LoHub extends JavaPlugin {
         getCommand("sethub").setExecutor(new com.loki.lohub.commands.SetHubCommand(this));
         getCommand("lohub").setExecutor(new com.loki.lohub.commands.LoHubCommand(this));
         getCommand("chatlock").setExecutor(new com.loki.lohub.commands.ChatLockCommand(this));
+    }
+
+    private void registerPluginChannels() {
+        getServer().getMessenger().registerIncomingPluginChannel(
+                this,
+                com.loki.lohub.listeners.ServerSwitchMessageListener.getChannel(),
+                new com.loki.lohub.listeners.ServerSwitchMessageListener(this)
+        );
+        getLogger().info("Plugin messaging channels registered");
     }
 
     public ConfigManager getConfigManager() {
