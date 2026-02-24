@@ -3,7 +3,7 @@ package com.loki.lohub.managers;
 import com.loki.lohub.LoHub;
 import com.loki.lohub.common.ConfigHelper;
 import com.loki.lohub.common.TextFormatter;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -12,6 +12,7 @@ import java.util.List;
 public class TablistManager {
 
     private static final String CONFIG_PATH = "tablist";
+    private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.legacySection();
 
     private final LoHub plugin;
     private int taskId = -1;
@@ -51,8 +52,8 @@ public class TablistManager {
         String footer = formatLines(CONFIG_PATH + ".footer", player);
 
         player.sendPlayerListHeaderAndFooter(
-                Component.text(header),
-                Component.text(footer)
+                SERIALIZER.deserialize(header),
+                SERIALIZER.deserialize(footer)
         );
     }
 

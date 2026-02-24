@@ -89,7 +89,8 @@ public class ItemBuilder {
     public ItemBuilder name(String name) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(TextUtil.colorize(name));
+            meta.displayName(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection()
+                    .deserialize(TextUtil.colorize(name)));
             itemStack.setItemMeta(meta);
         }
         return this;
@@ -98,10 +99,11 @@ public class ItemBuilder {
     public ItemBuilder lore(List<String> lore) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta != null) {
-            List<String> coloredLore = lore.stream()
-                    .map(TextUtil::colorize)
+            List<net.kyori.adventure.text.Component> coloredLore = lore.stream()
+                    .map(line -> net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection()
+                            .deserialize(TextUtil.colorize(line)))
                     .collect(Collectors.toList());
-            meta.setLore(coloredLore);
+            meta.lore(coloredLore);
             itemStack.setItemMeta(meta);
         }
         return this;

@@ -4,6 +4,7 @@ import com.loki.lohub.LoHub;
 import com.loki.lohub.common.ConfigHelper;
 import com.loki.lohub.common.TextFormatter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -20,6 +21,7 @@ public class ScoreboardManager {
 
     private static final String CONFIG_PATH = "scoreboard";
     private static final String OBJECTIVE_NAME = "lohub";
+    private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.legacySection();
 
     private final LoHub plugin;
     private final Map<UUID, Scoreboard> scoreboards = new HashMap<>();
@@ -79,7 +81,7 @@ public class ScoreboardManager {
 
     private void updateTitle(Player player, Objective objective) {
         String title = plugin.getConfig().getString(CONFIG_PATH + ".title", "");
-        objective.displayName(Component.text(TextFormatter.format(title, player)));
+        objective.displayName(SERIALIZER.deserialize(TextFormatter.format(title, player)));
     }
 
     private void updateLines(Player player, Scoreboard scoreboard, Objective objective) {
@@ -91,7 +93,7 @@ public class ScoreboardManager {
             String teamName = "line_" + score;
 
             Team team = getOrCreateTeam(scoreboard, teamName);
-            team.prefix(Component.text(formatted));
+            team.prefix(SERIALIZER.deserialize(formatted));
             objective.getScore(teamName).setScore(score);
             score--;
         }
