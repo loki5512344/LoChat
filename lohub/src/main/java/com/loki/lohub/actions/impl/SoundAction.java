@@ -16,9 +16,14 @@ public class SoundAction implements Action {
 
         Sound parsedSound;
         try {
-            parsedSound = Sound.valueOf(parts[0].toUpperCase());
+            String soundName = parts[0].toUpperCase().trim();
+            parsedSound = Sound.valueOf(soundName);
         } catch (IllegalArgumentException e) {
-            parsedSound = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
+            try {
+                parsedSound = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
+            } catch (NoSuchFieldError ex) {
+                parsedSound = Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP");
+            }
         }
 
         this.sound = parsedSound;
@@ -28,7 +33,9 @@ public class SoundAction implements Action {
 
     @Override
     public void execute(Player player) {
-        player.playSound(player.getLocation(), sound, volume, pitch);
+        if (player != null && sound != null) {
+            player.playSound(player.getLocation(), sound, volume, pitch);
+        }
     }
 
     @Override
