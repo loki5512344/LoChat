@@ -38,6 +38,7 @@ public class LoVelocity {
         logger.info("Version: 1.5.5");
 
         registerCommands();
+        registerListeners();
     }
 
     private void registerCommands() {
@@ -49,6 +50,11 @@ public class LoVelocity {
         server.getCommandManager().register(hubMeta, new HubCommand(this));
 
         logger.info("Commands registered: /hub, /lobby");
+    }
+
+    private void registerListeners() {
+        server.getEventManager().register(this, new com.loki.lovelocity.listeners.ServerSwitchListener(this));
+        logger.info("Listeners registered");
     }
 
     public ProxyServer getServer() {

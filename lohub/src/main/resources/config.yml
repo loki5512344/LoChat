@@ -160,8 +160,11 @@ anti_swear:
 
 join_leave_messages:
   enabled: true
-  join_message: "&#6BCB77+ &#FFD700%player% &#AAAAAAconnected"
-  quit_message: "&#FF6B6B- &#FFD700%player% &#AAAAAAdisconnected"
+  # Сообщение при подключении к хабу
+  # Пустая строка '' = не показывать сообщение
+  join_message: "&#6BCB77+ &#FFD700%player% &#AAAAAAподключился к хабу"
+  # Сообщение при выходе с сервера (не при переключении на другой сервер)
+  quit_message: "&#FF6B6B- &#FFD700%player% &#AAAAAAвышел"
 
 join_events:
   - "[MESSAGE] &#FFD700╔═══════════════════════════════╗"
