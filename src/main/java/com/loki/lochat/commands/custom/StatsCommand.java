@@ -1,6 +1,7 @@
 package com.loki.lochat.commands.custom;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -45,10 +46,11 @@ public class StatsCommand implements CommandExecutor {
     }
 
     private void showPlayerStats(CommandSender sender, Player target) {
-        // Получаем статистику игрока из конфига или базы данных
-        int messagesSent = plugin.getPlayerData().getInt("players." + target.getUniqueId() + ".messages-sent", 0);
-        int commandsUsed = plugin.getPlayerData().getInt("players." + target.getUniqueId() + ".commands-used", 0);
-        long playtime = plugin.getPlayerData().getLong("players." + target.getUniqueId() + ".total-playtime", 0);
+        // Получаем статистику игрока из конфига
+        String uuid = target.getUniqueId().toString();
+        int messagesSent = plugin.getConfig().getInt("player-stats." + uuid + ".messages-sent", 0);
+        int commandsUsed = plugin.getConfig().getInt("player-stats." + uuid + ".commands-used", 0);
+        long playtime = plugin.getConfig().getLong("player-stats." + uuid + ".total-playtime", 0);
         
         String playtimeFormatted = formatTime(playtime);
 
@@ -66,8 +68,8 @@ public class StatsCommand implements CommandExecutor {
 
     private void showServerStats(CommandSender sender) {
         // Получаем общую статистику сервера
-        int totalMessages = plugin.getStatisticsData().getInt("global.total-messages", 0);
-        int messagesToday = plugin.getStatisticsData().getInt("global.messages-today", 0);
+        int totalMessages = plugin.getConfig().getInt("server-stats.total-messages", 0);
+        int messagesToday = plugin.getConfig().getInt("server-stats.messages-today", 0);
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
         int maxPlayers = Bukkit.getMaxPlayers();
 
@@ -100,8 +102,17 @@ public class StatsCommand implements CommandExecutor {
     }
 
     private int getActiveMutesCount() {
-        return plugin.getMuteData().getConfigurationSection("active-mutes") != null ?
-            plugin.getMuteData().getConfigurationSection("active-mutes").getKeys(false).size() : 0;
+        // Получаем количество активных мутов через LoChat
+        if (plugin.getServiceRegistry() != null) {
+            try {
+                MuteService muteService = plugin.getServiceRegistry().get(MuteService.class);
+                return (int) Bukkit.getOnlinePlayers().stream()
+                    .filter(p -> muteService.isMuted(p.getUniqueId()))
+                    .count();
+            } catch (Exception e) {
+            }
+        }
+        return 0;
     }
 
     private double getCurrentTPS() {

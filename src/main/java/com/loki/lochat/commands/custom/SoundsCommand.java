@@ -27,7 +27,8 @@ public class SoundsCommand implements CommandExecutor {
         }
 
         String playerUUID = player.getUniqueId().toString();
-        boolean currentState = plugin.getPlayerData().getBoolean("players." + playerUUID + ".settings.sounds-enabled", true);
+        // Используем конфиг плагина для хранения настроек
+        boolean currentState = plugin.getConfig().getBoolean("player-settings." + playerUUID + ".sounds-enabled", true);
 
         if (args.length == 0) {
             // Показать текущее состояние
@@ -71,8 +72,8 @@ public class SoundsCommand implements CommandExecutor {
         }
 
         // Сохраняем настройку
-        plugin.getPlayerData().set("players." + playerUUID + ".settings.sounds-enabled", newState);
-        plugin.savePlayerData();
+        plugin.getConfig().set("player-settings." + playerUUID + ".sounds-enabled", newState);
+        plugin.saveConfig();
 
         return true;
     }

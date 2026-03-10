@@ -1,3 +1,1 @@
-rootProject.name = "LoNetwork"
-
-include("lohub")
+rootProject.name = "LoChat"

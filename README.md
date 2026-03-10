@@ -346,7 +346,7 @@ Proprietary - Все права защищены
 
 - [Codeberg Repository](https://codeberg.org/loki5512344/Lochat)
 - [Issues](https://codeberg.org/loki5512344/Lochat/issues)
-- [Releases](https://codeberg.org/loki5512344/Lochat/releases)
+
 
 ---
 

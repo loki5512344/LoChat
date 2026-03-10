@@ -1,6 +1,7 @@
 package com.loki.lochat.commands.custom;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,19 +38,24 @@ public class MeCommand implements CommandExecutor {
             return true;
         }
 
-        // Проверяем мут
-        if (plugin.getMuteService() != null && plugin.getMuteService().isMuted(player.getUniqueId())) {
-            String muteMessage = plugin.getMessagesConfig().getString("mute.you-muted", 
-                "<red>Вы замучены!</red>");
-            player.sendMessage(ChatFormatter.parse(muteMessage));
-            return true;
+        // Проверяем мут через LoChat
+        if (plugin.getServiceRegistry() != null) {
+            try {
+                MuteService muteService = plugin.getServiceRegistry().get(MuteService.class);
+                if (muteService.isMuted(player.getUniqueId())) {
+                    player.sendMessage(ChatFormatter.parse("<red>Вы замучены!</red>"));
+                    return true;
+                }
+            } catch (Exception e) {
+                // Сервис не зарегистрирован, продолжаем
+            }
         }
 
         // Собираем действие из аргументов
         String action = String.join(" ", args);
 
         // Получаем отображаемое имя игрока (с градиентом если есть)
-        String displayName = player.getDisplayName();
+        String displayName = player.getName();
         if (plugin.getGradientModule() != null) {
             displayName = plugin.getGradientModule().getFormattedName(player);
         }
