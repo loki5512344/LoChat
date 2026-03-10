@@ -1,188 +1,353 @@
-# 🎮 Loki Network Plugins
+# 🎮 LoChat - Advanced Chat Plugin
 
-Набор плагинов для Minecraft серверов: чат, хаб и прокси.
+Продвинутый чат плагин для Paper/Folia серверов с градиентными никами, модерацией и гибкой системой конфигурации.
 
-## 📦 Модули
+## ✨ Основные возможности
 
-### 1. LoChat - Чат плагин (Paper/Folia)
-Продвинутый чат с градиентными никами, модерацией и фильтрами.
+### 💬 Чат система
+- **Глобальный чат** - общение между всеми игроками
+- **Локальный чат** - общение в радиусе
+- **Личные сообщения** - PM система с ответами
+- **Игнорирование** - блокировка нежелательных игроков
+- **Упоминания** - @player, @everyone, @here, @role
+- **Hover/Click события** - интерактивные сообщения
 
-**Основные функции:**
-- Глобальный/локальный чат
-- PM система с игнором
-- Мут система с историей
-- Фильтры (мат, спам, CAPS, URL, IP)
-- Градиентные ники (LuckPerms)
-- Markdown форматирование
-- Упоминания (@player, @everyone, @here, @role)
-- 300+ эмодзи
+### 🎨 Градиентные ники
+- Кастомные градиентные цвета (до 7 цветов)
+- Готовые пресеты (огонь, океан, радуга и т.д.)
+- Кастомные префиксы
+- Интеграция с LuckPerms
+- Система покупки через PlayerPoints
+- Кулдауны и ограничения
 
-### 2. LoHub - Hub плагин (Paper/Folia)
-Плагин для лобби сервера с защитой мира и интерактивными элементами.
+### 🛡️ Модерация
+- **Мут система** с историей
+- Временные и постоянные муты
+- Скрытые муты (silent)
+- Готовые причины мутов
+- Эскалация наказаний
+- Автоматические муты
 
-**Основные функции:**
-- Spawn система с телепортом
-- WorldGuard регионы (авто-создание)
-- Защита мира (блоки, PvP, мобы)
-- Launchpad и Double Jump
-- Player Hider
-- Custom Join Items
-- Action система для гибкой настройки
+### 🔍 Фильтры
+- Фильтр мата (настраиваемый словарь)
+- Антиспам и антифлуд
+- CAPS фильтр
+- URL и IP фильтр
+- Фильтр рекламы
+- Фильтр повторов
 
-### 3. LoVelocity - Velocity плагин
-Простой плагин для прокси с командой /hub.
+### 🎯 Кастомные команды
+- /help, /rules, /discord - информационные
+- /coords, /ping, /stats - утилиты
+- /me - действия от третьего лица
+- /sounds - управление звуками
+- Полностью настраиваемые в конфиге
 
-**Основные функции:**
-- Команда /hub для телепорта на lobby
-- Кастомные сообщения
-- PlaceholderAPI поддержка
+### 🔊 Звуковые эффекты
+- Звуки для PM и упоминаний
+- Звуки для мутов/размутов
+- Звуки для градиентов
+- Звуки для команд
+- Персональные настройки звуков
 
-## 🏗️ Структура проекта
+### 📊 Статистика
+- Статистика сообщений
+- Топ игроков по активности
+- Статистика мутов
+- Статистика фильтров
+- Автоматическая очистка старых данных
+
+## 📁 Структура проекта
 
 ```
-LoChat/                          # Root проекта
-│
-├── src/main/                    # LoChat (основной модуль)
+LoChat/
+├── src/main/
 │   ├── java/com/loki/lochat/
-│   │   ├── api/                 # API интерфейсы
-│   │   │   ├── filter/          # Фильтры сообщений
-│   │   │   └── service/         # Сервисы (Chat, Mute, PM и т.д.)
-│   │   ├── commands/            # Команды плагина
-│   │   ├── config/              # Конфигурация
-│   │   ├── core/                # Реализации
-│   │   │   ├── filter/          # Реализации фильтров
-│   │   │   ├── registry/        # ServiceRegistry (DI)
-│   │   │   └── service/         # Реализации сервисов
-│   │   ├── gradient/            # Градиентные ники
-│   │   │   ├── commands/        # Команды градиентов
-│   │   │   ├── config/          # Конфиг градиентов
-│   │   │   ├── hook/            # LuckPerms интеграция
-│   │   │   └── util/            # Утилиты градиентов
-│   │   ├── listener/            # Слушатели событий
-│   │   ├── util/                # Утилиты (Folia)
-│   │   ├── utils/               # Утилиты (Formatter, Mention)
-│   │   └── LoChat.java          # Главный класс
-│   └── resources/               # Конфиги
-│       ├── config.yml           # Основной конфиг
-│       ├── messages.yml         # Сообщения
-│       ├── chat.yml             # Настройки чата
-│       ├── gradient-config.yml  # Конфиг градиентов
-│       ├── gradient-messages.yml
-│       ├── custom-commands.yml
-│       ├── automessages.yml
-│       └── plugin.yml
+│   │   ├── api/                          # API интерфейсы
+│   │   │   ├── filter/                   # Фильтры сообщений
+│   │   │   └── service/                  # Сервисы (Chat, Mute, PM и т.д.)
+│   │   ├── commands/                     # Команды плагина
+│   │   │   ├── custom/                   # Кастомные команды
+│   │   │   │   ├── HelpCommand.java
+│   │   │   │   ├── RulesCommand.java
+│   │   │   │   ├── DiscordCommand.java
+│   │   │   │   ├── CoordsCommand.java
+│   │   │   │   ├── PingCommand.java
+│   │   │   │   ├── StatsCommand.java
+│   │   │   │   ├── MeCommand.java
+│   │   │   │   └── SoundsCommand.java
+│   │   │   ├── CustomCommandManager.java
+│   │   │   ├── MuteCommand.java
+│   │   │   ├── UnmuteCommand.java
+│   │   │   └── ... (другие команды)
+│   │   ├── config/                       # Конфигурация
+│   │   ├── core/                         # Реализации
+│   │   │   ├── filter/                   # Реализации фильтров
+│   │   │   │   ├── AdvancedMessageFilter.java
+│   │   │   │   ├── CapsFilter.java
+│   │   │   │   ├── CooldownFilter.java
+│   │   │   │   └── MuteFilter.java
+│   │   │   ├── registry/                 # ServiceRegistry (DI)
+│   │   │   └── service/                  # Реализации сервисов
+│   │   │       ├── ChatServiceImpl.java
+│   │   │       ├── MuteServiceImpl.java
+│   │   │       ├── PMServiceImpl.java
+│   │   │       └── ... (другие сервисы)
+│   │   ├── data/                         # Модели данных
+│   │   │   └── model/
+│   │   │       ├── ChatMessage.java
+│   │   │       └── MuteData.java
+│   │   ├── gradient/                     # Градиентные ники
+│   │   │   ├── commands/                 # Команды градиентов
+│   │   │   ├── config/                   # Конфиг градиентов
+│   │   │   ├── data/                     # Данные градиентов
+│   │   │   ├── gui/                      # GUI для градиентов
+│   │   │   ├── hooks/                    # LuckPerms интеграция
+│   │   │   ├── listeners/                # Слушатели градиентов
+│   │   │   └── util/                     # Утилиты градиентов
+│   │   ├── integrations/                 # Интеграции с плагинами
+│   │   │   ├── PlaceholderAPIHook.java
+│   │   │   ├── LibertyBansHook.java
+│   │   │   └── SkinsRestorerHook.java
+│   │   ├── listener/                     # Слушатели событий
+│   │   ├── managers/                     # Менеджеры
+│   │   ├── util/                         # Утилиты (Folia)
+│   │   ├── utils/                        # Утилиты (Formatter, Mention)
+│   │   └── LoChat.java                   # Главный класс
+│   │
+│   └── resources/                        # Ресурсы
+│       ├── config/                       # Конфигурационные файлы
+│       │   ├── chat-formats.yml          # Форматы чата
+│       │   ├── filters.yml               # Настройки фильтров
+│       │   ├── gradient-config.yml       # Конфиг градиентов
+│       │   ├── automessages.yml          # Автосообщения
+│       │   ├── mute-config.yml           # Система мутов
+│       │   ├── sounds.yml                # Звуковые эффекты
+│       │   ├── database.yml              # База данных
+│       │   ├── integrations.yml          # Интеграции
+│       │   └── custom-commands.yml       # Кастомные команды
+│       │
+│       ├── data/                         # Файлы данных
+│       │   ├── data.yml                  # Основные данные
+│       │   ├── players.yml               # Данные игроков
+│       │   ├── gradients.yml             # Градиентные ники
+│       │   ├── mutes.yml                 # Муты и история
+│       │   ├── ignores.yml               # Игнорирование
+│       │   ├── statistics.yml            # Статистика
+│       │   └── filter-words.json         # Запрещенные слова
+│       │
+│       ├── config.yml                    # Основной конфиг
+│       ├── messages.yml                  # Сообщения
+│       └── plugin.yml                    # Конфиг плагина
 │
-├── lohub/                       # LoHub модуль
-│   ├── src/main/
-│   │   ├── java/com/loki/lohub/
-│   │   │   ├── actions/         # Action система
-│   │   │   │   ├── impl/        # Реализации действий
-│   │   │   │   ├── Action.java
-│   │   │   │   └── ActionType.java
-│   │   │   ├── commands/        # Команды
-│   │   │   │   ├── HubCommand.java
-│   │   │   │   ├── SetHubCommand.java
-│   │   │   │   └── LoHubCommand.java
-│   │   │   ├── config/          # Конфигурация
-│   │   │   │   └── ConfigManager.java
-│   │   │   ├── listeners/       # Слушатели
-│   │   │   │   ├── HubProtectionListener.java
-│   │   │   │   ├── PlayerJoinListener.java
-│   │   │   │   ├── LaunchpadListener.java
-│   │   │   │   └── DoubleJumpListener.java
-│   │   │   ├── managers/        # Менеджеры
-│   │   │   │   ├── SpawnManager.java
-│   │   │   │   ├── RegionManager.java
-│   │   │   │   ├── ActionManager.java
-│   │   │   │   ├── CooldownManager.java
-│   │   │   │   ├── HotbarManager.java
-│   │   │   │   └── PlayerHiderManager.java
-│   │   │   ├── utils/           # Утилиты
-│   │   │   │   ├── ItemBuilder.java
-│   │   │   │   ├── TextUtil.java
-│   │   │   │   └── PlaceholderUtil.java
-│   │   │   └── LoHub.java       # Главный класс
-│   │   └── resources/           # Конфиги
-│   │       ├── config.yml
-│   │       └── plugin.yml
-│   └── build.gradle.kts         # Gradle конфиг
-│
-├── lovelocity/                  # LoVelocity модуль
-│   ├── src/main/
-│   │   ├── java/com/loki/lovelocity/
-│   │   │   ├── commands/
-│   │   │   │   └── HubCommand.java
-│   │   │   └── LoVelocity.java
-│   │   └── resources/
-│   │       └── velocity-plugin.json
-│   └── build.gradle.kts
-│
-├── build.gradle.kts             # Root Gradle (Kotlin DSL)
-├── settings.gradle.kts          # Настройки проектов
-├── gradle.properties            # Gradle свойства
-├── TODO.md                      # Список задач
-└── README.md                    # Этот файл
+├── build.gradle.kts                      # Gradle конфиг
+└── README.md                             # Этот файл
 ```
 
-## 🚀 Сборка
+## 🚀 Быстрый старт
+
+### Установка
+
+1. Скачайте последнюю версию из [Releases](https://codeberg.org/loki5512344/Lochat/releases)
+2. Поместите `LoChat-1.5.5-1.20.1.jar` в папку `plugins/`
+3. Перезапустите сервер
+4. Настройте конфиги в `plugins/LoChat/`
+
+### Первая настройка
+
+1. **Основной конфиг** (`config.yml`):
+   - Настройте радиус локального чата
+   - Включите/отключите нужные функции
+   - Настройте Discord и Website ссылки
+
+2. **Сообщения** (`messages.yml`):
+   - Измените сообщения на свой язык
+   - Настройте цвета и форматирование
+
+3. **Фильтры** (`config/filters.yml`):
+   - Настройте фильтр мата
+   - Добавьте свои запрещенные слова в `data/filter-words.json`
+   - Настройте антиспам и другие фильтры
+
+4. **Градиенты** (`config/gradient-config.yml`):
+   - Настройте стоимость градиентов
+   - Добавьте свои пресеты
+   - Настройте интеграцию с PlayerPoints
+
+## � Сборка из исходников
 
 ```bash
-# Собрать все модули
+# Клонировать репозиторий
+git clone https://codeberg.org/loki5512344/Lochat.git
+cd Lochat
+
+# Собрать проект
 ./gradlew build
 
-# Собрать только LoChat
-./gradlew :build
-
-# Собрать только LoHub
-./gradlew :lohub:build
-
-# Собрать только LoVelocity
-./gradlew :lovelocity:build
-
-# Без тестов
-./gradlew build -x test
+# Jar файл будет в build/libs/
 ```
 
-## 📦 Артефакты
+## 📦 Зависимости
 
-После сборки jar файлы находятся в:
-- `build/libs/LoChat-1.5.5-1.20.1.jar`
-- `lohub/build/libs/LoHub-1.5.5-1.20.1.jar`
-- `lovelocity/build/libs/LoVelocity-1.5.5.jar`
-
-## 🔧 Требования
-
+### Обязательные
 - **Java 21+**
-- **Paper 1.20.1+** (для LoChat и LoHub)
-- **Velocity 3.3.0+** (для LoVelocity)
-- **Gradle 9.1+**
+- **Paper 1.20.1+** или **Folia**
 
-## 📝 Зависимости
+### Опциональные
+- **PlaceholderAPI** - для плейсхолдеров
+- **LuckPerms** - для градиентных ников и прав
+- **PlayerPoints** - для покупки градиентов
+- **LibertyBans** - синхронизация мутов
+- **SkinsRestorer** - поддержка скинов
 
-### LoChat
-- PlaceholderAPI (опционально)
-- LuckPerms (опционально)
-- PlayerPoints (опционально)
+## 📝 Команды
 
-### LoHub
-- WorldGuard 7.0.9+ (опционально)
-- PlaceholderAPI (опционально)
+### Чат команды
+- `/g <сообщение>` - глобальный чат
+- `/l <сообщение>` - локальный чат
+- `/msg <игрок> <сообщение>` - личное сообщение
+- `/reply <сообщение>` - ответить на ЛС
+- `/ignore <игрок>` - игнорировать игрока
+- `/unignore <игрок>` - разигнорировать
+- `/ignorelist` - список игнорируемых
 
-### LoVelocity
-- Нет зависимостей
+### Градиенты
+- `/color <hex1> [hex2] ...` - установить градиент
+- `/prefix <текст>` - установить префикс
+- `/aprefix <команда>` - админские команды градиентов
 
-## 🎯 Статус разработки
+### Модерация
+- `/lmute <игрок> [время] [-s] [причина]` - замутить
+- `/lunmute <игрок> [-s]` - размутить
+- `/lmutelist` - список мутов
+- `/lmutehistory <игрок>` - история мутов
+- `/lmuteblame <модератор>` - муты модератора
 
-- ✅ **LoChat** - Готов к использованию
-- 🔄 **LoHub** - В разработке (21% готово)
-- ✅ **LoVelocity** - Готов к использованию
+### Кастомные команды
+- `/help` - помощь
+- `/rules` - правила
+- `/discord` - Discord сервера
+- `/coords` - координаты
+- `/ping [игрок]` - пинг
+- `/stats [игрок]` - статистика
+- `/me <действие>` - действие от 3-го лица
+- `/sounds [on|off]` - управление звуками
 
-Подробности в [TODO.md](TODO.md)
+### Админские
+- `/lochat reload` - перезагрузить конфиг
+- `/clearchat` - очистить чат
+- `/chatspy` - режим шпиона
+- `/announce <сообщение>` - объявление
+
+## 🎨 Примеры использования
+
+### Градиентный ник
+```
+/color #FF0000 #00FF00 #0000FF
+```
+Создаст радужный градиент от красного через зеленый к синему.
+
+### Кастомный префикс
+```
+/prefix [VIP]
+```
+Установит префикс `[VIP]` перед ником.
+
+### Мут игрока
+```
+/lmute Player123 1h Спам в чате
+```
+Замутит игрока на 1 час с причиной "Спам в чате".
+
+### Скрытый мут
+```
+/lmute Player123 30m -s Нарушение правил
+```
+Замутит игрока скрытно (другие игроки не увидят уведомление).
+
+## 🔌 API для разработчиков
+
+### Получение сервисов
+```java
+// Получить сервис чата
+ChatService chatService = ServiceRegistry.getChatService();
+
+// Отправить глобальное сообщение
+chatService.sendGlobalMessage(player, "Привет!");
+
+// Получить сервис мутов
+MuteService muteService = ServiceRegistry.getMuteService();
+
+// Проверить мут
+if (muteService.isMuted(player.getUniqueId())) {
+    // Игрок замучен
+}
+```
+
+### Создание кастомного фильтра
+```java
+public class MyFilter implements MessageFilter {
+    @Override
+    public FilterResult filter(Player player, String message) {
+        if (message.contains("запрещено")) {
+            return FilterResult.block("Сообщение заблокировано");
+        }
+        return FilterResult.allow();
+    }
+    
+    @Override
+    public String getName() {
+        return "MyFilter";
+    }
+    
+    @Override
+    public int getPriority() {
+        return 10;
+    }
+}
+
+// Регистрация
+FilterManager.registerFilter(new MyFilter());
+```
+
+## 🐛 Известные проблемы
+
+- Градиенты могут не отображаться в некоторых версиях клиента
+- Фильтры могут блокировать легитимные сообщения (настраивается)
+
+## 📊 Статистика проекта
+
+- **Версия**: 1.5.5-1.20.1
+- **Коммитов**: 80+
+- **Строк кода**: 9000+
+- **Конфигов**: 10+
+- **Команд**: 30+
+
+## 🤝 Вклад в проект
+
+Проект находится в активной разработке. Pull requests приветствуются!
+
+1. Fork репозитория
+2. Создайте ветку для фичи (`git checkout -b feature/amazing-feature`)
+3. Commit изменения (`git commit -m 'Add amazing feature'`)
+4. Push в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
 
 ## 📄 Лицензия
 
 Proprietary - Все права защищены
 
-## 👥 Авторы
+## 👥 Автор
 
-Loki Development Team
+**Loki Development Team**
+- Codeberg: [@loki5512344](https://codeberg.org/loki5512344)
+
+## 🔗 Ссылки
+
+- [Codeberg Repository](https://codeberg.org/loki5512344/Lochat)
+- [Issues](https://codeberg.org/loki5512344/Lochat/issues)
+- [Releases](https://codeberg.org/loki5512344/Lochat/releases)
+
+---
+
+⭐ Если проект понравился, поставьте звезду на Codeberg!
