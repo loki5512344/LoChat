@@ -35,16 +35,16 @@ pm:
   # Форматы личных сообщений
   # {sender} - ник отправителя, {receiver} - ник получателя
   # {sender_display} - отправитель с градиентом, {receiver_display} - получатель с градиентом
-  # {message} - текст сообщения
-  format-sent: "<gray>[PM]</gray> <gradient:#87CEEB:#4682B4>Ты</gradient> <gray>→</gray> {receiver_display}<gray>:</gray> {message}"
-  format-received: "<gray>[PM]</gray> {sender_display} <gray>→</gray> <gradient:#87CEEB:#4682B4>Ты</gradient><gray>:</gray> {message}"
+  # {message} - текст сообщение
+  format-sent: "&7[→] &#87CEEBВы &7→ {receiver_display}&7: {message}"
+  format-received: "&7[←] {sender_display} &7→ &#87CEEBВы&7: {message}"
   
   # Использовать градиентные ники в PM
   use-gradient-names: true
   
   # Старые форматы (для совместимости)
-  sent: "<gray>[PM]</gray> <gradient:#87CEEB:#4682B4>Ты</gradient> <gray>→</gray> <white>{player}</white><gray>:</gray> {message}"
-  received: "<gray>[PM]</gray> <white>{player}</white> <gray>→</gray> <gradient:#87CEEB:#4682B4>Ты</gradient><gray>:</gray> {message}"
+  sent: "&7[→] &#87CEEBВы &7→ &f{player}&7: {message}"
+  received: "&7[←] &f{player} &7→ &#87CEEBВы&7: {message}"
   
   # Ошибки PM
   no-reply: "&#FF6B6BН&#FF5F5Fе&#FF5353к&#FF4747о&#FF3B3Bм&#FF2F2Fу &#FF2323о&#FF1717т&#FF0B0Bв&#FF0000е&#FF0000т&#FF0000и&#FF0000т&#FF0000ь"
@@ -62,6 +62,9 @@ ignore:
   already-ignored: "&#FFA726И&#FFA322г&#FF9F1Eр&#FF9B1Aо&#FF9716к &#FF9312у&#FF8F0Eж&#FF8B0Aе &#FF8706в &#FF8302и&#FF8000г&#FF8000н&#FF8000о&#FF8000р&#FF8000е"
   not-ignored: "&#FFA726И&#FFA322г&#FF9F1Eр&#FF9B1Aо&#FF9716к &#FF9312н&#FF8F0Eе &#FF8B0Aв &#FF8706и&#FF8302г&#FF8000н&#FF8000о&#FF8000р&#FF8000е"
   self: "&#FF6B6BН&#FF5F5Fе&#FF5353л&#FF4747ь&#FF3B3Bз&#FF2F2Fя &#FF2323и&#FF1717г&#FF0B0Bн&#FF0000о&#FF0000р&#FF0000и&#FF0000р&#FF0000о&#FF0000в&#FF0000а&#FF0000т&#FF0000ь &#FF0000с&#FF0000е&#FF0000б&#FF0000я"
+  list-empty: "&#87CEEBВ&#85CBE9а&#83C8E7ш &#81C5E5с&#7FC2E3п&#7DBFE1и&#7BBCDFс&#799BDDо&#7798DBк &#7595D9и&#7392D7г&#7190D5н&#6F8DD3о&#6D8AD1р&#6B87CFа &#6984CDп&#6782CBу&#6580C9с&#637DC7т"
+  list-header: "&#FFD700═&#FFC900═&#FFBB00═ &#FFAD00И&#FF9F00г&#FF9100н&#FF8300о&#FF7500р&#FF6700и&#FF5900р&#FF4B00у&#FF3D00е&#FF2F00м&#FF2100ы&#FF1300е &#FF0500и&#FF0000г&#FF0000р&#FF0000о&#FF0000к&#FF0000и &#FFD700═&#FFC900═&#FFBB00═"
+  list-footer: "&#87CEEBВ&#85CBE9с&#83C8E7е&#81C5E5г&#7FC2E3о&#7DBFE1: &#7BBCDFi&#799BDD{&#7798DBc&#7595D9o&#7392D7u&#7190D5n&#6F8DD3t&#6D8AD1}&#6B87CF &#6984CDи&#6782CBг&#6580C9р&#637DC7о&#6B7AC5к&#697CC3о&#6779C1в"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                              ОБЪЯВЛЕНИЯ                                    │
@@ -77,8 +80,8 @@ announce:
 spy:
   enabled: "&#6BCB77Ш&#62C973п&#5AC76Fи&#51C56Bо&#49C367н &#40C163р&#38BF5Fе&#2FBD5Bж&#27BB57и&#1EB953м &#16B74Fв&#0DB54Bк&#05B347л&#05B347ю&#05B347ч&#05B347е&#05B347н"
   disabled: "&#FF6B6BШ&#FF5F5Fп&#FF5353и&#FF4747о&#FF3B3Bн &#FF2F2Fр&#FF2323е&#FF1717ж&#FF0B0Bи&#FF0000м &#FF0000в&#FF0000ы&#FF0000к&#FF0000л&#FF0000ю&#FF0000ч&#FF0000е&#FF0000н"
-  format: "<gray>[SPY]</gray> <gradient:#FFD700:#FFA500>{sender}</gradient> <gray>→</gray> <gradient:#87CEEB:#4682B4>{receiver}</gradient><gray>:</gray> <white>{message}</white>"
-  chat-format: "<gray>[SPY]</gray> <gradient:#FFA726:#FF9800>{type}</gradient> <gradient:#00FF88:#00CC66>{sender}</gradient><gray>:</gray> <white>{message}</white>"
+  format: "&7[SPY] &#FFD700{&#FFC900s&#FFBB00e&#FFAD00n&#FF9F00d&#FF9100e&#FF8300r&#FF7500} &7→ &#87CEEB{&#85CBE9r&#83C8E7e&#81C5E5c&#7FC2E3e&#7DBFE1i&#7BBCDFv&#799BDDe&#7798DBr&#7595D9}&7: &f{message}"
+  chat-format: "&7[SPY] &#FFA726{&#FFA322t&#FF9F1Ey&#FF9B1Ap&#FF9716e&#FF9312} &#00FF88{&#00F582s&#00EB7Ce&#00E176n&#00D770d&#00CD6Ae&#00C364r&#00B95E}&7: &f{message}"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                              ФИЛЬТР МАТА                                   │
@@ -121,6 +124,25 @@ errors:
   invalid-usage: "&#FFA726И&#FFA322с&#FF9F1Eп&#FF9B1Aо&#FF9716л&#FF9312ь&#FF8F0Eз&#FF8B0Aо&#FF8706в&#FF8302а&#FF8000н&#FF8000и&#FF8000е&#FF8000: &#FF8000{&#FF8000u&#FF8000s&#FF8000a&#FF8000g&#FF8000e&#FF8000}"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                              ОБЩИЕ СООБЩЕНИЯ                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+general:
+  no-permission: "{prefix} &#FF6B6BУ вас нет прав!"
+  players-only: "{prefix} &#FF6B6BТолько для игроков!"
+  config-reloaded: "{prefix} &#6BCB77Конфиг перезагружен!"
+  invalid-player: "{prefix} &#FF6B6BИгрок %player% не найден!"
+  cooldown-active: "{prefix} &#FF6B6BПодождите %time%с перед повторным использованием!"
+  command-disabled: "{prefix} &#FF6B6BЭта команда отключена!"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                              HUB COMMAND                                   │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+hub:
+  connecting: "{prefix} &#6BCB77Подключение к серверу %server%..."
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                              СИСТЕМА МУТОВ                                 │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -131,3 +153,21 @@ mute:
   not-muted: "&#FFA726И&#FFA322г&#FF9F1Eр&#FF9B1Aо&#FF9716к &#FF9312н&#FF8F0Eе &#FF8B0Aз&#FF8706а&#FF8302м&#FF8000у&#FF8000ч&#FF8000е&#FF8000н"
   you-muted: "&#FF6B6BВ&#FF5F5Fы &#FF5353з&#FF4747а&#FF3B3Bм&#FF2F2Fу&#FF2323ч&#FF1717е&#FF0B0Bн&#FF0000ы&#FF0000! &#FF0000О&#FF0000с&#FF0000т&#FF0000а&#FF0000л&#FF0000о&#FF0000с&#FF0000ь&#FF0000: &#FF0000{&#FF0000t&#FF0000i&#FF0000m&#FF0000e&#FF0000}"
   permanent: "&#FF6B6BВ&#FF5F5Fы &#FF5353з&#FF4747а&#FF3B3Bм&#FF2F2Fу&#FF2323ч&#FF1717е&#FF0B0Bн&#FF0000ы &#FF0000н&#FF0000а&#FF0000в&#FF0000с&#FF0000е&#FF0000г&#FF0000д&#FF0000а&#FF0000!"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ГРАДИЕНТНЫЕ НИКИ                                   │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+gradient:
+  color-set: "&#6BCB77Градиент установлен!"
+  color-enabled: "&#6BCB77Градиентный ник включен"
+  color-disabled: "&#FF6B6BГрадиентный ник отключен"
+  color-reset: "&#FFA726Градиент сброшен"
+  prefix-set: "&#6BCB77Префикс установлен!"
+  prefix-reset: "&#FFA726Префикс сброшен"
+  invalid-hex: "&#FF6B6BНеверный HEX цвет: {color}"
+  too-many-colors: "&#FF6B6BСлишком много цветов! Максимум: {max}"
+  too-few-colors: "&#FF6B6BСлишком мало цветов! Минимум: {min}"
+  cooldown: "&#FFA726Подождите {time} сек"
+  not-enough-points: "&#FF6B6BНедостаточно поинтов! Нужно: {price}"
+  player-not-found: "&#FF6B6BИгрок не найден"

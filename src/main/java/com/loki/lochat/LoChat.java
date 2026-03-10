@@ -59,6 +59,7 @@ public final class LoChat extends JavaPlugin {
         // Команды и слушатели
         registerCommands();
         registerListeners();
+        registerPluginChannels();
 
         // Автосообщения
         autoMessageManager.start();
@@ -108,9 +109,11 @@ public final class LoChat extends JavaPlugin {
         getCommand("reply").setExecutor(new ReplyCommand(this));
         getCommand("ignore").setExecutor(new IgnoreCommand(this));
         getCommand("unignore").setExecutor(new UnignoreCommand(this));
+        getCommand("ignorelist").setExecutor(new IgnoreListCommand(this));
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
+        getCommand("hub").setExecutor(new HubCommand(this));
 
         NickCommand nickCmd = new NickCommand(this);
         getCommand("nick").setExecutor(nickCmd);
@@ -147,6 +150,11 @@ public final class LoChat extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatEventListener(this, serviceRegistry), this);
         getServer().getPluginManager().registerEvents(new PlayerEventListener(serviceRegistry), this);
         getLogger().info("Слушатели зарегистрированы (новая архитектура)");
+    }
+
+    private void registerPluginChannels() {
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        getLogger().info("BungeeCord plugin messaging channel registered");
     }
 
     public void reload() {

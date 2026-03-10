@@ -54,23 +54,44 @@ public class ChatEventListener implements Listener {
         }
 
         String filteredMessage = filterResult.filteredMessage();
-        event.message(Component.text(filteredMessage));
+        
+        // Определяем тип чата
+        boolean isGlobal = message.startsWith("!");
+        
+        event.message(com.loki.lochat.utils.ChatFormatter.parse(filteredMessage));
 
-        event.renderer(new EnhancedChatRenderer(sender, event.message()));
+        event.renderer(new EnhancedChatRenderer(sender, event.message(), isGlobal));
     }
 
     private class EnhancedChatRenderer implements ChatRenderer {
         private final Player sender;
         private final Component originalMessage;
+        private final boolean isGlobal;
 
-        public EnhancedChatRenderer(Player sender, Component originalMessage) {
+        public EnhancedChatRenderer(Player sender, Component originalMessage, boolean isGlobal) {
             this.sender = sender;
             this.originalMessage = originalMessage;
+            this.isGlobal = isGlobal;
         }
 
         @Override
         public Component render(Player source, Component sourceDisplayName, Component message, Audience viewer) {
-            String prefix = plugin.getConfig().getString("chat.global.prefix", "[G]");
+            // Префикс в зависимости от типа чата
+            Component prefixComponent;
+            if (isGlobal) {
+                // [G] с желтой буквой G
+                prefixComponent = Component.text("[")
+                        .color(net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                        .append(Component.text("G").color(net.kyori.adventure.text.format.NamedTextColor.GOLD))
+                        .append(Component.text("]").color(net.kyori.adventure.text.format.NamedTextColor.GRAY));
+            } else {
+                // [L] с голубой буквой L
+                prefixComponent = Component.text("[")
+                        .color(net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                        .append(Component.text("L").color(net.kyori.adventure.text.format.NamedTextColor.AQUA))
+                        .append(Component.text("]").color(net.kyori.adventure.text.format.NamedTextColor.GRAY));
+            }
+            
             Component playerComponent = createPlayerComponent(source, sourceDisplayName);
             Component processedMessage = message;
 
@@ -82,9 +103,10 @@ public class ChatEventListener implements Listener {
                 processedMessage = mentionHandler.processMentions(processedMessage, source, viewerPlayer);
             }
 
-            return Component.text(prefix + " ")
+            return prefixComponent
+                    .append(Component.text(" "))
                     .append(playerComponent)
-                    .append(Component.text(": "))
+                    .append(Component.text(": ").color(net.kyori.adventure.text.format.NamedTextColor.GRAY))
                     .append(processedMessage);
         }
 
@@ -129,7 +151,8 @@ public class ChatEventListener implements Listener {
 
         private Component processUrls(Component message) {
             String plainText = PlainTextComponentSerializer.plainText().serialize(message);
-            String urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!35538117-c5a8-4bfe-b9f2-b0dcf9374222'()*+,;=%]+)";
+            // Fixed regex: escape the dash in character class to avoid illegal range
+            String urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+)";
             java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(urlPattern);
             java.util.regex.Matcher matcher = pattern.matcher(plainText);
 

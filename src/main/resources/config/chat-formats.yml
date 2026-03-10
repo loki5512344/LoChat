@@ -1,0 +1,215 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                          LoChat Chat Formats                               ║
+# ║                           Форматы чата                                     ║
+# ║                              Версия: 1.5.5-1.20.1                          ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                            ФОРМАТЫ ЧАТА                                    │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+# Доступные плейсхолдеры:
+# {player} - имя игрока
+# {display_name} - отображаемое имя с градиентом
+# {prefix} - префикс игрока
+# {suffix} - суффикс игрока
+# {world} - мир игрока
+# {message} - сообщение
+# {time} - время
+# {date} - дата
+# Все плейсхолдеры PlaceholderAPI
+
+formats:
+  # Глобальный чат
+  global:
+    enabled: true
+    format: "&#FFD700[G] {prefix}{display_name}&r: {message}"
+    hover:
+      - "<gray>Игрок: <white>{player}"
+      - "<gray>Мир: <green>{world}"
+      - "<gray>Пинг: <yellow>%player_ping%ms"
+      - ""
+      - "<yellow>▶ Клик: написать ЛС"
+    click:
+      action: "suggest_command"
+      value: "/msg {player} "
+  
+  # Локальный чат
+  local:
+    enabled: true
+    format: "&#87CEEB[L] {prefix}{display_name}&r: {message}"
+    hover:
+      - "<gray>Игрок: <white>{player}"
+      - "<gray>Координаты: <yellow>{x}, {y}, {z}"
+      - "<gray>Расстояние: <green>%distance%м"
+      - ""
+      - "<yellow>▶ Клик: написать ЛС"
+    click:
+      action: "suggest_command"
+      value: "/msg {player} "
+  
+  # Личные сообщения
+  private:
+    sent: "&7[→] &#87CEEBВы &7→ {display_name}&7: {message}"
+    received: "&7[←] {display_name} &7→ &#87CEEBВы&7: {message}"
+    hover:
+      - "<gray>Отправлено: <white>%time%"
+      - ""
+      - "<yellow>▶ Клик: ответить"
+    click:
+      action: "suggest_command"
+      value: "/reply "
+  
+  # Объявления
+  announcement:
+    format: "&#FF6B6B[ОБЪЯВЛЕНИЕ] <message>"
+    title:
+      enabled: true
+      title: "&#FF6B6BОБЪЯВЛЕНИЕ"
+      subtitle: "{message}"
+      fade-in: 10
+      stay: 60
+      fade-out: 10
+    actionbar:
+      enabled: true
+      format: "&#FF6B6B[ОБЪЯВЛЕНИЕ] {message}"
+  
+  # Системные сообщения
+  system:
+    join: "&#6BCB77+ {display_name} &#6BCB77присоединился к игре"
+    quit: "&#FF6B6B- {display_name} &#FF6B6Bпокинул игру"
+    death: "&#FF6B6B☠ {display_name} &#FF6B6B{death_message}"
+    
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ФОРМАТЫ ПО ГРУППАМ                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+groups:
+  owner:
+    priority: 1000
+    prefix: "&#FF0000[OWNER]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#FF0000"
+  
+  admin:
+    priority: 900
+    prefix: "&#FF6B6B[ADMIN]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#FF6B6B"
+  
+  moderator:
+    priority: 800
+    prefix: "&#FFA726[MOD]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#FFA726"
+  
+  helper:
+    priority: 700
+    prefix: "&#87CEEB[HELPER]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#87CEEB"
+  
+  vip:
+    priority: 600
+    prefix: "&#FFD700[VIP]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#FFD700"
+  
+  premium:
+    priority: 500
+    prefix: "&#6BCB77[PREMIUM]"
+    suffix: ""
+    format: "{prefix} {display_name}&r: {message}"
+    name-color: "&#6BCB77"
+  
+  default:
+    priority: 0
+    prefix: ""
+    suffix: ""
+    format: "{display_name}&r: {message}"
+    name-color: "&#FFFFFF"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         СПЕЦИАЛЬНЫЕ ФОРМАТЫ                                │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+special:
+  # Формат для мутов
+  mute:
+    message: "&#FF6B6BВы замучены! Осталось: {time}"
+    permanent: "&#FF6B6BВы замучены навсегда!"
+  
+  # Формат для упоминаний
+  mention:
+    format: "&#FFFF00@{player}"
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    volume: 1.0
+    pitch: 1.0
+  
+  # Формат для эмодзи голов
+  head-emoji:
+    format: ":head_{player}:"
+    max-per-message: 3
+  
+  # Формат для ссылок
+  url:
+    format: "<click:open_url:'{url}'><hover:show_text:'<gray>Открыть ссылку'><u>{url}</u></hover></click>"
+    
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         НАСТРОЙКИ ОТОБРАЖЕНИЯ                              │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+display:
+  # Максимальная длина сообщения
+  max-message-length: 256
+  
+  # Показывать время в чате
+  show-time: false
+  time-format: "[HH:mm]"
+  
+  # Показывать мир в чате
+  show-world: false
+  world-format: "[{world}]"
+  
+  # Компактный режим (убирает лишние пробелы)
+  compact-mode: false
+  
+  # Автоматически переносить длинные сообщения
+  word-wrap: true
+  
+  # Цвет сообщений по умолчанию
+  default-message-color: "&#FFFFFF"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ИНТЕГРАЦИИ                                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+integrations:
+  # PlaceholderAPI
+  placeholderapi:
+    enabled: true
+    
+  # LuckPerms
+  luckperms:
+    enabled: true
+    use-prefix: true
+    use-suffix: true
+    
+  # Vault
+  vault:
+    enabled: true
+    
+  # DiscordSRV
+  discordsrv:
+    enabled: false
+    format: "**{player}**: {message}"
+    
+  # Dynmap
+  dynmap:
+    enabled: false
+    format: "{player}: {message}"

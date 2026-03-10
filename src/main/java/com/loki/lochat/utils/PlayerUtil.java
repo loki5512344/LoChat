@@ -17,20 +17,32 @@ public final class PlayerUtil {
 
     /**
      * Safely parses a sound name from config.
-     * Uses deprecated Sound.valueOf() for backward compatibility with string-based config values.
+     * Uses Registry API for modern sound parsing with fallback to reflection.
      *
      * @param soundName the sound name to parse
      * @param defaultSound the default sound to return if parsing fails
      * @return the parsed Sound or the default if invalid
      */
-    @SuppressWarnings("deprecation")
     public static Sound parseSound(String soundName, Sound defaultSound) {
         if (soundName == null || soundName.isEmpty()) {
             return defaultSound;
         }
+        
         try {
-            return Sound.valueOf(soundName.toUpperCase());
-        } catch (IllegalArgumentException e) {
+            // Try to get sound by key using Registry (modern way)
+            Sound sound = org.bukkit.Registry.SOUNDS.match(soundName);
+            if (sound != null) {
+                return sound;
+            }
+        } catch (Exception e) {
+            // Registry failed, try fallback
+        }
+        
+        // Fallback: try direct field access via reflection
+        try {
+            java.lang.reflect.Field field = Sound.class.getField(soundName.toUpperCase().trim());
+            return (Sound) field.get(null);
+        } catch (Exception ex) {
             return defaultSound;
         }
     }

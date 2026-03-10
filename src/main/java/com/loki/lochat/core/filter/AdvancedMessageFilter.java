@@ -22,25 +22,69 @@ public class AdvancedMessageFilter {
             "(.)\\1{3,}"
     );
 
+    // Паттерн для скрытых ссылок (h t t p, w w w и т.д.)
+    private static final Pattern HIDDEN_URL_PATTERN = Pattern.compile(
+            "(?i)(h\\s*t\\s*t\\s*p|w\\s*w\\s*w|d\\s*o\\s*t\\s*c\\s*o\\s*m)",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    // Паттерн для доменов без http
+    private static final Pattern DOMAIN_PATTERN = Pattern.compile(
+            "\\b([a-zA-Z0-9-]+\\.(com|net|org|ru|gg|me|io|xyz|tk|ml|ga|cf|gq))\\b",
+            Pattern.CASE_INSENSITIVE
+    );
+
     private final FileConfiguration config;
     private final List<String> whitelistedDomains;
     private final List<String> blacklistedDomains;
+    private final CapsFilter capsFilter;
 
     public AdvancedMessageFilter(FileConfiguration config) {
         this.config = config;
-        this.whitelistedDomains = config.getStringList("filters.url.whitelist");
-        this.blacklistedDomains = config.getStringList("filters.url.blacklist");
+        this.whitelistedDomains = config.getStringList("filters.advertising.whitelist");
+        this.blacklistedDomains = config.getStringList("filters.advertising.blacklist");
+        
+        // Инициализация капс фильтра
+        int maxCapsPercent = config.getInt("filters.caps.max-percent", 70);
+        int minLength = config.getInt("filters.caps.min-length", 5);
+        boolean autoLowercase = config.getBoolean("filters.caps.auto-lowercase", true);
+        boolean blockMessage = config.getBoolean("filters.caps.block", false);
+        this.capsFilter = new CapsFilter(maxCapsPercent, minLength, autoLowercase, blockMessage);
     }
 
     public FilterResult filterMessage(Player player, String message) {
-        if (config.getBoolean("filters.url.enabled", true)) {
+        // Капс фильтр
+        if (config.getBoolean("filters.caps.enabled", true)) {
+            String filtered = capsFilter.filter(player, message);
+            if (filtered == null) {
+                return new FilterResult(false, message, "&#FF6B6BНе кричите в чате!");
+            }
+            message = filtered;
+        }
+
+        // Анти-реклама (объединенная проверка)
+        if (config.getBoolean("filters.advertising.enabled", true)) {
+            // URL фильтр
             FilterResult urlResult = filterUrls(player, message);
             if (!urlResult.allowed()) {
                 return urlResult;
             }
             message = urlResult.filteredMessage();
+
+            // Скрытые ссылки
+            FilterResult hiddenResult = filterHiddenUrls(player, message);
+            if (!hiddenResult.allowed()) {
+                return hiddenResult;
+            }
+
+            // Домены без http
+            FilterResult domainResult = filterDomains(player, message);
+            if (!domainResult.allowed()) {
+                return domainResult;
+            }
         }
 
+        // IP фильтр
         if (config.getBoolean("filters.ip.enabled", true)) {
             FilterResult ipResult = filterIPs(player, message);
             if (!ipResult.allowed()) {
@@ -49,6 +93,7 @@ public class AdvancedMessageFilter {
             message = ipResult.filteredMessage();
         }
 
+        // Повторяющиеся символы
         if (config.getBoolean("filters.repeat.enabled", true)) {
             message = filterRepeatingChars(message);
         }
@@ -136,6 +181,70 @@ public class AdvancedMessageFilter {
             url = url.substring(0, slashIndex);
         }
         return url;
+    }
+
+    /**
+     * Фильтрует скрытые ссылки (h t t p, w w w и т.д.)
+     */
+    private FilterResult filterHiddenUrls(Player player, String message) {
+        if (!config.getBoolean("filters.advertising.block-hidden-urls", true)) {
+            return new FilterResult(true, message, null);
+        }
+        
+        if (player.hasPermission("lochat.bypass.hiddenurls")) {
+            return new FilterResult(true, message, null);
+        }
+
+        Matcher matcher = HIDDEN_URL_PATTERN.matcher(message);
+        if (matcher.find()) {
+            return new FilterResult(false, message,
+                    config.getString("filters.advertising.blocked-message", "&#FF6B6BРеклама запрещена!"));
+        }
+
+        return new FilterResult(true, message, null);
+    }
+
+    /**
+     * Фильтрует домены без http (example.com, discord.gg и т.д.)
+     */
+    private FilterResult filterDomains(Player player, String message) {
+        if (!config.getBoolean("filters.advertising.block-domains", true)) {
+            return new FilterResult(true, message, null);
+        }
+        
+        if (player.hasPermission("lochat.bypass.domains")) {
+            return new FilterResult(true, message, null);
+        }
+
+        Matcher matcher = DOMAIN_PATTERN.matcher(message);
+
+        while (matcher.find()) {
+            String domain = matcher.group();
+
+            // Проверяем whitelist
+            if (!whitelistedDomains.isEmpty()) {
+                boolean isWhitelisted = whitelistedDomains.stream()
+                        .anyMatch(d -> domain.toLowerCase().contains(d.toLowerCase()));
+
+                if (!isWhitelisted) {
+                    return new FilterResult(false, message,
+                            config.getString("filters.advertising.blocked-message", "&#FF6B6BРеклама запрещена!"));
+                }
+            }
+
+            // Проверяем blacklist
+            if (!blacklistedDomains.isEmpty()) {
+                boolean isBlacklisted = blacklistedDomains.stream()
+                        .anyMatch(d -> domain.toLowerCase().contains(d.toLowerCase()));
+
+                if (isBlacklisted) {
+                    return new FilterResult(false, message,
+                            config.getString("filters.advertising.blocked-message", "&#FF6B6BРеклама запрещена!"));
+                }
+            }
+        }
+
+        return new FilterResult(true, message, null);
     }
 
     public record FilterResult(boolean allowed, String filteredMessage, String blockReason) {

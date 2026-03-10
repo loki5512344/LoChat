@@ -1,0 +1,336 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                          LoChat Mute Configuration                         ║
+# ║                         Конфигурация мутов                                ║
+# ║                              Версия: 1.5.5-1.20.1                          ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ОСНОВНЫЕ НАСТРОЙКИ                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+settings:
+  # Причина мута по умолчанию
+  default-reason: "Нарушение правил чата"
+  
+  # Длительность мута по умолчанию
+  default-duration: "1h"
+  
+  # Максимальная длина причины мута
+  max-reason-length: 100
+  
+  # Показывать причину мута игроку
+  show-reason: true
+  
+  # Показывать оставшееся время мута
+  show-remaining-time: true
+  
+  # Автоматически размучивать при истечении времени
+  auto-unmute: true
+  
+  # Сохранять историю мутов
+  save-history: true
+  
+  # Максимальное количество записей в истории на игрока
+  max-history-entries: 50
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ДОСТУПНЫЕ ДЛИТЕЛЬНОСТИ                             │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+durations:
+  # Формат: "время": "право для использования"
+  "5m":
+    permission: "lochat.mute.dur.5m"
+    display: "5 минут"
+  
+  "10m":
+    permission: "lochat.mute.dur.10m"
+    display: "10 минут"
+  
+  "30m":
+    permission: "lochat.mute.dur.30m"
+    display: "30 минут"
+  
+  "1h":
+    permission: "lochat.mute.dur.1h"
+    display: "1 час"
+  
+  "3h":
+    permission: "lochat.mute.dur.3h"
+    display: "3 часа"
+  
+  "6h":
+    permission: "lochat.mute.dur.6h"
+    display: "6 часов"
+  
+  "12h":
+    permission: "lochat.mute.dur.12h"
+    display: "12 часов"
+  
+  "1d":
+    permission: "lochat.mute.dur.1d"
+    display: "1 день"
+  
+  "3d":
+    permission: "lochat.mute.dur.3d"
+    display: "3 дня"
+  
+  "7d":
+    permission: "lochat.mute.dur.7d"
+    display: "7 дней"
+  
+  "14d":
+    permission: "lochat.mute.dur.14d"
+    display: "14 дней"
+  
+  "30d":
+    permission: "lochat.mute.dur.30d"
+    display: "30 дней"
+  
+  "perm":
+    permission: "lochat.mute.dur.perm"
+    display: "Навсегда"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ГОТОВЫЕ ПРИЧИНЫ                                    │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+reasons:
+  spam:
+    text: "Спам в чате"
+    duration: "30m"
+    permission: "lochat.mute.reason.spam"
+  
+  caps:
+    text: "Злоупотребление заглавными буквами"
+    duration: "15m"
+    permission: "lochat.mute.reason.caps"
+  
+  swear:
+    text: "Использование нецензурной лексики"
+    duration: "1h"
+    permission: "lochat.mute.reason.swear"
+  
+  flood:
+    text: "Флуд в чате"
+    duration: "20m"
+    permission: "lochat.mute.reason.flood"
+  
+  advertising:
+    text: "Реклама"
+    duration: "3h"
+    permission: "lochat.mute.reason.advertising"
+  
+  insult:
+    text: "Оскорбления игроков"
+    duration: "2h"
+    permission: "lochat.mute.reason.insult"
+  
+  toxicity:
+    text: "Токсичное поведение"
+    duration: "6h"
+    permission: "lochat.mute.reason.toxicity"
+  
+  politics:
+    text: "Обсуждение политики"
+    duration: "1h"
+    permission: "lochat.mute.reason.politics"
+  
+  religion:
+    text: "Религиозные споры"
+    duration: "1h"
+    permission: "lochat.mute.reason.religion"
+  
+  begging:
+    text: "Попрошайничество"
+    duration: "30m"
+    permission: "lochat.mute.reason.begging"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         АВТОМАТИЧЕСКИЕ МУТЫ                                │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+auto-mute:
+  # Включить автоматические муты
+  enabled: true
+  
+  # Мут за спам
+  spam:
+    enabled: true
+    threshold: 5  # Количество сообщений
+    time-window: 10  # За какое время (секунды)
+    duration: "10m"
+    reason: "Автомут: спам в чате"
+  
+  # Мут за мат
+  swear:
+    enabled: true
+    threshold: 3  # Количество нарушений
+    duration: "30m"
+    reason: "Автомут: использование мата"
+  
+  # Мут за заглавные буквы
+  caps:
+    enabled: true
+    threshold: 5  # Количество нарушений
+    duration: "5m"
+    reason: "Автомут: злоупотребление CAPS"
+  
+  # Мут за рекламу
+  advertising:
+    enabled: true
+    threshold: 1  # Одно нарушение
+    duration: "1h"
+    reason: "Автомут: реклама"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ЭСКАЛАЦИЯ НАКАЗАНИЙ                                │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+escalation:
+  # Включить эскалацию наказаний
+  enabled: true
+  
+  # Период для подсчета нарушений (дни)
+  period: 30
+  
+  # Уровни наказаний
+  levels:
+    1:
+      duration: "30m"
+      reason: "Первое нарушение"
+    
+    2:
+      duration: "2h"
+      reason: "Повторное нарушение"
+    
+    3:
+      duration: "12h"
+      reason: "Третье нарушение"
+    
+    4:
+      duration: "3d"
+      reason: "Четвертое нарушение"
+    
+    5:
+      duration: "7d"
+      reason: "Пятое нарушение"
+    
+    6:
+      duration: "perm"
+      reason: "Систематические нарушения"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         УВЕДОМЛЕНИЯ                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+notifications:
+  # Уведомлять администраторов о мутах
+  notify-staff: true
+  
+  # Право для получения уведомлений
+  staff-permission: "lochat.mute.notify"
+  
+  # Публичные уведомления о мутах
+  public-mute: false
+  
+  # Публичные уведомления о размутах
+  public-unmute: false
+  
+  # Скрытые муты (с флагом -s)
+  silent-mute:
+    enabled: true
+    permission: "lochat.mute.silent"
+    notify-permission: "lochat.mute.see-silent"
+  
+  # Формат уведомлений
+  formats:
+    mute: "&#FF6B6B{moderator} замутил {player} на {duration}. Причина: {reason}"
+    unmute: "&#6BCB77{moderator} размутил {player}"
+    silent-mute: "&#FFA726[ТИХО] {moderator} замутил {player} на {duration}. Причина: {reason}"
+    auto-mute: "&#FF6B6B[АВТО] {player} замучен на {duration}. Причина: {reason}"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ИНТЕГРАЦИИ                                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+integrations:
+  # LibertyBans
+  libertybans:
+    enabled: false
+    sync-mutes: true
+  
+  # AdvancedBan
+  advancedban:
+    enabled: false
+    sync-mutes: true
+  
+  # LiteBans
+  litebans:
+    enabled: false
+    sync-mutes: true
+  
+  # Discord уведомления
+  discord:
+    enabled: false
+    webhook-url: ""
+    format: "**{moderator}** замутил **{player}** на **{duration}**\nПричина: {reason}"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ХРАНЕНИЕ ДАННЫХ                                    │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+storage:
+  # Тип хранения: file, mysql, sqlite
+  type: "file"
+  
+  # Настройки MySQL
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "lochat"
+    username: "root"
+    password: "password"
+    table-prefix: "lochat_"
+  
+  # Настройки SQLite
+  sqlite:
+    file: "plugins/LoChat/mutes.db"
+  
+  # Автоматическая очистка старых записей
+  cleanup:
+    enabled: true
+    days: 90  # Удалять записи старше N дней
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ                             │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+features:
+  # Временные муты (автоматически снимаются)
+  temporary-mutes: true
+  
+  # IP муты (мутить по IP адресу)
+  ip-mutes:
+    enabled: false
+    permission: "lochat.mute.ip"
+  
+  # Мут команд (блокировать определенные команды)
+  command-mute:
+    enabled: false
+    blocked-commands:
+      - "me"
+      - "say"
+      - "tell"
+  
+  # Предупреждения перед мутом
+  warnings:
+    enabled: true
+    max-warnings: 3
+    reset-time: 3600  # Сброс предупреждений (секунды)
+    
+  # Апелляции на муты
+  appeals:
+    enabled: false
+    command: "/appeal"
+    permission: "lochat.appeal"

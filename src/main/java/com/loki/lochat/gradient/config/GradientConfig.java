@@ -28,100 +28,88 @@ public class GradientConfig {
     }
 
     private void loadConfig() {
-        configFile = new File(plugin.getDataFolder(), "gradient-config.yml");
-        if (!configFile.exists()) {
-            plugin.saveResource("gradient-config.yml", false);
-        }
-        config = YamlConfiguration.loadConfiguration(configFile);
-
-        // Загружаем дефолты
-        InputStream defStream = plugin.getResource("gradient-config.yml");
-        if (defStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(
-                    new InputStreamReader(defStream, StandardCharsets.UTF_8));
-            config.setDefaults(defConfig);
-        }
+        // Читаем из главного config.yml вместо отдельного файла
+        config = plugin.getConfig();
+        plugin.getLogger().info("Gradient конфиг загружен из config.yml");
     }
 
     public void reload() {
+        plugin.reloadConfig();
         this.mainConfig = plugin.getConfig();
-        loadConfig();
+        this.config = plugin.getConfig();
     }
 
     public void save() {
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            plugin.getLogger().warning("Ошибка сохранения gradient-config.yml: " + e.getMessage());
-        }
+        // Сохранение не требуется, используем главный конфиг
+        plugin.saveConfig();
     }
 
     public boolean isEnabled() {
-        return config.getBoolean("enabled", true);
+        return config.getBoolean("gradient.enabled", true);
     }
 
     public int getMaxColors() {
-        return config.getInt("max-colors", 7);
+        return config.getInt("gradient.max-colors", 7);
     }
 
     public int getMinColors() {
-        return config.getInt("min-colors", 1);
+        return config.getInt("gradient.min-colors", 1);
     }
 
     public int getPricePerColor() {
-        return config.getInt("price-per-color", 50);
+        return config.getInt("gradient.price-per-color", 50);
     }
 
     public int getPrefixPrice() {
-        return config.getInt("prefix-price", 500);
+        return config.getInt("gradient.prefix-price", 500);
     }
 
     public boolean isPrefixOneTimePurchase() {
-        return config.getBoolean("prefix-one-time-purchase", true);
+        return config.getBoolean("gradient.prefix-one-time-purchase", true);
     }
 
     public int getColorCooldown() {
-        return config.getInt("color-cooldown", 60);
+        return config.getInt("gradient.color-cooldown", 60);
     }
 
     public int getPrefixCooldown() {
-        return config.getInt("prefix-cooldown", 300);
+        return config.getInt("gradient.prefix-cooldown", 120);
     }
 
     public int getMaxPrefixLength() {
-        return config.getInt("max-prefix-length", 7);
+        return config.getInt("gradient.max-prefix-length", 16);
     }
 
     public String getPrefixFormat() {
-        return config.getString("prefix-format", "[{prefix}] ");
+        return config.getString("gradient.prefix-format", "[{prefix}] ");
     }
 
     public boolean isGradientOnPrefix() {
-        return config.getBoolean("gradient-on-prefix", true);
+        return config.getBoolean("gradient.gradient-on-prefix", true);
     }
 
     public boolean isGradientOnLuckPermsPrefix() {
-        return config.getBoolean("gradient-on-luckperms-prefix", true);
+        return config.getBoolean("gradient.gradient-on-luckperms-prefix", true);
     }
 
     public boolean isContinuousGradient() {
-        return config.getBoolean("continuous-gradient", true);
+        return config.getBoolean("gradient.continuous-gradient", true);
     }
 
     public boolean isUseLegacyRgbFormat() {
-        return config.getBoolean("use-legacy-rgb-format", true);
+        return config.getBoolean("gradient.use-legacy-rgb-format", true);
     }
 
     public String getStorageType() {
-        return config.getString("storage-type", "YAML");
+        return config.getString("gradient.storage-type", "file");
     }
 
     public String getSqliteFile() {
-        return config.getString("sqlite-file", "gradient-data.db");
+        return config.getString("gradient.sqlite-file", "gradient-data.db");
     }
 
     public List<String> getPrefixBlacklist() {
-        return config.getStringList("prefix-blacklist");
+        return config.getStringList("gradient.prefix-blacklist");
     }
 
     public boolean isPrefixBlacklisted(String prefix) {

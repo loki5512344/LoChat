@@ -27,13 +27,13 @@ public class GradientMessages {
     }
 
     private void loadMessages() {
-        messagesFile = new File(plugin.getDataFolder(), "gradient-messages.yml");
+        messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
-            plugin.saveResource("gradient-messages.yml", false);
+            plugin.saveResource("messages.yml", false);
         }
         messages = YamlConfiguration.loadConfiguration(messagesFile);
 
-        InputStream defStream = plugin.getResource("gradient-messages.yml");
+        InputStream defStream = plugin.getResource("messages.yml");
         if (defStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(
                     new InputStreamReader(defStream, StandardCharsets.UTF_8));
@@ -49,7 +49,7 @@ public class GradientMessages {
      * Получает сообщение как строку с MiniMessage тегами
      */
     public String get(String key) {
-        String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
+        String message = messages.getString("gradient." + key, "&#FF0000Сообщение не найдено: " + key);
         return ChatFormatter.convertAllColors(message);
     }
 
@@ -57,7 +57,7 @@ public class GradientMessages {
      * Получает сообщение как строку с заменами
      */
     public String get(String key, String... replacements) {
-        String message = messages.getString(key, "&#FF0000Сообщение не найдено: " + key);
+        String message = messages.getString("gradient." + key, "&#FF0000Сообщение не найдено: " + key);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 < replacements.length) {
                 message = message.replace("{" + replacements[i] + "}", replacements[i + 1]);

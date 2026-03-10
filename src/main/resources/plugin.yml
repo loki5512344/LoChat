@@ -56,6 +56,12 @@ commands:
     permission: chat.pm.ignore
     aliases: [ разигнор, гтшптщку ]
 
+  ignorelist:
+    description: List ignored players
+    usage: /ignorelist
+    permission: chat.pm.ignore
+    aliases: [ игнорлист, шптщкудшые ]
+
   announce:
     description: Send announcement
     usage: /announce <message>
@@ -85,6 +91,11 @@ commands:
     usage: /clearchatconfig <enable|disable|message|status> [text]
     permission: lochat.clearchat.config
     aliases: [ ccc, настройкаочистки ]
+
+  hub:
+    description: Connect to hub server
+    usage: /hub
+    aliases: [ lobby, хаб, рги ]
 
   lochat:
     description: LoChat admin command
@@ -139,6 +150,134 @@ commands:
     usage: /lmuteblame <moderator>
     permission: lochat.muteblame
     aliases: [ muteblame, мутблейм, ьгеуидфьу ]
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                              КАСТОМНЫЕ КОМАНДЫ
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  help:
+    description: Show server help
+    usage: /help
+    aliases: [ помощь, хелп ]
+
+  rules:
+    description: Show server rules
+    usage: /rules
+    aliases: [ правила, rule ]
+
+  discord:
+    description: Show Discord invite
+    usage: /discord
+    aliases: [ дискорд, ds ]
+
+  website:
+    description: Show website link
+    usage: /website
+    aliases: [ сайт, site ]
+
+  coords:
+    description: Show your coordinates
+    usage: /coords
+    aliases: [ координаты, pos, position ]
+
+  time:
+    description: Show server time
+    usage: /time
+    aliases: [ время, дата ]
+
+  playerinfo:
+    description: Show player information
+    usage: /playerinfo [player]
+    permission: lochat.playerinfo
+    aliases: [ pinfo, инфо, info ]
+
+  sounds:
+    description: Toggle sound effects
+    usage: /sounds [on|off]
+    aliases: [ звуки, sound ]
+
+  automessage:
+    description: Toggle auto messages
+    usage: /automessage [on|off]
+    aliases: [ автосообщения, am ]
+
+  stats:
+    description: Show chat statistics
+    usage: /stats [player]
+    permission: lochat.stats
+    aliases: [ статистика, статы ]
+
+  top:
+    description: Show top chatters
+    usage: /top [messages|playtime]
+    aliases: [ топ, рейтинг ]
+
+  me:
+    description: Send action message
+    usage: /me <action>
+    permission: chat.me
+    aliases: [ action, действие ]
+
+  broadcast:
+    description: Broadcast message to all players
+    usage: /broadcast <message>
+    permission: lochat.broadcast
+    aliases: [ bc, объявить ]
+
+  maintenance:
+    description: Toggle maintenance mode
+    usage: /maintenance [on|off] [reason]
+    permission: lochat.maintenance
+    aliases: [ тех-работы, техработы ]
+
+  motd:
+    description: Show message of the day
+    usage: /motd
+    aliases: [ сообщение-дня, мотд ]
+
+  ping:
+    description: Show your ping
+    usage: /ping [player]
+    aliases: [ пинг ]
+
+  list:
+    description: Show online players
+    usage: /list
+    aliases: [ онлайн, online, who ]
+
+  afk:
+    description: Toggle AFK status
+    usage: /afk [reason]
+    aliases: [ афк, away ]
+
+  back:
+    description: Return from AFK
+    usage: /back
+    aliases: [ назад, return ]
+
+  tps:
+    description: Show server TPS
+    usage: /tps
+    permission: lochat.tps
+    aliases: [ тпс, performance ]
+
+  memory:
+    description: Show server memory usage
+    usage: /memory
+    permission: lochat.memory
+    aliases: [ mem, память, ram ]
+
+  version:
+    description: Show plugin version
+    usage: /version
+    permission: lochat.version
+    aliases: [ ver, версия ]
+
+  reload:
+    description: Reload plugin configuration
+    usage: /reload
+    permission: lochat.reload
+    aliases: [ rl, перезагрузить ]
 
 permissions:
   chat.global.use:
@@ -255,4 +394,51 @@ permissions:
     default: op
   lochat.bypass.ipfilter:
     description: Bypass IP filter
+    default: op
+  lochat.bypass.caps:
+    description: Bypass caps filter
+    default: op
+  lochat.bypass.hiddenurls:
+    description: Bypass hidden URLs filter
+    default: op
+  lochat.bypass.domains:
+    description: Bypass domains filter
+    default: op
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                              ПРАВА КАСТОМНЫХ КОМАНД
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  lochat.playerinfo:
+    description: Can view player information
+    default: op
+  lochat.stats:
+    description: Can view chat statistics
+    default: op
+  chat.me:
+    description: Can use /me command
+    default: true
+  lochat.broadcast:
+    description: Can broadcast messages
+    default: op
+  lochat.maintenance:
+    description: Can toggle maintenance mode
+    default: op
+  lochat.tps:
+    description: Can view server TPS
+    default: op
+  lochat.memory:
+    description: Can view server memory
+    default: op
+  lochat.version:
+    description: Can view plugin version
+    default: true
+  lochat.reload:
+    description: Can reload plugin
+    default: op
+  lochat.afk:
+    description: Can use AFK commands
+    default: true
+  lochat.ping.others:
+    description: Can view other players' ping
     default: op

@@ -1,0 +1,380 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                          LoChat Integrations                               ║
+# ║                           Интеграции                                      ║
+# ║                              Версия: 1.5.5-1.20.1                          ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         PLACEHOLDERAPI                                     │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+placeholderapi:
+  # Включить интеграцию с PlaceholderAPI
+  enabled: true
+  
+  # Регистрировать собственные плейсхолдеры
+  register-placeholders: true
+  
+  # Доступные плейсхолдеры LoChat:
+  # %lochat_player_muted% - замучен ли игрок (true/false)
+  # %lochat_player_mute_time% - оставшееся время мута
+  # %lochat_player_mute_reason% - причина мута
+  # %lochat_player_gradient% - градиентный ник
+  # %lochat_player_prefix% - кастомный префикс
+  # %lochat_player_ignored_count% - количество игнорируемых игроков
+  # %lochat_player_messages_sent% - отправлено сообщений
+  # %lochat_player_last_message% - последнее сообщение
+  # %lochat_server_muted_count% - количество замученных игроков
+  # %lochat_server_messages_today% - сообщений сегодня
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         LUCKPERMS                                          │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+luckperms:
+  # Включить интеграцию с LuckPerms
+  enabled: true
+  
+  # Использовать префиксы из LuckPerms
+  use-prefix: true
+  
+  # Использовать суффиксы из LuckPerms
+  use-suffix: true
+  
+  # Использовать мета-данные из LuckPerms
+  use-meta: true
+  
+  # Приоритет групп для форматирования чата
+  group-priority: true
+  
+  # Кэшировать данные LuckPerms
+  cache-data: true
+  
+  # Время кэширования (секунды)
+  cache-duration: 300
+  
+  # Синхронизировать изменения прав
+  sync-changes: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         VAULT                                              │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+vault:
+  # Включить интеграцию с Vault
+  enabled: true
+  
+  # Использовать Vault для прав
+  use-permissions: true
+  
+  # Использовать Vault для экономики
+  use-economy: true
+  
+  # Использовать Vault для чата (префиксы/суффиксы)
+  use-chat: true
+  
+  # Приоритет Vault над другими системами
+  priority: 1
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         PLAYERPOINTS                                       │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+playerpoints:
+  # Включить интеграцию с PlayerPoints
+  enabled: true
+  
+  # Использовать поинты для покупки градиентов
+  use-for-gradients: true
+  
+  # Использовать поинты для покупки префиксов
+  use-for-prefixes: true
+  
+  # Автоматически списывать поинты
+  auto-deduct: true
+  
+  # Уведомлять о списании поинтов
+  notify-deduction: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         LIBERTYBANS                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+libertybans:
+  # Включить интеграцию с LibertyBans
+  enabled: false
+  
+  # Синхронизировать муты с LibertyBans
+  sync-mutes: true
+  
+  # Использовать LibertyBans для мутов вместо встроенной системы
+  use-for-mutes: false
+  
+  # Импортировать существующие муты из LibertyBans
+  import-existing: false
+  
+  # Экспортировать муты в LibertyBans
+  export-mutes: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         SKINSRESTORER                                      │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+skinsrestorer:
+  # Включить интеграцию с SkinsRestorer
+  enabled: true
+  
+  # Обновлять отображение при смене скина
+  update-on-skin-change: true
+  
+  # Использовать скины в head emoji
+  use-in-head-emoji: true
+  
+  # Кэшировать данные скинов
+  cache-skins: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         DISCORDSRV                                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+discordsrv:
+  # Включить интеграцию с DiscordSRV
+  enabled: false
+  
+  # Отправлять сообщения чата в Discord
+  send-chat-to-discord: true
+  
+  # Отправлять сообщения из Discord в игру
+  send-discord-to-chat: true
+  
+  # Канал для глобального чата
+  global-chat-channel: "global-chat"
+  
+  # Канал для локального чата
+  local-chat-channel: "local-chat"
+  
+  # Канал для объявлений
+  announcement-channel: "announcements"
+  
+  # Формат сообщений в Discord
+  discord-format: "**{player}**: {message}"
+  
+  # Формат сообщений из Discord
+  minecraft-format: "&7[Discord] &b{user}&7: {message}"
+  
+  # Использовать градиентные ники в Discord
+  use-gradients-in-discord: false
+  
+  # Webhook для отправки сообщений
+  webhook:
+    enabled: false
+    url: ""
+    username: "LoChat"
+    avatar-url: ""
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         DYNMAP                                             │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+dynmap:
+  # Включить интеграцию с Dynmap
+  enabled: false
+  
+  # Отправлять сообщения чата на веб-карту
+  send-chat-to-web: true
+  
+  # Отправлять сообщения с веб-карты в игру
+  send-web-to-chat: true
+  
+  # Формат сообщений на веб-карте
+  web-format: "{player}: {message}"
+  
+  # Формат сообщений с веб-карты
+  minecraft-format: "&7[Web] &a{player}&7: {message}"
+  
+  # Использовать градиентные ники на веб-карте
+  use-gradients-on-web: false
+  
+  # Фильтровать сообщения для веб-карты
+  filter-messages: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         BLUEMAP                                            │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+bluemap:
+  # Включить интеграцию с BlueMap
+  enabled: false
+  
+  # Отправлять сообщения чата на карту
+  send-chat-to-map: true
+  
+  # Формат сообщений на карте
+  map-format: "{player}: {message}"
+  
+  # Использовать градиентные ники на карте
+  use-gradients-on-map: false
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         PLAN                                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+plan:
+  # Включить интеграцию с Plan
+  enabled: false
+  
+  # Отправлять статистику чата в Plan
+  send-chat-stats: true
+  
+  # Отправлять статистику мутов в Plan
+  send-mute-stats: true
+  
+  # Интервал отправки статистики (секунды)
+  stats-interval: 300
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         COREPROTECT                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+coreprotect:
+  # Включить интеграцию с CoreProtect
+  enabled: false
+  
+  # Логировать сообщения чата
+  log-chat-messages: true
+  
+  # Логировать команды
+  log-commands: true
+  
+  # Логировать муты
+  log-mutes: true
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         AUTHME                                             │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+authme:
+  # Включить интеграцию с AuthMe
+  enabled: false
+  
+  # Блокировать чат для неавторизованных игроков
+  block-chat-for-unregistered: true
+  
+  # Сообщение для неавторизованных игроков
+  unregistered-message: "&#FF6B6BВойдите в аккаунт для использования чата!"
+  
+  # Разрешенные команды для неавторизованных
+  allowed-commands:
+    - "/login"
+    - "/register"
+    - "/l"
+    - "/reg"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         TOWNY                                              │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+towny:
+  # Включить интеграцию с Towny
+  enabled: false
+  
+  # Чат города
+  town-chat:
+    enabled: true
+    format: "&6[Town] {prefix}{player}&r: {message}"
+    command: "/tc"
+  
+  # Чат нации
+  nation-chat:
+    enabled: true
+    format: "&5[Nation] {prefix}{player}&r: {message}"
+    command: "/nc"
+  
+  # Показывать город в чате
+  show-town-in-chat: true
+  
+  # Формат города в чате
+  town-format: "&7[{town}]"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         FACTIONS                                           │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+factions:
+  # Включить интеграцию с Factions
+  enabled: false
+  
+  # Чат фракции
+  faction-chat:
+    enabled: true
+    format: "&c[Faction] {prefix}{player}&r: {message}"
+    command: "/fc"
+  
+  # Чат альянса
+  alliance-chat:
+    enabled: true
+    format: "&a[Alliance] {prefix}{player}&r: {message}"
+    command: "/ac"
+  
+  # Показывать фракцию в чате
+  show-faction-in-chat: true
+  
+  # Формат фракции в чате
+  faction-format: "&7[{faction}]"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         MULTIVERSE                                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+multiverse:
+  # Включить интеграцию с Multiverse
+  enabled: false
+  
+  # Разделять чат по мирам
+  separate-chat-by-world: false
+  
+  # Показывать мир в чате
+  show-world-in-chat: true
+  
+  # Формат мира в чате
+  world-format: "&7[{world}]"
+  
+  # Настройки чата для конкретных миров
+  world-settings:
+    world_nether:
+      chat-color: "&c"
+      prefix: "&4[Nether]"
+    
+    world_the_end:
+      chat-color: "&5"
+      prefix: "&d[End]"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         ОБЩИЕ НАСТРОЙКИ                                    │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+general:
+  # Автоматически определять доступные плагины
+  auto-detect-plugins: true
+  
+  # Интервал проверки плагинов (секунды)
+  plugin-check-interval: 60
+  
+  # Логировать интеграции
+  log-integrations: true
+  
+  # Уведомлять о подключении/отключении интеграций
+  notify-integration-changes: true
+  
+  # Приоритет интеграций (чем выше число, тем выше приоритет)
+  integration-priority:
+    luckperms: 100
+    vault: 90
+    placeholderapi: 80
+    playerpoints: 70
+    libertybans: 60
+    skinsrestorer: 50
+    discordsrv: 40
+    dynmap: 30
+    plan: 20
+    coreprotect: 10

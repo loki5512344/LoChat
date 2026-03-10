@@ -1,0 +1,30 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                              Player Data                                   ║
+# ║                           Данные игроков                                  ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# НЕ РЕДАКТИРУЙТЕ ЭТОТ ФАЙЛ ВРУЧНУЮ!
+
+data-version: 1
+players: {}
+
+# Пример структуры:
+# 550e8400-e29b-41d4-a716-446655440000:
+#   name: "PlayerName"
+#   display-name: "&#FF0000P&#FF3300l&#FF6600a&#FF9900y&#FFcc00e&#FFff00r"
+#   first-join: 1640995200000
+#   last-join: 1640995200000
+#   last-quit: 1640995200000
+#   total-playtime: 3600000
+#   settings:
+#     sounds-enabled: true
+#     sound-volume: 1.0
+#     auto-messages: true
+#     mentions-enabled: true
+#     pm-sounds: true
+#   statistics:
+#     messages-sent: 150
+#     commands-used: 45
+#     mutes-received: 2
+#     last-message: "Привет всем!"
+#     join-count: 25

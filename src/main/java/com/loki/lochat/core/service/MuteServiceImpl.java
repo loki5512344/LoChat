@@ -32,20 +32,40 @@ public class MuteServiceImpl implements MuteService {
 
     @Override
     public void mute(UUID uuid, String playerName, long duration, String reason, String mutedBy) {
+        if (uuid == null) {
+            plugin.getLogger().warning("Attempted to mute player with null UUID");
+            return;
+        }
+        
+        if (playerName == null || playerName.isEmpty()) {
+            plugin.getLogger().warning("Attempted to mute player with null or empty name");
+            return;
+        }
+        
         long endTime = duration > 0 ? System.currentTimeMillis() + duration : 0;
         MuteData data = new MuteData(uuid, playerName, endTime, reason, mutedBy);
         mutes.put(uuid, data);
 
         historyManager.addEntry(uuid, playerName, duration, reason, mutedBy);
         saveAsync();
+        
+        plugin.getLogger().info("Player " + playerName + " muted by " + mutedBy + 
+                " for " + (duration > 0 ? formatTime(duration) : "permanent") + 
+                (reason != null ? " (reason: " + reason + ")" : ""));
     }
 
     @Override
     public boolean unmute(UUID uuid, String unmutedBy) {
+        if (uuid == null) {
+            plugin.getLogger().warning("Attempted to unmute player with null UUID");
+            return false;
+        }
+        
         MuteData removed = mutes.remove(uuid);
         if (removed != null) {
             historyManager.updateUnmute(uuid, unmutedBy);
             saveAsync();
+            plugin.getLogger().info("Player " + removed.getPlayerName() + " unmuted by " + unmutedBy);
             return true;
         }
         return false;
@@ -53,6 +73,10 @@ public class MuteServiceImpl implements MuteService {
 
     @Override
     public boolean isMuted(UUID uuid) {
+        if (uuid == null) {
+            return false;
+        }
+        
         MuteData data = mutes.get(uuid);
         if (data == null) {
             return false;
@@ -61,6 +85,7 @@ public class MuteServiceImpl implements MuteService {
         if (isExpired(data)) {
             mutes.remove(uuid);
             saveAsync();
+            plugin.getLogger().info("Mute expired for player " + data.getPlayerName());
             return false;
         }
         return true;

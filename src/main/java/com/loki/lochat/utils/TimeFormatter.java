@@ -6,8 +6,12 @@ public final class TimeFormatter {
     }
 
     public static String format(long millis) {
-        if (millis <= 0) {
+        if (millis < 0) {
             return "0с";
+        }
+        
+        if (millis == 0) {
+            return "навсегда";
         }
 
         long seconds = millis / 1000;
@@ -16,18 +20,21 @@ public final class TimeFormatter {
         long days = hours / 24;
 
         if (days > 0) {
-            return days + "д " + (hours % 24) + "ч";
+            long remainingHours = hours % 24;
+            return remainingHours > 0 ? days + "д " + remainingHours + "ч" : days + "д";
         } else if (hours > 0) {
-            return hours + "ч " + (minutes % 60) + "м";
+            long remainingMinutes = minutes % 60;
+            return remainingMinutes > 0 ? hours + "ч " + remainingMinutes + "м" : hours + "ч";
         } else if (minutes > 0) {
-            return minutes + "м " + (seconds % 60) + "с";
+            long remainingSeconds = seconds % 60;
+            return remainingSeconds > 0 ? minutes + "м " + remainingSeconds + "с" : minutes + "м";
         } else {
             return seconds + "с";
         }
     }
 
     public static long parse(String timeStr) {
-        if (timeStr == null || timeStr.isEmpty()) {
+        if (timeStr == null || timeStr.trim().isEmpty()) {
             return 0;
         }
 
@@ -38,8 +45,12 @@ public final class TimeFormatter {
             if (Character.isDigit(c)) {
                 number.append(c);
             } else if (number.length() > 0) {
-                long value = Long.parseLong(number.toString());
-                totalMillis += getMillisForUnit(c, value);
+                try {
+                    long value = Long.parseLong(number.toString());
+                    totalMillis += getMillisForUnit(c, value);
+                } catch (NumberFormatException e) {
+                    // Skip invalid numbers
+                }
                 number.setLength(0);
             }
         }

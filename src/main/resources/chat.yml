@@ -1,3 +1,0 @@
-formats:
-  global: "<gray>[G]</gray> {prefix}{name}<gray>:</gray> <white>{message}"
-  local: "{prefix}{name}<gray>:</gray> <white>{message}"

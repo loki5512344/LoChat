@@ -31,20 +31,15 @@ public class AutoMessageManager {
     }
 
     private void loadMessages() {
-        File file = new File(plugin.getDataFolder(), "automessages.yml");
-        if (!file.exists()) {
-            plugin.saveResource("automessages.yml", false);
-        }
-
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration config = plugin.getConfig();
 
         // Настройки
-        prefix = config.getString("settings.prefix", "&6[&eINFO&6]&r");
-        mode = config.getString("settings.mode", "sequential").toLowerCase();
+        prefix = plugin.getConfigManager().getString("prefix", "&#00D4FF[LoChat]");
+        mode = "sequential"; // Всегда последовательно
 
-        // Загружаем сообщения
+        // Загружаем сообщения из config.yml
         messages = new LinkedHashMap<>();
-        ConfigurationSection msgSection = config.getConfigurationSection("messages");
+        ConfigurationSection msgSection = config.getConfigurationSection("automessages-list");
 
         if (msgSection != null) {
             for (String key : msgSection.getKeys(false)) {
@@ -65,32 +60,7 @@ public class AutoMessageManager {
             }
         }
 
-        // Определяем порядок
-        messageOrder = new ArrayList<>();
-
-        if (mode.equals("custom")) {
-            String orderStr = config.getString("settings.order", "");
-            for (String item : orderStr.split(",")) {
-                String trimmed = item.trim();
-                if (!trimmed.isEmpty()) {
-                    try {
-                        int index = Integer.parseInt(trimmed) - 1;
-                        List<String> keys = new ArrayList<>(messages.keySet());
-                        if (index >= 0 && index < keys.size()) {
-                            messageOrder.add(keys.get(index));
-                        }
-                    } catch (NumberFormatException e) {
-                        if (messages.containsKey(trimmed)) {
-                            messageOrder.add(trimmed);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (messageOrder.isEmpty()) {
-            messageOrder.addAll(messages.keySet());
-        }
+        messageOrder = new ArrayList<>(messages.keySet());
 
         plugin.getLogger().info("Загружено " + messages.size() + " автосообщений");
     }

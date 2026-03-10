@@ -19,9 +19,9 @@ public class ChatMessage {
     }
 
     public static ChatMessage create(Player sender, String rawMessage) {
-        // Определяем тип чата
-        boolean isGlobal = rawMessage.startsWith("!") &&
-                sender.hasPermission("chat.global.use");
+        // С "!" = глобальный чат
+        // Без "!" = локальный чат
+        boolean isGlobal = rawMessage.startsWith("!");
 
         String content = isGlobal ?
                 rawMessage.substring(1).trim() :
