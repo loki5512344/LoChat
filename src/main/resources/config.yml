@@ -91,6 +91,54 @@ custom-commands:
     show-in-actionbar: true
     # Время показа в actionbar (тики)
     actionbar-duration: 60
+    
+  # Настройки /me команды
+  me:
+    # Радиус для локального действия
+    radius: 100
+    # Цвет сообщения
+    color: "gray"
+    
+  # Настройки звуков
+  sounds:
+    # Разрешить игрокам переключать звуки
+    allow-toggle: true
+    # Звук при включении/выключении
+    toggle-sound: "UI_BUTTON_CLICK"
+    
+  # Настройки статистики
+  stats:
+    # Показывать статистику сервера
+    show-server-stats: true
+    # Показывать статистику игроков
+    show-player-stats: true
+    # Обновлять статистику каждые N секунд
+    update-interval: 300
+    
+  # Настройки пинга
+  ping:
+    # Цвета для разных значений пинга
+    colors:
+      excellent: "green"    # < 50ms
+      good: "yellow"        # 50-100ms
+      fair: "gold"          # 100-200ms
+      poor: "red"           # > 200ms
+      
+  # Настройки времени
+  time:
+    # Формат времени (12 или 24 часа)
+    format: 24
+    # Показывать дату
+    show-date: true
+    
+  # Настройки списка игроков
+  list:
+    # Группировать по мирам
+    group-by-world: false
+    # Показывать AFK игроков
+    show-afk: true
+    # Максимум игроков в списке
+    max-players: 50
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                              НАСТРОЙКИ ЧАТА                                │
