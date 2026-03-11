@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
@@ -141,7 +142,7 @@ public class DiscordWebhook {
      * Синхронная отправка в вебхук
      */
     private boolean sendWebhookSync(String jsonPayload) throws IOException {
-        URL url = new URL(webhookUrl);
+        URL url = URI.create(webhookUrl).toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
         try {

@@ -1,6 +1,5 @@
 plugins {
     java
-    checkstyle
 }
 
 group = "com.loki"
@@ -52,18 +51,4 @@ tasks.jar {
     archiveFileName.set("LoChat-1.5.5-1.21.8.jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-checkstyle {
-    toolVersion = "10.12.5"
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    isIgnoreFailures = true
-    maxWarnings = 999
-}
-
-tasks.withType<Checkstyle> {
-    reports {
-        xml.required.set(false)
-        html.required.set(true)
-    }
 }

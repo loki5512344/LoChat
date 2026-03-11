@@ -33,20 +33,25 @@ public class EnhancedChatRenderer implements ChatRenderer {
 
     @Override
     public Component render(Player source, Component sourceDisplayName, Component message, Audience viewer) {
-        // Префикс в зависимости от типа чата
+        // Красивые префиксы с градиентами и эмодзи
         Component prefixComponent;
         if (isGlobal) {
-            // [G] с желтой буквой G
-            prefixComponent = Component.text("[")
-                    .color(net.kyori.adventure.text.format.NamedTextColor.GRAY)
-                    .append(Component.text("G").color(net.kyori.adventure.text.format.NamedTextColor.GOLD))
-                    .append(Component.text("]").color(net.kyori.adventure.text.format.NamedTextColor.GRAY));
+            // 🌍 GLOBAL с градиентом от золотого к оранжевому
+            prefixComponent = Component.text("🌍 ")
+                    .append(Component.text("G").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FFD700")))
+                    .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FFA500")))
+                    .append(Component.text("O").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF8C00")))
+                    .append(Component.text("B").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF7F50")))
+                    .append(Component.text("A").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF6347")))
+                    .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF4500")));
         } else {
-            // [L] с голубой буквой L
-            prefixComponent = Component.text("[")
-                    .color(net.kyori.adventure.text.format.NamedTextColor.GRAY)
-                    .append(Component.text("L").color(net.kyori.adventure.text.format.NamedTextColor.AQUA))
-                    .append(Component.text("]").color(net.kyori.adventure.text.format.NamedTextColor.GRAY));
+            // 📍 LOCAL с градиентом от голубого к синему
+            prefixComponent = Component.text("📍 ")
+                    .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEEB")))
+                    .append(Component.text("O").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEFA")))
+                    .append(Component.text("C").color(net.kyori.adventure.text.format.TextColor.fromHexString("#00BFFF")))
+                    .append(Component.text("A").color(net.kyori.adventure.text.format.TextColor.fromHexString("#1E90FF")))
+                    .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#4169E1")));
         }
         
         Component playerComponent = createPlayerComponent(source, sourceDisplayName);
@@ -60,10 +65,15 @@ public class EnhancedChatRenderer implements ChatRenderer {
             processedMessage = mentionHandler.processMentions(processedMessage, source, viewerPlayer);
         }
 
+        // Красивое разделение с градиентными стрелками
+        Component separator = isGlobal ? 
+            Component.text(" ▶ ").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FFD700")) :
+            Component.text(" ▶ ").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEEB"));
+
         return prefixComponent
-                .append(Component.text(" "))
+                .append(separator)
                 .append(playerComponent)
-                .append(Component.text(": ").color(net.kyori.adventure.text.format.NamedTextColor.GRAY))
+                .append(Component.text(": ").color(net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY))
                 .append(processedMessage);
     }
 
@@ -75,10 +85,16 @@ public class EnhancedChatRenderer implements ChatRenderer {
         java.util.List<String> hoverLines = plugin.getConfig().getStringList("chat.hover.format");
         if (hoverLines.isEmpty()) {
             hoverLines = java.util.Arrays.asList(
-                    "<gray>Игрок: <white>{player}",
-                    "<gray>Мир: <green>{world}",
+                    "<gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>",
+                    "<gradient:#87CEEB:#4169E1><bold>👤 Информация об игроке</bold></gradient>",
                     "",
-                    "<yellow>▶ Клик: написать ЛС"
+                    "<gray>🏷️ Имя: <white><bold>{player}</bold>",
+                    "<gray>📶 Пинг: <yellow><bold>{ping}ms</bold>",
+                    "<gray>❤️ Здоровье: <red><bold>{health}/20</bold>",
+                    "<gray>🍖 Голод: <gold><bold>{food}/20</bold>",
+                    "",
+                    "<gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>",
+                    "<yellow>💬 <bold>Клик:</bold> <gray>написать личное сообщение"
             );
         }
 
@@ -89,7 +105,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
             line = line.replace("{player}", player.getName())
                     .replace("{world}", player.getWorld().getName())
                     .replace("{ping}", String.valueOf(player.getPing()))
-                    .replace("{gamemode}", player.getGameMode().name())
+                    .replace("{gamemode}", getGameModeDisplay(player.getGameMode()))
                     .replace("{health}", String.valueOf(Math.round(player.getHealth())))
                     .replace("{food}", String.valueOf(player.getFoodLevel()));
 
@@ -104,6 +120,18 @@ public class EnhancedChatRenderer implements ChatRenderer {
         return displayName
                 .hoverEvent(HoverEvent.showText(hoverBuilder.build()))
                 .clickEvent(ClickEvent.suggestCommand("/msg " + player.getName() + " "));
+    }
+
+    /**
+     * Получить красивое отображение игрового режима
+     */
+    private String getGameModeDisplay(org.bukkit.GameMode gameMode) {
+        return switch (gameMode) {
+            case SURVIVAL -> "Выживание";
+            case CREATIVE -> "Творчество";
+            case ADVENTURE -> "Приключение";
+            case SPECTATOR -> "Наблюдатель";
+        };
     }
 
     private Component processUrls(Component message) {
@@ -130,26 +158,50 @@ public class EnhancedChatRenderer implements ChatRenderer {
 
     private Component processEmojis(Component message) {
         Component result = message;
-        result = result.replaceText(builder -> builder.matchLiteral(":heart:").replacement("❤"));
+        
+        // Основные символы
+        result = result.replaceText(builder -> builder.matchLiteral(":heart:").replacement("♥"));
         result = result.replaceText(builder -> builder.matchLiteral(":star:").replacement("★"));
-        result = result.replaceText(builder -> builder.matchLiteral(":check:").replacement("✔"));
-        result = result.replaceText(builder -> builder.matchLiteral(":cross:").replacement("✖"));
+        result = result.replaceText(builder -> builder.matchLiteral(":check:").replacement("✓"));
+        result = result.replaceText(builder -> builder.matchLiteral(":cross:").replacement("✗"));
         result = result.replaceText(builder -> builder.matchLiteral(":arrow:").replacement("→"));
         result = result.replaceText(builder -> builder.matchLiteral(":skull:").replacement("☠"));
         result = result.replaceText(builder -> builder.matchLiteral(":note:").replacement("♪"));
         result = result.replaceText(builder -> builder.matchLiteral(":sun:").replacement("☀"));
         result = result.replaceText(builder -> builder.matchLiteral(":moon:").replacement("☽"));
         result = result.replaceText(builder -> builder.matchLiteral(":snowflake:").replacement("❄"));
-        result = result.replaceText(builder -> builder.matchLiteral(":fire:").replacement("🔥"));
+        result = result.replaceText(builder -> builder.matchLiteral(":fire:").replacement("▲"));
+        
+        // Minecraft символы
         result = result.replaceText(builder -> builder.matchLiteral(":diamond:").replacement("◆"));
         result = result.replaceText(builder -> builder.matchLiteral(":sword:").replacement("⚔"));
         result = result.replaceText(builder -> builder.matchLiteral(":pickaxe:").replacement("⛏"));
-        result = result.replaceText(builder -> builder.matchLiteral(":bow:").replacement("🏹"));
-        result = result.replaceText(builder -> builder.matchLiteral(":shield:").replacement("🛡"));
-        result = result.replaceText(builder -> builder.matchLiteral(":potion:").replacement("🧪"));
-        result = result.replaceText(builder -> builder.matchLiteral(":book:").replacement("📖"));
-        result = result.replaceText(builder -> builder.matchLiteral(":crown:").replacement("👑"));
-        result = result.replaceText(builder -> builder.matchLiteral(":gem:").replacement("💎"));
+        result = result.replaceText(builder -> builder.matchLiteral(":bow:").replacement("⌐"));
+        result = result.replaceText(builder -> builder.matchLiteral(":shield:").replacement("▣"));
+        result = result.replaceText(builder -> builder.matchLiteral(":potion:").replacement("⚗"));
+        result = result.replaceText(builder -> builder.matchLiteral(":book:").replacement("▤"));
+        result = result.replaceText(builder -> builder.matchLiteral(":crown:").replacement("♔"));
+        result = result.replaceText(builder -> builder.matchLiteral(":gem:").replacement("◊"));
+        result = result.replaceText(builder -> builder.matchLiteral(":emerald:").replacement("◈"));
+        result = result.replaceText(builder -> builder.matchLiteral(":gold:").replacement("◉"));
+        result = result.replaceText(builder -> builder.matchLiteral(":iron:").replacement("◎"));
+        
+        // Дополнительные символы
+        result = result.replaceText(builder -> builder.matchLiteral(":thumbsup:").replacement("▲"));
+        result = result.replaceText(builder -> builder.matchLiteral(":thumbsdown:").replacement("▼"));
+        result = result.replaceText(builder -> builder.matchLiteral(":clap:").replacement("※"));
+        result = result.replaceText(builder -> builder.matchLiteral(":wave:").replacement("~"));
+        result = result.replaceText(builder -> builder.matchLiteral(":peace:").replacement("✌"));
+        result = result.replaceText(builder -> builder.matchLiteral(":ok:").replacement("◯"));
+        result = result.replaceText(builder -> builder.matchLiteral(":facepalm:").replacement("⌐_⌐"));
+        result = result.replaceText(builder -> builder.matchLiteral(":shrug:").replacement("¯\\_(ツ)_/¯"));
+        result = result.replaceText(builder -> builder.matchLiteral(":thinking:").replacement("?"));
+        result = result.replaceText(builder -> builder.matchLiteral(":laugh:").replacement("xD"));
+        result = result.replaceText(builder -> builder.matchLiteral(":cry:").replacement(":'("));
+        result = result.replaceText(builder -> builder.matchLiteral(":rage:").replacement(">:("));
+        result = result.replaceText(builder -> builder.matchLiteral(":cool:").replacement("B)"));
+        result = result.replaceText(builder -> builder.matchLiteral(":wink:").replacement(";)"));
+        
         return result;
     }
 }

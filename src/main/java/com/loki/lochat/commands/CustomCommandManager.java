@@ -28,7 +28,6 @@ public class CustomCommandManager {
         // Информационные команды
         commands.put("help", new HelpCommand(plugin));
         commands.put("rules", new RulesCommand(plugin));
-        commands.put("discord", new DiscordCommand(plugin));
         
         // Утилиты
         commands.put("coords", new CoordsCommand(plugin));

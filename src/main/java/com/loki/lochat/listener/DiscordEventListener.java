@@ -72,8 +72,8 @@ public class DiscordEventListener implements Listener {
         if (!discord.isEnabled()) return;
         
         Player player = event.getEntity();
-        String deathMessage = event.getDeathMessage() != null ? 
-            PlainTextComponentSerializer.plainText().serialize(event.getDeathMessage()) : 
+        String deathMessage = event.deathMessage() != null ? 
+            PlainTextComponentSerializer.plainText().serialize(event.deathMessage()) : 
             "умер";
         
         discord.sendPlayerDeath(player, deathMessage);
