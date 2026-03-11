@@ -49,6 +49,11 @@ public class ChatEventListener implements Listener {
 
         String filteredMessage = filterResult.filteredMessage();
         
+        // Убеждаемся что ! удален из отображаемого сообщения
+        if (isGlobal && filteredMessage.startsWith("!")) {
+            filteredMessage = filteredMessage.substring(1).stripLeading();
+        }
+        
         event.message(com.loki.lochat.utils.ChatFormatter.parse(filteredMessage));
 
         // Фильтруем получателей для локального чата

@@ -166,8 +166,9 @@ commands:
     aliases: [ правила, rule ]
 
   discord:
-    description: Show Discord invite
-    usage: /discord
+    description: Discord integration management
+    usage: /discord [status|reload|test]
+    permission: lochat.discord.admin
     aliases: [ дискорд, ds ]
 
   website:
@@ -441,4 +442,7 @@ permissions:
     default: true
   lochat.ping.others:
     description: Can view other players' ping
+    default: op
+  lochat.discord.admin:
+    description: Can manage Discord integration
     default: op

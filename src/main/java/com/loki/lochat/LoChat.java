@@ -8,9 +8,11 @@ import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.gradient.GradientModule;
+import com.loki.lochat.integrations.DiscordIntegration;
 import com.loki.lochat.integrations.LibertyBansHook;
 import com.loki.lochat.integrations.PlaceholderAPIHook;
 import com.loki.lochat.listener.ChatEventListener;
+import com.loki.lochat.listener.DiscordEventListener;
 import com.loki.lochat.listener.PlayerEventListener;
 import com.loki.lochat.managers.AutoMessageManager;
 import com.loki.lochat.managers.CustomCommandManager;
@@ -30,6 +32,7 @@ public final class LoChat extends JavaPlugin {
     private GradientModule gradientModule;
     private AutoMessageManager autoMessageManager;
     private CustomCommandManager customCommandManager;
+    private DiscordIntegration discordIntegration;
 
     // Геттеры
     public static LoChat getInstance() {
@@ -86,6 +89,9 @@ public final class LoChat extends JavaPlugin {
     }
 
     private void initIntegrations() {
+        // Discord интеграция
+        discordIntegration = new DiscordIntegration(this);
+        
         // Gradient модуль
         gradientModule = new GradientModule(this);
         if (gradientModule.init()) {
@@ -144,11 +150,23 @@ public final class LoChat extends JavaPlugin {
         ClearChatConfigCommand clearCfgCmd = new ClearChatConfigCommand(this);
         getCommand("clearchatconfig").setExecutor(clearCfgCmd);
         getCommand("clearchatconfig").setTabCompleter(clearCfgCmd);
+
+        // Discord команда
+        DiscordCommand discordCmd = new DiscordCommand(this, discordIntegration);
+        getCommand("discord").setExecutor(discordCmd);
+        getCommand("discord").setTabCompleter(discordCmd);
     }
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatEventListener(this, serviceRegistry), this);
         getServer().getPluginManager().registerEvents(new PlayerEventListener(serviceRegistry), this);
+        
+        // Discord listener
+        if (discordIntegration.isEnabled()) {
+            getServer().getPluginManager().registerEvents(new DiscordEventListener(discordIntegration), this);
+            getLogger().info("Discord event listener registered");
+        }
+        
         getLogger().info("Слушатели зарегистрированы (новая архитектура)");
     }
 
@@ -163,6 +181,7 @@ public final class LoChat extends JavaPlugin {
         autoMessageManager.reload();
         if (gradientModule != null) gradientModule.reload();
         if (customCommandManager != null) customCommandManager.reload();
+        if (discordIntegration != null) discordIntegration.reload();
     }
 
     public ServiceRegistry getServiceRegistry() {
@@ -183,5 +202,9 @@ public final class LoChat extends JavaPlugin {
 
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
+    }
+
+    public DiscordIntegration getDiscordIntegration() {
+        return discordIntegration;
     }
 }
