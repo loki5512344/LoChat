@@ -47,7 +47,7 @@ public class MeCommand implements CommandExecutor {
                     return true;
                 }
             } catch (Exception e) {
-                // Сервис не зарегистрирован, продолжаем
+                
             }
         }
 

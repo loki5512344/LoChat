@@ -17,24 +17,10 @@ public class ServiceRegistry {
         this.plugin = plugin;
     }
 
-    public static ServiceRegistry create(JavaPlugin plugin) {
-        ServiceRegistry registry = new ServiceRegistry(plugin);
-        registry.registerServices();
-        return registry;
-    }
-
     public static ServiceRegistry createWithDeps(JavaPlugin plugin, ConfigManager configManager, MessageConfig messageConfig) {
         ServiceRegistry registry = new ServiceRegistry(plugin);
         registry.registerServicesWithDeps(configManager, messageConfig);
         return registry;
-    }
-
-    private void registerServices() {
-        register(ChatService.class, new ChatServiceImpl(plugin, this));
-        register(MuteService.class, new MuteServiceImpl(plugin));
-        register(CooldownService.class, new CooldownServiceImpl());
-        register(MessageService.class, new MessageServiceImpl(plugin, this));
-        register(PlayerDataService.class, new PlayerDataServiceImpl(plugin));
     }
 
     private void registerServicesWithDeps(ConfigManager configManager, MessageConfig messageConfig) {

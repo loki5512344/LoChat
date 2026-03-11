@@ -1,7 +1,7 @@
 package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.IgnoreService;
-import com.loki.lochat.gradient.util.FoliaUtil;
+import com.loki.lochat.util.FoliaUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 

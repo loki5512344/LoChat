@@ -2,6 +2,7 @@ package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.core.registry.ServiceRegistry;
+import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.util.DistanceUtil;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
@@ -26,26 +27,17 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void sendGlobalMessage(Player sender, Object message) {
-        String format = plugin.getConfig().getString("chat.global.format",
-                "{prefix} {player}: {message}");
-        String prefix = plugin.getConfig().getString("chat.global.prefix", "[G]");
-
         Component messageComponent = (message instanceof Component)
                 ? (Component) message
                 : ChatFormatter.parse(message.toString());
 
-        // Используем displayName игрока (с градиентом если есть)
-        Component playerName = sender.displayName();
-
-        String formatted = format.replace("{prefix}", prefix);
-
-        Component finalComponent = ChatFormatter.parse(formatted)
-                .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
-                .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
-
+        // Используем тот же рендерер что и в ChatEventListener для единообразия
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, messageComponent, true);
+        
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!isGlobalChatDisabled(player.getUniqueId())) {
-                player.sendMessage(finalComponent);
+                Component renderedMessage = renderer.render(sender, sender.displayName(), messageComponent, player);
+                player.sendMessage(renderedMessage);
             }
         }
     }
@@ -53,23 +45,18 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void sendLocalMessage(Player sender, Object message) {
         int radius = plugin.getConfig().getInt("chat.local.radius", 100);
-        String format = plugin.getConfig().getString("chat.local.format",
-                "{player}: {message}");
-
+        
         Component messageComponent = (message instanceof Component)
                 ? (Component) message
                 : ChatFormatter.parse(message.toString());
 
-        // Используем displayName игрока (с градиентом если есть)
-        Component playerName = sender.displayName();
-
-        Component finalComponent = ChatFormatter.parse(format)
-                .replaceText(builder -> builder.matchLiteral("{player}").replacement(playerName))
-                .replaceText(builder -> builder.matchLiteral("{message}").replacement(messageComponent));
+        // Используем тот же рендерер что и в ChatEventListener для единообразия
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, messageComponent, false);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (DistanceUtil.isInRange(sender, player, radius)) {
-                player.sendMessage(finalComponent);
+                Component renderedMessage = renderer.render(sender, sender.displayName(), messageComponent, player);
+                player.sendMessage(renderedMessage);
             }
         }
     }

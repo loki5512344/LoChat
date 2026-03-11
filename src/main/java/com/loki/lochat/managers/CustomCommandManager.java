@@ -71,10 +71,8 @@ public class CustomCommandManager {
 
     private void registerCommand(CustomCommandData data) {
         try {
-            // Получаем CommandMap через рефлексию
-            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            commandMapField.setAccessible(true);
-            CommandMap commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+            // Получаем CommandMap через Paper API (безопаснее чем рефлексия)
+            CommandMap commandMap = Bukkit.getCommandMap();
 
             // Создаем и регистрируем команду
             CustomCommand command = new CustomCommand(data.name, this);

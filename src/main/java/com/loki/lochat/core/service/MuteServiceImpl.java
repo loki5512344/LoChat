@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.data.model.MuteData;
-import com.loki.lochat.gradient.util.FoliaUtil;
+import com.loki.lochat.util.FoliaUtil;
 import com.loki.lochat.utils.TimeFormatter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
