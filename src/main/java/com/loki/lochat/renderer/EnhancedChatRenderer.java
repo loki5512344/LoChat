@@ -45,16 +45,16 @@ public class EnhancedChatRenderer implements ChatRenderer {
                     .append(Component.text("A").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF6347")))
                     .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FF4500")));
         } else {
-            // 📍 LOCAL с градиентом от голубого к синему
-            prefixComponent = Component.text("📍 ")
-                    .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEEB")))
+            // LOCAL с градиентом от голубого к синему (без эмодзи)
+            prefixComponent = Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEEB"))
                     .append(Component.text("O").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEFA")))
                     .append(Component.text("C").color(net.kyori.adventure.text.format.TextColor.fromHexString("#00BFFF")))
                     .append(Component.text("A").color(net.kyori.adventure.text.format.TextColor.fromHexString("#1E90FF")))
                     .append(Component.text("L").color(net.kyori.adventure.text.format.TextColor.fromHexString("#4169E1")));
         }
         
-        Component playerComponent = createPlayerComponent(source, sourceDisplayName);
+        // Используем displayName игрока напрямую (он уже Component с градиентом)
+        Component playerComponent = createPlayerComponent(source, source.displayName());
         Component processedMessage = message;
 
         processedMessage = TextFormatter.formatMarkdown(processedMessage);
@@ -67,13 +67,13 @@ public class EnhancedChatRenderer implements ChatRenderer {
 
         // Красивое разделение с градиентными стрелками
         Component separator = isGlobal ? 
-            Component.text(" ▶ ").color(net.kyori.adventure.text.format.TextColor.fromHexString("#FFD700")) :
-            Component.text(" ▶ ").color(net.kyori.adventure.text.format.TextColor.fromHexString("#87CEEB"));
+            Component.text(" ▶ ", net.kyori.adventure.text.format.TextColor.fromHexString("#FFD700")) :
+            Component.text(" ▶ ", net.kyori.adventure.text.format.TextColor.fromHexString("#FFFFFF"));
 
         return prefixComponent
                 .append(separator)
                 .append(playerComponent)
-                .append(Component.text(": ").color(net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY))
+                .append(Component.text(": ", net.kyori.adventure.text.format.NamedTextColor.WHITE))
                 .append(processedMessage);
     }
 

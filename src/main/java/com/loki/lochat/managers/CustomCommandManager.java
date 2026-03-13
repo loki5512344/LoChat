@@ -10,6 +10,8 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -57,7 +59,8 @@ public class CustomCommandManager {
                     section.getString("message", ""),
                     section.getStringList("aliases"),
                     section.getString("type", "chat"),
-                    section.getString("target", "sender")
+                    section.getString("target", "sender"),
+                    section.getBoolean("enabled", true)
             );
 
             commands.put(commandName, data);
@@ -75,17 +78,18 @@ public class CustomCommandManager {
             CommandMap commandMap = Bukkit.getCommandMap();
 
             // Создаем и регистрируем команду
-            CustomCommand command = new CustomCommand(data.name, this);
+            CustomCommand command = new CustomCommand(data.name(), this);
             commandMap.register("lochat", command);
 
             // Регистрируем алиасы
-            for (String alias : data.aliases) {
+            for (String alias : data.aliases()) {
                 CustomCommand aliasCommand = new CustomCommand(alias, this);
                 commandMap.register("lochat", aliasCommand);
             }
 
         } catch (Exception e) {
-            plugin.getLogger().severe("Ошибка регистрации команды " + data.name + ": " + e.getMessage());
+            plugin.getLogger().severe("Ошибка регистрации команды " + data.name() + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -98,7 +102,7 @@ public class CustomCommandManager {
         if (data == null) {
             // Проверяем алиасы
             for (CustomCommandData cmd : commands.values()) {
-                if (cmd.aliases.contains(commandName)) {
+                if (cmd.aliases().contains(commandName)) {
                     data = cmd;
                     break;
                 }
@@ -107,21 +111,28 @@ public class CustomCommandManager {
 
         if (data == null) return false;
 
+        // Проверяем включена ли команда
+        if (!data.enabled()) {
+            // Не показываем ошибку, просто игнорируем команду
+            return true;
+        }
+
         // Проверяем права
-        if (data.permission != null && !player.hasPermission(data.permission)) {
+        if (data.permission() != null && !player.hasPermission(data.permission())) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getNoPermission()));
             return true;
         }
 
         // Обрабатываем плейсхолдеры
-        String message = processPlaceholders(data.message, player, args);
+        String message = processPlaceholders(data.message(), player, args);
 
         // Выполняем команду в зависимости от типа
-        switch (data.type.toLowerCase()) {
-            case "broadcast" -> sendBroadcast(data.target, message);
-            case "title" -> sendTitle(data.target, player, message);
-            case "actionbar" -> sendActionBar(data.target, player, message);
-            default -> sendChatMessage(data.target, player, message);
+        switch (data.type().toLowerCase()) {
+            case "broadcast" -> sendBroadcast(data.target(), message);
+            case "title" -> sendTitle(data.target(), player, message);
+            case "actionbar" -> sendActionBar(data.target(), player, message);
+            case "bungee" -> sendBungeeCommand(player, data);
+            default -> sendChatMessage(data.target(), player, message);
         }
 
         return true;
@@ -136,6 +147,7 @@ public class CustomCommandManager {
         result = result.replace("{y}", String.valueOf(player.getLocation().getBlockY()));
         result = result.replace("{z}", String.valueOf(player.getLocation().getBlockZ()));
         result = result.replace("{world}", player.getWorld().getName());
+        result = result.replace("{ping}", String.valueOf(player.getPing()));
 
         // Аргументы команды
         for (int i = 0; i < args.length; i++) {
@@ -258,11 +270,52 @@ public class CustomCommandManager {
         }
     }
 
+    private void sendBungeeCommand(Player player, CustomCommandData data) {
+        // Отправляем сообщение игроку
+        if (!data.message().isEmpty()) {
+            Component component = ChatFormatter.parse(data.message());
+            player.sendMessage(component);
+        }
+        
+        // Подключаем к серверу через BungeeCord
+        String serverName = getServerFromConfig(data);
+        if (serverName != null && !serverName.isEmpty()) {
+            connectToServer(player, serverName);
+        }
+    }
+    
+    private String getServerFromConfig(CustomCommandData data) {
+        // Ищем параметр server в конфиге команды
+        try {
+            File commandsFile = new File(plugin.getDataFolder(), "custom-commands.yml");
+            FileConfiguration config = YamlConfiguration.loadConfiguration(commandsFile);
+            return config.getString(data.name() + ".server", "hub");
+        } catch (Exception e) {
+            plugin.getLogger().warning("Ошибка получения сервера для команды " + data.name() + ": " + e.getMessage());
+            return "hub";
+        }
+    }
+    
+    private void connectToServer(Player player, String serverName) {
+        try {
+            java.io.ByteArrayOutputStream b = new java.io.ByteArrayOutputStream();
+            java.io.DataOutputStream out = new java.io.DataOutputStream(b);
+            
+            out.writeUTF("Connect");
+            out.writeUTF(serverName);
+            
+            player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+        } catch (Exception e) {
+            plugin.getLogger().severe("Ошибка подключения к серверу " + serverName + ": " + e.getMessage());
+            player.sendMessage(ChatFormatter.parse("<#F44336>❌ Ошибка подключения к серверу"));
+        }
+    }
+
     public Map<String, CustomCommandData> getCommands() {
         return commands;
     }
 
     public record CustomCommandData(String name, String permission, String message, List<String> aliases, String type,
-                                    String target) {
+                                    String target, boolean enabled) {
     }
 }

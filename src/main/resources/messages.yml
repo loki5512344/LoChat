@@ -26,6 +26,7 @@ global:
 
 local:
   no-players: "&#FFA726Р&#FFA322я&#FF9F1Eд&#FF9B1Aо&#FF9716м &#FF9312н&#FF8F0Eе&#FF8B0Aт &#FF8706и&#FF8302г&#FF8000р&#FF8000о&#FF8000к&#FF8000о&#FF8000в"
+  nobody-heard: "&#FFA726Вас никто не услышал - рядом нет игроков"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                            ЛИЧНЫЕ СООБЩЕНИЯ                                │
@@ -165,9 +166,58 @@ gradient:
   color-reset: "&#FFA726Градиент сброшен"
   prefix-set: "&#6BCB77Префикс установлен!"
   prefix-reset: "&#FFA726Префикс сброшен"
+  prefix-reset-success: "&#6BCB77Префикс успешно сброшен!"
+  prefix-enabled: "&#6BCB77Префикс включен"
+  prefix-disabled: "&#FF6B6BПрефикс отключен"
   invalid-hex: "&#FF6B6BНеверный HEX цвет: {color}"
+  invalid-color: "&#FF6B6BНеверный цвет: {color}"
   too-many-colors: "&#FF6B6BСлишком много цветов! Максимум: {max}"
   too-few-colors: "&#FF6B6BСлишком мало цветов! Минимум: {min}"
+  not-enough-colors: "&#FF6B6BСлишком мало цветов! Минимум: {min}"
   cooldown: "&#FFA726Подождите {time} сек"
   not-enough-points: "&#FF6B6BНедостаточно поинтов! Нужно: {price}"
+  not-enough-points-color: "&#FF6B6BНедостаточно поинтов! Нужно: {price}"
+  not-enough-points-prefix: "&#FF6B6BНедостаточно поинтов! Нужно: {price}"
   player-not-found: "&#FF6B6BИгрок не найден"
+  color-help: "&#FFD700И&#FFC900с&#FFBB00п&#FFAD00о&#FF9F00л&#FF9100ь&#FF8300з&#FF7500о&#FF6700в&#FF5900а&#FF4B00н&#FF3D00и&#FF2F00е&#FF2100:&#FF1300 &#FF0500/&#FF0000c&#FF0000o&#FF0000l&#FF0000o&#FF0000r &#FF0000<&#FF0000H&#FF0000E&#FF0000X&#FF00001&#FF0000> &#FF0000<&#FF0000H&#FF0000E&#FF0000X&#FF00002&#FF0000>"
+  color-success: "&#6BCB77Г&#62C973р&#5AC76Fа&#51C56Bд&#49C367и&#40C163е&#38BF5Fн&#2FBD5Bт &#27BB57у&#1EB953с&#16B74Fп&#0DB54Bе&#05B347ш&#05B347н&#05B347о &#05B347у&#05B347с&#05B347т&#05B347а&#05B347н&#05B347о&#05B347в&#05B347л&#05B347е&#05B347н&#05B347!"
+  color-no-colors: "&#FFA726У вас нет установленных цветов!"
+  color-copy-usage: "&#FFA726Использование: /color copy <игрок>"
+  color-copy-no-colors: "&#FFA726У игрока {player} нет установленных цветов!"
+  prefix-help: "&#FFD700Использование: /prefix <текст> или /prefix reset"
+  prefix-success: "&#6BCB77Префикс успешно установлен! Стоимость: {price} поинтов"
+  prefix-success-free: "&#6BCB77Префикс успешно установлен!"
+  prefix-no-prefix: "&#FFA726У вас нет установленного префикса!"
+  prefix-too-long: "&#FF6B6BПрефикс слишком длинный! Максимум: {max} символов"
+  prefix-no-colors: "&#FF6B6BПрефикс не может содержать цветовые коды!"
+  prefix-invalid-chars: "&#FF6B6BПрефикс содержит недопустимые символы!"
+  prefix-blacklisted: "&#FF6B6BЭтот префикс запрещён!"
+  only-player: "&#FF6B6BЭта команда только для игроков!"
+  no-permission: "&#FF6B6BУ вас нет прав!"
+  reload-success: "&#6BCB77Конфигурация градиента перезагружена!"
+  info-header: "&#FFD700=== Информация о {player} ==="
+  info-prefix: "&#87CEEBПрефикс: &#FFFFFF{prefix}"
+  info-prefix-enabled: "&#87CEEBПрефикс включен: &#FFFFFF{enabled}"
+  info-colors: "&#87CEEBЦвета: &#FFFFFF{colors}"
+  info-color-enabled: "&#87CEEBЦвет включен: &#FFFFFF{enabled}"
+  info-prefix-purchased: "&#87CEEBПрефикс куплен: &#FFFFFF{purchased}"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                              КАСТОМНЫЕ НИКИ                                │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+nick:
+  current: "&#87CEEBВаш текущий ник: {nick}"
+  usage: "&#FFA726Использование: /nick <ник> или /nick reset"
+  reset-usage: "&#FFA726Используйте /nick reset для сброса"
+  set-usage: "&#FFA726Используйте /nick <ник> для установки"
+  no-nick: "&#FFA726У вас нет кастомного ника"
+  reset-success: "&#6BCB77Ваш ник сброшен!"
+  set-success: "&#6BCB77Ваш ник изменён на: {nick}"
+  invalid: "&#FF6B6BНевалидный ник!"
+  requirements-header: "&#FFA726Требования:"
+  requirements-length: "&#87CEEB• Длина: 3-16 символов"
+  requirements-chars: "&#87CEEB• Разрешены: буквы, цифры, _, русские буквы"
+  requirements-colors: "&#87CEEB• Поддержка цветов: &#FF0000текст, <gradient:&#FF0000:&#00FF00>текст</gradient>"
+  taken: "&#FF6B6BЭтот ник уже занят!"
+  error: "&#FF6B6BНе удалось установить ник!"

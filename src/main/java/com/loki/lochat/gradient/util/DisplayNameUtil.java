@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public final class DisplayNameUtil {
 
     private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
-            .character('§')
+            .character('&')
             .hexCharacter('#')
             .hexColors()
             .build();

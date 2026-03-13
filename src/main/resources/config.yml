@@ -293,9 +293,17 @@ gradient:
   price-per-color: 50
   prefix-price: 500
   prefix-one-time-purchase: true
+  use-permission-instead-of-cost: false
   max-prefix-length: 16
   color-cooldown: 60
   prefix-cooldown: 120
+  
+  # Форматирование
+  prefix-format: "[{prefix}] "
+  gradient-on-prefix: true
+  gradient-on-luckperms-prefix: true
+  continuous-gradient: true
+  use-legacy-rgb-format: true
   
   presets:
     fire: [ "#FF4500", "#FF6347", "#FFD700" ]

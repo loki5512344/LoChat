@@ -81,6 +81,11 @@ public class GradientConfig {
     }
 
     public String getPrefixFormat() {
+        // Сначала проверяем в formatting.prefix-format (из gradient-config.yml)
+        if (config.contains("formatting.prefix-format")) {
+            return config.getString("formatting.prefix-format", "[{prefix}] ");
+        }
+        // Затем проверяем в gradient.prefix-format (из config.yml)
         return config.getString("gradient.prefix-format", "[{prefix}] ");
     }
 

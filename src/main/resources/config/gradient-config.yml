@@ -3,7 +3,33 @@
 # ║                         Конфигурация градиентов                            ║
 # ║                              Версия: 1.5.5-1.20.1                          ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
-
+#
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                         СИСТЕМА ОПЛАТЫ                                     │
+# └─────────────────────────────────────────────────────────────────────────────┘
+#
+# Есть два способа контролировать доступ к градиентам:
+#
+# 1. ЧЕРЕЗ PLAYERPOINTS (по умолчанию):
+#    - Установите use-permission-instead-of-cost: false
+#    - Игроки платят поинтами за установку градиентов
+#    - price-per-color: стоимость за каждый цвет
+#    - prefix-price: стоимость префикса
+#    - Игроки с правом "gradient.bypass.cost" могут использовать бесплатно
+#
+# 2. ЧЕРЕЗ ПЕРМИШЕНЫ (бесплатно):
+#    - Установите use-permission-instead-of-cost: true
+#    - Установите price-per-color: 0 и prefix-price: 0
+#    - Выдайте игрокам право "gradient.bypass.cost" для бесплатного использования
+#    - Или выдайте "gradient.color" для доступа к командам
+#
+# ОСНОВНЫЕ ПЕРМИШЕНЫ:
+#    - gradient.color       - доступ к команде /color
+#    - gradient.prefix      - доступ к команде /prefix
+#    - gradient.bypass.cost - бесплатное использование (обход стоимости)
+#    - gradient.bypass.cooldown - обход кулдауна
+#    - gradient.admin       - админские команды
+#
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                         ОСНОВНЫЕ НАСТРОЙКИ                                 │
 # └─────────────────────────────────────────────────────────────────────────────┘
@@ -19,13 +45,20 @@ gradient:
   max-colors: 7
   
   # Стоимость за каждый цвет (PlayerPoints)
+  # Установите 0 для бесплатного использования
   price-per-color: 50
   
   # Стоимость префикса
+  # Установите 0 для бесплатного использования
   prefix-price: 500
   
   # Одноразовая покупка префикса (true) или за каждое изменение (false)
   prefix-one-time-purchase: true
+  
+  # Использовать пермишены вместо поинтов
+  # Если true, игроки с правом gradient.bypass.cost могут использовать бесплатно
+  # Если false, используется система PlayerPoints
+  use-permission-instead-of-cost: false
   
   # Максимальная длина префикса
   max-prefix-length: 16
@@ -171,16 +204,18 @@ features:
 
 permissions:
   # Базовые права
-  use-gradient: "gradient.use"
-  use-prefix: "gradient.prefix"
-  admin: "gradient.admin"
+  use-gradient: "gradient.use"          # Право использовать градиенты
+  use-color: "gradient.color"           # Право использовать команду /color
+  use-prefix: "gradient.prefix"         # Право использовать команду /prefix
+  admin: "gradient.admin"               # Админские права
   
   # Обход ограничений
-  bypass-cooldown: "gradient.bypass.cooldown"
-  bypass-cost: "gradient.bypass.cost"
-  bypass-length: "gradient.bypass.length"
+  bypass-cooldown: "gradient.bypass.cooldown"  # Обход кулдауна
+  bypass-cost: "gradient.bypass.cost"          # Бесплатное использование (обход стоимости)
+  bypass-length: "gradient.bypass.length"      # Обход ограничения длины префикса
   
   # Дополнительные цвета
+  # Игроки с этими правами могут использовать больше цветов
   extra-colors:
     "gradient.colors.5": 5
     "gradient.colors.10": 10

@@ -24,7 +24,11 @@ public class GradientPlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         FoliaUtil.runAsync(module.getPlugin(), () -> {
-            module.getDataManager().getPlayerData(player.getUniqueId());
+            var data = module.getDataManager().getPlayerData(player.getUniqueId());
+            // Применяем градиент к displayName при входе
+            FoliaUtil.runEntityTask(module.getPlugin(), player, () -> {
+                com.loki.lochat.gradient.util.DisplayNameUtil.updateDisplayName(module, player, data);
+            });
         });
     }
 

@@ -28,7 +28,7 @@ public class DiscordWebhook {
     public DiscordWebhook(JavaPlugin plugin, String webhookUrl, String username, String avatarUrl, 
                          int timeout, int retryAttempts, long retryDelay) {
         this.plugin = plugin;
-        this.webhookUrl = webhookUrl;
+        this.webhookUrl = webhookUrl != null ? webhookUrl.trim() : null; // Убираем пробелы
         this.username = username;
         this.avatarUrl = avatarUrl;
         this.timeout = timeout * 1000; // конвертируем в миллисекунды
@@ -142,7 +142,8 @@ public class DiscordWebhook {
      * Синхронная отправка в вебхук
      */
     private boolean sendWebhookSync(String jsonPayload) throws IOException {
-        URL url = URI.create(webhookUrl).toURL();
+        String cleanUrl = webhookUrl.trim();
+        URL url = URI.create(cleanUrl).toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
         try {
@@ -180,8 +181,32 @@ public class DiscordWebhook {
      * Проверить валидность вебхука
      */
     public boolean isValid() {
-        return webhookUrl != null && 
-               webhookUrl.startsWith("https://discord.com/api/webhooks/") &&
-               webhookUrl.length() > 50; // Минимальная длина валидного URL
+        if (webhookUrl == null || webhookUrl.trim().isEmpty()) {
+            plugin.getLogger().warning("Discord webhook URL is null or empty");
+            return false;
+        }
+        
+        String cleanUrl = webhookUrl.trim();
+        
+        if (!cleanUrl.startsWith("https://discord.com/api/webhooks/") && 
+            !cleanUrl.startsWith("https://discordapp.com/api/webhooks/")) {
+            plugin.getLogger().warning("Discord webhook URL has invalid format: " + cleanUrl);
+            return false;
+        }
+        
+        if (cleanUrl.length() < 50) {
+            plugin.getLogger().warning("Discord webhook URL is too short: " + cleanUrl);
+            return false;
+        }
+        
+        // Проверяем на недопустимые символы
+        try {
+            URI.create(cleanUrl);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Discord webhook URL contains illegal characters: " + e.getMessage());
+            return false;
+        }
+        
+        return true;
     }
 }

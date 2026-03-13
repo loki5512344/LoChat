@@ -253,6 +253,67 @@ cd Lochat
 ```
 Установит префикс `[VIP]` перед ником.
 
+### Настройка системы оплаты градиентов
+
+#### Вариант 1: Через PlayerPoints (платно)
+```yaml
+# config/gradient-config.yml
+gradient:
+  price-per-color: 50          # 50 поинтов за каждый цвет
+  prefix-price: 500            # 500 поинтов за префикс
+  use-permission-instead-of-cost: false
+```
+
+Игроки платят поинтами за установку градиентов.
+
+#### Вариант 2: Через пермишены (бесплатно)
+```yaml
+# config/gradient-config.yml
+gradient:
+  price-per-color: 0           # Бесплатно
+  prefix-price: 0              # Бесплатно
+  use-permission-instead-of-cost: true
+```
+
+Выдайте игрокам права:
+```
+/lp user <игрок> permission set gradient.color true
+/lp user <игрок> permission set gradient.prefix true
+/lp user <игрок> permission set gradient.bypass.cost true
+```
+
+Или через группу:
+```
+/lp group vip permission set gradient.color true
+/lp group vip permission set gradient.prefix true
+/lp group vip permission set gradient.bypass.cost true
+```
+
+### Основные пермишены градиентов
+
+| Пермишен | Описание |
+|----------|----------|
+| `gradient.color` | Доступ к команде /color |
+| `gradient.prefix` | Доступ к команде /prefix |
+| `gradient.bypass.cost` | Бесплатное использование (обход стоимости) |
+| `gradient.bypass.cooldown` | Обход кулдауна |
+| `gradient.admin` | Админские команды /aprefix |
+| `gradient.colors.5` | Максимум 5 цветов в градиенте |
+| `gradient.colors.10` | Максимум 10 цветов в градиенте |
+| `gradient.colors.unlimited` | Неограниченное количество цветов |
+
+### Текущие цены (по умолчанию)
+
+- **Градиент**: 50 поинтов за каждый цвет
+  - 1 цвет = 50 поинтов
+  - 2 цвета = 100 поинтов
+  - 3 цвета = 150 поинтов
+  - и т.д.
+
+- **Префикс**: 500 поинтов (одноразовая покупка)
+
+Цены настраиваются в `config/gradient-config.yml`
+
 ### Мут игрока
 ```
 /lmute Player123 1h Спам в чате

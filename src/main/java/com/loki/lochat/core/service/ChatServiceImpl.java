@@ -53,11 +53,18 @@ public class ChatServiceImpl implements ChatService {
         // Используем тот же рендерер что и в ChatEventListener для единообразия
         EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, messageComponent, false);
 
+        int recipientCount = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (DistanceUtil.isInRange(sender, player, radius)) {
                 Component renderedMessage = renderer.render(sender, sender.displayName(), messageComponent, player);
                 player.sendMessage(renderedMessage);
+                recipientCount++;
             }
+        }
+        
+        // Если никто не услышал (только отправитель в радиусе)
+        if (recipientCount <= 1) {
+            sender.sendMessage(ChatFormatter.parse(plugin.getConfig().getString("messages.local.nobody-heard", "<#FFA726>Вас никто не услышал - рядом нет игроков")));
         }
     }
 

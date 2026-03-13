@@ -1,5 +1,6 @@
 package com.loki.lochat.listener;
 
+import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessageService;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
 import com.loki.lochat.core.registry.ServiceRegistry;
@@ -62,8 +63,25 @@ public class ChatEventListener implements Listener {
             event.viewers().removeIf(viewer ->
                 viewer instanceof Player p && !com.loki.lochat.util.DistanceUtil.isInRange(sender, p, radius)
             );
+            
+            // Проверяем, есть ли получатели (кроме отправителя)
+            long recipientCount = event.viewers().stream()
+                .filter(viewer -> viewer instanceof Player p && !p.equals(sender))
+                .count();
+                
+            if (recipientCount == 0) {
+                // Отправляем уведомление отправителю после обработки события (Folia-совместимо)
+                sender.getScheduler().run(plugin, (task) -> 
+                    sender.sendMessage(com.loki.lochat.utils.ChatFormatter.parse(plugin.getConfig().getString("messages.local.nobody-heard", "<#FFA726>Вас никто не услышал - рядом нет игроков"))), null
+                );
+            }
         }
 
         event.renderer(new EnhancedChatRenderer(plugin, sender, event.message(), isGlobal));
+        
+        // Отправляем сообщение в Discord
+        if (plugin instanceof LoChat loChat) {
+            loChat.getDiscordIntegration().sendChatMessage(sender, filteredMessage, isGlobal);
+        }
     }
 }

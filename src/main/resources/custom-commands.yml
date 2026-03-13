@@ -1,0 +1,140 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                           Custom Commands Configuration                      ║
+# ║                        Конфигурация кастомных команд                       ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# Информационные команды
+help:
+  enabled: true
+  message: |
+    <gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>📚 Помощь по серверу</bold></gradient>
+    
+    <#FFEB3B>🏠 Основные команды:</color>
+    <#9E9E9E>• <#FFFFFF>/spawn</color> - телепорт на спавн
+    <#9E9E9E>• <#FFFFFF>/home</color> - телепорт домой
+    <#9E9E9E>• <#FFFFFF>/sethome</color> - установить дом
+    
+    <#FFEB3B>💬 Чат команды:</color>
+    <#9E9E9E>• <#FFFFFF>!сообщение</color> - глобальный чат
+    <#9E9E9E>• <#FFFFFF>/msg игрок</color> - личное сообщение
+    <#9E9E9E>• <#FFFFFF>/reply</color> - ответить на ЛС
+    
+    <#FFEB3B>🎨 Кастомизация:</color>
+    <#9E9E9E>• <#FFFFFF>/color</color> - градиентный ник
+    <#9E9E9E>• <#FFFFFF>/prefix</color> - кастомный префикс
+    
+    <gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+  aliases: ["помощь", "хелп"]
+  type: "chat"
+  target: "sender"
+
+rules:
+  enabled: true
+  message: |
+    <gradient:#FF6B6B:#FF4500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>📋 Правила сервера</bold></gradient>
+    
+    <#F44336><bold>🚫 Запрещено:</bold></color>
+    <#9E9E9E>• Читерство и использование модов
+    <#9E9E9E>• Гриферство и воровство
+    <#9E9E9E>• Мат и оскорбления
+    <#9E9E9E>• Спам в чате
+    <#9E9E9E>• Реклама других серверов
+    
+    <#4CAF50><bold>✅ Разрешено:</bold></color>
+    <#9E9E9E>• Строительство в любом стиле
+    <#9E9E9E>• Торговля между игроками
+    <#9E9E9E>• Создание команд и кланов
+    <#9E9E9E>• Использование /home и /spawn
+    
+    <#FFA726><bold>⚠️ За нарушения:</bold></color>
+    <#9E9E9E>• Предупреждение → Мут → Бан
+    
+    <gradient:#FF6B6B:#FF4500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+  aliases: ["правила", "rule"]
+  type: "chat"
+  target: "sender"
+
+discord:
+  enabled: true
+  message: |
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>💬 Discord сервер</bold></gradient>
+    
+    <#5865F2><bold>Присоединяйся к нашему Discord!</bold></color>
+    
+    <#FFEB3B>🔗 Ссылка:</color> <click:open_url:'https://discord.gg/yourserver'><u><#00BFFF>discord.gg/yourserver</u></click>
+    
+    <#FFEB3B>📢 В Discord ты найдешь:</color>
+    <#9E9E9E>• Общение с игроками
+    <#9E9E9E>• Новости и обновления
+    <#9E9E9E>• Поддержку администрации
+    <#9E9E9E>• Конкурсы и ивенты
+    
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+  aliases: ["дискорд", "ds"]
+  type: "chat"
+  target: "sender"
+
+coords:
+  enabled: true
+  message: "<#FFEB3B>📍 <bold>Ваши координаты:</bold></color> <#9E9E9E>X: <#FFFFFF>{x}</color> Y: <#FFFFFF>{y}</color> Z: <#FFFFFF>{z}</color> <#9E9E9E>Мир: <#4CAF50>{world}</color>"
+  aliases: ["координаты", "pos", "position"]
+  type: "chat"
+  target: "sender"
+
+ping:
+  enabled: true
+  message: "<#FFEB3B>📶 <bold>Ваш пинг:</bold></color> <#4CAF50>{ping}ms</color>"
+  aliases: ["пинг"]
+  type: "chat"
+  target: "sender"
+  type: "chat"
+  target: "sender"
+
+hub:
+  enabled: true
+  message: "<#4CAF50>🏠 Подключение к хабу...</color>"
+  aliases: ["lobby", "хаб"]
+  type: "bungee"
+  target: "sender"
+  server: "hub"
+
+discord:
+  enabled: true
+  message: |
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>💬 Discord сервер</bold></gradient>
+    
+    <#5865F2><bold>Присоединяйся к нашему Discord!</bold></color>
+    
+    <#FFEB3B>🔗 Ссылка:</color> <click:open_url:'https://discord.gg/yourserver'><u><#00BFFF>discord.gg/yourserver</u></click>
+    
+    <#FFEB3B>📢 В Discord ты найдешь:</color>
+    <#9E9E9E>• Общение с игроками
+    <#9E9E9E>• Новости и обновления
+    <#9E9E9E>• Поддержку администрации
+    <#9E9E9E>• Конкурсы и ивенты
+    
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+  aliases: ["дискорд", "ds"]
+  type: "chat"
+  target: "sender"
+
+# Команды для администрации
+broadcast:
+  enabled: true
+  permission: "lochat.broadcast"
+  message: "{message}"
+  aliases: ["bc", "объявить"]
+  type: "broadcast"
+  target: "all"
+
+maintenance:
+  enabled: false
+  permission: "lochat.maintenance"
+  message: "<#FFA726><bold>🔧 Сервер переведен в режим технических работ</bold></color>"
+  aliases: ["тех-работы", "техработы"]
+  type: "title"
+  target: "all"

@@ -59,6 +59,12 @@ public class DiscordIntegration {
         int retryAttempts = config.getInt("performance.retry_attempts", 3);
         long retryDelay = config.getLong("performance.retry_delay", 1000);
         
+        // Логируем информацию о URL для отладки
+        plugin.getLogger().info("Discord webhook URL length: " + webhookUrl.length());
+        if (webhookUrl.length() > 0) {
+            plugin.getLogger().info("Discord webhook URL starts with: " + webhookUrl.substring(0, Math.min(50, webhookUrl.length())));
+        }
+        
         webhook = new DiscordWebhook(plugin, webhookUrl, username, avatarUrl, timeout, retryAttempts, retryDelay);
         
         if (!webhook.isValid()) {

@@ -119,7 +119,6 @@ public final class LoChat extends JavaPlugin {
         getCommand("announce").setExecutor(new AnnounceCommand(this));
         getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
         getCommand("clearchat").setExecutor(new ClearChatCommand(this));
-        getCommand("hub").setExecutor(new HubCommand(this));
 
         NickCommand nickCmd = new NickCommand(this);
         getCommand("nick").setExecutor(nickCmd);
@@ -151,10 +150,15 @@ public final class LoChat extends JavaPlugin {
         getCommand("clearchatconfig").setExecutor(clearCfgCmd);
         getCommand("clearchatconfig").setTabCompleter(clearCfgCmd);
 
-        // Discord команда
-        DiscordCommand discordCmd = new DiscordCommand(this, discordIntegration);
-        getCommand("discord").setExecutor(discordCmd);
-        getCommand("discord").setTabCompleter(discordCmd);
+        // Custom commands управление
+        CustomCommandsCommand customCommandsCmd = new CustomCommandsCommand(this, customCommandManager);
+        getCommand("customcommands").setExecutor(customCommandsCmd);
+        getCommand("customcommands").setTabCompleter(customCommandsCmd);
+
+        // Discord admin команда (отдельно от кастомной /discord)
+        DiscordCommand discordAdminCmd = new DiscordCommand(this, discordIntegration);
+        getCommand("discordadmin").setExecutor(discordAdminCmd);
+        getCommand("discordadmin").setTabCompleter(discordAdminCmd);
     }
 
     private void registerListeners() {

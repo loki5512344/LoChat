@@ -90,17 +90,28 @@ public class DiscordCommand implements CommandExecutor, TabCompleter {
         
         sender.sendMessage(ChatFormatter.parse("&e⏳ Отправка тестового сообщения..."));
         
-        // Отправляем тестовое сообщение
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        // Используем CompletableFuture для асинхронной отправки (Folia-совместимо)
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
             try {
                 discord.sendTestMessage(message, sender.getName());
-                plugin.getServer().getScheduler().runTask(plugin, () -> 
-                    sender.sendMessage(ChatFormatter.parse("&a✓ Тестовое сообщение отправлено в Discord"))
-                );
+                // Возвращаемся в главный поток для отправки сообщения
+                if (sender instanceof org.bukkit.entity.Player player) {
+                    player.getScheduler().run(plugin, (task) -> 
+                        sender.sendMessage(ChatFormatter.parse("&a✓ Тестовое сообщение отправлено в Discord")), null
+                    );
+                } else {
+                    // Для консоли можно отправить сразу
+                    sender.sendMessage(ChatFormatter.parse("&a✓ Тестовое сообщение отправлено в Discord"));
+                }
             } catch (Exception e) {
-                plugin.getServer().getScheduler().runTask(plugin, () -> 
-                    sender.sendMessage(ChatFormatter.parse("&c✗ Ошибка отправки: " + e.getMessage()))
-                );
+                if (sender instanceof org.bukkit.entity.Player player) {
+                    player.getScheduler().run(plugin, (task) -> 
+                        sender.sendMessage(ChatFormatter.parse("&c✗ Ошибка отправки: " + e.getMessage())), null
+                    );
+                } else {
+                    sender.sendMessage(ChatFormatter.parse("&c✗ Ошибка отправки: " + e.getMessage()));
+                }
+                plugin.getLogger().severe("Discord test error: " + e.getMessage());
             }
         });
     }
