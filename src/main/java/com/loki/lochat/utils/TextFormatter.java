@@ -3,7 +3,6 @@ package com.loki.lochat.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextFormatter {
@@ -14,82 +13,86 @@ public class TextFormatter {
     private static final Pattern STRIKETHROUGH_PATTERN = Pattern.compile("~~(.+?)~~");
     private static final Pattern CODE_PATTERN = Pattern.compile("`(.+?)`");
 
+    // Паттерн для быстрой проверки — есть ли в тексте markdown-символы
+    private static final Pattern HAS_MARKDOWN = Pattern.compile("[*_~`]");
+
+    /**
+     * Применяет markdown-форматирование к компоненту.
+     *
+     * Важно: PlainTextComponentSerializer стриппает все Adventure-цвета.
+     * Поэтому мы обрабатываем только replaceText на оригинальном компоненте,
+     * не конвертируя его в plain string и обратно.
+     * Это сохраняет градиенты и цвета, добавленные Adventure.
+     */
     public static Component formatMarkdown(Component message) {
-        String text = PlainTextComponentSerializer.plainText().serialize(message);
+        String plain = PlainTextComponentSerializer.plainText().serialize(message);
 
-        text = formatBold(text);
-        text = formatItalic(text);
-        text = formatUnderline(text);
-        text = formatStrikethrough(text);
-        text = formatCode(text);
+        // Быстрая проверка — нет markdown-символов, возвращаем как есть (без потери цветов)
+        if (!HAS_MARKDOWN.matcher(plain).find()) {
+            return message;
+        }
 
-        return ChatFormatter.parse(text);
+        // Применяем замены через replaceText прямо на компоненте — цвета сохраняются
+        message = applyBold(message);
+        message = applyItalic(message);
+        message = applyUnderline(message);
+        message = applyStrikethrough(message);
+        message = applyCode(message);
+
+        return message;
     }
 
-    private static String formatBold(String text) {
-        Matcher matcher = BOLD_PATTERN.matcher(text);
-        StringBuffer result = new StringBuffer();
-
-        while (matcher.find()) {
-            String content = matcher.group(1);
-            matcher.appendReplacement(result, "<bold>" + content + "</bold>");
-        }
-        matcher.appendTail(result);
-
-        return result.toString();
+    private static Component applyBold(Component message) {
+        return message.replaceText(config -> config
+                .match(BOLD_PATTERN)
+                .replacement((matchResult, builder) -> {
+                    String content = matchResult.group(1);
+                    return ChatFormatter.parse("<bold>" + content + "</bold>");
+                })
+        );
     }
 
-    private static String formatItalic(String text) {
-        Matcher matcher = ITALIC_PATTERN.matcher(text);
-        StringBuffer result = new StringBuffer();
-
-        while (matcher.find()) {
-            String content = matcher.group(1);
-            if (!content.startsWith("*") && !content.endsWith("*")) {
-                matcher.appendReplacement(result, "<italic>" + content + "</italic>");
-            }
-        }
-        matcher.appendTail(result);
-
-        return result.toString();
+    private static Component applyItalic(Component message) {
+        return message.replaceText(config -> config
+                .match(ITALIC_PATTERN)
+                .replacement((matchResult, builder) -> {
+                    String content = matchResult.group(1);
+                    // Пропускаем если это часть ** (bold)
+                    if (content.startsWith("*") || content.endsWith("*")) {
+                        return builder.content(matchResult.group());
+                    }
+                    return ChatFormatter.parse("<italic>" + content + "</italic>");
+                })
+        );
     }
 
-    private static String formatUnderline(String text) {
-        Matcher matcher = UNDERLINE_PATTERN.matcher(text);
-        StringBuffer result = new StringBuffer();
-
-        while (matcher.find()) {
-            String content = matcher.group(1);
-            matcher.appendReplacement(result, "<underlined>" + content + "</underlined>");
-        }
-        matcher.appendTail(result);
-
-        return result.toString();
+    private static Component applyUnderline(Component message) {
+        return message.replaceText(config -> config
+                .match(UNDERLINE_PATTERN)
+                .replacement((matchResult, builder) -> {
+                    String content = matchResult.group(1);
+                    return ChatFormatter.parse("<underlined>" + content + "</underlined>");
+                })
+        );
     }
 
-    private static String formatStrikethrough(String text) {
-        Matcher matcher = STRIKETHROUGH_PATTERN.matcher(text);
-        StringBuffer result = new StringBuffer();
-
-        while (matcher.find()) {
-            String content = matcher.group(1);
-            matcher.appendReplacement(result, "<strikethrough>" + content + "</strikethrough>");
-        }
-        matcher.appendTail(result);
-
-        return result.toString();
+    private static Component applyStrikethrough(Component message) {
+        return message.replaceText(config -> config
+                .match(STRIKETHROUGH_PATTERN)
+                .replacement((matchResult, builder) -> {
+                    String content = matchResult.group(1);
+                    return ChatFormatter.parse("<strikethrough>" + content + "</strikethrough>");
+                })
+        );
     }
 
-    private static String formatCode(String text) {
-        Matcher matcher = CODE_PATTERN.matcher(text);
-        StringBuffer result = new StringBuffer();
-
-        while (matcher.find()) {
-            String content = matcher.group(1);
-            matcher.appendReplacement(result, "&#888888`" + content + "`");
-        }
-        matcher.appendTail(result);
-
-        return result.toString();
+    private static Component applyCode(Component message) {
+        return message.replaceText(config -> config
+                .match(CODE_PATTERN)
+                .replacement((matchResult, builder) -> {
+                    String content = matchResult.group(1);
+                    return ChatFormatter.parse("&#888888`" + content + "`");
+                })
+        );
     }
 }

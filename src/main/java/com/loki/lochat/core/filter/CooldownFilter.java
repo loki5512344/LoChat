@@ -13,10 +13,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CooldownFilter implements MessageFilter {
     private final CooldownService cooldownService;
     private final FileConfiguration config;
+    private final JavaPlugin plugin;
 
     public CooldownFilter(CooldownService cooldownService, JavaPlugin plugin) {
         this.cooldownService = cooldownService;
         this.config = plugin.getConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -32,7 +34,13 @@ public class CooldownFilter implements MessageFilter {
             if (cooldownService.isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
                 int remaining = cooldownService.getRemainingCooldown(
                         player.getUniqueId(), chatType, cooldown);
-                player.sendMessage("§cПодождите " + remaining + " сек.");
+                
+                // Получаем сообщение из конфигурации
+                com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+                String cooldownMessage = loChat.getConfigManager().getHardcodedMessages().getCooldownMessage();
+                cooldownMessage = cooldownMessage.replace("{remaining}", String.valueOf(remaining));
+                
+                player.sendMessage(cooldownMessage);
                 return false;
             }
         }

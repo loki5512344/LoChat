@@ -29,24 +29,21 @@ public class MessageServiceImpl implements MessageService {
         this.filters = new ArrayList<>();
 
         // Регистрируем фильтры в порядке применения
-        filters.add(new MuteFilter(registry.get(MuteService.class)));
+        // MuteFilter теперь получает plugin для доступа к HardcodedMessages
+        filters.add(new MuteFilter(registry.get(MuteService.class), plugin));
         filters.add(new CooldownFilter(registry.get(CooldownService.class), plugin));
     }
 
     @Override
     public boolean processMessage(Player player, String rawMessage) {
-        // Создаем объект сообщения
         ChatMessage message = ChatMessage.create(player, rawMessage);
 
-        // Применяем фильтры (мут, кулдаун)
         for (MessageFilter filter : filters) {
             if (!filter.apply(player, message)) {
-                return false; // Сообщение заблокировано
+                return false;
             }
         }
 
-        // Возвращаем true - сообщение разрешено
-        // Рендерер сам отправит его
         return true;
     }
 }

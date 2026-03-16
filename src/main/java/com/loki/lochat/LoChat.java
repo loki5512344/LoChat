@@ -11,6 +11,7 @@ import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.integrations.DiscordIntegration;
 import com.loki.lochat.integrations.LibertyBansHook;
 import com.loki.lochat.integrations.PlaceholderAPIHook;
+import com.loki.lochat.core.filter.AdvancedMessageFilter;
 import com.loki.lochat.listener.ChatEventListener;
 import com.loki.lochat.listener.DiscordEventListener;
 import com.loki.lochat.listener.PlayerEventListener;
@@ -33,6 +34,8 @@ public final class LoChat extends JavaPlugin {
     private AutoMessageManager autoMessageManager;
     private CustomCommandManager customCommandManager;
     private DiscordIntegration discordIntegration;
+    private CommandManager commandManager;
+    private AdvancedMessageFilter advancedMessageFilter;
 
     // Геттеры
     public static LoChat getInstance() {
@@ -60,7 +63,8 @@ public final class LoChat extends JavaPlugin {
         initIntegrations();
 
         // Команды и слушатели
-        registerCommands();
+        commandManager = new CommandManager(this);
+        commandManager.registerCommands();
         registerListeners();
         registerPluginChannels();
 
@@ -74,6 +78,10 @@ public final class LoChat extends JavaPlugin {
     public void onDisable() {
         if (autoMessageManager != null) autoMessageManager.stop();
 
+        // Сохраняем статистику
+        com.loki.lochat.api.service.PlayerDataService pds = serviceRegistry.get(com.loki.lochat.api.service.PlayerDataService.class);
+        if (pds != null) pds.saveAll();
+
         // Сохранение данных через сервисы
         IgnoreService ignoreService = serviceRegistry.get(IgnoreService.class);
         if (ignoreService != null) ignoreService.save();
@@ -83,6 +91,9 @@ public final class LoChat extends JavaPlugin {
 
         NickService nickService = serviceRegistry.get(NickService.class);
         if (nickService != null) nickService.save();
+
+        // Останавливаем Discord executor
+        if (discordIntegration != null) discordIntegration.shutdown();
 
         if (gradientModule != null) gradientModule.shutdown();
         getLogger().info("LoChat отключен!");
@@ -108,62 +119,18 @@ public final class LoChat extends JavaPlugin {
         }
     }
 
+    // Старый метод регистрации команд - заменен на CommandManager
+    /*
     private void registerCommands() {
-        getCommand("g").setExecutor(new GlobalChatCommand(this));
-        getCommand("l").setExecutor(new LocalChatCommand(this));
-        getCommand("msg").setExecutor(new MsgCommand(this));
-        getCommand("reply").setExecutor(new ReplyCommand(this));
-        getCommand("ignore").setExecutor(new IgnoreCommand(this));
-        getCommand("unignore").setExecutor(new UnignoreCommand(this));
-        getCommand("ignorelist").setExecutor(new IgnoreListCommand(this));
-        getCommand("announce").setExecutor(new AnnounceCommand(this));
-        getCommand("chatspy").setExecutor(new ChatSpyCommand(this));
-        getCommand("clearchat").setExecutor(new ClearChatCommand(this));
-
-        NickCommand nickCmd = new NickCommand(this);
-        getCommand("nick").setExecutor(nickCmd);
-        getCommand("nick").setTabCompleter(nickCmd);
-
-        LoChatCommand loChatCmd = new LoChatCommand(this);
-        getCommand("lochat").setExecutor(loChatCmd);
-        getCommand("lochat").setTabCompleter(loChatCmd);
-
-        MuteCommand muteCmd = new MuteCommand(this);
-        getCommand("lmute").setExecutor(muteCmd);
-        getCommand("lmute").setTabCompleter(muteCmd);
-
-        UnmuteCommand unmuteCmd = new UnmuteCommand(this);
-        getCommand("lunmute").setExecutor(unmuteCmd);
-        getCommand("lunmute").setTabCompleter(unmuteCmd);
-
-        getCommand("lmutelist").setExecutor(new MuteListCommand(this));
-
-        MuteHistoryCommand historyCmd = new MuteHistoryCommand(this);
-        getCommand("lmutehistory").setExecutor(historyCmd);
-        getCommand("lmutehistory").setTabCompleter(historyCmd);
-
-        MuteBlameCommand blameCmd = new MuteBlameCommand(this);
-        getCommand("lmuteblame").setExecutor(blameCmd);
-        getCommand("lmuteblame").setTabCompleter(blameCmd);
-
-        ClearChatConfigCommand clearCfgCmd = new ClearChatConfigCommand(this);
-        getCommand("clearchatconfig").setExecutor(clearCfgCmd);
-        getCommand("clearchatconfig").setTabCompleter(clearCfgCmd);
-
-        // Custom commands управление
-        CustomCommandsCommand customCommandsCmd = new CustomCommandsCommand(this, customCommandManager);
-        getCommand("customcommands").setExecutor(customCommandsCmd);
-        getCommand("customcommands").setTabCompleter(customCommandsCmd);
-
-        // Discord admin команда (отдельно от кастомной /discord)
-        DiscordCommand discordAdminCmd = new DiscordCommand(this, discordIntegration);
-        getCommand("discordadmin").setExecutor(discordAdminCmd);
-        getCommand("discordadmin").setTabCompleter(discordAdminCmd);
+        // Код перенесен в CommandManager для лучшей организации
     }
+    */
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new ChatEventListener(this, serviceRegistry), this);
-        getServer().getPluginManager().registerEvents(new PlayerEventListener(serviceRegistry), this);
+        // Создаём один экземпляр фильтра и передаём в оба листенера — flood/spam трекеры общие
+        advancedMessageFilter = new AdvancedMessageFilter(getConfig(), this);
+        getServer().getPluginManager().registerEvents(new ChatEventListener(this, serviceRegistry, advancedMessageFilter), this);
+        getServer().getPluginManager().registerEvents(new PlayerEventListener(serviceRegistry, advancedMessageFilter), this);
         
         // Discord listener
         if (discordIntegration.isEnabled()) {
@@ -206,6 +173,10 @@ public final class LoChat extends JavaPlugin {
 
     public CustomCommandManager getCustomCommandManager() {
         return customCommandManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public DiscordIntegration getDiscordIntegration() {

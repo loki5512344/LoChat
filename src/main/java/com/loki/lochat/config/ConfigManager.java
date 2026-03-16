@@ -10,14 +10,38 @@ public class ConfigManager {
 
     private final LoChat plugin;
     private FileConfiguration config;
+    private AppearanceConfig appearanceConfig;
+    private HardcodedMessages hardcodedMessages;
 
     public ConfigManager(LoChat plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         this.config = plugin.getConfig();
 
+        // Инициализируем новые конфигурации
+        this.appearanceConfig = new AppearanceConfig(plugin);
+        this.hardcodedMessages = new HardcodedMessages(plugin);
+        
+        // Инициализируем их после создания
+        this.appearanceConfig.init();
+        this.hardcodedMessages.init();
+
         // Проверяем версию конфига и обновляем при необходимости
         updateConfig();
+    }
+
+    /**
+     * Получить конфигурацию внешнего вида
+     */
+    public AppearanceConfig getAppearanceConfig() {
+        return appearanceConfig;
+    }
+
+    /**
+     * Получить конфигурацию хардкодированных сообщений
+     */
+    public HardcodedMessages getHardcodedMessages() {
+        return hardcodedMessages;
     }
 
     private void updateConfig() {
@@ -81,6 +105,10 @@ public class ConfigManager {
     public void reload() {
         plugin.reloadConfig();
         this.config = plugin.getConfig();
+        
+        // Перезагружаем новые конфигурации
+        this.appearanceConfig.reload();
+        this.hardcodedMessages.reload();
     }
 
     /**
@@ -145,7 +173,7 @@ public class ConfigManager {
     }
 
     public int getLocalRadius() {
-        return config.getInt("chat.local.radius", com.loki.lochat.utils.Constants.DEFAULT_LOCAL_RADIUS);
+        return appearanceConfig.getLocalRadius();
     }
 
     public String getLocalPrefix() {

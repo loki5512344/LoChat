@@ -4,40 +4,47 @@ import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.util.DistanceUtil;
+import com.loki.lochat.util.FoliaUtil;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Реализация сервиса чата
+ * Реализация сервиса чата.
+ * globalChatDisabled персистируется в data/players.yml.
  */
 public class ChatServiceImpl implements ChatService {
+
     private final JavaPlugin plugin;
     private final Set<UUID> globalChatDisabled = ConcurrentHashMap.newKeySet();
+    private final File playersFile;
 
     public ChatServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
         this.plugin = plugin;
+        this.playersFile = new File(plugin.getDataFolder(), "data/players.yml");
+        loadDisabled();
     }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    //  Chat
+    // ──────────────────────────────────────────────────────────────────────────
 
     @Override
     public void sendGlobalMessage(Player sender, Object message) {
-        Component messageComponent = (message instanceof Component)
-                ? (Component) message
-                : ChatFormatter.parse(message.toString());
-
-        // Используем тот же рендерер что и в ChatEventListener для единообразия
-        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, messageComponent, true);
-        
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!isGlobalChatDisabled(player.getUniqueId())) {
-                Component renderedMessage = renderer.render(sender, sender.displayName(), messageComponent, player);
-                player.sendMessage(renderedMessage);
+        Component msg = toComponent(message);
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, msg, true);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!isGlobalChatDisabled(p.getUniqueId())) {
+                p.sendMessage(renderer.render(sender, sender.displayName(), msg, p));
             }
         }
     }
@@ -45,42 +52,81 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void sendLocalMessage(Player sender, Object message) {
         int radius = plugin.getConfig().getInt("chat.local.radius", 100);
-        
-        Component messageComponent = (message instanceof Component)
-                ? (Component) message
-                : ChatFormatter.parse(message.toString());
+        Component msg = toComponent(message);
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, msg, false);
 
-        // Используем тот же рендерер что и в ChatEventListener для единообразия
-        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, messageComponent, false);
-
-        int recipientCount = 0;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (DistanceUtil.isInRange(sender, player, radius)) {
-                Component renderedMessage = renderer.render(sender, sender.displayName(), messageComponent, player);
-                player.sendMessage(renderedMessage);
-                recipientCount++;
+        int count = 0;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (DistanceUtil.isInRange(sender, p, radius)) {
+                p.sendMessage(renderer.render(sender, sender.displayName(), msg, p));
+                count++;
             }
         }
-        
-        // Если никто не услышал (только отправитель в радиусе)
-        if (recipientCount <= 1) {
-            sender.sendMessage(ChatFormatter.parse(plugin.getConfig().getString("messages.local.nobody-heard", "<#FFA726>Вас никто не услышал - рядом нет игроков")));
+        if (count <= 1) {
+            sender.sendMessage(ChatFormatter.parse(
+                    plugin.getConfig().getString("messages.local.nobody-heard",
+                            "<color:#9878C9>Вас никто не услышал — рядом нет игроков</color>")));
         }
     }
 
+    // ──────────────────────────────────────────────────────────────────────────
+    //  Toggle global chat — с персистенцией
+    // ──────────────────────────────────────────────────────────────────────────
+
     @Override
     public boolean toggleGlobalChat(UUID player) {
+        boolean nowEnabled;
         if (globalChatDisabled.contains(player)) {
             globalChatDisabled.remove(player);
-            return true;
+            nowEnabled = true;
         } else {
             globalChatDisabled.add(player);
-            return false;
+            nowEnabled = false;
         }
+        FoliaUtil.runAsync(plugin, this::saveDisabled);
+        return nowEnabled;
     }
 
     @Override
     public boolean isGlobalChatDisabled(UUID player) {
         return globalChatDisabled.contains(player);
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    //  Персистенция
+    // ──────────────────────────────────────────────────────────────────────────
+
+    private void loadDisabled() {
+        if (!playersFile.exists()) return;
+        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(playersFile);
+        for (String uuidStr : cfg.getStringList("global-chat-disabled")) {
+            try {
+                globalChatDisabled.add(UUID.fromString(uuidStr));
+            } catch (IllegalArgumentException ignored) {}
+        }
+    }
+
+    private void saveDisabled() {
+        try {
+            ensureDir();
+            YamlConfiguration cfg = playersFile.exists()
+                    ? YamlConfiguration.loadConfiguration(playersFile)
+                    : new YamlConfiguration();
+
+            cfg.set("global-chat-disabled",
+                    globalChatDisabled.stream().map(UUID::toString).toList());
+            cfg.save(playersFile);
+        } catch (IOException e) {
+            plugin.getLogger().warning("[LoChat] Failed to save players.yml: " + e.getMessage());
+        }
+    }
+
+    private void ensureDir() {
+        File dir = playersFile.getParentFile();
+        if (!dir.exists()) dir.mkdirs();
+    }
+
+    private Component toComponent(Object message) {
+        return message instanceof Component c ? c : ChatFormatter.parse(message.toString());
     }
 }

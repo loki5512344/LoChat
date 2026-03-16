@@ -222,12 +222,19 @@ public final class ChatFormatter {
      * Получает отображаемое имя игрока с градиентом
      */
     private static String getPlayerDisplayName(Player player) {
-        // Получаем экземпляр плагина
-        com.loki.lochat.LoChat plugin = com.loki.lochat.LoChat.getInstance();
+        try {
+            // Получаем экземпляр плагина
+            com.loki.lochat.LoChat plugin = com.loki.lochat.LoChat.getInstance();
 
-        // Если градиентный модуль включен, используем его
-        if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
-            return plugin.getGradientModule().getFormattedName(player);
+            // Если градиентный модуль включен, используем его
+            if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
+                return plugin.getGradientModule().getFormattedName(player);
+            }
+        } catch (Exception e) {
+            // Если произошла ошибка, логируем и возвращаем обычное имя
+            com.loki.lochat.LoChat.getInstance().getLogger().warning(
+                "Ошибка при получении градиентного имени для " + player.getName() + ": " + e.getMessage()
+            );
         }
 
         // Иначе просто имя игрока

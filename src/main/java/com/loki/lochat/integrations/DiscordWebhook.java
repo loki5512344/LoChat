@@ -2,7 +2,6 @@ package com.loki.lochat.integrations;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.loki.lochat.util.FoliaUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -12,11 +11,16 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * Класс для отправки сообщений в Discord через вебхуки
+ * Отправка сообщений в Discord через вебхуки.
+ * Все запросы идут в выделенный daemon-поток LoChat-Discord,
+ * а не в ForkJoinPool.commonPool().
  */
 public class DiscordWebhook {
+
     private final JavaPlugin plugin;
     private final String webhookUrl;
     private final String username;
@@ -25,188 +29,127 @@ public class DiscordWebhook {
     private final int retryAttempts;
     private final long retryDelay;
 
-    public DiscordWebhook(JavaPlugin plugin, String webhookUrl, String username, String avatarUrl, 
-                         int timeout, int retryAttempts, long retryDelay) {
+    // Выделенный пул — не засоряем ForkJoinPool.commonPool()
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(
+            r -> {
+                Thread t = new Thread(r, "LoChat-Discord");
+                t.setDaemon(true);
+                return t;
+            }
+    );
+
+    public DiscordWebhook(JavaPlugin plugin, String webhookUrl, String username, String avatarUrl,
+                          int timeout, int retryAttempts, long retryDelay) {
         this.plugin = plugin;
-        this.webhookUrl = webhookUrl != null ? webhookUrl.trim() : null; // Убираем пробелы
+        this.webhookUrl = webhookUrl != null ? webhookUrl.trim() : null;
         this.username = username;
         this.avatarUrl = avatarUrl;
-        this.timeout = timeout * 1000; // конвертируем в миллисекунды
+        this.timeout = timeout * 1000;
         this.retryAttempts = retryAttempts;
         this.retryDelay = retryDelay;
     }
 
-    /**
-     * Отправить простое текстовое сообщение
-     */
+    // ── Публичные методы отправки ─────────────────────────────────────────────
+
     public CompletableFuture<Boolean> sendMessage(String content) {
         JsonObject json = new JsonObject();
         json.addProperty("content", content);
         json.addProperty("username", username);
         json.addProperty("avatar_url", avatarUrl);
-        
         return sendWebhook(json);
     }
 
-    /**
-     * Отправить embed сообщение
-     */
     public CompletableFuture<Boolean> sendEmbed(String title, String description, String color, String thumbnailUrl) {
-        JsonObject embed = new JsonObject();
-        if (title != null) embed.addProperty("title", title);
-        if (description != null) embed.addProperty("description", description);
-        if (color != null) embed.addProperty("color", Integer.parseInt(color, 16));
-        
-        if (thumbnailUrl != null) {
-            JsonObject thumbnail = new JsonObject();
-            thumbnail.addProperty("url", thumbnailUrl);
-            embed.add("thumbnail", thumbnail);
-        }
-        
-        // Добавляем timestamp
-        embed.addProperty("timestamp", java.time.Instant.now().toString());
-        
-        JsonArray embeds = new JsonArray();
-        embeds.add(embed);
-        
-        JsonObject json = new JsonObject();
-        json.add("embeds", embeds);
-        json.addProperty("username", username);
-        json.addProperty("avatar_url", avatarUrl);
-        
-        return sendWebhook(json);
+        return sendWebhook(buildEmbed(title, description, color, thumbnailUrl, null));
     }
 
-    /**
-     * Отправить embed с кастомными полями
-     */
-    public CompletableFuture<Boolean> sendEmbedWithFields(String title, String description, String color, 
-                                                         String thumbnailUrl, JsonArray fields) {
+    public CompletableFuture<Boolean> sendEmbedWithFields(String title, String description, String color,
+                                                          String thumbnailUrl, JsonArray fields) {
+        return sendWebhook(buildEmbed(title, description, color, thumbnailUrl, fields));
+    }
+
+    /** Остановить executor при выключении плагина */
+    public void shutdown() {
+        executor.shutdown();
+    }
+
+    // ── Внутренние методы ─────────────────────────────────────────────────────
+
+    private JsonObject buildEmbed(String title, String description, String color,
+                                  String thumbnailUrl, JsonArray fields) {
         JsonObject embed = new JsonObject();
         if (title != null) embed.addProperty("title", title);
         if (description != null) embed.addProperty("description", description);
         if (color != null) embed.addProperty("color", Integer.parseInt(color, 16));
         if (fields != null) embed.add("fields", fields);
-        
         if (thumbnailUrl != null) {
-            JsonObject thumbnail = new JsonObject();
-            thumbnail.addProperty("url", thumbnailUrl);
-            embed.add("thumbnail", thumbnail);
+            JsonObject thumb = new JsonObject();
+            thumb.addProperty("url", thumbnailUrl);
+            embed.add("thumbnail", thumb);
         }
-        
         embed.addProperty("timestamp", java.time.Instant.now().toString());
-        
+
         JsonArray embeds = new JsonArray();
         embeds.add(embed);
-        
+
         JsonObject json = new JsonObject();
         json.add("embeds", embeds);
         json.addProperty("username", username);
         json.addProperty("avatar_url", avatarUrl);
-        
-        return sendWebhook(json);
+        return json;
     }
 
     /**
-     * Отправить JSON в вебхук с повторными попытками
+     * Отправляет JSON в вебхук асинхронно через выделенный executor.
      */
     private CompletableFuture<Boolean> sendWebhook(JsonObject json) {
         return CompletableFuture.supplyAsync(() -> {
             for (int attempt = 1; attempt <= retryAttempts; attempt++) {
                 try {
-                    boolean success = sendWebhookSync(json.toString());
-                    if (success) {
-                        return true;
-                    }
+                    if (sendWebhookSync(json.toString())) return true;
                 } catch (Exception e) {
                     plugin.getLogger().warning("Discord webhook attempt " + attempt + " failed: " + e.getMessage());
                 }
-                
-                // Ждем перед следующей попыткой (кроме последней)
                 if (attempt < retryAttempts) {
-                    try {
-                        Thread.sleep(retryDelay);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        break;
-                    }
+                    try { Thread.sleep(retryDelay); }
+                    catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
                 }
             }
-            
             plugin.getLogger().severe("Failed to send Discord webhook after " + retryAttempts + " attempts");
             return false;
-        });
+        }, executor); // ← передаём свой executor, не commonPool
     }
 
-    /**
-     * Синхронная отправка в вебхук
-     */
     private boolean sendWebhookSync(String jsonPayload) throws IOException {
-        String cleanUrl = webhookUrl.trim();
-        URL url = URI.create(cleanUrl).toURL();
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        
+        URL url = URI.create(webhookUrl.trim()).toURL();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("User-Agent", "LoChat-Discord-Integration/1.0");
-            connection.setDoOutput(true);
-            connection.setConnectTimeout(timeout);
-            connection.setReadTimeout(timeout);
-            
-            // Отправляем JSON
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("User-Agent", "LoChat-Discord-Integration/1.0");
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(timeout);
+            conn.setReadTimeout(timeout);
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(jsonPayload.getBytes(StandardCharsets.UTF_8));
             }
-            
-            int responseCode = connection.getResponseCode();
-            
-            if (responseCode == 204) {
-                return true; // Успешная отправка
-            } else if (responseCode == 429) {
-                plugin.getLogger().warning("Discord webhook rate limited (429)");
-                return false;
-            } else {
-                plugin.getLogger().warning("Discord webhook returned code: " + responseCode);
-                return false;
-            }
-            
+            int code = conn.getResponseCode();
+            if (code == 204) return true;
+            if (code == 429) { plugin.getLogger().warning("Discord webhook rate limited (429)"); return false; }
+            plugin.getLogger().warning("Discord webhook returned code: " + code);
+            return false;
         } finally {
-            connection.disconnect();
+            conn.disconnect();
         }
     }
 
-    /**
-     * Проверить валидность вебхука
-     */
     public boolean isValid() {
-        if (webhookUrl == null || webhookUrl.trim().isEmpty()) {
-            plugin.getLogger().warning("Discord webhook URL is null or empty");
-            return false;
-        }
-        
-        String cleanUrl = webhookUrl.trim();
-        
-        if (!cleanUrl.startsWith("https://discord.com/api/webhooks/") && 
-            !cleanUrl.startsWith("https://discordapp.com/api/webhooks/")) {
-            plugin.getLogger().warning("Discord webhook URL has invalid format: " + cleanUrl);
-            return false;
-        }
-        
-        if (cleanUrl.length() < 50) {
-            plugin.getLogger().warning("Discord webhook URL is too short: " + cleanUrl);
-            return false;
-        }
-        
-        // Проверяем на недопустимые символы
-        try {
-            URI.create(cleanUrl);
-        } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning("Discord webhook URL contains illegal characters: " + e.getMessage());
-            return false;
-        }
-        
+        if (webhookUrl == null || webhookUrl.trim().isEmpty()) return false;
+        String url = webhookUrl.trim();
+        if (!url.startsWith("https://discord.com/api/webhooks/") &&
+            !url.startsWith("https://discordapp.com/api/webhooks/")) return false;
+        if (url.length() < 50) return false;
+        try { URI.create(url); } catch (IllegalArgumentException e) { return false; }
         return true;
     }
 }

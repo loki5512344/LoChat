@@ -73,22 +73,21 @@ public class MuteServiceImpl implements MuteService {
 
     @Override
     public boolean isMuted(UUID uuid) {
-        if (uuid == null) {
-            return false;
-        }
-        
-        MuteData data = mutes.get(uuid);
-        if (data == null) {
-            return false;
-        }
+        if (uuid == null) return false;
 
-        if (isExpired(data)) {
-            mutes.remove(uuid);
+        MuteData data = mutes.get(uuid);
+        if (data == null) return false;
+
+        if (!isExpired(data)) return true;
+
+        // Атомарно удаляем только если значение не изменилось между get() и remove().
+        // ConcurrentHashMap.remove(key, value) удаляет запись лишь когда она точно та же.
+        boolean removed = mutes.remove(uuid, data);
+        if (removed) {
             saveAsync();
             plugin.getLogger().info("Mute expired for player " + data.getPlayerName());
-            return false;
         }
-        return true;
+        return false;
     }
 
     @Override

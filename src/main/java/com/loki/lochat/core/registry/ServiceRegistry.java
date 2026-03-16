@@ -26,9 +26,15 @@ public class ServiceRegistry {
     private void registerServicesWithDeps(ConfigManager configManager, MessageConfig messageConfig) {
         register(ChatService.class, new ChatServiceImpl(plugin, this));
         register(MuteService.class, new MuteServiceImpl(plugin));
-        register(CooldownService.class, new CooldownServiceImpl());
+
+        // CooldownService регистрируем раньше PlayerDataService, чтобы передать его как зависимость
+        CooldownServiceImpl cooldownService = new CooldownServiceImpl();
+        register(CooldownService.class, cooldownService);
+
         register(MessageService.class, new MessageServiceImpl(plugin, this));
-        register(PlayerDataService.class, new PlayerDataServiceImpl(plugin));
+
+        // Передаём тот же экземпляр CooldownService, а не новый — иначе очистка при выходе не работает
+        register(PlayerDataService.class, new PlayerDataServiceImpl(plugin, cooldownService));
 
         register(PMService.class, new PMServiceImpl());
         register(IgnoreService.class, new IgnoreServiceImpl(plugin));

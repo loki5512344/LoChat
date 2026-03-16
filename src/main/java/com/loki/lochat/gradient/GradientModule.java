@@ -33,6 +33,7 @@ public class GradientModule {
     public GradientModule(JavaPlugin plugin) {
         this.plugin = plugin;
         this.enabled = false;
+        this.luckPermsHook = null; // Явно инициализируем как null
     }
 
     /**
@@ -155,7 +156,7 @@ public class GradientModule {
 
         // LuckPerms префикс
         String lpPrefix = null;
-        if (luckPermsHook.isEnabled()) {
+        if (luckPermsHook != null && luckPermsHook.isEnabled()) {
             lpPrefix = luckPermsHook.getActivePrefix(player);
         }
 
@@ -241,7 +242,7 @@ public class GradientModule {
         }
 
         // LuckPerms префикс
-        if (luckPermsHook.isEnabled()) {
+        if (luckPermsHook != null && luckPermsHook.isEnabled()) {
             String lpPrefix = luckPermsHook.getActivePrefix(player);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 if (data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
@@ -259,7 +260,7 @@ public class GradientModule {
      * Получает только LuckPerms префикс
      */
     public String getLuckPermsPrefix(Player player) {
-        if (!enabled || !luckPermsHook.isEnabled()) return "";
+        if (!enabled || luckPermsHook == null || !luckPermsHook.isEnabled()) return "";
         String prefix = luckPermsHook.getActivePrefix(player);
         return prefix != null ? prefix : "";
     }

@@ -52,18 +52,18 @@ public class DiscordIntegration {
     private void initWebhook() {
         if (!enabled) return;
         
+        // Получаем конфигурацию внешнего вида для дефолтных значений
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.config.AppearanceConfig appearanceConfig = loChat.getConfigManager().getAppearanceConfig();
+        
         String webhookUrl = config.getString("webhook.url", "");
         String username = config.getString("webhook.username", "Minecraft Server");
-        String avatarUrl = config.getString("webhook.avatar_url", "https://mc-heads.net/avatar/minecraft/64");
+        String avatarUrl = config.getString("webhook.avatar_url", appearanceConfig.getDefaultAvatarUrl());
         int timeout = config.getInt("performance.timeout", 10);
         int retryAttempts = config.getInt("performance.retry_attempts", 3);
         long retryDelay = config.getLong("performance.retry_delay", 1000);
         
-        // Логируем информацию о URL для отладки
-        plugin.getLogger().info("Discord webhook URL length: " + webhookUrl.length());
-        if (webhookUrl.length() > 0) {
-            plugin.getLogger().info("Discord webhook URL starts with: " + webhookUrl.substring(0, Math.min(50, webhookUrl.length())));
-        }
+        // Логируем только факт наличия URL, но не его содержимое (security)
         
         webhook = new DiscordWebhook(plugin, webhookUrl, username, avatarUrl, timeout, retryAttempts, retryDelay);
         
@@ -118,9 +118,21 @@ public class DiscordIntegration {
      */
     private void sendChatMessageInternal(String message, String playerName, boolean isGlobal) {
         if (config.getBoolean("chat.use_embed", true)) {
-            String title = isGlobal ? "🌍 Глобальный чат" : "📍 Локальный чат";
-            String color = config.getString("chat.embed_color", "5865F2");
-            String thumbnail = "https://mc-heads.net/avatar/" + playerName + "/64";
+            // Получаем заголовки из конфигурации внешнего вида
+            com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+            com.loki.lochat.config.AppearanceConfig appearanceConfig = loChat.getConfigManager().getAppearanceConfig();
+            
+            String title = isGlobal ? 
+                appearanceConfig.getDiscordEventTitle("global_chat") : 
+                appearanceConfig.getDiscordEventTitle("local_chat");
+            
+            // Если заголовок не найден в новой конфигурации, используем старый способ
+            if (title.isEmpty()) {
+                title = isGlobal ? "🌍 Глобальный чат" : "📍 Локальный чат";
+            }
+            
+            String color = config.getString("chat.embed_color", appearanceConfig.getDefaultEmbedColor());
+            String thumbnail = appearanceConfig.getPlayerAvatarUrl().replace("{player}", playerName);
             
             webhook.sendEmbed(title, message, color, thumbnail);
         } else {
@@ -135,12 +147,16 @@ public class DiscordIntegration {
         if (!enabled || !config.getBoolean("events.enabled", true) || 
             !config.getBoolean("events.join.enabled", true)) return;
         
+        // Получаем конфигурацию внешнего вида
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.config.AppearanceConfig appearanceConfig = loChat.getConfigManager().getAppearanceConfig();
+        
         String playerName = player.getName();
-        String title = config.getString("events.join.title", "🟢 Игрок зашел на сервер");
+        String title = config.getString("events.join.title", appearanceConfig.getDiscordEventTitle("join"));
         String description = config.getString("events.join.description", "**{player}** присоединился к серверу")
                 .replace("{player}", playerName);
         String color = config.getString("events.join.color", "00FF00");
-        String thumbnail = config.getString("events.join.thumbnail", "https://mc-heads.net/avatar/{player}/64")
+        String thumbnail = config.getString("events.join.thumbnail", appearanceConfig.getPlayerAvatarUrl())
                 .replace("{player}", playerName);
         
         if (config.getBoolean("performance.async", true)) {
@@ -157,12 +173,16 @@ public class DiscordIntegration {
         if (!enabled || !config.getBoolean("events.enabled", true) || 
             !config.getBoolean("events.quit.enabled", true)) return;
         
+        // Получаем конфигурацию внешнего вида
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.config.AppearanceConfig appearanceConfig = loChat.getConfigManager().getAppearanceConfig();
+        
         String playerName = player.getName();
-        String title = config.getString("events.quit.title", "🔴 Игрок покинул сервер");
+        String title = config.getString("events.quit.title", appearanceConfig.getDiscordEventTitle("quit"));
         String description = config.getString("events.quit.description", "**{player}** покинул сервер")
                 .replace("{player}", playerName);
         String color = config.getString("events.quit.color", "FF0000");
-        String thumbnail = config.getString("events.quit.thumbnail", "https://mc-heads.net/avatar/{player}/64")
+        String thumbnail = config.getString("events.quit.thumbnail", appearanceConfig.getPlayerAvatarUrl())
                 .replace("{player}", playerName);
         
         if (config.getBoolean("performance.async", true)) {
@@ -179,13 +199,17 @@ public class DiscordIntegration {
         if (!enabled || !config.getBoolean("events.enabled", true) || 
             !config.getBoolean("events.death.enabled", true)) return;
         
+        // Получаем конфигурацию внешнего вида
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.config.AppearanceConfig appearanceConfig = loChat.getConfigManager().getAppearanceConfig();
+        
         String playerName = player.getName();
-        String title = config.getString("events.death.title", "💀 Смерть игрока");
+        String title = config.getString("events.death.title", appearanceConfig.getDiscordEventTitle("death"));
         String description = config.getString("events.death.description", "**{player}** {death_message}")
                 .replace("{player}", playerName)
                 .replace("{death_message}", sanitizeMessage(deathMessage));
         String color = config.getString("events.death.color", "800080");
-        String thumbnail = config.getString("events.death.thumbnail", "https://mc-heads.net/avatar/{player}/64")
+        String thumbnail = config.getString("events.death.thumbnail", appearanceConfig.getPlayerAvatarUrl())
                 .replace("{player}", playerName);
         
         if (config.getBoolean("performance.async", true)) {
@@ -239,6 +263,13 @@ public class DiscordIntegration {
         String thumbnail = "https://mc-heads.net/avatar/" + senderName + "/64";
         
         webhook.sendEmbed(title, description, color, thumbnail);
+    }
+
+    /**
+     * Остановить executor при выключении плагина
+     */
+    public void shutdown() {
+        if (webhook != null) webhook.shutdown();
     }
 
     /**

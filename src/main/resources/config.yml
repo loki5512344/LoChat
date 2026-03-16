@@ -316,6 +316,34 @@ gradient:
 # │                         АВТОСООБЩЕНИЯ                                      │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                        ROLEPLAY НАСТРОЙКИ                             │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+rp:
+  # Радиус видимости RP-команд (в блоках)
+  radius: 100
+
+  # Кулдауны для RP-команд (в секундах, 0 = отключено)
+  cooldowns:
+    me: 3
+    try: 5
+    do: 3
+    roll: 2
+
+  # Форматы сообщений (поддерживают MiniMessage + цвета)
+  # {player}  — отображаемое имя игрока
+  # {action}  — текст действия (/me)
+  # {description} — текст сцены (/do)
+  # {result} — итог (/try)
+  # {max}    — максимум кубика, {result} — результат (/roll)
+  me-format: "<gray>* {player} {action}</gray>"
+  try-format: "<gray>* {player} пытается {action}...</gray> {result}"
+  try-success: "<green><bold>[Успех!]</bold></green>"
+  try-fail: "<red><bold>[Провал!]</bold></red>"
+  do-format: "<dark_gray>[<gray>Сцена</gray>]</dark_gray> <white>{description}</white> <dark_gray>({player})</dark_gray>"
+  roll-format: "<gray>* {player} бросает кубик и получает </gray><yellow><bold>{result}</bold></yellow><gray> из </gray><yellow>{max}</yellow>"
+
 automessages-list:
   welcome:
     - "&#FFD700Добро пожаловать на наш сервер!"
