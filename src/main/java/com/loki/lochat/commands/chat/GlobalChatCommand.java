@@ -3,7 +3,6 @@ package com.loki.lochat.commands.chat;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.utils.ChatFormatter;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +24,7 @@ public class GlobalChatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(plugin.getConfigManager().getHardcodedMessages().getPlayerOnly());
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
             return true;
         }
 

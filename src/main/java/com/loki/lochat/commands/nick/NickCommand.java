@@ -27,11 +27,11 @@ public class NickCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(Component.text(plugin.getConfigManager().getHardcodedMessages().getPlayerOnly(), NamedTextColor.RED));
+            sender.sendMessage(Component.text(plugin.getConfigManager().getMessagesConfig().getPlayerOnly(), NamedTextColor.RED));
             return true;
         }
         if (!player.hasPermission("lochat.nick")) {
-            player.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getHardcodedMessages().getNoPermission()));
+            player.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getMessagesConfig().getNoPermission()));
             return true;
         }
 

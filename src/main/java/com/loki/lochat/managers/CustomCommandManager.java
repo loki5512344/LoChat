@@ -10,12 +10,9 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.loki.lochat.commands.moderation;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
-import com.loki.lochat.config.HardcodedMessages;
+import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -34,7 +34,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
 
-        HardcodedMessages hm = plugin.getConfigManager().getHardcodedMessages();
+        MessagesConfig hm = plugin.getConfigManager().getMessagesConfig();
 
         if (!sender.hasPermission("lochat.mute")) {
             sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission"));
@@ -68,7 +68,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         }
 
         if (silent && !sender.hasPermission("lochat.mute.silent")) {
-            sender.sendMessage(ChatFormatter.parse(hm.getNoSilentPermission()));
+            sender.sendMessage(ChatFormatter.parse(hm.getNoSilentMutePermission()));
             return true;
         }
 
@@ -121,6 +121,12 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             String broadcastMsg = (duration == 0 ? hm.getPlayerMutedPermanent() : hm.getPlayerMuted())
                     .replace("{player}", finalName).replace("{time}", timeDisplay).replace("{reason}", reason);
             Bukkit.broadcast(ChatFormatter.parse(broadcastMsg));
+        }
+
+        String voiceCmd = plugin.getConfig().getString("moderation.voice-mute-console-command", "");
+        if (target != null && voiceCmd != null && !voiceCmd.isEmpty()) {
+            String c = voiceCmd.replace("{player}", finalName).replace("{uuid}", targetUUID.toString());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c);
         }
 
         return true;

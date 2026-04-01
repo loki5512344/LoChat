@@ -157,6 +157,7 @@ public final class GradientUtil {
                                           String prefixFormat, boolean useLegacyFormat) {
         if (colors == null || colors.isEmpty()) {
             if (prefix != null && !prefix.isEmpty()) {
+                // ✅ FIX: Не используем stripTrailing() чтобы сохранить пробел из prefixFormat
                 return prefixFormat.replace("{prefix}", prefix) + nick;
             }
             return nick;
@@ -167,13 +168,16 @@ public final class GradientUtil {
         }
 
         if (continuousGradient && gradientOnPrefix) {
+            // ✅ FIX: Сохраняем пробел между префиксом и ником
             String fullText = prefixFormat.replace("{prefix}", prefix) + nick;
             return applyGradient(fullText, colors, useLegacyFormat);
         } else if (gradientOnPrefix) {
+            // ✅ FIX: Применяем градиент к префиксу с форматом (включая пробел)
             String coloredPrefix = applyGradient(prefixFormat.replace("{prefix}", prefix), colors, useLegacyFormat);
             String coloredNick = applyGradient(nick, colors, useLegacyFormat);
             return coloredPrefix + coloredNick;
         } else {
+            // ✅ FIX: Префикс без градиента, но с пробелом из формата
             String formattedPrefix = prefixFormat.replace("{prefix}", prefix);
             return formattedPrefix + applyGradient(nick, colors, useLegacyFormat);
         }

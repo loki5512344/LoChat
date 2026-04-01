@@ -10,11 +10,9 @@ import org.bukkit.entity.Player;
  */
 public class LibertyBansHook {
 
-    private final LoChat plugin;
     private final MuteService muteService;
 
     public LibertyBansHook(LoChat plugin) {
-        this.plugin = plugin;
         this.muteService = plugin.getServiceRegistry().get(MuteService.class);
 
         // Проверяем наличие LibertyBans

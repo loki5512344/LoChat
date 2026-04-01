@@ -18,7 +18,7 @@ public class ReloadConfigCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.hasPermission("lochat.admin.reload")) {
-            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getHardcodedMessages().getNoPermission()));
+            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getMessagesConfig().getNoPermission()));
             return true;
         }
         try {

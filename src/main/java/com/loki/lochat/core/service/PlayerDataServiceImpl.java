@@ -44,7 +44,7 @@ public class PlayerDataServiceImpl implements PlayerDataService {
 
     /** Вызывать при каждом сообщении в чате */
     public void recordMessage(UUID player, String chatType) {
-        playerMessages.merge(player, 1L, Long::sum);
+        playerMessages.compute(player, (k, v) -> (v == null ? 0L : v) + 1L);
         totalMessages.incrementAndGet();
         switch (chatType) {
             case "global" -> globalChatCount.incrementAndGet();

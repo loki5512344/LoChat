@@ -25,7 +25,7 @@ public class IgnoreListCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) { sender.sendMessage(plugin.getConfigManager().getHardcodedMessages().getPlayerOnly()); return true; }
+        if (!(sender instanceof Player player)) { sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly()); return true; }
 
         Set<UUID> ignored = ignoreService.getIgnoredPlayers(player.getUniqueId());
         if (ignored.isEmpty()) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-empty"))); return true; }

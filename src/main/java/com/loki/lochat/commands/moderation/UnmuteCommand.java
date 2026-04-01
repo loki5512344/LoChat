@@ -38,7 +38,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
             else if (targetName == null) targetName = a;
         }
         if (silent && !sender.hasPermission("lochat.mute.silent")) { 
-            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getHardcodedMessages().getNoSilentUnmutePermission())); 
+            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getMessagesConfig().getNoSilentUnmutePermission())); 
             return true; 
         }
 
@@ -59,7 +59,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
                 Bukkit.broadcast(ChatFormatter.parse("&#9878C9Игрок &#7858E9" + name + " &#9878C9размучен модератором &#7858E9" + op));
             }
         } else {
-            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getHardcodedMessages().getPlayerNotMutedSimple()));
+            sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getMessagesConfig().getPlayerNotMutedSimple()));
         }
         return true;
     }

@@ -1,5 +1,6 @@
 plugins {
     java
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 group = "com.loki"
@@ -51,4 +52,10 @@ tasks.jar {
     archiveFileName.set("LoChat-1.5.5-1.21.8.jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Локальный Paper для тестов: .\gradlew.bat runServer
+tasks.runServer {
+    minecraftVersion("1.21.4")
+    // Совпадает с compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }

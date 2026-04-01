@@ -1,181 +1,30 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                              LoChat Configuration                            ║
-# ║                              Версия: 1.5.5-1.20.1                          ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-
+# LoChat Configuration v1.5.5
 config-version: 4
 prefix: "&#00D4FF[LoChat]"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         ДОПОЛНИТЕЛЬНЫЕ КОНФИГИ                             │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-# Загружать дополнительные конфигурационные файлы
-load-additional-configs: true
-
-# Список дополнительных конфигов для загрузки
-additional-configs:
-  - "config/chat-formats.yml"      # Форматы чата и сообщений
-  - "config/filters.yml"           # Настройки фильтров
-  - "config/gradient-config.yml"   # Конфигурация градиентов
-  - "config/automessages.yml"      # Автосообщения
-  - "config/mute-config.yml"       # Система мутов
-  - "config/sounds.yml"            # Звуковые эффекты
-  - "config/database.yml"          # База данных
-  - "config/integrations.yml"      # Интеграции с другими плагинами
-  - "config/custom-commands.yml"   # Кастомные команды
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         СТРУКТУРА ДАННЫХ                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-# Настройки хранения данных
-data-storage:
-  # Основная папка для данных
-  data-folder: "data/"
-  
-  # Использовать отдельные файлы для разных типов данных
-  separate-files: true
-  
-  # Файлы данных
-  files:
-    main: "data.yml"              # Основные данные (если separate-files: false)
-    players: "players.yml"        # Данные игроков
-    gradients: "gradients.yml"    # Градиентные ники
-    mutes: "mutes.yml"           # Муты и история
-    ignores: "ignores.yml"       # Игнорирование
-    statistics: "statistics.yml"  # Статистика
-    filter-words: "filter-words.json"  # Запрещенные слова
-  
-  # Автосохранение (секунды)
-  auto-save-interval: 300
-  
-  # Создавать резервные копии
-  backup:
-    enabled: true
-    interval: 3600  # Каждый час
-    max-backups: 24
-    folder: "backups/"
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                              HUB COMMAND                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-hub_command:
-  # Enable/disable /hub command
-  enabled: true
-  
-  # Target server name for /hub command
-  # Sends player to this server via BungeeCord
-  server: "hub"
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         КАСТОМНЫЕ КОМАНДЫ                                  │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-custom-commands:
-  # Включить кастомные команды
-  enabled: true
-  
-  # Настройки Discord команды
-  discord:
-    invite-link: "discord.gg/example"
-    
-  # Настройки Website команды  
-  website:
-    url: "https://example.com"
-    
-  # Настройки координат
-  coords:
-    # Показывать координаты в actionbar
-    show-in-actionbar: true
-    # Время показа в actionbar (тики)
-    actionbar-duration: 60
-    
-  # Настройки /me команды
-  me:
-    # Радиус для локального действия
-    radius: 100
-    # Цвет сообщения
-    color: "gray"
-    
-  # Настройки звуков
-  sounds:
-    # Разрешить игрокам переключать звуки
-    allow-toggle: true
-    # Звук при включении/выключении
-    toggle-sound: "UI_BUTTON_CLICK"
-    
-  # Настройки статистики
-  stats:
-    # Показывать статистику сервера
-    show-server-stats: true
-    # Показывать статистику игроков
-    show-player-stats: true
-    # Обновлять статистику каждые N секунд
-    update-interval: 300
-    
-  # Настройки пинга
-  ping:
-    # Цвета для разных значений пинга
-    colors:
-      excellent: "green"    # < 50ms
-      good: "yellow"        # 50-100ms
-      fair: "gold"          # 100-200ms
-      poor: "red"           # > 200ms
-      
-  # Настройки времени
-  time:
-    # Формат времени (12 или 24 часа)
-    format: 24
-    # Показывать дату
-    show-date: true
-    
-  # Настройки списка игроков
-  list:
-    # Группировать по мирам
-    group-by-world: false
-    # Показывать AFK игроков
-    show-afk: true
-    # Максимум игроков в списке
-    max-players: 50
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                              НАСТРОЙКИ ЧАТА                                │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# Базовые настройки чата
+# Детальные настройки (префиксы, цвета, форматы) в config/*.yml
 
 chat:
+  # Режим чата:
+  # - Оба включены = локальный (по умолчанию) + глобальный (с "!")
+  # - Только global = единый чат без префиксов для всех
   global:
     enabled: true
     cooldown: 3
-    prefix: "&#FFD700[G]"
-  
   local:
     enabled: true
-    radius: 100
     cooldown: 1
-    prefix: "&#87CEEB[L]"
-  
   pm:
     enabled: true
     cooldown: 2
-    sound: true
-    sound-type: "BLOCK_NOTE_BLOCK_PLING"
-    log: false
-  
-  hover:
-    enabled: true
-    format:
-      - "<gray>Игрок: <white>{player}"
-      - "<gray>Мир: <green>{world}"
-      - "<gray>Пинг: <yellow>{ping}ms"
-      - ""
-      - "<yellow>▶ Клик: написать ЛС"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ГРАДИЕНТНЫЕ НИКИ                                │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# Hub команда
+hub_command:
+  enabled: true
+  server: "hub"
 
+# Градиентные ники
 lopreff:
   enabled: true
   use-gradient-name: true
@@ -185,107 +34,7 @@ display:
   update-display-name: true
   update-tab-list: true
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ                             │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-mentions:
-  enabled: true
-  sound: true
-  sound-type: "BLOCK_NOTE_BLOCK_PLING"
-  highlight: "&#FFFF00@{player}"
-  self-highlight: "&#FFD700{player}"
-  everyone:
-    enabled: true
-    permission: "lochat.mention.everyone"
-  here:
-    enabled: true
-    permission: "lochat.mention.here"
-  role:
-    enabled: true
-    permission: "lochat.mention.role"
-
-automessages:
-  enabled: true
-  interval: 300
-  random: false
-
-announcements:
-  show-title: true
-  title-header: "&#FF6B6BОБЪЯВЛЕНИЕ"
-  show-actionbar: true
-  title-duration: 3
-
-clearchat:
-  message:
-    enabled: true
-    text: "&#FF6B6BЧат очищен администратором {player}"
-
-head-emoji:
-  enabled: true
-  allow-player-heads: true
-  max-heads-per-message: 3
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                              СИСТЕМА МУТОВ                                 │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-mute:
-  default-reason: "Нарушение правил"
-  default-duration: "7d"
-  durations:
-    - "10m"
-    - "30m"
-    - "1h"
-    - "6h"
-    - "12h"
-    - "1d"
-    - "3d"
-    - "7d"
-    - "14d"
-    - "30d"
-    - "perm"
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ФИЛЬТРЫ СООБЩЕНИЙ                               │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-filters:
-  caps:
-    enabled: true
-    max-percent: 70
-    min-length: 5
-    auto-lowercase: true
-
-  advertising:
-    enabled: true
-    block-hidden-urls: true
-    block-domains: true
-    whitelist:
-      - "youtube.com"
-      - "youtu.be"
-      - "discord.gg"
-      - "twitch.tv"
-    blacklist:
-      - "scam-site.com"
-
-  ip:
-    enabled: true
-    block: false
-    replacement: "[IP скрыт]"
-
-  repeat:
-    enabled: true
-    max-repeats: 3
-
-# Форматы (не трогать)
-formats:
-  announcement: "&#FF6B6B[ОБЪЯВЛЕНИЕ] <message>"
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         НАСТРОЙКИ ГРАДИЕНТОВ                               │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
+# Градиенты (детали в config/gradient.yml)
 gradient:
   storage-type: "file"
   min-colors: 1
@@ -297,66 +46,21 @@ gradient:
   max-prefix-length: 16
   color-cooldown: 60
   prefix-cooldown: 120
-  
-  # Форматирование
   prefix-format: "[{prefix}] "
   gradient-on-prefix: true
   gradient-on-luckperms-prefix: true
   continuous-gradient: true
   use-legacy-rgb-format: true
-  
-  presets:
-    fire: [ "#FF4500", "#FF6347", "#FFD700" ]
-    ocean: [ "#00CED1", "#1E90FF", "#4169E1" ]
-    forest: [ "#228B22", "#32CD32", "#90EE90" ]
-    sunset: [ "#FF69B4", "#FF1493", "#DC143C" ]
-    rainbow: [ "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3" ]
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                         АВТОСООБЩЕНИЯ                                      │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                        ROLEPLAY НАСТРОЙКИ                             │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
+# RP команды (детали в config/rp.yml)
 rp:
-  # Радиус видимости RP-команд (в блоках)
   radius: 100
-
-  # Кулдауны для RP-команд (в секундах, 0 = отключено)
   cooldowns:
     me: 3
     try: 5
     do: 3
     roll: 2
 
-  # Форматы сообщений (поддерживают MiniMessage + цвета)
-  # {player}  — отображаемое имя игрока
-  # {action}  — текст действия (/me)
-  # {description} — текст сцены (/do)
-  # {result} — итог (/try)
-  # {max}    — максимум кубика, {result} — результат (/roll)
-  me-format: "<gray>* {player} {action}</gray>"
-  try-format: "<gray>* {player} пытается {action}...</gray> {result}"
-  try-success: "<green><bold>[Успех!]</bold></green>"
-  try-fail: "<red><bold>[Провал!]</bold></red>"
-  do-format: "<dark_gray>[<gray>Сцена</gray>]</dark_gray> <white>{description}</white> <dark_gray>({player})</dark_gray>"
-  roll-format: "<gray>* {player} бросает кубик и получает </gray><yellow><bold>{result}</bold></yellow><gray> из </gray><yellow>{max}</yellow>"
-
-automessages-list:
-  welcome:
-    - "&#FFD700Добро пожаловать на наш сервер!"
-    - "&#87CEEBИспользуйте /help для получения помощи"
-  
-  rules:
-    - "&#FF6B6BСоблюдайте правила сервера!"
-    - "&#87CEEBПодробнее: /rules"
-  
-  discord:
-    - "&#7289DAПрисоединяйтесь к нашему Discord!"
-    - "&#87CEEBСсылка: discord.gg/example"
-  
-  website:
-    - "&#00FF88Посетите наш сайт!"
-    - "&#87CEEBАдрес: example.com"
+# Модерация: после /lmute выполнить команду от консоли (SimpleVoiceChat: voice mute {player})
+moderation:
+  voice-mute-console-command: ""

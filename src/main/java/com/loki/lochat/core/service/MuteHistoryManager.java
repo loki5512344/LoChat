@@ -15,6 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MuteHistoryManager {
 
+    // ✅ FIX: Ограничиваем размер истории для предотвращения утечки памяти
+    private static final int MAX_HISTORY_PER_PLAYER = 50;
+
     private final Map<UUID, List<MuteData.MuteHistoryEntry>> history = new ConcurrentHashMap<>();
     private final File historyFile;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -36,6 +39,11 @@ public class MuteHistoryManager {
                 null,
                 0
         ));
+        
+        // ✅ FIX: Удаляем старые записи если превышен лимит
+        if (entries.size() > MAX_HISTORY_PER_PLAYER) {
+            entries.remove(0); // Удаляем самую старую запись
+        }
     }
 
     public void updateUnmute(UUID uuid, String unmutedBy) {

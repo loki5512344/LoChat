@@ -23,6 +23,33 @@ public final class ChatFormatter {
         return MM.deserialize(converted);
     }
 
+    /**
+     * Default message color for players without {@code lochat.chat.colors}.
+     * Escapes {@code \} and {@code <} in the raw text so a literal {@code </color>} (or any {@code <})
+     * cannot close the outer MiniMessage wrapper early — which used to leave a stray {@code </color>}
+     * visible in-game and in the server console log.
+     * <p>
+     * Legacy hex ({@code &#RRGGBB}) and ampersand color codes in the message are still applied after escaping
+     * (see {@link #convertLegacyFormats} inside {@link #parse}).
+     */
+    public static Component parseWithDefaultMessageColor(String message, String hexCode) {
+        if (message == null) message = "";
+        String hex = (hexCode == null || hexCode.isBlank())
+                ? "#FFFFFF"
+                : (hexCode.startsWith("#") ? hexCode : "#" + hexCode);
+        String escaped = escapeForMiniMessageOuterWrap(message);
+        return parse("<color:" + hex + ">" + escaped + "</color>");
+    }
+
+    /**
+     * Escape user text before it is embedded in a MiniMessage template with outer tags.
+     * MiniMessage treats {@code \<} as a literal angle bracket.
+     */
+    public static String escapeForMiniMessageOuterWrap(String text) {
+        if (text == null) return "";
+        return text.replace("\\", "\\\\").replace("<", "\\<");
+    }
+
     public static Component parse(String message, String... replacements) {
         if (message == null) return Component.empty();
         String result = message;

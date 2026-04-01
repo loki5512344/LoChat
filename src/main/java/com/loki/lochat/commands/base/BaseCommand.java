@@ -68,7 +68,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
      */
     protected boolean requirePlayer(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getConfigManager().getHardcodedMessages().getPlayerOnly());
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
             return false;
         }
         return true;
@@ -79,7 +79,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
      */
     protected boolean requirePermission(CommandSender sender, String permission) {
         if (!hasPermission(sender, permission)) {
-            sender.sendMessage(plugin.getConfigManager().getHardcodedMessages().getNoPermission());
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getNoPermission());
             return false;
         }
         return true;

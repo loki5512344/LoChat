@@ -1,0 +1,92 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                           Discord Integration                                ║
+# ║                        Интеграция с Discord                                 ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# Включить интеграцию с Discord
+enabled: true
+
+# Настройки вебхука
+webhook:
+  # URL вебхука Discord (получить в настройках канала)
+  url: "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+  
+  # Имя бота в Discord
+  username: "Minecraft Server"
+  
+  # Аватар бота (URL изображения)
+  avatar_url: "https://mc-heads.net/avatar/minecraft/64"
+
+# Настройки чата
+chat:
+  # Отправлять сообщения чата в Discord
+  enabled: true
+  
+  # Отправлять только глобальный чат (true) или весь чат (false)
+  global_only: true
+  
+  # Формат сообщения чата
+  format: "**{player}**: {message}"
+  
+  # Цвет embed для сообщений чата (hex без #)
+  embed_color: "5865F2"
+  
+  # Использовать embed или обычное сообщение
+  use_embed: true
+
+# Настройки событий игроков
+events:
+  # Отправлять события входа/выхода
+  enabled: true
+  
+  # Настройки входа на сервер
+  join:
+    enabled: true
+    title: "🟢 Игрок зашел на сервер"
+    description: "**{player}** присоединился к серверу"
+    color: "00FF00"
+    thumbnail: "https://mc-heads.net/avatar/{player}/64"
+    
+  # Настройки выхода с сервера  
+  quit:
+    enabled: true
+    title: "🔴 Игрок покинул сервер"
+    description: "**{player}** покинул сервер"
+    color: "FF0000"
+    thumbnail: "https://mc-heads.net/avatar/{player}/64"
+    
+  # Настройки смерти игрока
+  death:
+    enabled: true
+    title: "💀 Смерть игрока"
+    description: "**{player}** {death_message}"
+    color: "800080"
+    thumbnail: "https://mc-heads.net/avatar/{player}/64"
+
+# Настройки фильтрации
+filter:
+  # Игнорировать сообщения от ботов
+  ignore_bots: true
+  
+  # Минимальная длина сообщения для отправки
+  min_message_length: 1
+  
+  # Максимальная длина сообщения (обрезать если больше)
+  max_message_length: 2000
+  
+  # Заменять @everyone и @here на безопасные варианты
+  sanitize_mentions: true
+
+# Настройки производительности
+performance:
+  # Асинхронная отправка (рекомендуется)
+  async: true
+  
+  # Таймаут подключения (секунды)
+  timeout: 10
+  
+  # Повторные попытки при ошибке
+  retry_attempts: 3
+  
+  # Задержка между попытками (миллисекунды)
+  retry_delay: 1000

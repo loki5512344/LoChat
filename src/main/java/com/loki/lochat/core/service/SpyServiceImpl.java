@@ -7,8 +7,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,12 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * Реализация сервиса шпионажа за чатом
  */
 public class SpyServiceImpl implements SpyService {
-    private final JavaPlugin plugin;
     private final MessageConfig messageConfig;
     private final Set<UUID> spyEnabled = ConcurrentHashMap.newKeySet();
 
-    public SpyServiceImpl(JavaPlugin plugin, MessageConfig messageConfig) {
-        this.plugin = plugin;
+    public SpyServiceImpl(MessageConfig messageConfig) {
         this.messageConfig = messageConfig;
     }
 

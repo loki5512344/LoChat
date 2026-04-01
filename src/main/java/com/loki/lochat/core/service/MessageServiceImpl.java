@@ -1,7 +1,6 @@
 package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.filter.MessageFilter;
-import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.api.service.CooldownService;
 import com.loki.lochat.api.service.MessageService;
 import com.loki.lochat.api.service.MuteService;
@@ -19,13 +18,9 @@ import java.util.List;
  * Реализация сервиса обработки сообщений (Chain of Responsibility)
  */
 public class MessageServiceImpl implements MessageService {
-    private final JavaPlugin plugin;
     private final List<MessageFilter> filters;
-    private final ChatService chatService;
 
     public MessageServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
-        this.plugin = plugin;
-        this.chatService = registry.get(ChatService.class);
         this.filters = new ArrayList<>();
 
         // Регистрируем фильтры в порядке применения

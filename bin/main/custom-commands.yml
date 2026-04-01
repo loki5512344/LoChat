@@ -1,169 +1,140 @@
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                          LoChat Custom Commands                             ║
-# ║                           Кастомные команды                                ║
-# ║                              Версия: 1.5.5-1.20.1                          ║
+# ║                           Custom Commands Configuration                      ║
+# ║                        Конфигурация кастомных команд                       ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ПРИМЕРЫ КОМАНД                                  │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-# Структура команды:
-# command-name:
-#   permission: "право.для.использования"  # Опционально
-#   message: "Текст сообщения"             # Обязательно
-#   aliases: ["alias1", "alias2"]          # Опционально
-#   type: "chat"                           # chat, broadcast, title, actionbar
-#   target: "sender"                       # sender, all, permission:право
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#                              ИНФОРМАЦИОННЫЕ КОМАНДЫ
-# ═══════════════════════════════════════════════════════════════════════════════
-
+# Информационные команды
 help:
+  enabled: true
   message: |
-    <gradient:#FFD700:#FFA500>═══════ Помощь по серверу ═══════</gradient>
-    <gradient:#87CEEB:#4682B4>/rules</gradient> <gray>- правила сервера</gray>
-    <gradient:#87CEEB:#4682B4>/discord</gradient> <gray>- наш Discord</gray>
-    <gradient:#87CEEB:#4682B4>/website</gradient> <gray>- официальный сайт</gray>
-    <gradient:#87CEEB:#4682B4>/coords</gradient> <gray>- ваши координаты</gray>
-    <gradient:#87CEEB:#4682B4>/time</gradient> <gray>- время на сервере</gray>
+    <gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>📚 Помощь по серверу</bold></gradient>
+    
+    <#FFEB3B>🏠 Основные команды:</color>
+    <#9E9E9E>• <#FFFFFF>/spawn</color> - телепорт на спавн
+    <#9E9E9E>• <#FFFFFF>/home</color> - телепорт домой
+    <#9E9E9E>• <#FFFFFF>/sethome</color> - установить дом
+    
+    <#FFEB3B>💬 Чат команды:</color>
+    <#9E9E9E>• <#FFFFFF>!сообщение</color> - глобальный чат
+    <#9E9E9E>• <#FFFFFF>/msg игрок</color> - личное сообщение
+    <#9E9E9E>• <#FFFFFF>/reply</color> - ответить на ЛС
+    
+    <#FFEB3B>🎨 Кастомизация:</color>
+    <#9E9E9E>• <#FFFFFF>/color</color> - градиентный ник
+    <#9E9E9E>• <#FFFFFF>/prefix</color> - кастомный префикс
+    
+    <gradient:#FFD700:#FFA500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
   aliases: ["помощь", "хелп"]
   type: "chat"
   target: "sender"
 
 rules:
+  enabled: true
   message: |
-    <gradient:#FF6B6B:#FF4757>═══════ Правила сервера ═══════</gradient>
-    <white>1.</white> <gray>Не используйте читы и моды</gray>
-    <white>2.</white> <gray>Уважайте других игроков</gray>
-    <white>3.</white> <gray>Не спамьте в чате</gray>
-    <white>4.</white> <gray>Не стройте рядом с чужими постройками</gray>
-    <white>5.</white> <gray>Не используйте мат и оскорбления</gray>
+    <gradient:#FF6B6B:#FF4500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>📋 Правила сервера</bold></gradient>
     
-    <gradient:#FFA726:#FF9800>Нарушение правил карается мутом или баном!</gradient>
+    <#F44336><bold>🚫 Запрещено:</bold></color>
+    <#9E9E9E>• Читерство и использование модов
+    <#9E9E9E>• Гриферство и воровство
+    <#9E9E9E>• Мат и оскорбления
+    <#9E9E9E>• Спам в чате
+    <#9E9E9E>• Реклама других серверов
+    
+    <#4CAF50><bold>✅ Разрешено:</bold></color>
+    <#9E9E9E>• Строительство в любом стиле
+    <#9E9E9E>• Торговля между игроками
+    <#9E9E9E>• Создание команд и кланов
+    <#9E9E9E>• Использование /home и /spawn
+    
+    <#FFA726><bold>⚠️ За нарушения:</bold></color>
+    <#9E9E9E>• Предупреждение → Мут → Бан
+    
+    <gradient:#FF6B6B:#FF4500><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
   aliases: ["правила", "rule"]
   type: "chat"
   target: "sender"
 
 discord:
+  enabled: true
   message: |
-    <gradient:#7289DA:#5865F2>═══════ Наш Discord ═══════</gradient>
-    <gray>Присоединяйтесь к нашему сообществу!</gray>
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>💬 Discord сервер</bold></gradient>
     
-    <click:open_url:'https://discord.gg/example'><gradient:#87CEEB:#4682B4>🔗 discord.gg/example</gradient></click>
+    <#5865F2><bold>Присоединяйся к нашему Discord!</bold></color>
     
-    <gray>В Discord вы можете:</gray>
-    <white>•</white> <gray>Общаться с игроками</gray>
-    <white>•</white> <gray>Получать новости сервера</gray>
-    <white>•</white> <gray>Участвовать в событиях</gray>
+    <#FFEB3B>🔗 Ссылка:</color> <click:open_url:'https://discord.gg/yourserver'><u><#00BFFF>discord.gg/yourserver</u></click>
+    
+    <#FFEB3B>📢 В Discord ты найдешь:</color>
+    <#9E9E9E>• Общение с игроками
+    <#9E9E9E>• Новости и обновления
+    <#9E9E9E>• Поддержку администрации
+    <#9E9E9E>• Конкурсы и ивенты
+    
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
   aliases: ["дискорд", "ds"]
   type: "chat"
   target: "sender"
 
-website:
-  message: |
-    <gradient:#00FF88:#00CC66>═══════ Официальный сайт ═══════</gradient>
-    <click:open_url:'https://example.com'><gradient:#87CEEB:#4682B4>🌐 example.com</gradient></click>
-    
-    <gray>На сайте доступно:</gray>
-    <white>•</white> <gray>Карта сервера</gray>
-    <white>•</white> <gray>Статистика игроков</gray>
-    <white>•</white> <gray>Форум и новости</gray>
-  aliases: ["сайт", "site"]
-  type: "chat"
-  target: "sender"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#                              УТИЛИТЫ
-# ═══════════════════════════════════════════════════════════════════════════════
-
 coords:
-  message: |
-    <gradient:#FFA726:#FF9800>Ваши координаты:</gradient>
-    <gradient:#87CEEB:#4682B4>X:</gradient> <white>{x}</white>
-    <gradient:#87CEEB:#4682B4>Y:</gradient> <white>{y}</white>
-    <gradient:#87CEEB:#4682B4>Z:</gradient> <white>{z}</white>
-    <gradient:#87CEEB:#4682B4>Мир:</gradient> <white>{world}</white>
+  enabled: true
+  message: "<#FFEB3B>📍 <bold>Ваши координаты:</bold></color> <#9E9E9E>X: <#FFFFFF>{x}</color> Y: <#FFFFFF>{y}</color> Z: <#FFFFFF>{z}</color> <#9E9E9E>Мир: <#4CAF50>{world}</color>"
   aliases: ["координаты", "pos", "position"]
-  type: "actionbar"
-  target: "sender"
-
-time:
-  message: |
-    <gradient:#87CEEB:#4682B4>Время на сервере:</gradient> <white>%server_time_24%</white>
-    <gradient:#87CEEB:#4682B4>Дата:</gradient> <white>%server_date%</white>
-    <gradient:#87CEEB:#4682B4>Онлайн:</gradient> <white>%server_online%</white> <gray>игроков</gray>
-  aliases: ["время", "дата"]
   type: "chat"
   target: "sender"
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#                              АДМИНСКИЕ КОМАНДЫ
-# ═══════════════════════════════════════════════════════════════════════════════
+ping:
+  enabled: true
+  message: "<#FFEB3B>📶 <bold>Ваш пинг:</bold></color> <#4CAF50>{ping}ms</color>"
+  aliases: ["пинг"]
+  type: "chat"
+  target: "sender"
+  type: "chat"
+  target: "sender"
 
-restart-warning:
-  permission: "lochat.admin"
-  message: |
-    <gradient:#FF6B6B:#FF4757>⚠ ВНИМАНИЕ! ⚠</gradient>
-    <gradient:#FFA726:#FF9800>Сервер будет перезагружен через 5 минут!</gradient>
-    <gray>Сохраните свой прогресс и подготовьтесь к перезагрузке.</gray>
-  aliases: ["рестарт", "reboot"]
-  type: "title"
-  target: "all"
+hub:
+  enabled: true
+  message: "<#4CAF50>🏠 Подключение к хабу...</color>"
+  aliases: ["lobby", "хаб"]
+  type: "bungee"
+  target: "sender"
+  server: "hub"
 
-maintenance:
-  permission: "lochat.admin"
+discord:
+  enabled: true
   message: |
-    <gradient:#FF6B6B:#FF4757>Сервер переходит в режим технических работ</gradient>
-    <gray>Ожидаемое время: 30 минут</gray>
-  aliases: ["тех-работы", "maintenance"]
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+    <gradient:#87CEEB:#4169E1><bold>💬 Discord сервер</bold></gradient>
+    
+    <#5865F2><bold>Присоединяйся к нашему Discord!</bold></color>
+    
+    <#FFEB3B>🔗 Ссылка:</color> <click:open_url:'https://discord.gg/yourserver'><u><#00BFFF>discord.gg/yourserver</u></click>
+    
+    <#FFEB3B>📢 В Discord ты найдешь:</color>
+    <#9E9E9E>• Общение с игроками
+    <#9E9E9E>• Новости и обновления
+    <#9E9E9E>• Поддержку администрации
+    <#9E9E9E>• Конкурсы и ивенты
+    
+    <gradient:#5865F2:#7289DA><bold>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</bold></gradient>
+  aliases: ["дискорд", "ds"]
+  type: "chat"
+  target: "sender"
+
+# Команды для администрации
+broadcast:
+  enabled: true
+  permission: "lochat.broadcast"
+  message: "{message}"
+  aliases: ["bc", "объявить"]
   type: "broadcast"
   target: "all"
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#                              VIP КОМАНДЫ
-# ═══════════════════════════════════════════════════════════════════════════════
-
-vip-info:
-  permission: "lochat.vip"
-  message: |
-    <gradient:#FFD700:#FFA500>═══════ VIP Привилегии ═══════</gradient>
-    <white>•</white> <gray>Цветной ник и префикс</gray>
-    <white>•</white> <gray>Приоритет входа на сервер</gray>
-    <white>•</white> <gray>Дополнительные команды</gray>
-    <white>•</white> <gray>Больше возможностей в чате</gray>
-    
-    <gradient:#6BCB77:#4ECDC4>Спасибо за поддержку сервера!</gradient>
-  type: "chat"
-  target: "permission:lochat.vip"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#                              РАЗВЛЕКАТЕЛЬНЫЕ КОМАНДЫ
-# ═══════════════════════════════════════════════════════════════════════════════
-
-welcome:
-  message: |
-    <gradient:#FFD700:#FFA500>Добро пожаловать на сервер!</gradient>
-    <gradient:#87CEEB:#4682B4>Игрок {player} присоединился к игре</gradient>
-  aliases: ["привет", "hello"]
+maintenance:
+  enabled: false
+  permission: "lochat.maintenance"
+  message: "<#FFA726><bold>🔧 Сервер переведен в режим технических работ</bold></color>"
+  aliases: ["тех-работы", "техработы"]
   type: "title"
-  target: "sender"
-
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ПЛЕЙСХОЛДЕРЫ                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
-
-# Доступные плейсхолдеры в сообщениях:
-# {player} - имя игрока
-# {x}, {y}, {z} - координаты игрока
-# {world} - название мира
-# {arg0}, {arg1}, {arg2} - аргументы команды (нумерация с 0)
-# {args} - все аргументы через пробел
-# 
-# Также поддерживаются все плейсхолдеры PlaceholderAPI:
-# %player_name% - имя игрока
-# %server_online% - количество игроков онлайн
-# %server_time_24% - время в формате 24 часа
-# %server_date% - текущая дата
-# И многие другие...
+  target: "all"

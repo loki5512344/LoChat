@@ -25,29 +25,22 @@ public class EnhancedChatRenderer implements ChatRenderer {
     private static final TextColor FALLBACK_COLOR = NamedTextColor.WHITE;
 
     private final JavaPlugin plugin;
-    private final Player sender;
     private final boolean isGlobal;
     private final MentionHandler mentionHandler;
-    private final com.loki.lochat.config.AppearanceConfig cfg;
-    private final com.loki.lochat.config.HardcodedMessages hm;
+    private final com.loki.lochat.config.ConfigManager cfg;
 
-    public EnhancedChatRenderer(JavaPlugin plugin, Player sender, Component originalMessage, boolean isGlobal) {
+    public EnhancedChatRenderer(JavaPlugin plugin, boolean isGlobal) {
         this.plugin = plugin;
-        this.sender = sender;
         this.isGlobal = isGlobal;
         this.mentionHandler = new MentionHandler(plugin);
 
         com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
-        this.cfg = loChat.getConfigManager().getAppearanceConfig();
-        this.hm = loChat.getConfigManager().getHardcodedMessages();
+        this.cfg = loChat.getConfigManager();
     }
 
     @Override
     public Component render(Player source, Component sourceDisplayName, Component message, Audience viewer) {
-        Component prefix    = buildPrefix();
-        Component separator = buildSeparator();
-        Component player    = buildPlayerComponent(source);
-
+        // Обрабатываем сообщение
         Component processed = message;
         processed = TextFormatter.formatMarkdown(processed);
         processed = processUrls(processed);
@@ -57,11 +50,94 @@ public class EnhancedChatRenderer implements ChatRenderer {
             processed = mentionHandler.processMentions(processed, source, vp);
         }
 
-        return prefix
-                .append(separator)
-                .append(player)
-                .append(Component.text(": ", NamedTextColor.WHITE))
-                .append(processed);
+        // ✅ Получаем кастомный формат из конфига
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        String format = isGlobal ? appearanceCfg.getGlobalChatFormat() : appearanceCfg.getLocalChatFormat();
+        
+        // Строим компоненты
+        Component emoji = buildEmojiComponent();
+        Component prefix = buildPrefix();
+        Component separator = buildSeparator();
+        Component playerPrefix = buildPlayerPrefix(source);
+        Component player = buildPlayerComponent(source);
+        
+        // Парсим формат и заменяем плейсхолдеры
+        return buildFormattedMessage(format, emoji, prefix, separator, playerPrefix, player, processed);
+    }
+    
+    /**
+     * Строит финальное сообщение по формату с плейсхолдерами
+     */
+    private Component buildFormattedMessage(String format, Component emoji, Component prefix, 
+                                           Component separator, Component playerPrefix, 
+                                           Component player, Component message) {
+        Component result = Component.empty();
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\{([^}]+)\\}");
+        java.util.regex.Matcher matcher = pattern.matcher(format);
+
+        int lastEnd = 0;
+        
+        while (matcher.find()) {
+            // Добавляем текст до плейсхолдера
+            if (matcher.start() > lastEnd) {
+                result = result.append(Component.text(format.substring(lastEnd, matcher.start())));
+            }
+            
+            // Заменяем плейсхолдер
+            String placeholder = matcher.group(1);
+            switch (placeholder) {
+                case "emoji" -> result = result.append(emoji);
+                case "prefix" -> result = result.append(prefix);
+                case "separator" -> result = result.append(separator);
+                case "player_prefix" -> result = result.append(playerPrefix);
+                case "player" -> result = result.append(player);
+                case "message" -> result = result.append(message);
+                default -> result = result.append(Component.text("{" + placeholder + "}"));
+            }
+            
+            lastEnd = matcher.end();
+        }
+        
+        // Добавляем оставшийся текст
+        if (lastEnd < format.length()) {
+            result = result.append(Component.text(format.substring(lastEnd)));
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Строит компонент эмодзи
+     */
+    private Component buildEmojiComponent() {
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        String emoji = isGlobal ? appearanceCfg.getGlobalEmoji() : appearanceCfg.getLocalEmoji();
+        return emoji.isEmpty() ? Component.empty() : Component.text(emoji);
+    }
+    
+    /**
+     * Строит префикс игрока из LuckPerms/градиента
+     */
+    private Component buildPlayerPrefix(Player player) {
+        // Получаем градиентный модуль
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.gradient.GradientModule gradientModule = loChat.getGradientModule();
+        
+        if (gradientModule != null) {
+            com.loki.lochat.gradient.data.GradientPlayerData data = 
+                gradientModule.getDataManager().getPlayerData(player.getUniqueId());
+            
+            if (data != null && data.isPrefixEnabled() && data.hasPrefix()) {
+                String prefixText = data.getPrefix();
+                if (data.hasColors() && data.isColorEnabled()) {
+                    // Применяем градиент к префиксу
+                    return buildGradientText(prefixText, data.getColors());
+                }
+                return Component.text(prefixText);
+            }
+        }
+        
+        return Component.empty();
     }
 
     // ──────────────────────────────────────────────────────────────────────────
@@ -69,18 +145,13 @@ public class EnhancedChatRenderer implements ChatRenderer {
     // ──────────────────────────────────────────────────────────────────────────
 
     private Component buildPrefix() {
-        String emoji  = isGlobal ? cfg.getGlobalEmoji()  : cfg.getLocalEmoji();
-        String text   = isGlobal ? cfg.getGlobalText()   : cfg.getLocalText();
-        List<String> colors = isGlobal ? cfg.getGlobalColors() : cfg.getLocalColors();
+        // ✅ FIX: Получаем AppearanceConfig через ConfigManager
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        
+        String text = isGlobal ? appearanceCfg.getGlobalText() : appearanceCfg.getLocalText();
+        List<String> colors = isGlobal ? appearanceCfg.getGlobalColors() : appearanceCfg.getLocalColors();
 
-        Component prefix = Component.empty();
-
-        if (!emoji.isEmpty()) {
-            prefix = prefix.append(Component.text(emoji + " "));
-        }
-
-        prefix = prefix.append(buildGradientText(text, colors));
-        return prefix;
+        return buildGradientText(text, colors);
     }
 
     /**
@@ -145,8 +216,9 @@ public class EnhancedChatRenderer implements ChatRenderer {
     // ──────────────────────────────────────────────────────────────────────────
 
     private Component buildSeparator() {
-        String text  = isGlobal ? cfg.getGlobalSeparatorText()  : cfg.getLocalSeparatorText();
-        String color = isGlobal ? cfg.getGlobalSeparatorColor() : cfg.getLocalSeparatorColor();
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        String text = isGlobal ? appearanceCfg.getGlobalSeparatorText() : appearanceCfg.getLocalSeparatorText();
+        String color = isGlobal ? appearanceCfg.getGlobalSeparatorColor() : appearanceCfg.getLocalSeparatorColor();
         return Component.text(text, parseColor(color));
     }
 
@@ -157,11 +229,28 @@ public class EnhancedChatRenderer implements ChatRenderer {
     private Component buildPlayerComponent(Player player) {
         Component displayName = player.displayName();
 
-        if (!cfg.isHoverEnabled()) {
+        // ✅ FIX: Получаем AppearanceConfig для проверки hover
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        
+        if (!appearanceCfg.isHoverEnabled()) {
             return displayName.clickEvent(ClickEvent.suggestCommand("/msg " + player.getName() + " "));
         }
 
-        List<String> hoverLines = cfg.getHoverFormat();
+        List<String> hoverLines = appearanceCfg.getHoverFormat();
+        if (hoverLines.isEmpty()) {
+            hoverLines = List.of(
+                "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&#B798A8✦ &f{player}",
+                "",
+                "&#9878C9⏱ &fПинг: &#7858E9{ping}ms",
+                "&#9878C9♥ &fЗдоровье: &#7858E9{health}/20",
+                "&#9878C9🍖 &fГолод: &#7858E9{food}/20",
+                "",
+                "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
+                "&#B798A8✦ &fНажми чтобы написать"
+            );
+        }
+        
         net.kyori.adventure.text.TextComponent.Builder hoverBuilder = Component.text();
 
         for (int i = 0; i < hoverLines.size(); i++) {
@@ -169,7 +258,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
                     .replace("{player}",   player.getName())
                     .replace("{world}",    player.getWorld().getName())
                     .replace("{ping}",     String.valueOf(player.getPing()))
-                    .replace("{gamemode}", hm.getGamemodeName(player.getGameMode().name().toLowerCase()))
+                    .replace("{gamemode}", player.getGameMode().name())
                     .replace("{health}",   String.valueOf(Math.round(player.getHealth())))
                     .replace("{food}",     String.valueOf(player.getFoodLevel()));
 
@@ -204,8 +293,11 @@ public class EnhancedChatRenderer implements ChatRenderer {
     }
 
     private Component processEmojis(Component message) {
+        // ✅ FIX: Получаем AppearanceConfig для эмодзи
+        com.loki.lochat.config.AppearanceConfig appearanceCfg = cfg.getAppearanceConfig();
+        
         Component result = message;
-        for (java.util.Map.Entry<String, String> e : cfg.getEmojis().entrySet()) {
+        for (java.util.Map.Entry<String, String> e : appearanceCfg.getEmojis().entrySet()) {
             result = result.replaceText(b -> b.matchLiteral(e.getKey()).replacement(e.getValue()));
         }
         return result;

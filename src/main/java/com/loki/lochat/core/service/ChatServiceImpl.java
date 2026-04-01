@@ -41,7 +41,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void sendGlobalMessage(Player sender, Object message) {
         Component msg = toComponent(message);
-        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, msg, true);
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, true);
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (!isGlobalChatDisabled(p.getUniqueId())) {
                 p.sendMessage(renderer.render(sender, sender.displayName(), msg, p));
@@ -53,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
     public void sendLocalMessage(Player sender, Object message) {
         int radius = plugin.getConfig().getInt("chat.local.radius", 100);
         Component msg = toComponent(message);
-        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, sender, msg, false);
+        EnhancedChatRenderer renderer = new EnhancedChatRenderer(plugin, false);
 
         int count = 0;
         for (Player p : Bukkit.getOnlinePlayers()) {

@@ -1,7 +1,6 @@
 package com.loki.lochat.integrations;
 
 import com.loki.lochat.util.FoliaUtil;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,9 +31,24 @@ public class DiscordIntegration {
      * Загрузить конфигурацию
      */
     private void loadConfig() {
-        File configFile = new File(plugin.getDataFolder(), "config/discord.yml");
+        // Создаём папку config если её нет
+        File configFolder = new File(plugin.getDataFolder(), "config");
+        if (!configFolder.exists()) {
+            configFolder.mkdirs();
+        }
+        
+        File configFile = new File(configFolder, "discord.yml");
         if (!configFile.exists()) {
-            plugin.saveResource("config/discord.yml", false);
+            try {
+                // Копируем из resources/config/discord.yml
+                java.io.InputStream in = plugin.getResource("config/discord.yml");
+                if (in != null) {
+                    java.nio.file.Files.copy(in, configFile.toPath());
+                    in.close();
+                }
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to copy config/discord.yml: " + e.getMessage());
+            }
         }
         
         config = YamlConfiguration.loadConfiguration(configFile);

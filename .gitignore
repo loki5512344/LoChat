@@ -1,6 +1,10 @@
 # Gradle
 .gradle/
 build/
+
+# Local Paper test server (gradlew runServer / run-paper)
+run/
+api_docs/
 !gradle/wrapper/gradle-wrapper.jar
 
 # IDE

@@ -2,7 +2,7 @@ package com.loki.lochat.core.filter;
 
 import com.loki.lochat.api.filter.MessageFilter;
 import com.loki.lochat.api.service.MuteService;
-import com.loki.lochat.config.HardcodedMessages;
+import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.ChatMessage;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.entity.Player;
@@ -13,13 +13,13 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class MuteFilter implements MessageFilter {
     private final MuteService muteService;
-    private final HardcodedMessages hardcodedMessages;
+    private final MessagesConfig messagesConfig;
 
     public MuteFilter(MuteService muteService, JavaPlugin plugin) {
         this.muteService = muteService;
-        // Получаем HardcodedMessages через LoChat
+        // Получаем MessagesConfig через LoChat
         com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
-        this.hardcodedMessages = loChat.getConfigManager().getHardcodedMessages();
+        this.messagesConfig = loChat.getConfigManager().getMessagesConfig();
     }
 
     @Override
@@ -39,11 +39,11 @@ public class MuteFilter implements MessageFilter {
         String msg;
         if (remaining < 0) {
             // Permanent mute
-            msg = hardcodedMessages.getMutedPermanent()
+            msg = messagesConfig.getMutedPermanent()
                     .replace("{reason}", reason);
         } else {
             String timeStr = muteService.formatTime(remaining);
-            msg = hardcodedMessages.getMutedMessage()
+            msg = messagesConfig.getMutedMessage()
                     .replace("{reason}", reason)
                     .replace("{time}", timeStr);
         }

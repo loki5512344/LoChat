@@ -37,7 +37,7 @@ public class CooldownFilter implements MessageFilter {
                 
                 // Получаем сообщение из конфигурации
                 com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
-                String cooldownMessage = loChat.getConfigManager().getHardcodedMessages().getCooldownMessage();
+                String cooldownMessage = loChat.getConfigManager().getMessagesConfig().getCooldownMessage();
                 cooldownMessage = cooldownMessage.replace("{remaining}", String.valueOf(remaining));
                 
                 player.sendMessage(cooldownMessage);

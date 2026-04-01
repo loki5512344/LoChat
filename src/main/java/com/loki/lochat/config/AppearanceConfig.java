@@ -1,51 +1,33 @@
 package com.loki.lochat.config;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Конфигурация внешнего вида чата
+ * Конфигурация внешнего вида чата (config/appearance.yml)
  */
-public class AppearanceConfig {
-    private final Plugin plugin;
-    private YamlConfiguration config;
+public class AppearanceConfig extends BaseConfig {
     private final Map<String, String> emojiCache = new HashMap<>();
     
     public AppearanceConfig(Plugin plugin) {
-        this.plugin = plugin;
-        // Не вызываем loadConfig() в конструкторе для избежания this-escape
+        super((org.bukkit.plugin.java.JavaPlugin) plugin, "appearance.yml", true); // true = в папке config/
+        // init() вызывается отдельно в методе init()
     }
     
     /**
      * Инициализировать конфигурацию (вызывать после создания объекта)
      */
     public void init() {
-        loadConfig();
-    }
-    
-    /**
-     * Загрузить конфигурацию
-     */
-    public void loadConfig() {
-        File configFile = new File(plugin.getDataFolder(), "config/chat-appearance.yml");
-        if (!configFile.exists()) {
-            plugin.saveResource("config/chat-appearance.yml", false);
-        }
-        
-        config = YamlConfiguration.loadConfiguration(configFile);
+        super.init(); // ✅ Вызываем init() родителя
         loadEmojiCache();
     }
     
-    /**
-     * Перезагрузить конфигурацию
-     */
-    public void reload() {
-        loadConfig();
+    @Override
+    protected void onLoad() {
+        loadEmojiCache();
     }
     
     /**
@@ -144,6 +126,22 @@ public class AppearanceConfig {
      */
     public String getLocalMessageColor() {
         return config.getString("prefixes.local.message-color", "#FFFFFF");
+    }
+    
+    // ========== ФОРМАТ СООБЩЕНИЙ ==========
+    
+    /**
+     * Получить формат сообщения для глобального чата
+     */
+    public String getGlobalChatFormat() {
+        return config.getString("chat-format.global", "{emoji} {prefix} {separator} {player} : {message}");
+    }
+    
+    /**
+     * Получить формат сообщения для локального чата
+     */
+    public String getLocalChatFormat() {
+        return config.getString("chat-format.local", "{emoji} {prefix} {separator} {player} : {message}");
     }
     
     // ========== HOVER ЭФФЕКТЫ ==========

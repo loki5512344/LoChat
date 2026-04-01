@@ -57,18 +57,42 @@ public class AdvancedMessageFilter {
 
     public AdvancedMessageFilter(FileConfiguration config, JavaPlugin plugin) {
         this.config = config;
-        this.whitelistedDomains = config.getStringList("filters.advertising.whitelist");
-        this.blacklistedDomains = config.getStringList("filters.advertising.blacklist");
+        
+        // ✅ Используем FiltersConfig если доступен
+        com.loki.lochat.config.FiltersConfig filtersConfig = null;
+        if (plugin instanceof com.loki.lochat.LoChat loChat) {
+            filtersConfig = loChat.getConfigManager().getFiltersConfig();
+        }
+        
+        // Читаем настройки из FiltersConfig или fallback на config.yml
+        if (filtersConfig != null) {
+            this.whitelistedDomains = filtersConfig.getWhitelistedDomains();
+            this.blacklistedDomains = filtersConfig.getBlacklistedDomains();
+            
+            int maxCapsPercent = filtersConfig.getCapsMaxPercent();
+            int minLength = filtersConfig.getCapsMinLength();
+            boolean autoLower = filtersConfig.isCapsAutoLowercase();
+            boolean blockCaps = filtersConfig.isCapsBlock();
+            this.capsFilter = new CapsFilter(maxCapsPercent, minLength, autoLower, blockCaps);
+            
+            this.replacementChar = filtersConfig.getSwearReplacementChar().charAt(0);
+            this.checkFragments = filtersConfig.isSwearCheckFragments();
+            this.ignoreCase = filtersConfig.isSwearIgnoreCase();
+        } else {
+            // Fallback на config.yml
+            this.whitelistedDomains = config.getStringList("filters.advertising.whitelist");
+            this.blacklistedDomains = config.getStringList("filters.advertising.blacklist");
 
-        int maxCapsPercent = config.getInt("filters.caps.max-percent", 70);
-        int minLength      = config.getInt("filters.caps.min-length", 5);
-        boolean autoLower  = config.getBoolean("filters.caps.auto-lowercase", true);
-        boolean blockCaps  = config.getBoolean("filters.caps.block", false);
-        this.capsFilter = new CapsFilter(maxCapsPercent, minLength, autoLower, blockCaps);
+            int maxCapsPercent = config.getInt("filters.caps.max-percent", 70);
+            int minLength = config.getInt("filters.caps.min-length", 5);
+            boolean autoLower = config.getBoolean("filters.caps.auto-lowercase", true);
+            boolean blockCaps = config.getBoolean("filters.caps.block", false);
+            this.capsFilter = new CapsFilter(maxCapsPercent, minLength, autoLower, blockCaps);
 
-        this.replacementChar = config.getString("filters.swear.replacement-char", "*").charAt(0);
-        this.checkFragments  = config.getBoolean("filters.swear.check-fragments", true);
-        this.ignoreCase      = config.getBoolean("filters.swear.ignore-case", true);
+            this.replacementChar = config.getString("filters.swear.replacement-char", "*").charAt(0);
+            this.checkFragments = config.getBoolean("filters.swear.check-fragments", true);
+            this.ignoreCase = config.getBoolean("filters.swear.ignore-case", true);
+        }
 
         loadWordFilter(plugin);
     }

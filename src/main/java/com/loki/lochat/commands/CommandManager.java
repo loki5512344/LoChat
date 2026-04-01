@@ -43,10 +43,14 @@ public class CommandManager {
         reg("lmutelist",       new MuteListCommand(plugin));
         regTab("lmutehistory", new MuteHistoryCommand(plugin));
         regTab("lmuteblame",   new MuteBlameCommand(plugin));
+        regTab("warn",         new WarnCommand(plugin));
+        regTab("silentwarn",   new SilentWarnCommand(plugin));
+        regTab("lban",         new BanCommand(plugin));
+        regTab("lunban",       new UnbanCommand(plugin));
 
         // ── Ник / профиль ─────────────────────────────────────────────────────
         regTab("nick",       new NickCommand(plugin));
-        reg("playerinfo",    new PlayerInfoCommand(plugin));
+        regTab("playerinfo", new PlayerInfoCommand(plugin));
 
         // ── Админ ─────────────────────────────────────────────────────────────
         reg("announce",         new AnnounceCommand(plugin));

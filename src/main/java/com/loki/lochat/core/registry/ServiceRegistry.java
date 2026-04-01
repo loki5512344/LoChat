@@ -38,9 +38,11 @@ public class ServiceRegistry {
 
         register(PMService.class, new PMServiceImpl());
         register(IgnoreService.class, new IgnoreServiceImpl(plugin));
-        register(SpyService.class, new SpyServiceImpl(plugin, messageConfig));
+        SpyService spyService = new SpyServiceImpl(messageConfig);
+        register(SpyService.class, spyService);
         register(MentionService.class, new MentionServiceImpl(configManager));
         register(NickService.class, new NickServiceImpl(plugin));
+        register(PunishmentService.class, new PunishmentServiceImpl(plugin, configManager.getMessagesConfig()));
     }
 
     public <T> void register(Class<T> serviceClass, T implementation) {

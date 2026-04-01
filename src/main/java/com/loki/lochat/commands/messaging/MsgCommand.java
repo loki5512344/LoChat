@@ -31,7 +31,7 @@ public class MsgCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(plugin.getConfigManager().getHardcodedMessages().getPlayerOnly());
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
             return true;
         }
         if (!plugin.getConfigManager().isPmEnabled()) return true;

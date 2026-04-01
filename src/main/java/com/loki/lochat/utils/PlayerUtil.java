@@ -17,7 +17,7 @@ public final class PlayerUtil {
 
     /**
      * Safely parses a sound name from config.
-     * Uses Registry API for modern sound parsing with fallback to reflection.
+     * Uses Paper Registry API for modern sound parsing with fallback to reflection.
      *
      * @param soundName the sound name to parse
      * @param defaultSound the default sound to return if parsing fails
@@ -29,8 +29,9 @@ public final class PlayerUtil {
         }
         
         try {
-            // Try to get sound by key using Registry (modern way)
-            Sound sound = org.bukkit.Registry.SOUNDS.match(soundName);
+            // ✅ FIX: Use Paper's NamespacedKey instead of deprecated match()
+            org.bukkit.NamespacedKey key = org.bukkit.NamespacedKey.minecraft(soundName.toLowerCase());
+            Sound sound = org.bukkit.Registry.SOUNDS.get(key);
             if (sound != null) {
                 return sound;
             }

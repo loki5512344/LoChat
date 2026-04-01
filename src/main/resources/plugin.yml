@@ -36,7 +36,7 @@ commands:
     description: Send private message
     usage: /msg <player> <message>
     permission: chat.pm.use
-    aliases: [ tell, w, pm, m, ьып, ееддж, цж, зьж, ьж ]
+    aliases: [ tell, pm, m, ьып, ееддж, цж, зьж, ьж ]
 
   reply:
     description: Reply to last message
@@ -145,6 +145,36 @@ commands:
     usage: /lmuteblame <moderator>
     permission: lochat.muteblame
     aliases: [ muteblame, мутблейм, ьгеуидфьу ]
+
+  warn:
+    description: Warn a player (visible to them)
+    usage: /warn <player> [reason]
+    permission: lochat.warn
+    aliases: [ w, варн ]
+
+  silentwarn:
+    description: Silent warn (logged; staff with lochat.warn.notify see)
+    usage: /silentwarn <player> [reason]
+    permission: lochat.warn.silent
+    aliases: [ siw ]
+
+  lban:
+    description: Ban a player
+    usage: /lban <player> [time|perm] [reason]
+    permission: lochat.ban
+    aliases: [ ban, бан ]
+
+  lunban:
+    description: Unban a player
+    usage: /lunban <player>
+    permission: lochat.unban
+    aliases: [ unban, разбан ]
+
+  playerinfo:
+    description: Player info and moderation stats
+    usage: /playerinfo <player>
+    permission: lochat.playerinfo
+    aliases: [ pi, инфо ]
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                              КАСТОМНЫЕ КОМАНДЫ
@@ -283,6 +313,34 @@ permissions:
     default: false
   lochat.mute.dur.perm:
     description: Can mute permanently
+    default: op
+
+  lochat.warn:
+    description: Issue a visible warning
+    default: op
+  lochat.warn.silent:
+    description: Issue a silent warning
+    default: op
+  lochat.warn.notify:
+    description: See silent warn notifications
+    default: op
+  lochat.ban:
+    description: Ban players
+    default: op
+  lochat.ban.override:
+    description: Ban players with lochat.bypass.ban
+    default: op
+  lochat.unban:
+    description: Unban players
+    default: op
+  lochat.bypass.warn:
+    description: Immune to /warn
+    default: false
+  lochat.bypass.ban:
+    description: Immune to /lban (unless staff has lochat.ban.override)
+    default: false
+  lochat.playerinfo:
+    description: View player moderation stats
     default: op
   lochat.clearchat.config:
     description: Can configure clear chat message

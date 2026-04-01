@@ -5,7 +5,6 @@ import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +17,7 @@ import java.util.Random;
  * Бросает кубик от 1 до максимума (по умолчанию 100).
  * Формат: * ИгрокИмя бросает кубик и получает N из M
  */
-public class RollCommand extends PlayerCommand implements TabCompleter {
+public class RollCommand extends PlayerCommand {
 
     private static final Random RANDOM = new Random();
     private static final int DEFAULT_MAX = 100;

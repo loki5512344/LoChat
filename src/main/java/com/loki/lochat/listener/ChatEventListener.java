@@ -33,8 +33,35 @@ public class ChatEventListener implements Listener {
         // plain нужен только для фильтров — цвета игрока обрабатываем ниже отдельно
         String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
 
-        boolean isGlobal = rawMessage.startsWith("!");
-        String plainMessage = isGlobal ? rawMessage.substring(1).stripLeading() : rawMessage;
+        // ✅ РЕЖИМ ЕДИНОГО ЧАТА: если локальный отключен, весь чат = глобальный
+        LoChat loChat = (LoChat) plugin;
+        boolean localEnabled = loChat.getConfigManager().isLocalEnabled();
+        
+        boolean isGlobal;
+        String plainMessage;
+        
+        if (localEnabled) {
+            // Старая логика: "!" = глобальный, без "!" = локальный
+            isGlobal = rawMessage.startsWith("!");
+            plainMessage = isGlobal ? rawMessage.substring(1).stripLeading() : rawMessage;
+        } else {
+            // Новая логика: весь чат глобальный, "!" не нужен
+            isGlobal = true;
+            plainMessage = rawMessage;
+        }
+
+        // ✅ Проверка: включен ли глобальный/локальный чат
+        if (isGlobal && !loChat.getConfigManager().isGlobalEnabled()) {
+            event.setCancelled(true);
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Глобальный чат отключен!"));
+            return;
+        }
+        
+        if (!isGlobal && !localEnabled) {
+            event.setCancelled(true);
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Локальный чат отключен!"));
+            return;
+        }
 
         // Мут, кулдаун
         if (!messageService.processMessage(sender, plainMessage)) {
@@ -52,14 +79,14 @@ public class ChatEventListener implements Listener {
 
         String filteredMessage = filterResult.filteredMessage();
 
-        // ── Фиксируем цвет текста ──────────────────────────────────────────────
-        // Проблема: Paper наследует цвет от предыдущего компонента если явный не задан.
-        // Синий цвет в LOCAL — это цвет последней буквы градиента "LOCAL" (#4169E1),
-        // который просачивается в текст сообщения.
-        // Решение: всегда явно задаём цвет сообщения.
-        //   • lochat.chat.colors → парсим &7 / &#RRGGBB / MiniMessage из самого текста
-        //   • без права          → берём message-color из конфига
-        LoChat loChat = (LoChat) plugin;
+        // ── Цвет текста сообщения ({message}) ─────────────────────────────────
+        // Если стиль не задан явно, Paper может унаследовать цвет последнего символа градиента
+        // префикса в строке чата (например у LOCAL последняя буква давала синеватый #4169E1) —
+        // из‑за этого весь текст сообщения «подтягивался» под этот тон. Намеренный цвет текста
+        // задаётся в appearance.yml: prefixes.global.message-color / prefixes.local.message-color (#E8E0F0 по умолчанию).
+        // Решение: всегда выставлять стиль тела сообщения:
+        //   • lochat.chat.colors → MiniMessage / &# / & из текста
+        //   • иначе → parseWithDefaultMessageColor(..., message-color) + экранирование < (см. ChatFormatter)
         Component messageComponent;
 
         if (sender.hasPermission("lochat.chat.colors")) {
@@ -68,32 +95,42 @@ public class ChatEventListener implements Listener {
             String defaultColor = isGlobal
                     ? loChat.getConfigManager().getAppearanceConfig().getGlobalMessageColor()
                     : loChat.getConfigManager().getAppearanceConfig().getLocalMessageColor();
-            String hex = defaultColor.startsWith("#") ? defaultColor : "#" + defaultColor;
-            messageComponent = ChatFormatter.parse("<color:" + hex + ">" + filteredMessage + "</color>");
+            messageComponent = ChatFormatter.parseWithDefaultMessageColor(filteredMessage, defaultColor);
         }
 
         event.message(messageComponent);
 
-        // Радиус для локального чата
+        // ✅ FIX: Радиус для локального чата - кэшируем локации в async потоке
+        // Paper позволяет читать Location в async, но не модифицировать World
         if (!isGlobal) {
             int radius = loChat.getConfigManager().getAppearanceConfig().getLocalRadius();
-            event.viewers().removeIf(v ->
-                    v instanceof Player p && !com.loki.lochat.util.DistanceUtil.isInRange(sender, p, radius)
-            );
+            
+            // Безопасно: AsyncChatEvent.viewers() thread-safe, Location.distance() тоже
+            event.viewers().removeIf(v -> {
+                if (!(v instanceof Player p)) return false;
+                
+                // Проверяем мир и расстояние (чтение Location безопасно в async)
+                try {
+                    return !com.loki.lochat.util.DistanceUtil.isInRange(sender, p, radius);
+                } catch (Exception e) {
+                    // На всякий случай ловим исключения
+                    return false;
+                }
+            });
 
             long recipients = event.viewers().stream()
                     .filter(v -> v instanceof Player p && !p.equals(sender))
                     .count();
 
             if (recipients == 0) {
-                String msg = loChat.getConfigManager().getHardcodedMessages().getNobodyHeard();
+                String msg = loChat.getConfigManager().getMessagesConfig().getNobodyHeard();
                 sender.getScheduler().run(plugin, t ->
                         sender.sendMessage(ChatFormatter.parse(msg)), null
                 );
             }
         }
 
-        event.renderer(new EnhancedChatRenderer(plugin, sender, messageComponent, isGlobal));
+        event.renderer(new EnhancedChatRenderer(plugin, isGlobal));
 
         loChat.getDiscordIntegration().sendChatMessage(sender, filteredMessage, isGlobal);
 

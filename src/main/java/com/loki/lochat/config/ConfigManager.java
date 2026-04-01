@@ -9,9 +9,15 @@ import java.util.List;
 public class ConfigManager {
 
     private final LoChat plugin;
-    private FileConfiguration config;
-    private AppearanceConfig appearanceConfig;
-    private HardcodedMessages hardcodedMessages;
+    
+    // ✅ THREAD-SAFETY: volatile для безопасного reload из разных потоков
+    // volatile гарантирует что все потоки видят актуальную версию конфига после reload
+    private volatile FileConfiguration config;
+    private volatile AppearanceConfig appearanceConfig;
+    private volatile MessagesConfig messagesConfig;
+    private volatile MuteConfig muteConfig;
+    private volatile FiltersConfig filtersConfig;
+    private volatile SoundsConfig soundsConfig;
 
     public ConfigManager(LoChat plugin) {
         this.plugin = plugin;
@@ -20,11 +26,13 @@ public class ConfigManager {
 
         // Инициализируем новые конфигурации
         this.appearanceConfig = new AppearanceConfig(plugin);
-        this.hardcodedMessages = new HardcodedMessages(plugin);
+        this.messagesConfig = new MessagesConfig(plugin);
+        this.muteConfig = new MuteConfig(plugin);
+        this.filtersConfig = new FiltersConfig(plugin);
+        this.soundsConfig = new SoundsConfig(plugin);
         
         // Инициализируем их после создания
         this.appearanceConfig.init();
-        this.hardcodedMessages.init();
 
         // Проверяем версию конфига и обновляем при необходимости
         updateConfig();
@@ -38,32 +46,47 @@ public class ConfigManager {
     }
 
     /**
-     * Получить конфигурацию хардкодированных сообщений
+     * Получить конфигурацию системных сообщений
      */
-    public HardcodedMessages getHardcodedMessages() {
-        return hardcodedMessages;
+    public MessagesConfig getMessagesConfig() {
+        return messagesConfig;
+    }
+
+    /**
+     * Получить конфигурацию мутов
+     */
+    public MuteConfig getMuteConfig() {
+        return muteConfig;
+    }
+
+    /**
+     * Получить конфигурацию фильтров
+     */
+    public FiltersConfig getFiltersConfig() {
+        return filtersConfig;
+    }
+
+    /**
+     * Получить конфигурацию звуков
+     */
+    public SoundsConfig getSoundsConfig() {
+        return soundsConfig;
     }
 
     private void updateConfig() {
         int currentVersion = config.getInt("config-version", 1);
-        int requiredVersion = 2; // Текущая версия конфига
+        int requiredVersion = 5;
 
         if (currentVersion < requiredVersion) {
             plugin.getLogger().info("Обновление конфига с версии " + currentVersion + " до " + requiredVersion);
-
-            // Добавляем новые настройки если их нет
             addMissingConfigOptions();
-
-            // Обновляем версию
             config.set("config-version", requiredVersion);
             plugin.saveConfig();
-
             plugin.getLogger().info("Конфиг успешно обновлен!");
         }
     }
 
     private void addMissingConfigOptions() {
-        // Добавляем настройки объявлений если их нет
         if (!config.contains("announcements")) {
             config.set("announcements.show-title", true);
             config.set("announcements.title-header", "&#FFD700ОБЪЯВЛЕНИЕ");
@@ -71,7 +94,6 @@ public class ConfigManager {
             config.set("announcements.title-duration", 3);
         }
 
-        // Можно добавить другие недостающие настройки
         if (!config.contains("chat.pm.enabled")) {
             config.set("chat.pm.enabled", true);
         }
@@ -100,48 +122,47 @@ public class ConfigManager {
             config.set("lopreff.use-gradient-name", true);
             config.set("lopreff.use-custom-prefix", true);
         }
+
+        if (!config.contains("moderation.voice-mute-console-command")) {
+            config.set("moderation.voice-mute-console-command", "");
+        }
     }
 
-    public void reload() {
+    /**
+     * Перезагрузить все конфигурации
+     * ✅ THREAD-SAFE: использует volatile для безопасного обновления
+     */
+    public synchronized void reload() {
         plugin.reloadConfig();
         this.config = plugin.getConfig();
         
         // Перезагружаем новые конфигурации
+        // volatile гарантирует что изменения видны всем потокам
         this.appearanceConfig.reload();
-        this.hardcodedMessages.reload();
+        this.messagesConfig.reload();
+        this.muteConfig.reload();
+        this.filtersConfig.reload();
+        this.soundsConfig.reload();
+        
+        plugin.getLogger().info("Все конфигурации успешно перезагружены");
     }
 
-    /**
-     * Получить строку из конфига с дефолтным значением
-     */
     public String getString(String path, String defaultValue) {
         return config.getString(path, defaultValue);
     }
 
-    /**
-     * Получить строку из конфига
-     */
     public String getString(String path) {
         return config.getString(path);
     }
 
-    /**
-     * Получить int из конфига
-     */
     public int getInt(String path, int defaultValue) {
         return config.getInt(path, defaultValue);
     }
 
-    /**
-     * Получить boolean из конфига
-     */
     public boolean getBoolean(String path, boolean defaultValue) {
         return config.getBoolean(path, defaultValue);
     }
 
-    /**
-     * Получить список строк из конфига
-     */
     public List<String> getStringList(String path) {
         return config.getStringList(path);
     }
@@ -149,18 +170,6 @@ public class ConfigManager {
     // Global chat
     public boolean isGlobalEnabled() {
         return config.getBoolean("chat.global.enabled", true);
-    }
-
-    public String getGlobalPrefix() {
-        return ChatFormatter.convertAllColors(config.getString("chat.global.prefix", "[G]"));
-    }
-
-    public String getGlobalFormat() {
-        return ChatFormatter.convertAllColors(config.getString("chat.global.format", "<prefix><player>: <message>"));
-    }
-
-    public String getGlobalSymbol() {
-        return config.getString("chat.global.symbol", "!");
     }
 
     public int getGlobalCooldown() {
@@ -174,14 +183,6 @@ public class ConfigManager {
 
     public int getLocalRadius() {
         return appearanceConfig.getLocalRadius();
-    }
-
-    public String getLocalPrefix() {
-        return ChatFormatter.convertAllColors(config.getString("chat.local.prefix", "[L]"));
-    }
-
-    public String getLocalFormat() {
-        return ChatFormatter.convertAllColors(config.getString("chat.local.format", "<player>: <message>"));
     }
 
     public int getLocalCooldown() {
@@ -198,11 +199,13 @@ public class ConfigManager {
     }
 
     public boolean isPmSoundEnabled() {
-        return config.getBoolean("chat.pm.sound", true);
+        // ✅ Используем SoundsConfig если доступен
+        return soundsConfig != null ? soundsConfig.isPmSoundEnabled() : config.getBoolean("chat.pm.sound", true);
     }
 
     public String getPmSoundType() {
-        return config.getString("chat.pm.sound-type", "ENTITY_EXPERIENCE_ORB_PICKUP");
+        // ✅ Используем SoundsConfig если доступен
+        return soundsConfig != null ? soundsConfig.getPmSound() : config.getString("chat.pm.sound-type", "ENTITY_EXPERIENCE_ORB_PICKUP");
     }
 
     // Mentions
@@ -211,11 +214,13 @@ public class ConfigManager {
     }
 
     public boolean isMentionSoundEnabled() {
-        return config.getBoolean("mentions.sound", true);
+        // ✅ Используем SoundsConfig если доступен
+        return soundsConfig != null ? soundsConfig.isMentionSoundEnabled() : config.getBoolean("mentions.sound", true);
     }
 
     public String getMentionSoundType() {
-        return config.getString("mentions.sound-type", "BLOCK_NOTE_BLOCK_PLING");
+        // ✅ Используем SoundsConfig если доступен
+        return soundsConfig != null ? soundsConfig.getMentionSound() : config.getString("mentions.sound-type", "BLOCK_NOTE_BLOCK_PLING");
     }
 
     public String getMentionHighlight() {

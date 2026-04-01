@@ -121,7 +121,8 @@ public final class DisplayNameUtil {
         if (!data.hasPrefix() || !data.isPrefixEnabled()) return null;
 
         GradientConfig cfg = module.getConfig();
-        String prefix = cfg.getPrefixFormat().replace("{prefix}", data.getPrefix()).stripTrailing();
+        // ✅ FIX: Убрал stripTrailing() чтобы сохранить пробел из prefix-format
+        String prefix = cfg.getPrefixFormat().replace("{prefix}", data.getPrefix());
 
         // Применяем градиент только если цвета включены И есть цвета
         if (data.hasColors() && data.isColorEnabled() && cfg.isGradientOnPrefix()) {

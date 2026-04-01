@@ -1,140 +1,90 @@
 # План миграции команд на новую архитектуру
 
-## ✅ Что уже сделано
+> **Статус (актуально для репозитория):** централизованная регистрация в `CommandManager` и раскладка по пакетам **уже внедрены**. Ниже — что сделано и что остаётся опциональной доработкой.
 
-### 1. Создана базовая архитектура
-- `BaseCommand` - базовый класс для всех команд
-- `PlayerCommand` - для команд игроков
-- `AdminCommand` - для административных команд
-- `CommandManager` - централизованное управление
+**Что осталось по плану:** миграция команд **завершена**. Дальше — по желанию: перевести оставшиеся `CommandExecutor` на `PlayerCommand`/`AdminCommand`, добавить тесты/ручной регресс, короткую доку «как добавить команду».
 
-### 2. Созданы категории команд
-- `chat/` - команды чата
-- `messaging/` - личные сообщения  
-- `social/` - социальные функции
-- `moderation/` - модерация
-- `admin/` - административные команды
+## Что уже сделано
 
-### 3. Примеры новых команд
-- `GlobalChatCommand` (новая архитектура)
-- `LocalChatCommand` (новая архитектура)
-- `MsgCommand` (новая архитектура)
-- `ReplyCommand` (новая архитектура)
-- `IgnoreCommand` (новая архитектура)
+### Архитектура
+- `commands/base/BaseCommand`, `PlayerCommand`, `AdminCommand`
+- `CommandManager` — единая точка регистрации (`reg` / `regTab` / `registerBaseCommand`)
 
-## 🔄 План поэтапной миграции
+### Пакеты (фактическая структура)
+| Пакет | Назначение |
+|--------|------------|
+| `commands/chat/` | глобальный / локальный чат (`g`, `l`) |
+| `commands/messaging/` | ЛС, игнор (`msg`, `reply`, `ignore`, `unignore`, `ignorelist`) |
+| `commands/moderation/` | муты, варны, баны (`lmute`, `lunmute`, `lmutelist`, `lmutehistory`, `lmuteblame`, `warn`, `silentwarn`, `lban`, `lunban`) |
+| `commands/nick/` | ник, инфо (`nick`, `playerinfo`) |
+| `commands/admin/` | админ-утилиты (`announce`, `chatspy`, `clearchat`, `clearchatconfig`, `lochat`, `lochatreload`, `discordadmin`); в репозитории также есть `HubCommand.java` (проверьте `plugin.yml`, если нужна команда хаба) |
+| `commands/rp/` | RP (`me`, `try`, `do`, `roll`) |
+| Корень `commands/` | `CustomCommandsCommand`, `CustomCommand` |
 
-### Этап 1: Команды чата (ПРИОРИТЕТ 1)
-- [x] `GlobalChatCommand` - создан
-- [x] `LocalChatCommand` - создан
-- [ ] Тестирование и отладка
-- [ ] Замена в CommandManager
+Папки `social/` в проекте нет — социальные команды лежат в `messaging/` и `nick/`.
 
-### Этап 2: Личные сообщения (ПРИОРИТЕТ 1)
-- [x] `MsgCommand` - создан
-- [x] `ReplyCommand` - создан
-- [ ] Тестирование и отладка
-- [ ] Замена в CommandManager
+### Регистрация в `CommandManager` (выполнено)
+- [x] Этап 1 — чат: `GlobalChatCommand`, `LocalChatCommand`
+- [x] Этап 2 — ЛС: `MsgCommand`, `ReplyCommand`
+- [x] Этап 3 — социальное: `IgnoreCommand`, `UnignoreCommand`, `IgnoreListCommand`, `NickCommand` (+ `PlayerInfoCommand`)
+- [x] Этап 4 — модерация: все перечисленные в таблице пакета `moderation/`
+- [x] Этап 5 — админ: `AnnounceCommand`, `ClearChatCommand`, `ClearChatConfigCommand`, `ChatSpyCommand`, `LoChatCommand`, `ReloadConfigCommand`, `DiscordCommand`
+- [x] Этап 6 — `CustomCommandsCommand` и движок кастомных команд
 
-### Этап 3: Социальные команды (ПРИОРИТЕТ 2)
-- [x] `IgnoreCommand` - создан
-- [ ] `UnignoreCommand`
-- [ ] `IgnoreListCommand`
-- [ ] `NickCommand`
+## Что ещё можно сделать (не блокирует работу)
 
-### Этап 4: Команды модерации (ПРИОРИТЕТ 2)
-- [ ] `MuteCommand`
-- [ ] `UnmuteCommand`
-- [ ] `MuteListCommand`
-- [ ] `MuteHistoryCommand`
-- [ ] `MuteBlameCommand`
+### Унификация базового класса
+Многие команды по-прежнему реализуют `CommandExecutor` напрямую, а не `PlayerCommand` / `AdminCommand`. Имеет смысл постепенно переводить на базовые классы там, где это убирает дублирование проверок и сообщений.
 
-### Этап 5: Административные команды (ПРИОРИТЕТ 3)
-- [ ] `AnnounceCommand`
-- [ ] `ClearChatCommand`
-- [ ] `ClearChatConfigCommand`
-- [ ] `ChatSpyCommand`
-- [ ] `LoChatCommand`
-- [ ] `ReloadConfigCommand`
-- [ ] `DiscordCommand`
+### Тесты и ручная проверка
+- [ ] Стабильные сценарии для приоритетных команд (чат, ЛС, муты) — ручные или автотесты
+- [ ] Проверка TabCompleter на зарегистрированных командах с `regTab`
 
-### Этап 6: Специальные команды (ПРИОРИТЕТ 4)
-- [ ] `CustomCommandsCommand`
-- [ ] Кастомные команды из `custom/`
+### Документация
+- [ ] Короткий `CONTRIBUTING` или раздел в README: как добавить команду через `CommandManager` и `plugin.yml`
 
-## 🛠️ Процесс миграции одной команды
+## Процесс миграции одной команды (если рефакторите дальше)
 
-### 1. Создание новой команды
+### 1. Новая команда на базовом классе
 ```java
 public class NewCommand extends PlayerCommand {
     public NewCommand(LoChat plugin) {
         super(plugin);
     }
-    
+
     @Override
-    protected boolean executePlayerCommand(Player player, Command command, 
-                                         String label, String[] args) {
-        // Логика команды
+    protected boolean executePlayerCommand(Player player, Command command,
+            String label, String[] args) {
         return true;
     }
 }
 ```
 
-### 2. Тестирование
-- Проверка функциональности
-- Проверка прав доступа
-- Проверка обработки ошибок
+### 2. Проверки
+- Поведение и права
+- Сообщения из `MessagesConfig` / конфигов
+- TabCompleter при необходимости
 
-### 3. Замена в CommandManager
-```java
-// Было:
-registerOldCommand("command", new OldCommand(plugin));
+### 3. Регистрация
+В `CommandManager`: `reg("name", new NewCommand(plugin))` или `regTab`, плюс запись в `plugin.yml`.
 
-// Стало:
-registerCommand("command", new NewCommand(plugin));
-```
+### 4. Удаление старого кода
+После замены — удалить старый класс и неиспользуемые импорты.
 
-### 4. Удаление старой команды
-- Удалить файл старой команды
-- Убрать импорты
+## Чек-лист для команды
 
-## 📋 Чек-лист для каждой команды
-
-### Обязательные проверки:
-- [ ] Наследуется от правильного базового класса
-- [ ] Правильная проверка прав доступа
-- [ ] Обработка ошибок
-- [ ] Валидация аргументов
+- [ ] Корректный базовый класс или явный `CommandExecutor` с единым стилем обработки ошибок
+- [ ] Права из `plugin.yml`
 - [ ] Сообщения из конфигурации
-- [ ] TabCompleter (если нужен)
+- [ ] Валидация аргументов
+- [ ] TabCompleter при необходимости
 
-### Тестирование:
-- [ ] Команда выполняется корректно
-- [ ] Права доступа работают
-- [ ] Ошибки обрабатываются
-- [ ] Автодополнение работает
-- [ ] Нет дублирования кода
+## Ожидаемые эффекты от доведения до единого стиля
 
-## 🎯 Ожидаемые результаты
+- Меньше дублирования проверок отправителя и прав
+- Проще добавлять новые команды
+- Проще сопровождать код при едином паттерне
 
-### После полной миграции:
-- **Сокращение кода** на 40-50%
-- **Устранение дублирования** проверок
-- **Единообразная обработка** ошибок
-- **Простота добавления** новых команд
-- **Лучшая читаемость** кода
-- **Соответствие SOLID** принципам
+---
 
-### Метрики качества:
-- Цикломатическая сложность: ↓ 30%
-- Дублирование кода: ↓ 60%
-- Покрытие тестами: ↑ 80%
-- Время разработки новых команд: ↓ 50%
-
-## 🚀 Следующие шаги
-
-1. **Протестировать созданные команды**
-2. **Мигрировать команды по приоритету**
-3. **Обновить документацию**
-4. **Создать примеры для разработчиков**
-5. **Настроить автотесты**
+**Следующие шаги (по желанию):** выбрать 2–3 самых «шумных» по коду команды → перевести на `PlayerCommand`/`AdminCommand` → добавить минимальные тесты или чек-лист ручной регрессии.
