@@ -275,4 +275,38 @@ public class ConfigManager {
     public boolean useCustomPrefix() {
         return config.getBoolean("lopreff.use-custom-prefix", true);
     }
+
+    // ========== Кастомные сообщения ==========
+
+    public boolean isJoinMessageEnabled() {
+        return config.getBoolean("messages.join.enabled", true);
+    }
+
+    public String getJoinMessageFormat() {
+        return config.getString("messages.join.format", "&#9878C9✦ &#B798A8{player} &#7858E9зашел на сервер");
+    }
+
+    public boolean isQuitMessageEnabled() {
+        return config.getBoolean("messages.quit.enabled", true);
+    }
+
+    public String getQuitMessageFormat() {
+        return config.getString("messages.quit.format", "&#9878C9✦ &#B798A8{player} &#7858E9вышел с сервера");
+    }
+
+    public boolean isDeathMessageEnabled() {
+        return config.getBoolean("messages.death.enabled", true);
+    }
+
+    public String getDeathPlayerKillFormat() {
+        return config.getString("messages.death.player_kill", "&#CF6679☠ &#B798A8{player} &#7858E9был убит игроком &#B798A8{killer} &#9878C9({weapon})");
+    }
+
+    public String getDeathMobKillFormat() {
+        return config.getString("messages.death.mob_kill", "&#CF6679☠ &#B798A8{player} &#7858E9был убит мобом &#B798A8{killer}");
+    }
+
+    public String getDeathDefaultFormat() {
+        return config.getString("messages.death.default", "&#CF6679☠ &#B798A8{player} &#7858E9{death_message}");
+    }
 }

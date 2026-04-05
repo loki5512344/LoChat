@@ -79,10 +79,47 @@ public class PrefixService {
     }
     
     /**
-     * Получает полное имя игрока: префикс + ник с градиентом
+     * Получает суффикс из LuckPerms
+     */
+    public String getLuckPermsSuffix(Player player, GradientPlayerData data) {
+        if (!luckPermsAvailable) {
+            return "";
+        }
+        
+        try {
+            LuckPerms luckPerms = LuckPermsProvider.get();
+            User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+            
+            if (user == null) {
+                return "";
+            }
+            
+            CachedMetaData metaData = user.getCachedData().getMetaData();
+            String suffix = metaData.getSuffix();
+            
+            if (suffix == null || suffix.isEmpty()) {
+                return "";
+            }
+            
+            // Применяем градиент если нужно
+            if (data != null && data.hasColors() && data.isColorEnabled() && config.isGradientOnLuckPermsPrefix()) {
+                String cleanSuffix = GradientService.stripColors(suffix);
+                return GradientService.applyGradient(cleanSuffix, data.getColors());
+            }
+            
+            return suffix;
+            
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    
+    /**
+     * Получает полное имя игрока: префикс + ник с градиентом + суффикс
      */
     public String getFullName(Player player, GradientPlayerData data) {
         String prefix = getPrefix(player, data);
+        String suffix = getLuckPermsSuffix(player, data);
         String nick = player.getName();
         
         // Применяем градиент к нику если есть цвета
@@ -90,7 +127,12 @@ public class PrefixService {
             nick = GradientService.applyGradient(nick, data.getColors());
         }
         
-        return prefix.isEmpty() ? nick : prefix + " " + nick;
+        StringBuilder result = new StringBuilder();
+        if (!prefix.isEmpty()) result.append(prefix).append(" ");
+        result.append(nick);
+        if (!suffix.isEmpty()) result.append(" ").append(suffix);
+        
+        return result.toString();
     }
     
     /**
@@ -98,6 +140,7 @@ public class PrefixService {
      */
     public String getFullNameForTab(Player player, GradientPlayerData data) {
         String prefix = getPrefix(player, data);
+        String suffix = getLuckPermsSuffix(player, data);
         String nick = player.getName();
         
         // Применяем градиент в формате TAB
@@ -105,7 +148,12 @@ public class PrefixService {
             nick = GradientService.applyGradientForTab(nick, data.getColors());
         }
         
-        return prefix.isEmpty() ? nick : prefix + " " + nick;
+        StringBuilder result = new StringBuilder();
+        if (!prefix.isEmpty()) result.append(prefix).append(" ");
+        result.append(nick);
+        if (!suffix.isEmpty()) result.append(" ").append(suffix);
+        
+        return result.toString();
     }
     
     public boolean isLuckPermsAvailable() {

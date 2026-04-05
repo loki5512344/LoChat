@@ -57,13 +57,14 @@ public class EnhancedChatRenderer implements ChatRenderer {
         Component prefix = buildPrefix();
         Component separator = buildSeparator();
         Component playerPrefix = buildPlayerPrefix(source);
+        Component playerSuffix = buildPlayerSuffix(source);
         Component player = buildPlayerComponent(source);
         
-        return buildFormattedMessage(format, emoji, prefix, separator, playerPrefix, player, processed);
+        return buildFormattedMessage(format, emoji, prefix, separator, playerPrefix, playerSuffix, player, processed);
     }
     
     private Component buildFormattedMessage(String format, Component emoji, Component prefix, 
-                                           Component separator, Component playerPrefix, 
+                                           Component separator, Component playerPrefix, Component playerSuffix,
                                            Component player, Component message) {
         Component result = Component.empty();
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\{([^}]+)\\}");
@@ -83,6 +84,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
                 case "separator" -> result = result.append(separator);
                 case "player_prefix" -> result = result.append(playerPrefix);
                 case "player" -> result = result.append(player);
+                case "player_suffix" -> result = result.append(playerSuffix);
                 case "message" -> result = result.append(message);
                 default -> result = result.append(Component.text("{" + placeholder + "}"));
             }
@@ -111,6 +113,20 @@ public class EnhancedChatRenderer implements ChatRenderer {
             String prefix = gradientModule.getPrefix(player);
             if (!prefix.isEmpty()) {
                 return com.loki.lochat.utils.ChatFormatter.parse(prefix);
+            }
+        }
+        
+        return Component.empty();
+    }
+
+    private Component buildPlayerSuffix(Player player) {
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        com.loki.lochat.gradient.GradientModule gradientModule = loChat.getGradientModule();
+        
+        if (gradientModule != null && gradientModule.isEnabled()) {
+            String suffix = gradientModule.getSuffix(player);
+            if (!suffix.isEmpty()) {
+                return com.loki.lochat.utils.ChatFormatter.parse(suffix);
             }
         }
         

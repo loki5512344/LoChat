@@ -40,6 +40,7 @@ events:
   enabled: true
   
   # Настройки входа на сервер
+  # {player} - ник игрока
   join:
     enabled: true
     title: "🟢 Игрок зашел на сервер"
@@ -47,7 +48,8 @@ events:
     color: "00FF00"
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
     
-  # Настройки выхода с сервера  
+  # Настройки выхода с сервера
+  # {player} - ник игрока
   quit:
     enabled: true
     title: "🔴 Игрок покинул сервер"
@@ -56,11 +58,27 @@ events:
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
     
   # Настройки смерти игрока
+  # {player} - ник игрока
+  # {killer} - ник убийцы (если есть)
+  # {weapon} - название оружия (если есть)
+  # {death_message} - стандартное сообщение смерти
   death:
     enabled: true
-    title: "💀 Смерть игрока"
-    description: "**{player}** {death_message}"
-    color: "800080"
+    # Убийство игроком
+    player_kill:
+      title: "⚔️ PvP убийство"
+      description: "**{player}** был убит игроком **{killer}** с помощью **{weapon}**"
+      color: "FF0000"
+    # Смерть от моба
+    mob_kill:
+      title: "💀 Смерть от моба"
+      description: "**{player}** был убит мобом **{killer}**"
+      color: "800080"
+    # Обычная смерть
+    default:
+      title: "💀 Смерть игрока"
+      description: "**{player}** {death_message}"
+      color: "800080"
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
 
 # Настройки фильтрации

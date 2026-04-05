@@ -103,7 +103,7 @@ public class PluginInitializer {
             new ChatEventListener(plugin, serviceRegistry, filter), plugin
         );
         plugin.getServer().getPluginManager().registerEvents(
-            new PlayerEventListener(serviceRegistry, filter), plugin
+            new PlayerEventListener(plugin, serviceRegistry, filter), plugin
         );
         plugin.getServer().getPluginManager().registerEvents(
             new ModerationListener(serviceRegistry), plugin

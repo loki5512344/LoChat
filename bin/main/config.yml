@@ -1,58 +1,143 @@
-# LoChat Configuration v1.5.5
-config-version: 4
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                           LoChat Configuration                               ║
+# ║                         Единый конфиг плагина                                ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+config-version: 5
 prefix: "&#00D4FF[LoChat]"
 
-# Базовые настройки чата
-# Детальные настройки (префиксы, цвета, форматы) в config/*.yml
-
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Режимы чата                                                                  │
+# └─────────────────────────────────────────────────────────────────────────────┘
 chat:
-  # Режим чата:
-  # - Оба включены = локальный (по умолчанию) + глобальный (с "!")
-  # - Только global = единый чат без префиксов для всех
+  # Глобальный чат (все видят, активируется через "!")
   global:
     enabled: true
     cooldown: 3
+    
+  # Локальный чат (только в радиусе)
   local:
     enabled: true
     cooldown: 1
+    radius: 100
+    
+  # Личные сообщения
   pm:
     enabled: true
     cooldown: 2
+    
+  # Лимиты сообщений
+  min_message_length: 1
+  max_message_length: 2000
+  clear_lines: 100
 
-# Hub команда
-hub_command:
-  enabled: true
-  server: "hub"
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Внешний вид чата (префиксы, форматы, цвета)                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+appearance:
+  # Префиксы чата (GLOBAL / LOCAL)
+  prefixes:
+    global:
+      emoji: "✦"
+      text: "GLOBAL"
+      colors: ["#B798A8", "#7858E9"]
+      separator:
+        text: " ▶ "
+        color: "#9878C9"
+      message-color: "#E8E0F0"
+      
+    local:
+      emoji: "◆"
+      text: "LOCAL"
+      colors: ["#9878C9", "#7858E9"]
+      separator:
+        text: " ▶ "
+        color: "#8B6BD6"
+      message-color: "#E8E0F0"
+  
+  # Формат сообщений
+  # {emoji} {prefix} {separator} {player_prefix} {player} {player_suffix} {message}
+  chat-format:
+    global: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix}: {message}"
+    local: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix}: {message}"
+  
+  # Hover при наведении на ник
+  hover:
+    enabled: true
+    format:
+      - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+      - "&#B798A8✦ &f{player}"
+      - ""
+      - "&#9878C9⏱ &fПинг: &#7858E9{ping}ms"
+      - "&#9878C9❤ &fЗдоровье: &#7858E9{health}/20"
+      - "&#9878C9🍖 &fГолод: &#7858E9{food}/20"
+      - ""
+      - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+      - "&#B798A8✦ &fНажми чтобы написать"
+  
+  # Эмодзи (текстовые замены)
+  emojis:
+    ":heart:": "❤"
+    ":star:": "★"
+    ":diamond:": "♦"
+    ":check:": "✓"
+    ":cross:": "✗"
+    ":arrow:": "→"
+    ":smile:": ":)"
+    ":sad:": ":("
+    ":shrug:": "¯\\_(ツ)_/¯"
+  
+  # Цвета системных сообщений
+  colors:
+    nobody_heard: "#9878C9"
+    error: "#CF6679"
+    success: "#9878C9"
+    warning: "#B798A8"
+    info: "#A485BC"
 
-# Градиентные ники
-lopreff:
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Градиентные ники и префиксы                                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+gradient:
   enabled: true
   use-gradient-name: true
   use-custom-prefix: true
-
-display:
-  update-display-name: true
-  update-tab-list: true
-
-# Градиенты (детали в config/gradient.yml)
-gradient:
-  storage-type: "file"
+  
+  # Настройки отображения
+  display:
+    update-display-name: true
+    update-tab-list: true
+  
+  # Лимиты
   min-colors: 1
   max-colors: 7
+  max-prefix-length: 16
+  
+  # Цены (PlayerPoints)
   price-per-color: 50
   prefix-price: 500
   prefix-one-time-purchase: true
   use-permission-instead-of-cost: false
-  max-prefix-length: 16
+  
+  # Кулдауны (секунды)
   color-cooldown: 60
   prefix-cooldown: 120
+  
+  # Форматирование
   prefix-format: "[{prefix}] "
   gradient-on-prefix: true
   gradient-on-luckperms-prefix: true
+  gradient-on-luckperms-suffix: true
   continuous-gradient: true
   use-legacy-rgb-format: true
+  
+  # Хранилище (file / sqlite)
+  storage-type: "file"
+  sqlite-file: "gradient-data.db"
 
-# RP команды (детали в config/rp.yml)
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ RP команды (/me, /do, /try, /roll)                                          │
+# └─────────────────────────────────────────────────────────────────────────────┘
 rp:
   radius: 100
   cooldowns:
@@ -61,6 +146,126 @@ rp:
     do: 3
     roll: 2
 
-# Модерация: после /lmute выполнить команду от консоли (SimpleVoiceChat: voice mute {player})
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Фильтры чата                                                                 │
+# └─────────────────────────────────────────────────────────────────────────────┘
+filters:
+  # Мат-фильтр
+  swear:
+    enabled: true
+    replace: false
+    replacement: "***"
+    words:
+      - "хуй"
+      - "пизда"
+      - "ебать"
+  
+  # URL фильтр
+  url:
+    enabled: true
+    replacement: "[ссылка скрыта]"
+  
+  # IP фильтр
+  ip:
+    enabled: true
+    replacement: "[IP скрыт]"
+  
+  # Скрытые URL (discord.gg и т.д.)
+  hidden-urls:
+    enabled: true
+    patterns:
+      - "discord\\.gg"
+      - "dsc\\.gg"
+  
+  # Анти-спам
+  spam:
+    enabled: true
+    max-repeating-chars: 5
+  
+  # Анти-флуд
+  flood:
+    enabled: true
+    max-same-messages: 3
+  
+  # Капс
+  caps:
+    enabled: true
+    max-caps-percent: 70
+    min-length: 5
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Модерация (муты, баны, варны)                                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
 moderation:
+  # Дефолтные значения
+  default-mute-duration: "7d"
+  default-mute-reason: "Без причины"
+  default-ban-reason: "Без причины"
+  
+  # Команда после мута (для голосового чата)
   voice-mute-console-command: ""
+  
+  # Сообщение при кике забаненного
+  ban-kick-message: "&#CF6679Вы забанены! &#B798A8Причина: &#7858E9{reason}"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Звуки                                                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+sounds:
+  # Упоминание в чате
+  mention:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    volume: 1.0
+    pitch: 1.5
+  
+  # Личное сообщение
+  pm:
+    enabled: true
+    sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    volume: 0.8
+    pitch: 1.2
+  
+  # Команды
+  command:
+    enabled: false
+    sound: "UI_BUTTON_CLICK"
+    volume: 0.5
+    pitch: 1.0
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Сообщения входа/выхода/смерти                                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+messages:
+  # Сообщение при входе
+  # {player} - ник игрока
+  join:
+    enabled: true
+    format: "&#9878C9✦ &#B798A8{player} &#7858E9зашел на сервер"
+  
+  # Сообщение при выходе
+  quit:
+    enabled: true
+    format: "&#9878C9✦ &#B798A8{player} &#7858E9вышел с сервера"
+  
+  # Сообщение при смерти
+  # {player} - ник игрока
+  # {killer} - ник убийцы (если есть)
+  # {weapon} - название оружия (если есть)
+  # {death_message} - стандартное сообщение смерти
+  death:
+    enabled: true
+    # Убийство игроком
+    player_kill: "&#CF6679☠ &#B798A8{player} &#7858E9был убит игроком &#B798A8{killer} &#9878C9({weapon})"
+    # Смерть от моба
+    mob_kill: "&#CF6679☠ &#B798A8{player} &#7858E9был убит мобом &#B798A8{killer}"
+    # Обычная смерть
+    default: "&#CF6679☠ &#B798A8{player} &#7858E9{death_message}"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Прочее                                                                       │
+# └─────────────────────────────────────────────────────────────────────────────┘
+# Hub команда
+hub_command:
+  enabled: true
+  server: "hub"

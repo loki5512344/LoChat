@@ -150,6 +150,16 @@ public class GradientModule {
     }
 
     /**
+     * Получает суффикс игрока из LuckPerms с градиентом
+     */
+    public String getSuffix(Player player) {
+        if (!enabled) return "";
+        
+        GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
+        return prefixService.getLuckPermsSuffix(player, data);
+    }
+
+    /**
      * Получает только LuckPerms префикс
      */
     public String getLuckPermsPrefix(Player player) {

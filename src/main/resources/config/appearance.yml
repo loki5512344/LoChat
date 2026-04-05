@@ -44,16 +44,17 @@ prefixes:
 #   {separator}      — separator (e.g. ▶)
 #   {player_prefix}  — LuckPerms / gradient prefix from LoPreff
 #   {player}         — display name + hover (click to /msg)
+#   {player_suffix}  — LuckPerms / gradient suffix from LoPreff
 #   {message}        — message body
 #
 # Examples:
 #   Default:  {emoji} {prefix} {separator} {player} : {message}
 #   Minimal:  {player_prefix} {player} ▶ {message}
-#   Custom:   ✦ {player_prefix} {player} ▶ {message}
+#   Custom:   ✦ {player_prefix} {player} {player_suffix} ▶ {message}
 
 chat-format:
-  global: "{emoji} {prefix} {separator} {player} : {message}"
-  local: "{emoji} {prefix} {separator} {player} : {message}"
+  global: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix} : {message}"
+  local: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix} : {message}"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │ Hover shown when pointing at the player name in chat                         │
