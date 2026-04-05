@@ -38,6 +38,7 @@ class ChatFormatterTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void testReplaceEmojis() {
         String result = ChatFormatter.replaceEmojis("Test :smile:");
         assertEquals("Test :smile:", result);

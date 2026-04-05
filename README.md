@@ -1,4 +1,4 @@
-# 🎮 LoChat - Advanced Chat Plugin
+# LoChat - Advanced Chat Plugin
 
 Продвинутый чат плагин для Paper/Folia серверов с градиентными никами, модерацией и гибкой системой конфигурации.
 
@@ -8,156 +8,96 @@
 ./gradlew runServer
 ```
 
-Gradle задача `runServer` ([run-paper](https://github.com/jpenilla/run-paper)) скачивает Paper **1.21.4** (как `paper-api` в `build.gradle.kts`), собирает JAR плагина и кладёт его в `run/plugins`. Первый запуск долгий из‑за загрузки; остановка — `stop` в консоли сервера.
+Gradle задача `runServer` ([run-paper](https://github.com/jpenilla/run-paper)) скачивает Paper 1.21.4, собирает JAR плагина и кладёт его в `run/plugins`. Первый запуск долгий из-за загрузки. Остановка через `stop` в консоли сервера.
 
-## ✨ Основные возможности
+## Основные возможности
 
-### 💬 Чат система
-- **Глобальный чат** - общение между всеми игроками
-- **Локальный чат** - общение в радиусе
-- **Личные сообщения** - PM система с ответами
-- **Игнорирование** - блокировка нежелательных игроков
-- **Упоминания** - @player, @everyone, @here, @role
-- **Hover/Click события** - интерактивные сообщения
+### Чат система
+- Глобальный чат - общение между всеми игроками
+- Локальный чат - общение в радиусе
+- Личные сообщения - PM система с ответами
+- Игнорирование - блокировка нежелательных игроков
+- Упоминания - @player, @everyone, @here, @role
+- Hover/Click события - интерактивные сообщения
+- Кастомные сообщения входа/выхода/смерти с названием оружия
 
-### 🎨 Градиентные ники
+### Градиентные ники и префиксы
 - Кастомные градиентные цвета (до 7 цветов)
 - Готовые пресеты (огонь, океан, радуга и т.д.)
-- Кастомные префиксы
-- Интеграция с LuckPerms
+- Кастомные префиксы и суффиксы
+- Интеграция с LuckPerms (префиксы и суффиксы с градиентом)
 - Система покупки через PlayerPoints
 - Кулдауны и ограничения
 
-### 🛡️ Модерация
-- **Мут система** с историей
-- Временные и постоянные муты
+### Модерация
+- Мут система с историей
+- Бан система с временем и причиной
+- Варны (предупреждения)
+- Временные и постоянные наказания
 - Скрытые муты (silent)
-- Готовые причины мутов
+- Готовые причины наказаний
 - Эскалация наказаний
-- Автоматические муты
 
-### 🔍 Фильтры
-- Фильтр мата (настраиваемый словарь)
+### Фильтры чата
+- Фильтр мата с защитой от обхода (х->x, о->o и т.д.)
 - Антиспам и антифлуд
 - CAPS фильтр
 - URL и IP фильтр
-- Фильтр рекламы
-- Фильтр повторов
+- Фильтр скрытых ссылок (discord.gg, bit.ly и т.д.)
+- Фильтр повторяющихся символов
+- Настраиваемый список запрещенных слов
 
-### 🎯 Кастомные команды
-- /help, /rules, /discord - информационные
-- /coords, /ping, /stats - утилиты
+### RP команды
 - /me - действия от третьего лица
-- /sounds - управление звуками
-- Полностью настраиваемые в конфиге
+- /do - описание действий
+- /try - попытка действия с шансом
+- /roll - бросок кубика
+- Настраиваемый радиус и кулдауны
 
-### 🔊 Звуковые эффекты
+### Звуковые эффекты
 - Звуки для PM и упоминаний
 - Звуки для мутов/размутов
 - Звуки для градиентов
 - Звуки для команд
 - Персональные настройки звуков
 
-### 📊 Статистика
-- Статистика сообщений
-- Топ игроков по активности
-- Статистика мутов
-- Статистика фильтров
-- Автоматическая очистка старых данных
+### Discord интеграция
+- Webhook для отправки сообщений
+- События входа/выхода/смерти
+- Кастомные форматы и цвета
+- Аватары игроков
+- Фильтрация сообщений
 
-## 📁 Структура проекта
+## Структура конфигов
 
 ```
-LoChat/
-├── src/main/
-│   ├── java/com/loki/lochat/
-│   │   ├── api/                          # API интерфейсы
-│   │   │   ├── filter/                   # Фильтры сообщений
-│   │   │   └── service/                  # Сервисы (Chat, Mute, PM и т.д.)
-│   │   ├── commands/                     # Команды плагина
-│   │   │   ├── custom/                   # Кастомные команды
-│   │   │   │   ├── HelpCommand.java
-│   │   │   │   ├── RulesCommand.java
-│   │   │   │   ├── DiscordCommand.java
-│   │   │   │   ├── CoordsCommand.java
-│   │   │   │   ├── PingCommand.java
-│   │   │   │   ├── StatsCommand.java
-│   │   │   │   ├── MeCommand.java
-│   │   │   │   └── SoundsCommand.java
-│   │   │   ├── CustomCommandManager.java
-│   │   │   ├── MuteCommand.java
-│   │   │   ├── UnmuteCommand.java
-│   │   │   └── ... (другие команды)
-│   │   ├── config/                       # Конфигурация
-│   │   ├── core/                         # Реализации
-│   │   │   ├── filter/                   # Реализации фильтров
-│   │   │   │   ├── AdvancedMessageFilter.java
-│   │   │   │   ├── CapsFilter.java
-│   │   │   │   ├── CooldownFilter.java
-│   │   │   │   └── MuteFilter.java
-│   │   │   ├── registry/                 # ServiceRegistry (DI)
-│   │   │   └── service/                  # Реализации сервисов
-│   │   │       ├── ChatServiceImpl.java
-│   │   │       ├── MuteServiceImpl.java
-│   │   │       ├── PMServiceImpl.java
-│   │   │       └── ... (другие сервисы)
-│   │   ├── data/                         # Модели данных
-│   │   │   └── model/
-│   │   │       ├── ChatMessage.java
-│   │   │       └── MuteData.java
-│   │   ├── gradient/                     # Градиентные ники
-│   │   │   ├── commands/                 # Команды градиентов
-│   │   │   ├── config/                   # Конфиг градиентов
-│   │   │   ├── data/                     # Данные градиентов
-│   │   │   ├── gui/                      # GUI для градиентов
-│   │   │   ├── hooks/                    # LuckPerms интеграция
-│   │   │   ├── listeners/                # Слушатели градиентов
-│   │   │   └── util/                     # Утилиты градиентов
-│   │   ├── integrations/                 # Интеграции с плагинами
-│   │   │   ├── PlaceholderAPIHook.java
-│   │   │   ├── LibertyBansHook.java
-│   │   │   └── SkinsRestorerHook.java
-│   │   ├── listener/                     # Слушатели событий
-│   │   ├── managers/                     # Менеджеры
-│   │   ├── util/                         # Утилиты (Folia)
-│   │   ├── utils/                        # Утилиты (Formatter, Mention)
-│   │   └── LoChat.java                   # Главный класс
-│   │
-│   └── resources/                        # Ресурсы
-│       ├── config/                       # Конфигурационные файлы
-│       │   ├── chat-formats.yml          # Форматы чата
-│       │   ├── filters.yml               # Настройки фильтров
-│       │   ├── gradient-config.yml       # Конфиг градиентов
-│       │   ├── automessages.yml          # Автосообщения
-│       │   ├── mute-config.yml           # Система мутов
-│       │   ├── sounds.yml                # Звуковые эффекты
-│       │   ├── database.yml              # База данных
-│       │   ├── integrations.yml          # Интеграции
-│       │   └── custom-commands.yml       # Кастомные команды
-│       │
-│       ├── data/                         # Файлы данных
-│       │   ├── data.yml                  # Основные данные
-│       │   ├── players.yml               # Данные игроков
-│       │   ├── gradients.yml             # Градиентные ники
-│       │   ├── mutes.yml                 # Муты и история
-│       │   ├── ignores.yml               # Игнорирование
-│       │   ├── statistics.yml            # Статистика
-│       │   └── filter-words.json         # Запрещенные слова
-│       │
-│       ├── config.yml                    # Основной конфиг
-│       ├── messages.yml                  # Сообщения
-│       └── plugin.yml                    # Конфиг плагина
+plugins/LoChat/
+├── config.yml                    # Основной конфиг (все настройки в одном месте)
+├── messages.yml                  # Сообщения плагина
+├── custom-commands.yml           # Кастомные команды
+├── badwords.txt                  # Список запрещенных слов
 │
-├── build.gradle.kts                      # Gradle конфиг
-└── README.md                             # Этот файл
+├── config/
+│   ├── appearance.yml            # Внешний вид чата (префиксы, форматы, hover)
+│   ├── discord.yml               # Discord интеграция
+│   ├── filters.yml               # Настройки фильтров
+│   ├── messages.yml              # Дополнительные сообщения
+│   ├── mute.yml                  # Настройки мутов
+│   └── sounds.yml                # Звуковые эффекты
+│
+└── data/
+    ├── mutes.yml                 # Данные мутов
+    ├── bans.yml                  # Данные банов
+    ├── ignores.yml               # Игнорирование
+    └── gradient-data.yml         # Градиентные ники
 ```
 
-## 🚀 Быстрый старт
+## Быстрый старт
 
 ### Установка
 
-1. Скачайте последнюю версию из [Releases](https://codeberg.org/loki5512344/Lochat/releases)
-2. Поместите `LoChat-1.5.5-1.20.1.jar` в папку `plugins/`
+1. Скачайте последнюю версию из Releases
+2. Поместите JAR в папку `plugins/`
 3. Перезапустите сервер
 4. Настройте конфиги в `plugins/LoChat/`
 
@@ -166,23 +106,26 @@ LoChat/
 1. **Основной конфиг** (`config.yml`):
    - Настройте радиус локального чата
    - Включите/отключите нужные функции
-   - Настройте Discord и Website ссылки
+   - Настройте цены на градиенты
+   - Настройте фильтры
 
-2. **Сообщения** (`messages.yml`):
-   - Измените сообщения на свой язык
-   - Настройте цвета и форматирование
+2. **Фильтр мата** (`badwords.txt`):
+   - Добавьте свои запрещенные слова
+   - По одному слову на строку
+   - Строки с # игнорируются
 
-3. **Фильтры** (`config/filters.yml`):
-   - Настройте фильтр мата
-   - Добавьте свои запрещенные слова в `data/filter-words.json`
-   - Настройте антиспам и другие фильтры
+3. **Внешний вид** (`config/appearance.yml`):
+   - Настройте префиксы чата (GLOBAL/LOCAL)
+   - Измените цвета и форматы
+   - Настройте hover подсказки
+   - Добавьте эмодзи
 
-4. **Градиенты** (`config/gradient-config.yml`):
-   - Настройте стоимость градиентов
-   - Добавьте свои пресеты
-   - Настройте интеграцию с PlayerPoints
+4. **Discord** (`config/discord.yml`):
+   - Вставьте URL вебхука
+   - Настройте форматы сообщений
+   - Включите нужные события
 
-## � Сборка из исходников
+## Сборка из исходников
 
 ```bash
 # Клонировать репозиторий
@@ -195,20 +138,20 @@ cd Lochat
 # Jar файл будет в build/libs/
 ```
 
-## 📦 Зависимости
+## Зависимости
 
 ### Обязательные
-- **Java 21+**
-- **Paper 1.20.1+** или **Folia**
+- Java 21+
+- Paper 1.20.1+ или Folia
 
 ### Опциональные
-- **PlaceholderAPI** - для плейсхолдеров
-- **LuckPerms** - для градиентных ников и прав
-- **PlayerPoints** - для покупки градиентов
-- **LibertyBans** - синхронизация мутов
-- **SkinsRestorer** - поддержка скинов
+- PlaceholderAPI - для плейсхолдеров
+- LuckPerms - для градиентных префиксов/суффиксов
+- PlayerPoints - для покупки градиентов
+- LibertyBans - синхронизация мутов
+- SkinsRestorer - поддержка скинов
 
-## 📝 Команды
+## Команды
 
 ### Чат команды
 - `/g <сообщение>` - глобальный чат
@@ -227,19 +170,17 @@ cd Lochat
 ### Модерация
 - `/lmute <игрок> [время] [-s] [причина]` - замутить
 - `/lunmute <игрок> [-s]` - размутить
+- `/lban <игрок> [время] [причина]` - забанить
+- `/lunban <игрок>` - разбанить
+- `/lwarn <игрок> [причина]` - выдать варн
 - `/lmutelist` - список мутов
 - `/lmutehistory <игрок>` - история мутов
-- `/lmuteblame <модератор>` - муты модератора
 
-### Кастомные команды
-- `/help` - помощь
-- `/rules` - правила
-- `/discord` - Discord сервера
-- `/coords` - координаты
-- `/ping [игрок]` - пинг
-- `/stats [игрок]` - статистика
+### RP команды
 - `/me <действие>` - действие от 3-го лица
-- `/sounds [on|off]` - управление звуками
+- `/do <описание>` - описание действия
+- `/try <попытка>` - попытка с шансом
+- `/roll [число]` - бросок кубика
 
 ### Админские
 - `/lochat reload` - перезагрузить конфиг
@@ -247,7 +188,7 @@ cd Lochat
 - `/chatspy` - режим шпиона
 - `/announce <сообщение>` - объявление
 
-## 🎨 Примеры использования
+## Примеры использования
 
 ### Градиентный ник
 ```
@@ -265,21 +206,19 @@ cd Lochat
 
 #### Вариант 1: Через PlayerPoints (платно)
 ```yaml
-# config/gradient-config.yml
+# config.yml
 gradient:
-  price-per-color: 50          # 50 поинтов за каждый цвет
-  prefix-price: 500            # 500 поинтов за префикс
+  price-per-color: 50
+  prefix-price: 500
   use-permission-instead-of-cost: false
 ```
 
-Игроки платят поинтами за установку градиентов.
-
 #### Вариант 2: Через пермишены (бесплатно)
 ```yaml
-# config/gradient-config.yml
+# config.yml
 gradient:
-  price-per-color: 0           # Бесплатно
-  prefix-price: 0              # Бесплатно
+  price-per-color: 0
+  prefix-price: 0
   use-permission-instead-of-cost: true
 ```
 
@@ -290,37 +229,34 @@ gradient:
 /lp user <игрок> permission set gradient.bypass.cost true
 ```
 
-Или через группу:
-```
-/lp group vip permission set gradient.color true
-/lp group vip permission set gradient.prefix true
-/lp group vip permission set gradient.bypass.cost true
-```
+### Основные пермишены
 
-### Основные пермишены градиентов
+#### Градиенты
+- `gradient.color` - доступ к /color
+- `gradient.prefix` - доступ к /prefix
+- `gradient.bypass.cost` - бесплатное использование
+- `gradient.bypass.cooldown` - обход кулдауна
+- `gradient.admin` - админские команды
 
-| Пермишен | Описание |
-|----------|----------|
-| `gradient.color` | Доступ к команде /color |
-| `gradient.prefix` | Доступ к команде /prefix |
-| `gradient.bypass.cost` | Бесплатное использование (обход стоимости) |
-| `gradient.bypass.cooldown` | Обход кулдауна |
-| `gradient.admin` | Админские команды /aprefix |
-| `gradient.colors.5` | Максимум 5 цветов в градиенте |
-| `gradient.colors.10` | Максимум 10 цветов в градиенте |
-| `gradient.colors.unlimited` | Неограниченное количество цветов |
+#### Чат
+- `lochat.chat.colors` - цветные сообщения
+- `lochat.chat.global` - глобальный чат
+- `lochat.chat.local` - локальный чат
+- `lochat.pm` - личные сообщения
 
-### Текущие цены (по умолчанию)
+#### Модерация
+- `lochat.mute` - мутить игроков
+- `lochat.mute.silent` - скрытые муты
+- `lochat.ban` - банить игроков
+- `lochat.warn` - выдавать варны
 
-- **Градиент**: 50 поинтов за каждый цвет
-  - 1 цвет = 50 поинтов
-  - 2 цвета = 100 поинтов
-  - 3 цвета = 150 поинтов
-  - и т.д.
-
-- **Префикс**: 500 поинтов (одноразовая покупка)
-
-Цены настраиваются в `config/gradient-config.yml`
+#### Обход фильтров
+- `lochat.bypass.swear` - обход мат-фильтра
+- `lochat.bypass.spam` - обход антиспама
+- `lochat.bypass.flood` - обход антифлуда
+- `lochat.bypass.caps` - обход CAPS фильтра
+- `lochat.bypass.urlfilter` - обход URL фильтра
+- `lochat.bypass.cooldown` - обход кулдауна
 
 ### Мут игрока
 ```
@@ -334,18 +270,65 @@ gradient:
 ```
 Замутит игрока скрытно (другие игроки не увидят уведомление).
 
-## 🔌 API для разработчиков
+### Бан с причиной
+```
+/lban Player123 7d Читы
+```
+Забанит игрока на 7 дней с причиной "Читы".
+
+## Форматы времени
+
+- `s` - секунды (30s = 30 секунд)
+- `m` - минуты (15m = 15 минут)
+- `h` - часы (2h = 2 часа)
+- `d` - дни (7d = 7 дней)
+- `perm` или `0` - навсегда
+
+Примеры:
+- `1h30m` - 1 час 30 минут
+- `7d` - 7 дней
+- `perm` - навсегда
+
+## Плейсхолдеры
+
+### Чат
+- `{player}` - ник игрока
+- `{player_prefix}` - префикс игрока (LuckPerms/градиент)
+- `{player_suffix}` - суффикс игрока (LuckPerms/градиент)
+- `{message}` - текст сообщения
+- `{emoji}` - эмодзи префикса чата
+- `{prefix}` - префикс чата (GLOBAL/LOCAL)
+- `{separator}` - разделитель
+
+### Hover
+- `{player}` - ник игрока
+- `{world}` - мир игрока
+- `{ping}` - пинг
+- `{gamemode}` - режим игры
+- `{health}` - здоровье
+- `{food}` - голод
+
+### Смерть
+- `{player}` - ник погибшего
+- `{killer}` - ник убийцы
+- `{weapon}` - название оружия
+- `{death_message}` - стандартное сообщение смерти
+
+## API для разработчиков
 
 ### Получение сервисов
 ```java
+// Получить ServiceRegistry
+ServiceRegistry registry = plugin.getServiceRegistry();
+
 // Получить сервис чата
-ChatService chatService = ServiceRegistry.getChatService();
+ChatService chatService = registry.get(ChatService.class);
 
 // Отправить глобальное сообщение
 chatService.sendGlobalMessage(player, "Привет!");
 
 // Получить сервис мутов
-MuteService muteService = ServiceRegistry.getMuteService();
+MuteService muteService = registry.get(MuteService.class);
 
 // Проверить мут
 if (muteService.isMuted(player.getUniqueId())) {
@@ -359,42 +342,28 @@ public class MyFilter implements MessageFilter {
     @Override
     public FilterResult filter(Player player, String message) {
         if (message.contains("запрещено")) {
-            return FilterResult.block("Сообщение заблокировано");
+            return FilterResult.blocked("Сообщение заблокировано");
         }
-        return FilterResult.allow();
-    }
-    
-    @Override
-    public String getName() {
-        return "MyFilter";
-    }
-    
-    @Override
-    public int getPriority() {
-        return 10;
+        return FilterResult.ok(message);
     }
 }
-
-// Регистрация
-FilterManager.registerFilter(new MyFilter());
 ```
 
-## 🐛 Известные проблемы
+## Известные проблемы
 
 - Градиенты могут не отображаться в некоторых версиях клиента
 - Фильтры могут блокировать легитимные сообщения (настраивается)
 
-## 📊 Статистика проекта
+## Статистика проекта
 
-- **Версия**: 1.5.5-1.20.1
-- **Коммитов**: 80+
-- **Строк кода**: 9000+
-- **Конфигов**: 10+
-- **Команд**: 30+
+- Версия: 1.5.5
+- Строк кода: 9000+
+- Конфигов: 10+
+- Команд: 30+
 
-## 🤝 Вклад в проект
+## Вклад в проект
 
-Проект находится в активной разработке. Pull requests приветствуются!
+Проект находится в активной разработке. Pull requests приветствуются.
 
 1. Fork репозитория
 2. Создайте ветку для фичи (`git checkout -b feature/amazing-feature`)
@@ -402,21 +371,18 @@ FilterManager.registerFilter(new MyFilter());
 4. Push в ветку (`git push origin feature/amazing-feature`)
 5. Откройте Pull Request
 
-## 📄 Лицензия
+## Лицензия
 
-Proprietary - Все права защищены
+GNU General Public License v3.0 - см. файл [LICENSE](LICENSE)
 
-## 👥 Автор
+Это свободное программное обеспечение. Вы можете распространять и/или модифицировать его в соответствии с условиями GNU General Public License версии 3.
 
-**Loki Development Team**
-- Codeberg: [@loki5512344](https://codeberg.org/loki5512344)
+## Автор
 
-## 🔗 Ссылки
+Loki Development Team
+- Codeberg: @loki5512344
+
+## Ссылки
 
 - [Codeberg Repository](https://codeberg.org/loki5512344/Lochat)
 - [Issues](https://codeberg.org/loki5512344/Lochat/issues)
-
-
----
-
-⭐ Если проект понравился, поставьте звезду на Codeberg!
