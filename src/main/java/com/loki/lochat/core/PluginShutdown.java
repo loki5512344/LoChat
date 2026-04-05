@@ -1,11 +1,11 @@
 package com.loki.lochat.core;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.IgnoreService;
+import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.api.service.NickService;
-import com.loki.lochat.api.service.PlayerDataService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.integrations.DiscordIntegration;
@@ -62,15 +62,15 @@ public class PluginShutdown {
         if (serviceRegistry == null) return;
         
         // Статистика игроков
-        PlayerDataService playerDataService = serviceRegistry.get(PlayerDataService.class);
-        if (playerDataService != null) {
-            playerDataService.saveAll();
+        PlayerService playerService = serviceRegistry.get(PlayerService.class);
+        if (playerService != null) {
+            playerService.saveAll();
         }
         
-        // Игнорирования
-        IgnoreService ignoreService = serviceRegistry.get(IgnoreService.class);
-        if (ignoreService != null) {
-            ignoreService.save();
+        // Messaging (Ignore + PM + Spy)
+        MessagingService messagingService = serviceRegistry.get(MessagingService.class);
+        if (messagingService != null) {
+            messagingService.save();
         }
         
         // Муты

@@ -116,3 +116,22 @@ general:
   disabled: "&#B798A8Отключено"
   online: "&#9878C9В сети"
   offline: "&#B798A8Не в сети"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │                     ВАРНЫ / БАНЫ (LoChat)                                    │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+moderation:
+  default_reason: "Без причины"
+  duration_permanent: "навсегда"
+  warn_received: "&#CF6679⚠ Вам выдано предупреждение! &#B798A8Причина: &#7858E9{reason}"
+  warn_staff_confirm: "&#9878C9Игроку &#7858E9{player} &#9878C9выдан варн. &#B798A8Причина: &#7858E9{reason}"
+  silent_warn_staff: "&#B798A8[&#9878C9ТИХИЙ ВАРН&#B798A8] &#7858E9{player}&#9878C9: &#B798A8{reason}"
+  ban_usage: "&#B798A8Использование: &#7858E9/lban <ник> [время|perm] [причина]"
+  ban_confirm: "&#9878C9Игрок &#7858E9{player} &#9878C9забанен. &#B798A8Срок: &#7858E9{duration}"
+  unban_confirm: "&#9878C9Бан снят с &#7858E9{player}"
+  not_banned: "&#CF6679Игрок не забанен!"
+  already_banned: "&#CF6679Игрок уже забанен!"
+  warn_usage: "&#B798A8Использование: &#7858E9/warn <ник> [причина]"
+  silent_warn_usage: "&#B798A8Использование: &#7858E9/silentwarn <ник> [причина]"
+  ban_kick_message: "<gradient:#FF5555:#8B0000><bold>═══════ ДОСТУП ЗАПРЕЩЁН ═══════</bold></gradient>\n<gray>Вы заблокированы на этом сервере.</gray>\n<white>Причина: <gradient:#7858E9:#B798A8>{reason}</gradient></white>\n<gray>Модератор: <white>{moderator}</white></gray>\n<gray>Срок: <#7858E9>{duration}</#7858E9></gray>\n<gradient:#FF5555:#8B0000><bold>════════════════════════</bold></gradient>"

@@ -1,7 +1,7 @@
 package com.loki.lochat.commands.rp;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.CooldownService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
@@ -19,11 +19,11 @@ import java.util.Random;
 public class TryCommand extends PlayerCommand {
 
     private static final Random RANDOM = new Random();
-    private final CooldownService cooldownService;
+    private final PlayerService playerService;
 
     public TryCommand(LoChat plugin) {
         super(plugin);
-        this.cooldownService = plugin.getServiceRegistry().get(CooldownService.class);
+        this.playerService = plugin.getServiceRegistry().get(PlayerService.class);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class TryCommand extends PlayerCommand {
         if (!requirePermission(player, "lochat.rp.try")) return true;
 
         int cooldown = plugin.getConfigManager().getInt("rp.cooldowns.try", 0);
-        if (cooldown > 0 && cooldownService.isOnCooldown(player.getUniqueId(), "rp_try", cooldown)) {
-            int remaining = cooldownService.getRemainingCooldown(player.getUniqueId(), "rp_try", cooldown);
+        if (cooldown > 0 && playerService.isOnCooldown(player.getUniqueId(), "rp_try", cooldown)) {
+            int remaining = playerService.getRemainingCooldown(player.getUniqueId(), "rp_try", cooldown);
             String msg = plugin.getConfigManager().getMessagesConfig().getCooldownMessage().replace("{remaining}", String.valueOf(remaining));
             player.sendMessage(ChatFormatter.parse(msg));
             return true;
@@ -64,7 +64,7 @@ public class TryCommand extends PlayerCommand {
         int radius = plugin.getConfigManager().getInt("rp.radius", 100);
         RpUtil.sendToRadius(player, message, radius);
 
-        if (cooldown > 0) cooldownService.setCooldown(player.getUniqueId(), "rp_try");
+        if (cooldown > 0) playerService.setCooldown(player.getUniqueId(), "rp_try");
         plugin.getLogger().info("[TRY] " + player.getName() + ": " + action + " -> " + (success ? "SUCCESS" : "FAIL"));
         return true;
     }

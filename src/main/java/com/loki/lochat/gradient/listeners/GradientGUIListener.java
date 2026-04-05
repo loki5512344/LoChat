@@ -5,7 +5,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import com.loki.lochat.gradient.util.GradientConstants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -80,9 +80,6 @@ public class GradientGUIListener implements Listener {
                 if (gui.getColors() != null && !gui.getColors().isEmpty()) {
                     data.setColors(gui.getColors());
                     data.setColorEnabled(true);
-                }
-                if (module.getLuckPermsHook() != null) {
-                    module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
                 }
                 msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free",
                         "price", String.valueOf(price));

@@ -1,7 +1,7 @@
 package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.IgnoreService;
+import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.ChatFormatter;
 import com.loki.lochat.utils.PlayerUtil;
 import org.bukkit.command.Command;
@@ -16,18 +16,18 @@ import java.util.UUID;
 public class IgnoreListCommand implements CommandExecutor {
 
     private final LoChat plugin;
-    private final IgnoreService ignoreService;
+    private final MessagingService messagingService;
 
     public IgnoreListCommand(LoChat plugin) {
         this.plugin = plugin;
-        this.ignoreService = plugin.getServiceRegistry().get(IgnoreService.class);
+        this.messagingService = plugin.getServiceRegistry().get(MessagingService.class);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly()); return true; }
 
-        Set<UUID> ignored = ignoreService.getIgnoredPlayers(player.getUniqueId());
+        Set<UUID> ignored = messagingService.getIgnoredPlayers(player.getUniqueId());
         if (ignored.isEmpty()) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-empty"))); return true; }
 
         player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-header")));

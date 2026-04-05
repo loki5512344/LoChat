@@ -1,7 +1,7 @@
 package com.loki.lochat.core.filter;
 
 import com.loki.lochat.api.filter.MessageFilter;
-import com.loki.lochat.api.service.CooldownService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.data.model.ChatMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -11,12 +11,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Фильтр кулдаунов
  */
 public class CooldownFilter implements MessageFilter {
-    private final CooldownService cooldownService;
+    private final PlayerService playerService;
     private final FileConfiguration config;
     private final JavaPlugin plugin;
 
-    public CooldownFilter(CooldownService cooldownService, JavaPlugin plugin) {
-        this.cooldownService = cooldownService;
+    public CooldownFilter(PlayerService playerService, JavaPlugin plugin) {
+        this.playerService = playerService;
         this.config = plugin.getConfig();
         this.plugin = plugin;
     }
@@ -31,8 +31,8 @@ public class CooldownFilter implements MessageFilter {
         int cooldown = config.getInt("chat." + chatType + ".cooldown", 0);
 
         if (cooldown > 0) {
-            if (cooldownService.isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
-                int remaining = cooldownService.getRemainingCooldown(
+            if (playerService.isOnCooldown(player.getUniqueId(), chatType, cooldown)) {
+                int remaining = playerService.getRemainingCooldown(
                         player.getUniqueId(), chatType, cooldown);
                 
                 // Получаем сообщение из конфигурации
@@ -45,7 +45,7 @@ public class CooldownFilter implements MessageFilter {
             }
         }
 
-        cooldownService.setCooldown(player.getUniqueId(), chatType);
+        playerService.setCooldown(player.getUniqueId(), chatType);
         return true;
     }
 }

@@ -6,7 +6,6 @@ import com.loki.lochat.gradient.data.GradientPlayerData;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,46 +24,10 @@ public final class DisplayNameUtil {
     }
 
     public static void updateDisplayName(GradientModule module, Player player, GradientPlayerData data) {
-        GradientConfig cfg = module.getConfig();
-        String prefix = null;
-        String prefixFormat = cfg.getPrefixFormat();
-
-        // Определяем префикс: сначала кастомный, потом LuckPerms
-        if (data.isPrefixEnabled() && data.hasPrefix()) {
-            // Есть кастомный префикс
-            prefix = data.getPrefix();
-        } else if (module.getLuckPermsHook() != null && module.getLuckPermsHook().isEnabled()) {
-            // Нет кастомного префикса, проверяем LuckPerms
-            String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
-            if (lpPrefix != null && !lpPrefix.isEmpty()) {
-                String displayName = buildWithLuckPermsPrefix(
-                        lpPrefix,
-                        player.getName(),
-                        data.isColorEnabled() ? data.getColors() : null,
-                        cfg.isUseLegacyRgbFormat(),
-                        cfg.isContinuousGradient()
-                );
-                // Для display name нужен §x формат, конвертируем MiniMessage в legacy
-                displayName = convertMiniMessageToLegacy(displayName);
-                var component = SERIALIZER.deserialize(displayName);
-                player.displayName(component);
-                player.playerListName(component);
-                return;
-            }
-        }
-
-        // Строим display name с кастомным префиксом или без префикса
-        String displayName = GradientUtil.buildDisplayName(
-                prefix,
-                player.getName(),
-                data.isColorEnabled() ? data.getColors() : null,
-                cfg.isGradientOnPrefix(),
-                cfg.isContinuousGradient(),
-                prefixFormat,
-                cfg.isUseLegacyRgbFormat()
-        );
-
-        // Для display name нужен §x формат, конвертируем MiniMessage в legacy
+        // Используем новый PrefixService для получения полного имени
+        String displayName = module.getFormattedName(player);
+        
+        // Конвертируем в legacy формат для display name
         displayName = convertMiniMessageToLegacy(displayName);
         var component = SERIALIZER.deserialize(displayName);
         player.displayName(component);
@@ -93,28 +56,6 @@ public final class DisplayNameUtil {
         matcher.appendTail(sb);
 
         return sb.toString();
-    }
-
-    private static String buildWithLuckPermsPrefix(String lpPrefix, String nick,
-                                                   List<String> colors,
-                                                   boolean useLegacyFormat,
-                                                   boolean continuousGradient) {
-        if (colors == null || colors.isEmpty()) {
-            return lpPrefix + nick;
-        }
-
-        if (continuousGradient) {
-            String cleanPrefix = stripColors(lpPrefix);
-            String fullText = cleanPrefix + nick;
-            return GradientUtil.applyGradient(fullText, colors, useLegacyFormat);
-        } else {
-            return lpPrefix + GradientUtil.applyGradient(nick, colors, useLegacyFormat);
-        }
-    }
-
-    private static String stripColors(String text) {
-        if (text == null) return null;
-        return text.replaceAll("(?i)(§x(§[0-9a-f]){6}|§[0-9a-fk-or]|&[0-9a-fk-or]|&#[0-9a-f]{6})", "");
     }
 
     public static String buildColoredPrefix(GradientModule module, GradientPlayerData data) {

@@ -128,8 +128,8 @@ public final class GradientConfirmGUI implements InventoryHolder {
         boolean useLegacyForPreview = true;
 
         // Если нет кастомного префикса - используем LuckPerms префикс
-        if ((prefixToUse == null || prefixToUse.isEmpty()) && module.getLuckPermsHook() != null && module.getLuckPermsHook().isEnabled()) {
-            String lpPrefix = module.getLuckPermsHook().getActivePrefix(player);
+        if ((prefixToUse == null || prefixToUse.isEmpty())) {
+            String lpPrefix = module.getPrefixService().getLuckPermsPrefix(player, data);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 // Конвертируем LP префикс в legacy формат
                 lpPrefix = convertToLegacy(lpPrefix);

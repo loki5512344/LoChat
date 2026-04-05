@@ -1,53 +1,36 @@
 package com.loki.lochat.utils;
 
+import com.loki.lochat.utils.color.ColorConverter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 
+/**
+ * Утилита для форматирования сообщений - упрощенная версия
+ */
 public final class ChatFormatter {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
-    private static final PlainTextComponentSerializer PLAIN =
-            PlainTextComponentSerializer.plainText();
+    private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 
     private ChatFormatter() {
     }
 
-    /* ===================== BASIC ===================== */
+    // ========== Базовые методы ==========
 
     public static Component parse(String message) {
         if (message == null) return Component.empty();
-        // Конвертируем legacy форматы в MiniMessage перед парсингом
-        String converted = convertLegacyFormats(message);
+        String converted = ColorConverter.convertLegacyFormats(message);
         return MM.deserialize(converted);
     }
 
-    /**
-     * Default message color for players without {@code lochat.chat.colors}.
-     * Escapes {@code \} and {@code <} in the raw text so a literal {@code </color>} (or any {@code <})
-     * cannot close the outer MiniMessage wrapper early — which used to leave a stray {@code </color>}
-     * visible in-game and in the server console log.
-     * <p>
-     * Legacy hex ({@code &#RRGGBB}) and ampersand color codes in the message are still applied after escaping
-     * (see {@link #convertLegacyFormats} inside {@link #parse}).
-     */
     public static Component parseWithDefaultMessageColor(String message, String hexCode) {
         if (message == null) message = "";
-        String hex = (hexCode == null || hexCode.isBlank())
-                ? "#FFFFFF"
-                : (hexCode.startsWith("#") ? hexCode : "#" + hexCode);
-        String escaped = escapeForMiniMessageOuterWrap(message);
+        String hex = (hexCode == null || hexCode.isBlank()) ? "#FFFFFF" : 
+                     (hexCode.startsWith("#") ? hexCode : "#" + hexCode);
+        String escaped = ColorConverter.escapeForMiniMessage(message);
         return parse("<color:" + hex + ">" + escaped + "</color>");
-    }
-
-    /**
-     * Escape user text before it is embedded in a MiniMessage template with outer tags.
-     * MiniMessage treats {@code \<} as a literal angle bracket.
-     */
-    public static String escapeForMiniMessageOuterWrap(String text) {
-        if (text == null) return "";
-        return text.replace("\\", "\\\\").replace("<", "\\<");
     }
 
     public static Component parse(String message, String... replacements) {
@@ -56,91 +39,11 @@ public final class ChatFormatter {
         for (int i = 0; i + 1 < replacements.length; i += 2) {
             result = result.replace(replacements[i], replacements[i + 1]);
         }
-        // Конвертируем legacy форматы в MiniMessage перед парсингом
-        String converted = convertLegacyFormats(result);
+        String converted = ColorConverter.convertLegacyFormats(result);
         return MM.deserialize(converted);
     }
 
-    /**
-     * Конвертирует legacy форматы цветов в MiniMessage формат
-     */
-    private static String convertLegacyFormats(String message) {
-        if (message == null) return "";
-
-        // Конвертируем &#RRGGBB в <color:#RRGGBB>
-        java.util.regex.Pattern pattern1 = java.util.regex.Pattern.compile("&#([0-9a-fA-F]{6})");
-        java.util.regex.Matcher matcher1 = pattern1.matcher(message);
-        StringBuffer sb1 = new StringBuffer();
-        while (matcher1.find()) {
-            String hex = matcher1.group(1).toLowerCase();
-            matcher1.appendReplacement(sb1, "<color:#" + hex + ">");
-        }
-        matcher1.appendTail(sb1);
-        message = sb1.toString();
-
-        // Конвертируем #RRGGBB в <color:#RRGGBB> (только если не внутри тегов)
-        java.util.regex.Pattern pattern2 = java.util.regex.Pattern.compile("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)");
-        java.util.regex.Matcher matcher2 = pattern2.matcher(message);
-        StringBuffer sb2 = new StringBuffer();
-        while (matcher2.find()) {
-            String hex = matcher2.group(1).toLowerCase();
-            matcher2.appendReplacement(sb2, "<color:#" + hex + ">");
-        }
-        matcher2.appendTail(sb2);
-        message = sb2.toString();
-
-        // Конвертируем §[0-9a-fk-or] в соответствующие MiniMessage теги
-        message = message.replaceAll("§0", "<black>");
-        message = message.replaceAll("§1", "<dark_blue>");
-        message = message.replaceAll("§2", "<dark_green>");
-        message = message.replaceAll("§3", "<dark_aqua>");
-        message = message.replaceAll("§4", "<dark_red>");
-        message = message.replaceAll("§5", "<dark_purple>");
-        message = message.replaceAll("§6", "<gold>");
-        message = message.replaceAll("§7", "<gray>");
-        message = message.replaceAll("§8", "<dark_gray>");
-        message = message.replaceAll("§9", "<blue>");
-        message = message.replaceAll("§a", "<green>");
-        message = message.replaceAll("§b", "<aqua>");
-        message = message.replaceAll("§c", "<red>");
-        message = message.replaceAll("§d", "<light_purple>");
-        message = message.replaceAll("§e", "<yellow>");
-        message = message.replaceAll("§f", "<white>");
-        message = message.replaceAll("§k", "<obfuscated>");
-        message = message.replaceAll("§l", "<bold>");
-        message = message.replaceAll("§m", "<strikethrough>");
-        message = message.replaceAll("§n", "<underlined>");
-        message = message.replaceAll("§o", "<italic>");
-        message = message.replaceAll("§r", "<reset>");
-
-        // Конвертируем &[0-9a-fk-or] в соответствующие MiniMessage теги
-        message = message.replaceAll("&0", "<black>");
-        message = message.replaceAll("&1", "<dark_blue>");
-        message = message.replaceAll("&2", "<dark_green>");
-        message = message.replaceAll("&3", "<dark_aqua>");
-        message = message.replaceAll("&4", "<dark_red>");
-        message = message.replaceAll("&5", "<dark_purple>");
-        message = message.replaceAll("&6", "<gold>");
-        message = message.replaceAll("&7", "<gray>");
-        message = message.replaceAll("&8", "<dark_gray>");
-        message = message.replaceAll("&9", "<blue>");
-        message = message.replaceAll("&a", "<green>");
-        message = message.replaceAll("&b", "<aqua>");
-        message = message.replaceAll("&c", "<red>");
-        message = message.replaceAll("&d", "<light_purple>");
-        message = message.replaceAll("&e", "<yellow>");
-        message = message.replaceAll("&f", "<white>");
-
-        // Конвертируем форматирование
-        message = message.replaceAll("&k", "<obfuscated>");
-        message = message.replaceAll("&l", "<bold>");
-        message = message.replaceAll("&m", "<strikethrough>");
-        message = message.replaceAll("&n", "<underlined>");
-        message = message.replaceAll("&o", "<italic>");
-        message = message.replaceAll("&r", "<reset>");
-
-        return message;
-    }
+    // ========== Утилиты ==========
 
     public static String stripTags(String message) {
         if (message == null) return "";
@@ -159,63 +62,24 @@ public final class ChatFormatter {
         return obj.toString();
     }
 
-    /**
-     * Отправляет сообщение игроку
-     */
     public static void sendMessage(Player player, Component component) {
         if (player != null && component != null) {
             player.sendMessage(component);
         }
     }
 
-    /* ===================== COLORS ===================== */
-
-    /**
-     * Конвертирует различные форматы цветов в MiniMessage формат
-     */
     public static String convertAllColors(String message) {
         if (message == null) return "";
-        return convertLegacyFormats(message);
+        return ColorConverter.convertLegacyFormats(message);
     }
 
-    /* ===================== EMOJIS (REMOVED) ===================== */
-
-    public static String replaceEmojis(String message) {
-        return message; // Эмодзи удалены
-    }
-
-    public static String replaceEmojis(String message, Player player) {
-        return message; // Эмодзи удалены
-    }
-
-    /* ===================== CHAT ===================== */
-
-    /**
-     * Legacy API для ChatManager
-     */
-    public static String processPlayerMessage(
-            String message,
-            Player player,
-            boolean hasColorPermission
-    ) {
-        return message;
-    }
-
-    /* ===================== ANNOUNCE ===================== */
+    // ========== Форматирование сообщений ==========
 
     public static Component formatAnnouncement(String format, String message) {
         return parse(format.replace("<message>", message));
     }
 
-    /* ===================== PM ===================== */
-
-    public static Component formatPmSentNew(
-            String format,
-            Player sender,
-            Player receiver,
-            String message
-    ) {
-        // Получаем отображаемые имена игроков
+    public static Component formatPmSentNew(String format, Player sender, Player receiver, String message) {
         String senderDisplay = getPlayerDisplayName(sender);
         String receiverDisplay = getPlayerDisplayName(receiver);
 
@@ -227,13 +91,7 @@ public final class ChatFormatter {
                 .replace("{message}", message));
     }
 
-    public static Component formatPmReceivedNew(
-            String format,
-            Player sender,
-            Player receiver,
-            String message
-    ) {
-        // Получаем отображаемые имена игроков
+    public static Component formatPmReceivedNew(String format, Player sender, Player receiver, String message) {
         String senderDisplay = getPlayerDisplayName(sender);
         String receiverDisplay = getPlayerDisplayName(receiver);
 
@@ -245,40 +103,45 @@ public final class ChatFormatter {
                 .replace("{message}", message));
     }
 
-    /**
-     * Получает отображаемое имя игрока с градиентом
-     */
+    public static Component format(String format, Component name, Component prefix, Component message) {
+        return MM.deserialize(format)
+                .replaceText(b -> b.matchLiteral("{name}").replacement(name))
+                .replaceText(b -> b.matchLiteral("{prefix}").replacement(prefix))
+                .replaceText(b -> b.matchLiteral("{message}").replacement(message));
+    }
+
+    // ========== Приватные методы ==========
+
     private static String getPlayerDisplayName(Player player) {
         try {
-            // Получаем экземпляр плагина
             com.loki.lochat.LoChat plugin = com.loki.lochat.LoChat.getInstance();
 
-            // Если градиентный модуль включен, используем его
             if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
                 return plugin.getGradientModule().getFormattedName(player);
             }
         } catch (Exception e) {
-            // Если произошла ошибка, логируем и возвращаем обычное имя
             com.loki.lochat.LoChat.getInstance().getLogger().warning(
                 "Ошибка при получении градиентного имени для " + player.getName() + ": " + e.getMessage()
             );
         }
 
-        // Иначе просто имя игрока
         return player.getName();
     }
 
-    /* ===================== FORMAT (Component-based) ===================== */
+    // ========== Deprecated методы для обратной совместимости ==========
 
-    public static Component format(
-            String format,
-            Component name,
-            Component prefix,
-            Component message
-    ) {
-        return MM.deserialize(format)
-                .replaceText(b -> b.matchLiteral("{name}").replacement(name))
-                .replaceText(b -> b.matchLiteral("{prefix}").replacement(prefix))
-                .replaceText(b -> b.matchLiteral("{message}").replacement(message));
+    @Deprecated
+    public static String replaceEmojis(String message) {
+        return message;
+    }
+
+    @Deprecated
+    public static String replaceEmojis(String message, Player player) {
+        return message;
+    }
+
+    @Deprecated
+    public static String processPlayerMessage(String message, Player player, boolean hasColorPermission) {
+        return message;
     }
 }

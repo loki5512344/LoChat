@@ -1,7 +1,7 @@
 package com.loki.lochat.commands.rp;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.CooldownService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.utils.ChatFormatter;
 import net.kyori.adventure.text.Component;
@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DoCommand extends PlayerCommand {
 
-    private final CooldownService cooldownService;
+    private final PlayerService playerService;
 
     public DoCommand(LoChat plugin) {
         super(plugin);
-        this.cooldownService = plugin.getServiceRegistry().get(CooldownService.class);
+        this.playerService = plugin.getServiceRegistry().get(PlayerService.class);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class DoCommand extends PlayerCommand {
         if (!requirePermission(player, "lochat.rp.do")) return true;
 
         int cooldown = plugin.getConfigManager().getInt("rp.cooldowns.do", 0);
-        if (cooldown > 0 && cooldownService.isOnCooldown(player.getUniqueId(), "rp_do", cooldown)) {
-            int remaining = cooldownService.getRemainingCooldown(player.getUniqueId(), "rp_do", cooldown);
+        if (cooldown > 0 && playerService.isOnCooldown(player.getUniqueId(), "rp_do", cooldown)) {
+            int remaining = playerService.getRemainingCooldown(player.getUniqueId(), "rp_do", cooldown);
             String msg = plugin.getConfigManager().getMessagesConfig().getCooldownMessage().replace("{remaining}", String.valueOf(remaining));
             player.sendMessage(ChatFormatter.parse(msg));
             return true;
@@ -54,7 +54,7 @@ public class DoCommand extends PlayerCommand {
         int radius = plugin.getConfigManager().getInt("rp.radius", 100);
         RpUtil.sendToRadius(player, message, radius);
 
-        if (cooldown > 0) cooldownService.setCooldown(player.getUniqueId(), "rp_do");
+        if (cooldown > 0) playerService.setCooldown(player.getUniqueId(), "rp_do");
         plugin.getLogger().info("[DO] " + player.getName() + ": " + description);
         return true;
     }

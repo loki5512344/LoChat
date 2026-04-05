@@ -1,7 +1,7 @@
 package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.IgnoreService;
+import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.ChatFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 public class IgnoreCommand implements CommandExecutor {
 
     private final LoChat plugin;
-    private final IgnoreService ignoreService;
+    private final MessagingService messagingService;
 
     public IgnoreCommand(LoChat plugin) {
         this.plugin = plugin;
-        this.ignoreService = plugin.getServiceRegistry().get(IgnoreService.class);
+        this.messagingService = plugin.getServiceRegistry().get(MessagingService.class);
     }
 
     @Override
@@ -28,9 +28,9 @@ public class IgnoreCommand implements CommandExecutor {
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getPlayerNotFound())); return true; }
         if (target.equals(player)) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.self"))); return true; }
-        if (ignoreService.isIgnoring(player.getUniqueId(), target.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.already-ignored"))); return true; }
+        if (messagingService.isIgnoring(player.getUniqueId(), target.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.already-ignored"))); return true; }
 
-        ignoreService.addIgnore(player.getUniqueId(), target.getUniqueId());
+        messagingService.addIgnore(player.getUniqueId(), target.getUniqueId());
         player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.added", "{player}", target.getName())));
         return true;
     }

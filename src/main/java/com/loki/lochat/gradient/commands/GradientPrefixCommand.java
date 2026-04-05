@@ -6,7 +6,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import com.loki.lochat.gradient.util.GradientConstants;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -83,9 +83,6 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
         }
 
         data.setPrefixEnabled(true);
-        if (module.getLuckPermsHook() != null) {
-            module.getLuckPermsHook().setPrefix(player, DisplayNameUtil.buildColoredPrefix(module, data));
-        }
         saveAndUpdate(player, data);
         msg.send(player, "prefix-enabled");
         return true;
@@ -94,9 +91,6 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     private boolean handleOff(Player player, String[] args) {
         GradientPlayerData data = module.getDataManager().getPlayerData(player.getUniqueId());
         data.setPrefixEnabled(false);
-        if (module.getLuckPermsHook() != null) {
-            module.getLuckPermsHook().removePrefix(player);
-        }
         saveAndUpdate(player, data);
         module.getMessages().send(player, "prefix-disabled");
         return true;
@@ -113,9 +107,6 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
 
         data.setPrefix(null);
         data.setPrefixEnabled(false);
-        if (module.getLuckPermsHook() != null) {
-            module.getLuckPermsHook().removePrefix(player);
-        }
         saveAndUpdate(player, data);
         msg.send(player, "prefix-reset-success");
         return true;

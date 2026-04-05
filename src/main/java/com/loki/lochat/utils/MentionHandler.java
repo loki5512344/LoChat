@@ -1,6 +1,6 @@
 package com.loki.lochat.utils;
 
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

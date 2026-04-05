@@ -27,25 +27,30 @@ public class ServiceRegistry {
         register(ChatService.class, new ChatServiceImpl(plugin, this));
         register(MuteService.class, new MuteServiceImpl(plugin));
 
-        // CooldownService регистрируем раньше PlayerDataService, чтобы передать его как зависимость
-        CooldownServiceImpl cooldownService = new CooldownServiceImpl();
-        register(CooldownService.class, cooldownService);
+        // ✅ NEW: Объединённый PlayerService (Cooldown + PlayerData)
+        PlayerService playerService = new PlayerServiceImpl(plugin);
+        register(PlayerService.class, playerService);
 
         register(MessageService.class, new MessageServiceImpl(plugin, this));
 
-        // Передаём тот же экземпляр CooldownService, а не новый — иначе очистка при выходе не работает
-        register(PlayerDataService.class, new PlayerDataServiceImpl(plugin, cooldownService));
-
-        register(PMService.class, new PMServiceImpl());
-        register(IgnoreService.class, new IgnoreServiceImpl(plugin));
-        SpyService spyService = new SpyServiceImpl(messageConfig);
-        register(SpyService.class, spyService);
+        // ✅ NEW: Объединённый MessagingService (PM + Spy + Ignore)
+        MessagingService messagingService = new MessagingServiceImpl(plugin, messageConfig);
+        register(MessagingService.class, messagingService);
+        
         register(MentionService.class, new MentionServiceImpl(configManager));
         register(NickService.class, new NickServiceImpl(plugin));
         register(PunishmentService.class, new PunishmentServiceImpl(plugin, configManager.getMessagesConfig()));
     }
 
     public <T> void register(Class<T> serviceClass, T implementation) {
+        services.put(serviceClass, implementation);
+    }
+    
+    /**
+     * Регистрирует сервис с возможностью приведения типов (для обратной совместимости)
+     */
+    @SuppressWarnings("unchecked")
+    public void registerCompat(Class<?> serviceClass, Object implementation) {
         services.put(serviceClass, implementation);
     }
 

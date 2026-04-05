@@ -3,6 +3,7 @@ package com.loki.lochat.listener;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessageService;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
+import com.loki.lochat.core.filter.FilterResult;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.utils.ChatFormatter;
@@ -29,66 +30,81 @@ public class ChatEventListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncChatEvent event) {
         Player sender = event.getPlayer();
-
-        // plain нужен только для фильтров — цвета игрока обрабатываем ниже отдельно
         String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
-
-        // ✅ РЕЖИМ ЕДИНОГО ЧАТА: если локальный отключен, весь чат = глобальный
         LoChat loChat = (LoChat) plugin;
-        boolean localEnabled = loChat.getConfigManager().isLocalEnabled();
-        
-        boolean isGlobal;
-        String plainMessage;
-        
-        if (localEnabled) {
-            // Старая логика: "!" = глобальный, без "!" = локальный
-            isGlobal = rawMessage.startsWith("!");
-            plainMessage = isGlobal ? rawMessage.substring(1).stripLeading() : rawMessage;
-        } else {
-            // Новая логика: весь чат глобальный, "!" не нужен
-            isGlobal = true;
-            plainMessage = rawMessage;
+
+        // Определяем режим чата (глобальный/локальный)
+        ChatMode mode = determineChatMode(loChat, rawMessage);
+        if (mode == null) {
+            event.setCancelled(true);
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Этот режим чата отключен!"));
+            return;
         }
 
-        // ✅ Проверка: включен ли глобальный/локальный чат
+        String plainMessage = mode.message;
+        boolean isGlobal = mode.isGlobal;
+
+        // Проверки: мут, кулдаун, фильтры
+        if (!processFilters(event, sender, plainMessage, isGlobal)) {
+            return;
+        }
+
+        // Обработка локального чата (радиус)
+        if (!isGlobal) {
+            handleLocalChat(event, sender, loChat);
+        }
+
+        // Рендеринг и интеграции
+        event.renderer(new EnhancedChatRenderer(plugin, isGlobal));
+        loChat.getDiscordIntegration().sendChatMessage(sender, plainMessage, isGlobal);
+        recordStatistics(loChat, sender, isGlobal);
+    }
+
+    private ChatMode determineChatMode(LoChat loChat, String rawMessage) {
+        boolean localEnabled = loChat.getConfigManager().isLocalEnabled();
+        boolean isGlobal;
+        String message;
+
+        if (localEnabled) {
+            isGlobal = rawMessage.startsWith("!");
+            message = isGlobal ? rawMessage.substring(1).stripLeading() : rawMessage;
+        } else {
+            isGlobal = true;
+            message = rawMessage;
+        }
+
+        // Проверка: включен ли режим
         if (isGlobal && !loChat.getConfigManager().isGlobalEnabled()) {
-            event.setCancelled(true);
-            sender.sendMessage(ChatFormatter.parse("&#CF6679Глобальный чат отключен!"));
-            return;
+            return null;
         }
-        
         if (!isGlobal && !localEnabled) {
-            event.setCancelled(true);
-            sender.sendMessage(ChatFormatter.parse("&#CF6679Локальный чат отключен!"));
-            return;
+            return null;
         }
+
+        return new ChatMode(isGlobal, message);
+    }
+
+    private boolean processFilters(AsyncChatEvent event, Player sender, String plainMessage, boolean isGlobal) {
+        LoChat loChat = (LoChat) plugin;
 
         // Мут, кулдаун
         if (!messageService.processMessage(sender, plainMessage)) {
             event.setCancelled(true);
-            return;
+            return false;
         }
 
         // Капс, реклама, повторы
-        AdvancedMessageFilter.FilterResult filterResult = advancedFilter.filterMessage(sender, plainMessage);
+        FilterResult filterResult = advancedFilter.filterMessage(sender, plainMessage);
         if (!filterResult.allowed()) {
             event.setCancelled(true);
             sender.sendMessage(ChatFormatter.parse(filterResult.blockReason()));
-            return;
+            return false;
         }
 
         String filteredMessage = filterResult.filteredMessage();
 
-        // ── Цвет текста сообщения ({message}) ─────────────────────────────────
-        // Если стиль не задан явно, Paper может унаследовать цвет последнего символа градиента
-        // префикса в строке чата (например у LOCAL последняя буква давала синеватый #4169E1) —
-        // из‑за этого весь текст сообщения «подтягивался» под этот тон. Намеренный цвет текста
-        // задаётся в appearance.yml: prefixes.global.message-color / prefixes.local.message-color (#E8E0F0 по умолчанию).
-        // Решение: всегда выставлять стиль тела сообщения:
-        //   • lochat.chat.colors → MiniMessage / &# / & из текста
-        //   • иначе → parseWithDefaultMessageColor(..., message-color) + экранирование < (см. ChatFormatter)
+        // Цвет текста сообщения
         Component messageComponent;
-
         if (sender.hasPermission("lochat.chat.colors")) {
             messageComponent = ChatFormatter.parse(filteredMessage);
         } else {
@@ -99,46 +115,41 @@ public class ChatEventListener implements Listener {
         }
 
         event.message(messageComponent);
+        return true;
+    }
 
-        // ✅ FIX: Радиус для локального чата - кэшируем локации в async потоке
-        // Paper позволяет читать Location в async, но не модифицировать World
-        if (!isGlobal) {
-            int radius = loChat.getConfigManager().getAppearanceConfig().getLocalRadius();
-            
-            // Безопасно: AsyncChatEvent.viewers() thread-safe, Location.distance() тоже
-            event.viewers().removeIf(v -> {
-                if (!(v instanceof Player p)) return false;
-                
-                // Проверяем мир и расстояние (чтение Location безопасно в async)
-                try {
-                    return !com.loki.lochat.util.DistanceUtil.isInRange(sender, p, radius);
-                } catch (Exception e) {
-                    // На всякий случай ловим исключения
-                    return false;
-                }
-            });
+    private void handleLocalChat(AsyncChatEvent event, Player sender, LoChat loChat) {
+        int radius = loChat.getConfigManager().getAppearanceConfig().getLocalRadius();
 
-            long recipients = event.viewers().stream()
-                    .filter(v -> v instanceof Player p && !p.equals(sender))
-                    .count();
-
-            if (recipients == 0) {
-                String msg = loChat.getConfigManager().getMessagesConfig().getNobodyHeard();
-                sender.getScheduler().run(plugin, t ->
-                        sender.sendMessage(ChatFormatter.parse(msg)), null
-                );
+        event.viewers().removeIf(v -> {
+            if (!(v instanceof Player p)) return false;
+            try {
+                return !com.loki.lochat.utils.DistanceUtil.isInRange(sender, p, radius);
+            } catch (Exception e) {
+                return false;
             }
+        });
+
+        long recipients = event.viewers().stream()
+                .filter(v -> v instanceof Player p && !p.equals(sender))
+                .count();
+
+        if (recipients == 0) {
+            String msg = loChat.getConfigManager().getMessagesConfig().getNobodyHeard();
+            sender.getScheduler().run(plugin, t ->
+                    sender.sendMessage(ChatFormatter.parse(msg)), null
+            );
         }
+    }
 
-        event.renderer(new EnhancedChatRenderer(plugin, isGlobal));
-
-        loChat.getDiscordIntegration().sendChatMessage(sender, filteredMessage, isGlobal);
-
-        // Статистика
-        com.loki.lochat.api.service.PlayerDataService pds =
-                loChat.getServiceRegistry().get(com.loki.lochat.api.service.PlayerDataService.class);
-        if (pds instanceof com.loki.lochat.core.service.PlayerDataServiceImpl impl) {
+    private void recordStatistics(LoChat loChat, Player sender, boolean isGlobal) {
+        com.loki.lochat.api.service.PlayerService playerService =
+                loChat.getServiceRegistry().get(com.loki.lochat.api.service.PlayerService.class);
+        if (playerService instanceof com.loki.lochat.core.service.PlayerServiceImpl impl) {
             impl.recordMessage(sender.getUniqueId(), isGlobal ? "global" : "local");
         }
+    }
+
+    private record ChatMode(boolean isGlobal, String message) {
     }
 }

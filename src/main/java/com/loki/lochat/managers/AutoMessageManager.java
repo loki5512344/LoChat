@@ -1,7 +1,7 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import com.loki.lochat.utils.ChatFormatter;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;

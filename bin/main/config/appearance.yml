@@ -1,16 +1,15 @@
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                          LoChat Chat Appearance Config                     ║
-# ║                           Настройки внешнего вида чата                     ║
-# ║                           Цветовая гамма: Spacelegacy                      ║
-# ║                           #B798A8 → #7858E9 (розово-фиолетовый)            ║
+# ║                    LoChat — config/appearance.yml                            ║
+# ║  In-game chat look: prefixes, format, hover, emoji shortcuts, Discord UI   ║
+# ║  Palette (Spacelegacy): #B798A8 (dusty rose) → #7858E9 (violet)            ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ПРЕФИКСЫ ЧАТА                                   │
+# │ Chat prefixes (gradient label + separator + default message color)         │
 # └─────────────────────────────────────────────────────────────────────────────┘
 #
-#  Градиент: ровно 2 цвета — от и до. Интерполяция плавная между ними.
-#  Вся гамма сервера: светлый #B798A8 (пыльная роза) → тёмный #7858E9 (фиолет)
+# Gradient: use 2+ hex colors; letters are blended smoothly along the label.
+# message-color: used when the player does NOT have lochat.chat.colors (see plugin.yml).
 
 prefixes:
   global:
@@ -36,31 +35,28 @@ prefixes:
     message-color: "#E8E0F0"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                        ФОРМАТ СООБЩЕНИЙ В ЧАТЕ                             │
+# │ Rendered chat line layout                                                    │
 # └─────────────────────────────────────────────────────────────────────────────┘
 #
-# Доступные плейсхолдеры:
-#   {emoji}          - эмодзи префикса (✦ или ◆)
-#   {prefix}         - текст префикса с градиентом (GLOBAL или LOCAL)
-#   {separator}      - разделитель (▶)
-#   {player_prefix}  - префикс игрока из LuckPerms/градиента
-#   {player}         - ник игрока с hover
-#   {message}        - текст сообщения
+# Placeholders:
+#   {emoji}          — prefix emoji (✦ / ◆)
+#   {prefix}         — gradient prefix text (GLOBAL / LOCAL)
+#   {separator}      — separator (e.g. ▶)
+#   {player_prefix}  — LuckPerms / gradient prefix from LoPreff
+#   {player}         — display name + hover (click to /msg)
+#   {message}        — message body
 #
-# Примеры форматов:
-#   По умолчанию:  {emoji} {prefix} {separator} {player} : {message}
-#   Минимальный:   {player_prefix} {player} ▶ {message}
-#   Кастомный:     ✦ {player_prefix} {player} ▶ {message}
+# Examples:
+#   Default:  {emoji} {prefix} {separator} {player} : {message}
+#   Minimal:  {player_prefix} {player} ▶ {message}
+#   Custom:   ✦ {player_prefix} {player} ▶ {message}
 
 chat-format:
-  # Формат для глобального чата
   global: "{emoji} {prefix} {separator} {player} : {message}"
-  
-  # Формат для локального чата
   local: "{emoji} {prefix} {separator} {player} : {message}"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            HOVER ЭФФЕКТЫ                                   │
+# │ Hover shown when pointing at the player name in chat                         │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
 hover:
@@ -77,7 +73,7 @@ hover:
     - "&#B798A8✦ &fНажми чтобы написать"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ЭМОДЗИ ЗАМЕНЫ                                   │
+# │ Text shortcuts → unicode (applied to outgoing chat before URLs / mentions)   │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
 emojis:
@@ -101,7 +97,7 @@ emojis:
   ":shrug:": "¯\\_(ツ)_/¯"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            НАСТРОЙКИ ЧАТА                                  │
+# │ Radius, length limits, and misc chat UI colors (plugin internals)          │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
 chat:
@@ -117,7 +113,7 @@ chat:
     info: "#A485BC"
 
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            DISCORD ИНТЕГРАЦИЯ                              │
+# │ Discord webhook embeds (see also config/discord.yml for webhooks)          │
 # └─────────────────────────────────────────────────────────────────────────────┘
 
 discord:

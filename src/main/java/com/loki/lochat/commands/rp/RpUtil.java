@@ -1,7 +1,7 @@
 package com.loki.lochat.commands.rp;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.util.DistanceUtil;
+import com.loki.lochat.utils.DistanceUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;

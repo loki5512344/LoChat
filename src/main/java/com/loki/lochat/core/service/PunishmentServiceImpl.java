@@ -7,7 +7,7 @@ import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.data.model.WarnEntry;
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import com.loki.lochat.utils.ChatFormatter;
 import com.loki.lochat.utils.TimeFormatter;
 import net.kyori.adventure.text.Component;

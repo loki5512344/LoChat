@@ -1,7 +1,7 @@
 package com.loki.lochat.gradient.listeners;
 
 import com.loki.lochat.gradient.GradientModule;
-import com.loki.lochat.util.FoliaUtil;
+import com.loki.lochat.utils.FoliaUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

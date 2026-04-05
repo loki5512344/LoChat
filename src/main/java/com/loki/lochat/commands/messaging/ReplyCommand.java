@@ -1,9 +1,7 @@
 package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.api.service.IgnoreService;
-import com.loki.lochat.api.service.PMService;
-import com.loki.lochat.api.service.SpyService;
+import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.ChatFormatter;
 import com.loki.lochat.utils.PlayerUtil;
 import org.bukkit.Bukkit;
@@ -20,15 +18,11 @@ import java.util.UUID;
 public class ReplyCommand implements CommandExecutor {
 
     private final LoChat plugin;
-    private final PMService pmService;
-    private final IgnoreService ignoreService;
-    private final SpyService spyService;
+    private final MessagingService messagingService;
 
     public ReplyCommand(LoChat plugin) {
         this.plugin = plugin;
-        this.pmService = plugin.getServiceRegistry().get(PMService.class);
-        this.ignoreService = plugin.getServiceRegistry().get(IgnoreService.class);
-        this.spyService = plugin.getServiceRegistry().get(SpyService.class);
+        this.messagingService = plugin.getServiceRegistry().get(MessagingService.class);
     }
 
     @Override
@@ -43,12 +37,12 @@ public class ReplyCommand implements CommandExecutor {
             return true;
         }
 
-        Optional<UUID> lastUuid = pmService.getLastConversation(player.getUniqueId());
+        Optional<UUID> lastUuid = messagingService.getLastConversation(player.getUniqueId());
         if (lastUuid.isEmpty()) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.no-reply"))); return true; }
 
         Player target = Bukkit.getPlayer(lastUuid.get());
         if (target == null) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.player-offline"))); return true; }
-        if (ignoreService.isIgnoring(target.getUniqueId(), player.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored"))); return true; }
+        if (messagingService.isIgnoring(target.getUniqueId(), player.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored"))); return true; }
 
         String message = String.join(" ", args);
         player.sendMessage(ChatFormatter.formatPmSentNew(plugin.getMessageConfig().getPmFormatSent(), player, target, message));
@@ -57,8 +51,8 @@ public class ReplyCommand implements CommandExecutor {
             Sound sound = PlayerUtil.parseSound(plugin.getConfigManager().getPmSoundType(), null);
             if (sound != null) target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
         }
-        spyService.broadcastPM(player, target, message);
-        pmService.setLastConversation(target.getUniqueId(), player.getUniqueId());
+        messagingService.broadcastPM(player, target, message);
+        messagingService.setLastConversation(target.getUniqueId(), player.getUniqueId());
         if (plugin.getConfigManager().isPmLogEnabled())
             plugin.getLogger().info("[PM] " + player.getName() + " -> " + target.getName() + ": " + message);
         return true;

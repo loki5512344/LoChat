@@ -60,3 +60,7 @@ rp:
     try: 5
     do: 3
     roll: 2
+
+# Модерация: после /lmute выполнить команду от консоли (SimpleVoiceChat: voice mute {player})
+moderation:
+  voice-mute-console-command: ""
