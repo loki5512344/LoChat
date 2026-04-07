@@ -1,7 +1,7 @@
 package com.loki.lochat.gradient.gui;
 
+import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
-import com.loki.lochat.gradient.util.GradientConstants;
 import com.loki.lochat.gradient.util.GradientUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -81,7 +81,7 @@ public final class GradientConfirmGUI implements InventoryHolder {
         }
         skullMeta.lore(lore);
         head.setItemMeta(skullMeta);
-        inventory.setItem(GradientConstants.GUI_PREVIEW_SLOT, head);
+        inventory.setItem(RatConfig.GUI_PREVIEW_SLOT, head);
 
         ItemStack confirm = createItem(Material.LIME_WOOL, "§a§lПодтвердить");
         ItemMeta confirmMeta = confirm.getItemMeta();
@@ -91,7 +91,7 @@ public final class GradientConfirmGUI implements InventoryHolder {
                 .decoration(TextDecoration.ITALIC, false));
         confirmMeta.lore(confirmLore);
         confirm.setItemMeta(confirmMeta);
-        inventory.setItem(GradientConstants.GUI_CONFIRM_SLOT, confirm);
+        inventory.setItem(RatConfig.GUI_CONFIRM_SLOT, confirm);
 
         ItemStack cancel = createItem(Material.RED_WOOL, "§c§lОтменить");
         ItemMeta cancelMeta = cancel.getItemMeta();
@@ -101,7 +101,7 @@ public final class GradientConfirmGUI implements InventoryHolder {
                 .decoration(TextDecoration.ITALIC, false));
         cancelMeta.lore(cancelLore);
         cancel.setItemMeta(cancelMeta);
-        inventory.setItem(GradientConstants.GUI_CANCEL_SLOT, cancel);
+        inventory.setItem(RatConfig.GUI_CANCEL_SLOT, cancel);
     }
 
     private String buildPreview() {

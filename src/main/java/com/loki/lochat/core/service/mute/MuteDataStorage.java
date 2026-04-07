@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loki.lochat.data.model.MuteData;
-import com.loki.lochat.utils.FoliaUtil;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -27,40 +27,24 @@ public class MuteDataStorage {
         this.dataFile = new File(plugin.getDataFolder(), "mutes.json");
     }
     
-    public void addMute(UUID uuid, MuteData data) {
-        mutes.put(uuid, data);
+    public void save(MuteData data) {
+        mutes.put(data.getUuid(), data);
         saveAsync();
     }
-    
-    public MuteData removeMute(UUID uuid) {
+
+    public MuteData remove(UUID uuid) {
         MuteData removed = mutes.remove(uuid);
         if (removed != null) {
             saveAsync();
         }
         return removed;
     }
-    
-    public boolean isMuted(UUID uuid) {
-        if (uuid == null) return false;
 
-        MuteData data = mutes.get(uuid);
-        if (data == null) return false;
-
-        if (!isExpired(data)) return true;
-
-        boolean removed = mutes.remove(uuid, data);
-        if (removed) {
-            saveAsync();
-            plugin.getLogger().info("Mute expired for player " + data.getPlayerName());
-        }
-        return false;
-    }
-    
-    public MuteData getMute(UUID uuid) {
+    public MuteData get(UUID uuid) {
         return mutes.get(uuid);
     }
-    
-    public Map<UUID, MuteData> getAllMutes() {
+
+    public Map<UUID, MuteData> getActiveMutes() {
         mutes.entrySet().removeIf(entry -> isExpired(entry.getValue()));
         return new HashMap<>(mutes);
     }
@@ -90,7 +74,11 @@ public class MuteDataStorage {
         }
     }
     
-    public void save() {
+    public void saveToFile() {
+        save();
+    }
+
+    private void save() {
         try {
             ensureDataFolderExists();
             

@@ -2,7 +2,8 @@ package com.loki.lochat.commands.rp;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.commands.base.PlayerCommand;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.config.RatConfig;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -20,8 +21,6 @@ import java.util.Random;
 public class RollCommand extends PlayerCommand {
 
     private static final Random RANDOM = new Random();
-    private static final int DEFAULT_MAX = 100;
-    private static final int ABSOLUTE_MAX = 1_000_000;
 
     public RollCommand(LoChat plugin) {
         super(plugin);
@@ -32,7 +31,7 @@ public class RollCommand extends PlayerCommand {
                                            @NotNull String label, @NotNull String[] args) {
         if (!requirePermission(player, "lochat.rp.roll")) return true;
 
-        int max = DEFAULT_MAX;
+        int max = RatConfig.ROLL_DEFAULT_MAX;
 
         if (args.length >= 1) {
             try {
@@ -43,7 +42,7 @@ public class RollCommand extends PlayerCommand {
                                     "<red>Минимальное значение кубика: 2</red>")));
                     return true;
                 }
-                if (max > ABSOLUTE_MAX) {
+                if (max > RatConfig.ROLL_ABSOLUTE_MAX) {
                     player.sendMessage(ChatFormatter.parse(
                             plugin.getConfigManager().getString("rp.roll-max-error",
                                     "<red>Максимальное значение кубика: 1000000</red>")));

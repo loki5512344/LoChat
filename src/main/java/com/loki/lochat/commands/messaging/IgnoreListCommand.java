@@ -2,8 +2,8 @@ package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
-import com.loki.lochat.utils.ChatFormatter;
-import com.loki.lochat.utils.PlayerUtil;
+import com.loki.lochat.utils.format.ChatFormatter;
+import com.loki.lochat.utils.player.PlayerUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

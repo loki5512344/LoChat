@@ -1,6 +1,6 @@
 package com.loki.lochat.core.service.mute;
 
-import com.loki.lochat.utils.TimeFormatter;
+import com.loki.lochat.utils.format.TimeFormatter;
 import org.bukkit.entity.Player;
 
 /**

@@ -2,7 +2,7 @@ package com.loki.lochat.commands.nick;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.NickService;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

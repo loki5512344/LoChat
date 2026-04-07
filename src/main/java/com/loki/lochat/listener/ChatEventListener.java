@@ -6,7 +6,7 @@ import com.loki.lochat.core.filter.AdvancedMessageFilter;
 import com.loki.lochat.core.filter.FilterResult;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -124,7 +124,7 @@ public class ChatEventListener implements Listener {
         event.viewers().removeIf(v -> {
             if (!(v instanceof Player p)) return false;
             try {
-                return !com.loki.lochat.utils.DistanceUtil.isInRange(sender, p, radius);
+                return !com.loki.lochat.utils.player.DistanceUtil.isInRange(sender, p, radius);
             } catch (Exception e) {
                 return false;
             }

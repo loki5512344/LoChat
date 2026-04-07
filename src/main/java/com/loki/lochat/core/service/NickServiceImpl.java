@@ -1,7 +1,8 @@
 package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.NickService;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.config.RatConfig;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -21,9 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Реализация сервиса кастомных ников
  */
 public class NickServiceImpl implements NickService {
-    // Настройки
-    private static final int MIN_LENGTH = 3;
-    private static final int MAX_LENGTH = 16;
     private final JavaPlugin plugin;
     private final Map<UUID, String> nicknames = new ConcurrentHashMap<>();
     private final File dataFile;
@@ -150,7 +148,7 @@ public class NickServiceImpl implements NickService {
         String cleanNick = stripColors(nickname);
 
         // Проверка длины
-        if (cleanNick.length() < MIN_LENGTH || cleanNick.length() > MAX_LENGTH) {
+        if (cleanNick.length() < RatConfig.NICK_MIN_LENGTH || cleanNick.length() > RatConfig.NICK_MAX_LENGTH) {
             return false;
         }
 

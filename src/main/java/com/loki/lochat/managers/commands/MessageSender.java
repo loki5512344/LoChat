@@ -1,6 +1,6 @@
 package com.loki.lochat.managers.commands;
 
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;

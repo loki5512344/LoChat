@@ -1,10 +1,14 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.commands.admin.*;
+import com.loki.lochat.commands.admin.chat.*;
+import com.loki.lochat.commands.admin.system.*;
+import com.loki.lochat.commands.admin.broadcast.*;
 import com.loki.lochat.commands.chat.*;
 import com.loki.lochat.commands.messaging.*;
-import com.loki.lochat.commands.moderation.*;
+import com.loki.lochat.commands.moderation.ban.*;
+import com.loki.lochat.commands.moderation.mute.*;
+import com.loki.lochat.commands.moderation.warn.*;
 import com.loki.lochat.commands.nick.*;
 import com.loki.lochat.commands.rp.*;
 import org.bukkit.command.PluginCommand;

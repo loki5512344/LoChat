@@ -3,6 +3,7 @@ package com.loki.lochat.core.registry;
 import com.loki.lochat.api.service.*;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
+import com.loki.lochat.core.factory.ServiceFactory;
 import com.loki.lochat.core.service.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +26,7 @@ public class ServiceRegistry {
 
     private void registerServicesWithDeps(ConfigManager configManager, MessageConfig messageConfig) {
         register(ChatService.class, new ChatServiceImpl(plugin, this));
-        register(MuteService.class, new MuteServiceImpl(plugin));
+        register(MuteService.class, ServiceFactory.createMuteService(plugin));
 
         // ✅ NEW: Объединённый PlayerService (Cooldown + PlayerData)
         PlayerService playerService = new PlayerServiceImpl(plugin);
@@ -36,7 +37,7 @@ public class ServiceRegistry {
         // ✅ NEW: Объединённый MessagingService (PM + Spy + Ignore)
         MessagingService messagingService = new MessagingServiceImpl(plugin, messageConfig);
         register(MessagingService.class, messagingService);
-        
+
         register(MentionService.class, new MentionServiceImpl(configManager));
         register(NickService.class, new NickServiceImpl(plugin));
         register(PunishmentService.class, new PunishmentServiceImpl(plugin, configManager.getMessagesConfig()));

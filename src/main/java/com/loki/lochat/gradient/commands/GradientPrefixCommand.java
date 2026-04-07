@@ -1,13 +1,13 @@
 package com.loki.lochat.gradient.commands;
 
+import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.config.GradientConfig;
 import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.utils.FoliaUtil;
-import com.loki.lochat.gradient.util.GradientConstants;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -169,10 +169,10 @@ public class GradientPrefixCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean checkCooldown(Player player, int cooldownSec, long lastChange) {
-        long cooldownMs = cooldownSec * GradientConstants.MILLIS_PER_SECOND;
+        long cooldownMs = cooldownSec * RatConfig.MILLIS_PER_SECOND;
         long timePassed = System.currentTimeMillis() - lastChange;
         if (timePassed < cooldownMs) {
-            long remaining = (cooldownMs - timePassed) / GradientConstants.MILLIS_PER_SECOND;
+            long remaining = (cooldownMs - timePassed) / RatConfig.MILLIS_PER_SECOND;
             module.getMessages().send(player, "cooldown", "time", String.valueOf(remaining));
             return false;
         }

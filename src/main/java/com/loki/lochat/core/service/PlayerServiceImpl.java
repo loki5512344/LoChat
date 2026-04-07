@@ -1,7 +1,7 @@
 package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.PlayerService;
-import com.loki.lochat.utils.FoliaUtil;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 

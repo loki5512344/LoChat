@@ -1,8 +1,8 @@
 package com.loki.lochat.renderer;
 
 import com.loki.lochat.renderer.components.*;
-import com.loki.lochat.utils.MentionHandler;
-import com.loki.lochat.utils.TextFormatter;
+import com.loki.lochat.utils.player.MentionHandler;
+import com.loki.lochat.utils.format.TextFormatter;
 import io.papermc.paper.chat.ChatRenderer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -112,7 +112,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
         if (gradientModule != null && gradientModule.isEnabled()) {
             String prefix = gradientModule.getPrefix(player);
             if (!prefix.isEmpty()) {
-                return com.loki.lochat.utils.ChatFormatter.parse(prefix);
+                return com.loki.lochat.utils.format.ChatFormatter.parse(prefix);
             }
         }
         
@@ -126,7 +126,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
         if (gradientModule != null && gradientModule.isEnabled()) {
             String suffix = gradientModule.getSuffix(player);
             if (!suffix.isEmpty()) {
-                return com.loki.lochat.utils.ChatFormatter.parse(suffix);
+                return com.loki.lochat.utils.format.ChatFormatter.parse(suffix);
             }
         }
         
@@ -184,7 +184,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
                     .replace("{health}",   String.valueOf(Math.round(player.getHealth())))
                     .replace("{food}",     String.valueOf(player.getFoodLevel()));
 
-            hoverBuilder.append(com.loki.lochat.utils.ChatFormatter.parse(line));
+            hoverBuilder.append(com.loki.lochat.utils.format.ChatFormatter.parse(line));
             if (i < hoverLines.size() - 1) hoverBuilder.append(Component.newline());
         }
 

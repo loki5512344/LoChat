@@ -1,12 +1,13 @@
 package com.loki.lochat.gradient.commands;
 
+import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.commands.handlers.ColorCommandHandler;
 import com.loki.lochat.gradient.commands.handlers.PrefixCommandHandler;
 import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.utils.FoliaUtil;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -26,10 +27,6 @@ import java.util.List;
  */
 public class GradientAdminCommand implements CommandExecutor, TabCompleter {
 
-    private static final List<String> PRESET_COLORS = Arrays.asList(
-        "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"
-    );
-    
     private final GradientModule module;
     private final ColorCommandHandler colorHandler;
     private final PrefixCommandHandler prefixHandler;
@@ -149,7 +146,7 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length >= 3 && args[0].equalsIgnoreCase("setcolor")) {
-            return PRESET_COLORS.stream()
+            return RatConfig.PRESET_COLORS.stream()
                     .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
                     .toList();
         }

@@ -1,13 +1,13 @@
 package com.loki.lochat.gradient.commands;
 
+import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.config.GradientConfig;
 import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.utils.FoliaUtil;
-import com.loki.lochat.gradient.util.GradientConstants;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import com.loki.lochat.gradient.util.GradientUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,10 +26,6 @@ import java.util.function.BiFunction;
  */
 public class GradientColorCommand implements CommandExecutor, TabCompleter {
 
-    private static final List<String> PRESET_COLORS = List.of(
-            "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3",
-            "#FF69B4", "#00FFFF", "#FFD700", "#FFFFFF", "#000000"
-    );
     private static final Set<String> SUB_COMMANDS = Set.of("on", "off", "reset", "copy");
     private final GradientModule module;
     private final Map<String, BiFunction<Player, String[], Boolean>> subCommands = new HashMap<>();
@@ -197,10 +193,10 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean checkCooldown(Player player, int cooldownSec, long lastChange) {
-        long cooldownMs = cooldownSec * GradientConstants.MILLIS_PER_SECOND;
+        long cooldownMs = cooldownSec * RatConfig.MILLIS_PER_SECOND;
         long timePassed = System.currentTimeMillis() - lastChange;
         if (timePassed < cooldownMs) {
-            long remaining = (cooldownMs - timePassed) / GradientConstants.MILLIS_PER_SECOND;
+            long remaining = (cooldownMs - timePassed) / RatConfig.MILLIS_PER_SECOND;
             module.getMessages().send(player, "cooldown", "time", String.valueOf(remaining));
             return false;
         }
@@ -233,7 +229,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String input = args[0].toLowerCase();
             List<String> completions = new ArrayList<>(SUB_COMMANDS);
-            completions.addAll(PRESET_COLORS);
+            completions.addAll(RatConfig.PRESET_COLORS);
             return completions.stream().filter(s -> s.toLowerCase().startsWith(input)).toList();
         }
 
@@ -245,7 +241,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!SUB_COMMANDS.contains(firstArg) && args.length <= module.getConfig().getMaxColors()) {
-            return PRESET_COLORS.stream()
+            return RatConfig.PRESET_COLORS.stream()
                     .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
                     .toList();
         }

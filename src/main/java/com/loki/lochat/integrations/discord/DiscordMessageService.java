@@ -1,7 +1,7 @@
 package com.loki.lochat.integrations.discord;
 
 import com.loki.lochat.integrations.DiscordWebhook;
-import com.loki.lochat.utils.FoliaUtil;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

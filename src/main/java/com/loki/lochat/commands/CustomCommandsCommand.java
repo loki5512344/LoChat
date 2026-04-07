@@ -2,7 +2,7 @@ package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.managers.CustomCommandManager;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -1,12 +1,12 @@
 package com.loki.lochat.gradient.listeners;
 
+import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
-import com.loki.lochat.utils.FoliaUtil;
-import com.loki.lochat.gradient.util.GradientConstants;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,8 +38,8 @@ public class GradientGUIListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player player) || !player.equals(gui.getPlayer())) return;
 
         switch (event.getRawSlot()) {
-            case GradientConstants.GUI_CONFIRM_SLOT -> handleConfirm(player, gui);
-            case GradientConstants.GUI_CANCEL_SLOT -> handleCancel(player);
+            case RatConfig.GUI_CONFIRM_SLOT -> handleConfirm(player, gui);
+            case RatConfig.GUI_CANCEL_SLOT -> handleCancel(player);
         }
     }
 

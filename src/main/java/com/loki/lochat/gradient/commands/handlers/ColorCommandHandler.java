@@ -5,7 +5,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.gradient.util.GradientUtil;
-import com.loki.lochat.utils.FoliaUtil;
+import com.loki.lochat.utils.platform.FoliaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

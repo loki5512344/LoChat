@@ -4,7 +4,7 @@ import com.loki.lochat.api.filter.MessageFilter;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.ChatMessage;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -3,7 +3,7 @@ package com.loki.lochat.commands.rp;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.commands.base.PlayerCommand;
-import com.loki.lochat.utils.ChatFormatter;
+import com.loki.lochat.utils.format.ChatFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;

@@ -1,5 +1,7 @@
 package com.loki.lochat.utils;
 
+import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import org.junit.jupiter.api.Test;
 
