@@ -34,8 +34,8 @@ public class ServiceRegistry {
 
         register(MessageService.class, new MessageServiceImpl(plugin, this));
 
-        // ✅ NEW: Объединённый MessagingService (PM + Spy + Ignore)
-        MessagingService messagingService = new MessagingServiceImpl(plugin, messageConfig);
+        // ✅ NEW: Объединённый MessagingService (PM + Spy + Ignore) через фабрику
+        MessagingService messagingService = ServiceFactory.createMessagingService(plugin, messageConfig);
         register(MessagingService.class, messagingService);
 
         register(MentionService.class, new MentionServiceImpl(configManager));
