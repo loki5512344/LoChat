@@ -9,7 +9,6 @@ public class SoundsConfig extends BaseConfig {
 
     public SoundsConfig(JavaPlugin plugin) {
         super(plugin, "sounds.yml", true);
-        init(); // ✅ Явная инициализация
     }
 
     // ── Звуки упоминаний ────────────────────────────────────────────────────────

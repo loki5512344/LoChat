@@ -27,6 +27,7 @@ public class MessagingServiceImpl implements MessagingService {
         this.pmService = new PrivateMessageService();
         this.spyService = new SpyService(messageConfig);
         this.ignoreService = new IgnoreService(plugin);
+        this.ignoreService.init();
     }
 
     // ========== PM Delegation ==========

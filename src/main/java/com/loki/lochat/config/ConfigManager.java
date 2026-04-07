@@ -35,7 +35,12 @@ public class ConfigManager {
         this.filtersConfig = new FiltersConfig(plugin);
         this.soundsConfig = new SoundsConfig(plugin);
 
+        // Инициализируем все конфиги
         this.appearanceConfig.init();
+        this.messagesConfig.init();
+        this.muteConfig.init();
+        this.filtersConfig.init();
+        this.soundsConfig.init();
 
         loader.updateConfig();
     }

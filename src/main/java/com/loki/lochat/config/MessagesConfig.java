@@ -9,7 +9,6 @@ public class MessagesConfig extends BaseConfig {
 
     public MessagesConfig(JavaPlugin plugin) {
         super(plugin, "messages.yml", true); // true = в папке config/
-        init(); // ✅ Явная инициализация
     }
 
     // ── Общие сообщения ────────────────────────────────────────────────────────

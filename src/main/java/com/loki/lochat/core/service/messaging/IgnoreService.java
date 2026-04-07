@@ -22,6 +22,9 @@ public class IgnoreService {
     public IgnoreService(JavaPlugin plugin) {
         this.plugin = plugin;
         this.ignoreFile = new File(plugin.getDataFolder(), "ignores.yml");
+    }
+    
+    public void init() {
         load();
     }
 

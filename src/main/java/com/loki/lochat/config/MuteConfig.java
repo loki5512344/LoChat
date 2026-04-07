@@ -9,7 +9,6 @@ public class MuteConfig extends BaseConfig {
 
     public MuteConfig(JavaPlugin plugin) {
         super(plugin, "mute.yml", true);
-        init(); // ✅ Явная инициализация
     }
 
     // ── Основные настройки ──────────────────────────────────────────────────────

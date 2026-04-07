@@ -11,7 +11,6 @@ public class FiltersConfig extends BaseConfig {
 
     public FiltersConfig(JavaPlugin plugin) {
         super(plugin, "filters.yml", true);
-        init(); // ✅ Явная инициализация
     }
 
     // ── Капс ────────────────────────────────────────────────────────────────────
