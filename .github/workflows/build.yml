@@ -20,27 +20,29 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build & Test
-        run: ./gradlew build --no-daemon
+        run: chmod +x gradlew && ./gradlew build --no-daemon
 
       - name: JaCoCo Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html/
 
       - name: Test Results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: build/test-results/
 
       - name: Plugin JAR
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: LoChat-Plugin
