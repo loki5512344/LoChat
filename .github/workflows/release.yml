@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        run: ./gradlew clean build --no-daemon
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "LoChat ${{ github.ref_name }}"
+          body: |
+            ## 🚀 LoChat ${{ github.ref_name }}
+
+            - Сервер: Paper/Folia 1.21+
+            - Java: 21
+
+            ### 📦 Установка
+            Скопируйте `LoChat-*.jar` в папку `plugins/` сервера и перезагрузите.
+
+            ### 🔧 Зависимости (опционально)
+            - PlaceholderAPI
+            - PlayerPoints
+            - LuckPerms
+            - SkinsRestorer
+
+            Полный список изменений: [Commits](https://github.com/loki5512344/LoChat/commits/main)
+          files: build/libs/LoChat-*.jar
+          generateReleaseNotes: true
