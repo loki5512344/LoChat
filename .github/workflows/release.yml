@@ -22,6 +22,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -29,25 +30,34 @@ jobs:
       - name: Build
         run: chmod +x gradlew && ./gradlew clean build --no-daemon
 
+      - name: Generate Checksums
+        run: |
+          cd build/libs/
+          sha256sum LoChat-*.jar > LoChat-${GITHUB_REF_NAME#v}.jar.sha256
+          cat LoChat-${GITHUB_REF_NAME#v}.jar.sha256
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: "LoChat ${{ github.ref_name }}"
           body: |
-            ## 🚀 LoChat ${{ github.ref_name }}
+            ## LoChat ${{ github.ref_name }}
 
-            - Сервер: Paper/Folia 1.21+
-            - Java: 21
+            **Server:** Paper/Folia 1.21+ · **Java:** 21
 
-            ### 📦 Установка
-            Скопируйте `LoChat-*.jar` в папку `plugins/` сервера и перезагрузите.
+            ### Installation
+            Copy the `LoChat-*.jar` into your server's `plugins/` folder and restart.
 
-            ### 🔧 Зависимости (опционально)
+            ### Optional Dependencies
             - PlaceholderAPI
             - PlayerPoints
             - LuckPerms
             - SkinsRestorer
+            - LibertyBans
 
-            Полный список изменений: [Commits](https://github.com/loki5512344/LoChat/commits/main)
-          files: build/libs/LoChat-*.jar
+            ### Changelog
+            See the full list of changes below.
+          files: |
+            build/libs/LoChat-*.jar
+            build/libs/LoChat-*.sha256
           generate_release_notes: true
