@@ -35,7 +35,8 @@ public class DiscordCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         switch (args[0].toLowerCase()) {
-            case "status" -> sender.sendMessage(ChatFormatter.parse(discord.isEnabled() ? "&#9878C9Discord &#7858E9включён" : "&#9878C9Discord &#CF6679отключён"));
+            case "status" -> sender.sendMessage(ChatFormatter.parse(
+                    discord.isEnabled() ? "&#9878C9Discord &#7858E9включён" : "&#9878C9Discord &#CF6679отключён"));
             case "reload" -> {
                 try {
                     discord.reload();

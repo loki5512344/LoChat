@@ -96,7 +96,8 @@ public class MessagesConfig extends BaseConfig {
     }
 
     public String getMuteTimeHelp() {
-        return getConfig().getString("commands.mute.time_help", "&#9878C9Время: &#7858E91d&#9878C9, &#7858E92h&#9878C9, &#7858E930m&#9878C9, &#7858E960s&#9878C9, &#7858E9perm");
+        return getConfig().getString("commands.mute.time_help",
+                "&#9878C9Время: &#7858E91d&#9878C9, &#7858E92h&#9878C9, &#7858E930m&#9878C9, &#7858E960s&#9878C9, &#7858E9perm");
     }
 
     public String getMuteSilentHelp() {
@@ -192,7 +193,8 @@ public class MessagesConfig extends BaseConfig {
     }
 
     public String getSilentWarnStaff() {
-        return getConfig().getString("moderation.silent_warn_staff", "&#B798A8[&#9878C9ТИХИЙ ВАРН&#B798A8] &#7858E9{player}&#9878C9: &#B798A8{reason}");
+        return getConfig().getString("moderation.silent_warn_staff",
+                "&#B798A8[&#9878C9ТИХИЙ ВАРН&#B798A8] &#7858E9{player}&#9878C9: &#B798A8{reason}");
     }
 
     public String getBanUsage() {

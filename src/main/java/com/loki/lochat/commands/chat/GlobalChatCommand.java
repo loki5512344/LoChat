@@ -33,7 +33,8 @@ public class GlobalChatCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("globalchat")) {
             if (args.length > 0 && args[0].equalsIgnoreCase("toggle")) {
                 boolean enabled = chatService.toggleGlobalChat(player.getUniqueId());
-                player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get(enabled ? "global.toggled-on" : "global.toggled-off")));
+                player.sendMessage(ChatFormatter.parse(
+                        plugin.getMessageConfig().get(enabled ? "global.toggled-on" : "global.toggled-off")));
             } else {
                 player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/globalchat toggle")));
             }

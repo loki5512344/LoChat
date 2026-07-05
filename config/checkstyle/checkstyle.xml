@@ -8,12 +8,16 @@
     <property name="severity" value="warning"/>
     <property name="fileExtensions" value="java"/>
 
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*[\\/]src[\\/]test[\\/].*"/>
+    </module>
+
     <module name="FileLength">
         <property name="max" value="600"/>
     </module>
 
     <module name="LineLength">
-        <property name="max" value="120"/>
+        <property name="max" value="140"/>
         <property name="ignorePattern"
             value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>

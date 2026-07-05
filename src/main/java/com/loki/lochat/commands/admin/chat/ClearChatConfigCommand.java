@@ -50,7 +50,8 @@ public class ClearChatConfigCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение установлено: &f" + msg));
             }
             case "status"  -> {
-                sender.sendMessage(ChatFormatter.parse("&#B798A8Включено: " + (plugin.getConfigManager().isClearChatMessageEnabled() ? "&#7858E9да" : "&#CF6679нет")));
+                sender.sendMessage(ChatFormatter.parse("&#B798A8Включено: "
+                        + (plugin.getConfigManager().isClearChatMessageEnabled() ? "&#7858E9да" : "&#CF6679нет")));
                 sender.sendMessage(ChatFormatter.parse("&#B798A8Текст: &f" + plugin.getConfigManager().getClearChatMessage()));
             }
             default -> sender.sendMessage(ChatFormatter.parse("&#CF6679Неизвестный аргумент"));

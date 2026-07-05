@@ -101,7 +101,8 @@ public class GradientDataManager {
 
         if (useSqlite && sqliteConnection != null) {
             try (PreparedStatement stmt = sqliteConnection.prepareStatement(
-                    "SELECT prefix, colors, color_enabled, prefix_enabled, prefix_purchased, last_color_change, last_prefix_change FROM gradient_data WHERE uuid = ?")) {
+                    "SELECT prefix, colors, color_enabled, prefix_enabled, "
+                    + "prefix_purchased, last_color_change, last_prefix_change FROM gradient_data WHERE uuid = ?")) {
                 stmt.setString(1, uuid.toString());
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
@@ -132,7 +133,9 @@ public class GradientDataManager {
 
         if (useSqlite && sqliteConnection != null) {
             try (PreparedStatement stmt = sqliteConnection.prepareStatement(
-                    "INSERT OR REPLACE INTO gradient_data (uuid, prefix, colors, color_enabled, prefix_enabled, prefix_purchased, last_color_change, last_prefix_change) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    "INSERT OR REPLACE INTO gradient_data "
+                    + "(uuid, prefix, colors, color_enabled, prefix_enabled, "
+                    + "prefix_purchased, last_color_change, last_prefix_change) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
                 stmt.setString(1, uuid.toString());
                 stmt.setString(2, data.getPrefix());
                 stmt.setString(3, data.hasColors() ? String.join(",", data.getColors()) : "");

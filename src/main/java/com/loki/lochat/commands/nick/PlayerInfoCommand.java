@@ -86,7 +86,8 @@ public class PlayerInfoCommand implements CommandExecutor, TabCompleter {
             String tag = w.silent ? "&#B798A8[тихий] " : "";
             String reason = w.reason != null ? w.reason : "—";
             long t = w.time;
-            sender.sendMessage(ChatFormatter.parse(tag + "&#9878C9• &7" + formatTime(t) + " &#B798A8от &#7858E9" + w.moderator + "&#9878C9: &f" + reason));
+            sender.sendMessage(ChatFormatter.parse(
+                    tag + "&#9878C9• &7" + formatTime(t) + " &#B798A8от &#7858E9" + w.moderator + "&#9878C9: &f" + reason));
         }
 
         BanRecord ban = punishmentService.getActiveBan(uuid);

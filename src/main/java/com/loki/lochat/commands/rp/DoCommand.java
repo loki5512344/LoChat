@@ -47,8 +47,8 @@ public class DoCommand extends PlayerCommand {
         }
 
         String description = String.join(" ", args);
-        String format = plugin.getConfigManager().getString("rp.do-format",
-                "<dark_gray>[</dark_gray><gray>Сцена</gray><dark_gray>]</dark_gray> <white>{description}</white> <dark_gray>({player})</dark_gray>");
+        String format = plugin.getConfigManager().getString("rp.do-format", "<dark_gray>[</dark_gray>"
+                + "<gray>Сцена</gray><dark_gray>]</dark_gray> <white>{description}</white> <dark_gray>({player})</dark_gray>");
 
         String displayName = RpUtil.getDisplayName(plugin, player);
         Component message = ChatFormatter.parse(

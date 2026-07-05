@@ -62,8 +62,9 @@ public class RollCommand extends PlayerCommand {
 
         int result = RANDOM.nextInt(max) + 1; // 1..max включительно
 
-        String format = plugin.getConfigManager().getString("rp.roll-format",
-                "<gray>* </gray><white>{player}</white><gray> бросает кубик и получает </gray><yellow><bold>{result}</bold></yellow><gray> из </gray><yellow>{max}</yellow>");
+        String format = plugin.getConfigManager().getString("rp.roll-format", "<gray>* </gray>"
+                + "<white>{player}</white><gray> бросает кубик и получает </gray><yellow><bold>{result}</bold></yellow>"
+                + "<gray> из </gray><yellow>{max}</yellow>");
 
         String displayName = RpUtil.getDisplayName(plugin, player);
         Component message = ChatFormatter.parse(

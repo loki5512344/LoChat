@@ -45,7 +45,8 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
                 } else {
                     var cmds = plugin.getCustomCommandManager().getCommands();
                     sender.sendMessage(ChatFormatter.parse("&#B798A8Кастомные команды &#9878C9(" + cmds.size() + "&#9878C9):"));
-                    cmds.values().forEach(c -> sender.sendMessage(ChatFormatter.parse("&#7858E9/" + c.name() + " &#B798A8(" + c.type() + ")")));
+                    cmds.values().forEach(c -> sender.sendMessage(
+                            ChatFormatter.parse("&#7858E9/" + c.name() + " &#B798A8(" + c.type() + ")")));
                 }
             }
             default -> sender.sendMessage(ChatFormatter.parse("&#CF6679Неизвестная команда"));

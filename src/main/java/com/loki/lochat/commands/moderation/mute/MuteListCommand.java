@@ -44,7 +44,8 @@ public class MuteListCommand implements CommandExecutor {
         for (Map.Entry<UUID, MuteData> e : mutes.entrySet()) {
             MuteData d = e.getValue();
             String name = d.getPlayerName() != null ? d.getPlayerName() : Bukkit.getOfflinePlayer(e.getKey()).getName();
-            String time = d.isPermanent() ? "&#CF6679навсегда" : "&#7858E9" + muteService.formatTime(d.getEndTime() - System.currentTimeMillis());
+            String time = d.isPermanent() ? "&#CF6679навсегда"
+                    : "&#7858E9" + muteService.formatTime(d.getEndTime() - System.currentTimeMillis());
             sender.sendMessage("&#9878C9" + i + ". &f" + name + " &#B798A8— " + time);
             sender.sendMessage("   &#B798A8Причина: &f" + (d.getReason() != null ? d.getReason() : "—"));
             sender.sendMessage("   &#B798A8Выдал: &#7858E9" + d.getMutedBy() + " &#B798A8(" + fmt.format(new Date(d.getMutedAt())) + ")");

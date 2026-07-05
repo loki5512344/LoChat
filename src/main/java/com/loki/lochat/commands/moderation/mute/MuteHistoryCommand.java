@@ -56,12 +56,15 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        sender.sendMessage("&#7858E9▬▬▬▬▬ &#B798A8История мутов &#9878C9" + args[0] + " &#9878C9(" + history.size() + "&#9878C9) &#7858E9▬▬▬▬▬");
+        sender.sendMessage("&#7858E9▬▬▬▬▬ &#B798A8История мутов &#9878C9" + args[0]
+                + " &#9878C9(" + history.size() + "&#9878C9) &#7858E9▬▬▬▬▬");
         int idx = 1;
         for (int i = history.size() - 1; i >= 0 && idx <= 10; i--, idx++) {
             MuteData.MuteHistoryEntry e = history.get(i);
             String status = e.unmuted ? "&#9878C9Размучен" : (e.duration == 0 ? "&#CF6679Активен (навсегда)" :
-                    System.currentTimeMillis() > e.mutedAt + e.duration ? "&#B798A8Истёк" : "&#CF6679Активен (" + muteService.formatTime(e.mutedAt + e.duration - System.currentTimeMillis()) + ")");
+                    System.currentTimeMillis() > e.mutedAt + e.duration ? "&#B798A8Истёк"
+                            : "&#CF6679Активен (" + muteService.formatTime(
+                                    e.mutedAt + e.duration - System.currentTimeMillis()) + ")");
             sender.sendMessage("&#9878C9" + idx + ". &f" + fmt.format(new Date(e.mutedAt)) + " &#B798A8— " + status);
             sender.sendMessage("   &#B798A8Длительность: &f" + (e.duration == 0 ? "навсегда" : muteService.formatTime(e.duration)));
             sender.sendMessage("   &#B798A8Причина: &f" + (e.reason != null ? e.reason : "—") + "  &#B798A8Выдал: &#7858E9" + e.mutedBy);
