@@ -1,110 +1,73 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                           Discord Integration                                ║
-# ║                        Интеграция с Discord                                 ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
+# LoChat Discord integration
+# Relays chat messages and server events to a Discord channel via webhook.
 
-# Включить интеграцию с Discord
+# ── General ────────────────────────────────────────────────────────────────────
+
 enabled: true
 
-# Настройки вебхука
+# ── Webhook ────────────────────────────────────────────────────────────────────
+
 webhook:
-  # URL вебхука Discord (получить в настройках канала)
   url: "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
-  
-  # Имя бота в Discord
-  username: "Minecraft Server"
-  
-  # Аватар бота (URL изображения)
-  avatar_url: "https://mc-heads.net/avatar/minecraft/64"
+  username: "Minecraft"
+  avatar-url: "https://mc-heads.net/avatar/minecraft/64"
 
-# Настройки чата
+# ── Chat Relay ─────────────────────────────────────────────────────────────────
+
 chat:
-  # Отправлять сообщения чата в Discord
   enabled: true
-  
-  # Отправлять только глобальный чат (true) или весь чат (false)
-  global_only: true
-  
-  # Формат сообщения чата
+  global-only: true
   format: "**{player}**: {message}"
-  
-  # Цвет embed для сообщений чата (hex без #)
-  embed_color: "5865F2"
-  
-  # Использовать embed или обычное сообщение
-  use_embed: true
+  embed-color: "5865F2"
+  use-embed: true
 
-# Настройки событий игроков
+# ── Events ─────────────────────────────────────────────────────────────────────
+
 events:
-  # Отправлять события входа/выхода
   enabled: true
-  
-  # Настройки входа на сервер
-  # {player} - ник игрока
+
   join:
     enabled: true
-    title: "🟢 Игрок зашел на сервер"
-    description: "**{player}** присоединился к серверу"
+    title: "Player joined"
+    description: "**{player}** joined the server"
     color: "00FF00"
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
-    
-  # Настройки выхода с сервера
-  # {player} - ник игрока
+
   quit:
     enabled: true
-    title: "🔴 Игрок покинул сервер"
-    description: "**{player}** покинул сервер"
+    title: "Player left"
+    description: "**{player}** left the server"
     color: "FF0000"
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
-    
-  # Настройки смерти игрока
-  # {player} - ник игрока
-  # {killer} - ник убийцы (если есть)
-  # {weapon} - название оружия (если есть)
-  # {death_message} - стандартное сообщение смерти
+
   death:
     enabled: true
-    # Убийство игроком
-    player_kill:
-      title: "⚔️ PvP убийство"
-      description: "**{player}** был убит игроком **{killer}** с помощью **{weapon}**"
+    player-kill:
+      title: "PvP kill"
+      description: "**{player}** was killed by **{killer}** using **{weapon}**"
       color: "FF0000"
-    # Смерть от моба
-    mob_kill:
-      title: "💀 Смерть от моба"
-      description: "**{player}** был убит мобом **{killer}**"
+    mob-kill:
+      title: "Mob kill"
+      description: "**{player}** was slain by **{killer}**"
       color: "800080"
-    # Обычная смерть
     default:
-      title: "💀 Смерть игрока"
+      title: "Player died"
       description: "**{player}** {death_message}"
       color: "800080"
     thumbnail: "https://mc-heads.net/avatar/{player}/64"
 
-# Настройки фильтрации
-filter:
-  # Игнорировать сообщения от ботов
-  ignore_bots: true
-  
-  # Минимальная длина сообщения для отправки
-  min_message_length: 1
-  
-  # Максимальная длина сообщения (обрезать если больше)
-  max_message_length: 2000
-  
-  # Заменять @everyone и @here на безопасные варианты
-  sanitize_mentions: true
+# ── Filtering ──────────────────────────────────────────────────────────────────
 
-# Настройки производительности
+filter:
+  ignore-bots: true
+  min-message-length: 1
+  max-message-length: 2000
+  sanitize-mentions: true
+
+# ── Performance ────────────────────────────────────────────────────────────────
+
 performance:
-  # Асинхронная отправка (рекомендуется)
   async: true
-  
-  # Таймаут подключения (секунды)
   timeout: 10
-  
-  # Повторные попытки при ошибке
-  retry_attempts: 3
-  
-  # Задержка между попытками (миллисекунды)
-  retry_delay: 1000
+  retry-attempts: 3
+  retry-delay: 1000

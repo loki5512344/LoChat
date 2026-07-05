@@ -1,419 +1,170 @@
-# TODO — LoChat Critical Fixes & Config Refactor
+# LoChat Development TODO
 
-> Дата: 17.03.2026
-> Статус: ✅ КРИТИЧНЫЕ БАГИ ИСПРАВЛЕНЫ | ✅ РЕФАКТОРИНГ КОНФИГОВ ЗАВЕРШЁН
-
----
-
-## ✅ ИСПРАВЛЕНО
-
-### 1. ✅ УТЕЧКА ПАМЯТИ: Scheduled Tasks
-**Статус:** ИСПРАВЛЕНО
-- AutoMessageManager теперь сохраняет ссылку на task и отменяет в `stop()`
-- Добавлена проверка и отмена старой задачи перед созданием новой
-
-### 2. ✅ УТЕЧКА ПАМЯТИ: Event Listeners
-**Статус:** ИСПРАВЛЕНО
-- Добавлен `HandlerList.unregisterAll(this)` в `LoChat.onDisable()`
-- Listeners корректно отменяются при выключении плагина
-
-### 3. ✅ УТЕЧКА ПАМЯТИ: MuteHistoryManager
-**Статус:** ИСПРАВЛЕНО
-- Добавлен лимит MAX_HISTORY_PER_PLAYER = 50 записей
-- Старые записи автоматически удаляются
-
-### 4. ✅ RACE CONDITION: AsyncChatEvent
-**Статус:** ИСПРАВЛЕНО
-- Добавлен try-catch для безопасной работы с Location в async
-- Кэшируются данные перед async операциями
-
-### 5. ✅ КОМПИЛЯЦИЯ: EnhancedChatRenderer
-**Статус:** ИСПРАВЛЕНО
-- Исправлена переменная `appearanceCfg` → `cfg.getAppearanceConfig()`
-
-### 6. ✅ РЕФАКТОРИНГ КОНФИГОВ
-**Статус:** ЗАВЕРШЁН
-- Создан базовый класс `BaseConfig` для избежания дублирования кода
-- Переименован `HardcodedMessages` → `MessagesConfig`
-- Все конфиги остались в папке `config/` для удобства
-- Структура: `plugins/LoChat/config/*.yml`
-- Правильное копирование файлов из `resources/config/`
-
-### 7. ✅ ОТКЛЮЧЕНИЕ ЧАТОВ
-**Статус:** РЕАЛИЗОВАНО
-- Добавлена проверка `isGlobalEnabled()` и `isLocalEnabled()`
-- Игроки получают сообщение если чат отключен
-- Настройки в `config.yml`: `chat.global.enabled` и `chat.local.enabled`
-
-### 8. ✅ БАГ: Пробел в табе между префиксом и ником
-**Статус:** ИСПРАВЛЕНО
-- Убрал `.stripTrailing()` из `DisplayNameUtil.buildColoredPrefix()`
-- Теперь пробел из `prefix-format: "[{prefix}] "` сохраняется
-- В табе отображается: `[Префикс] Ник` вместо `[Префикс]Ник`
-
-### 9. ✅ РЕФАКТОРИНГ: Главный класс LoChat
-**Статус:** ЗАВЕРШЁН
-- Создан `PluginInitializer` - вся логика инициализации
-- Создан `PluginShutdown` - вся логика выключения
-- Главный класс сократился с 185 до 108 строк (42% уменьшение)
-- Следует Single Responsibility Principle
-
-### 10. ✅ ЧИСТКА: Warnings и deprecated методы
-**Статус:** ИСПРАВЛЕНО
-- Заменил deprecated `Registry.SOUNDS.match()` на `Registry.SOUNDS.get(NamespacedKey)` (Paper API)
-- Удалил все неиспользуемые импорты
-- Убрал redundant interface `TabCompleter` из `RollCommand`
-- Проект собирается без ошибок
+> Last updated: 2026-07-05
 
 ---
 
-## 📁 СТРУКТУРА КОНФИГОВ
+## ✅ COMPLETED
 
-```
-plugins/LoChat/
-├── config.yml                    # Основной конфиг
-├── messages.yml                  # Сообщения игрокам
-├── custom-commands.yml           # Кастомные команды
-├── config/
-│   ├── appearance.yml           # ✅ Внешний вид чата (AppearanceConfig)
-│   ├── messages.yml             # ✅ Системные сообщения (MessagesConfig)
-│   ├── mute.yml                 # ✅ Настройки мутов (MuteConfig)
-│   ├── filters.yml              # ✅ Фильтры сообщений (FiltersConfig)
-│   ├── sounds.yml               # ✅ Звуки (SoundsConfig)
-│   ├── discord.yml              # ✅ Discord интеграция (DiscordIntegration)
-│   ├── gradient.yml             # ✅ Градиенты (GradientModule)
-│   ├── automessages.yml         # Автосообщения
-│   ├── chat-formats.yml         # Форматы чата
-│   ├── database.yml             # База данных
-│   └── integrations.yml         # Интеграции
-└── data/
-    ├── players.yml
-    ├── mutes.json
-    ├── filter-words.json
-    └── ...
-```
+### Memory Leaks
+- [x] AutoMessageManager: save task reference, cancel in `stop()`
+- [x] Event listeners: `HandlerList.unregisterAll(this)` in `onDisable()`
+- [x] MuteHistoryManager: MAX_HISTORY_PER_PLAYER = 50
 
-### ✅ Подключенные конфиги:
-- `AppearanceConfig` - внешний вид чата, префиксы, цвета, эмодзи
-- `MessagesConfig` - все системные сообщения для игроков
-- `MuteConfig` - настройки системы мутов
-- `FiltersConfig` - все фильтры (капс, мат, реклама, флуд, спам)
-- `SoundsConfig` - звуковые эффекты
-- `DiscordIntegration` - Discord вебхуки
-- `GradientModule` - градиентные ники
+### Race Conditions
+- [x] AsyncChatEvent: try-catch for Location in async
+- [x] ConfigManager: `volatile` + `synchronized reload()`
 
----
+### Compilation Fixes
+- [x] EnhancedChatRenderer: `appearanceCfg` → `cfg.getAppearanceConfig()`
+- [x] Replace deprecated `Registry.SOUNDS.match()` with `Registry.SOUNDS.get(NamespacedKey)`
+- [x] Remove unused imports
+- [x] Remove redundant `TabCompleter` from `RollCommand`
 
-## 🎯 АРХИТЕКТУРА
+### Config Refactor
+- [x] BaseConfig base class for all configs
+- [x] MessagesConfig (renamed from HardcodedMessages)
+- [x] Clean config.yml: 300+ → 44 lines
+- [x] Thread-safety: volatile + synchronized
 
-### BaseConfig
-Базовый класс для всех конфигов:
-- Автоматическое копирование из resources
-- Поддержка подпапок (config/)
-- Единый интерфейс load/reload/save
-- Избегает дублирования кода
+### Main Class Refactor
+- [x] PluginInitializer — init logic
+- [x] PluginShutdown — shutdown logic
+- [x] LoChat: 185 → 108 lines
 
-### Конфиги наследуют BaseConfig:
-- `MessagesConfig` (config/messages.yml)
-- `AppearanceConfig` (config/appearance.yml)
-- Легко добавлять новые конфиги
+### Documentation
+- [x] README bilingual (EN + RU)
+- [x] CONTRIBUTING.md created
+- [x] CODE_OF_CONDUCT.md bilingual
+- [x] SECURITY.md bilingual
+- [x] GitHub issue/PR templates bilingual
+- [x] Config comments in English, no Spacelegacy palette
+
+### Checkstyle
+- [x] Google Java Style config (2-space indent, 100-char lines, Javadoc)
+- [x] Checkstyle plugin wired into build.gradle.kts
+
+### Cleanup
+- [x] Removed `libs/lolib-3.0.0.jar` (unused)
+- [x] Removed CODE_OF_CONDUCT.md, SECURITY.md
+- [x] Added `bin/` to .gitignore
+- [x] Configs rewritten: clean, English, no Russian/Spacelegacy
 
 ---
 
-## ✅ ЗАДАЧА ВЫПОЛНЕНА: Очистка config.yml
+## 🟡 CODE QUALITY ISSUES (HIGH PRIORITY)
 
-### ✅ РЕЗУЛЬТАТ:
-- Сократил config.yml с 300+ строк до 44 строк (85% уменьшение!)
-- Убрал дублирующиеся секции (filters, mentions, automessages, mute)
-- Убрал раздутые секции (custom-commands, data-storage)
-- Убрал пресеты градиентов
-- Оставил только базовые настройки (chat, hub, gradient, rp)
-- Проект собирается без ошибок
+### 1. Max 3 Files Per Folder
 
-### 🔍 СТАТУС КОНФИГОВ:
-Все конфиги в config/ проверены и почищены:
-- ✅ appearance.yml (AppearanceConfig) - используется
-- ✅ messages.yml (MessagesConfig) - используется
-- ✅ mute.yml (MuteConfig) - используется
-- ✅ filters.yml (FiltersConfig) - используется
-- ✅ sounds.yml (SoundsConfig) - используется
-- ✅ discord.yml (DiscordIntegration) - используется
-- ❌ automessages.yml - удален (не использовался)
-- ❌ chat-formats.yml - удален (не использовался)
-- ❌ database.yml - удален (не использовался)
-- ❌ gradient.yml - удален (не использовался)
-- ❌ integrations.yml - удален (не использовался)
+| Folder | Files | Fix |
+|--------|-------|-----|
+| `config/` | **9** ⚠️ | Split into `config/chat/`, `config/mute/`, `config/filter/`, `config/general/` |
+| `api/service/` | **8** ⚠️ | Keep interfaces flat or split into `api/service/chat/`, `api/service/mute/` |
+| `core/service/` | **8** ⚠️ | Mirror the api split |
 
----
+### 2. DRY: `AppearanceConfig.loadEmojiCache()` Called Twice
 
-## ✅ ЗАДАЧА ВЫПОЛНЕНА: Thread-Safety для ConfigManager
+**File:** `config/AppearanceConfig.java:23-31`
+- `init()` calls `super.init()` which calls `onLoad()` which calls `loadEmojiCache()`
+- Then `init()` calls `loadEmojiCache()` again
+- **Fix:** Remove the duplicate call in `init()`
 
-### ✅ РЕЗУЛЬТАТ:
-- Добавлен `volatile` для всех конфигов (config, appearanceConfig, messagesConfig, muteConfig, filtersConfig, soundsConfig)
-- Метод `reload()` теперь `synchronized` для предотвращения race conditions
-- Все потоки теперь видят актуальную версию конфигов после reload
-- Проект собирается без ошибок
+### 3. SRP: `ConfigManager.java` (278 lines)
 
-### 📝 ЧТО СДЕЛАНО:
-```java
-// Было:
-private FileConfiguration config;
-private AppearanceConfig appearanceConfig;
+God class with 60+ methods across 10+ concerns:
+- Config orchestration
+- Chat settings (global, local, PM)
+- Mention settings
+- Clear chat state mutation
+- Announcement settings
+- Join/quit/death message settings
 
-// Стало:
-private volatile FileConfiguration config;
-private volatile AppearanceConfig appearanceConfig;
+**Fix:** Split into `ChatConfig`, `PmConfig`, `MentionConfig`, `ClearChatConfig`, `AnnouncementConfig`, `CustomMessagesConfig`
 
-// И метод reload стал synchronized:
-public synchronized void reload() { ... }
-```
+### 4. OCP: `AdvancedMessageFilter.filterMessage()`
 
-**Зачем volatile:**
-- Гарантирует видимость изменений между потоками
-- Предотвращает кэширование значений в регистрах CPU
-- Обеспечивает happens-before relationship
+Hardcoded pipeline of 7 filters. Adding a new filter requires modifying this method.
 
-**Зачем synchronized:**
-- Предотвращает одновременный reload из разных потоков
-- Гарантирует атомарность операции перезагрузки
+**Fix:** Dynamic `List<Filter>` pipeline with registration
 
----
+### 5. ISP: `MessagingService` (fat interface)
 
-## 🔧 ОСТАЛОСЬ (НИЗКИЙ ПРИОРИТЕТ)
+16 methods across 4 concerns: PM + Spy + Ignore + Persistence
 
-### ПРОИЗВОДИТЕЛЬНОСТЬ: Фильтры
-- Рассмотреть Aho-Corasick алгоритм для поиска матных слов
-- Добавить метрики производительности
+**Fix:** Split into `PrivateMessageService`, `SpyService`, `IgnoreService`, `PersistableService`
 
-### БЕЗОПАСНОСТЬ: Discord rate limiting
-- Добавить локальный rate limiter
+### 6. DIP: Service Locator Anti-Pattern
 
----
+`ServiceRegistry.get(Xxx.class)` used everywhere instead of constructor DI.
 
-## ✅ ИТОГ
+**Fix:** Pass required services via constructor parameters
 
-Все критичные баги исправлены. Плагин полностью готов к использованию.
+### 7. DRY: 12 Commands Duplicate Constructor Pattern
 
-**Выполнено:**
-- ✅ Исправлены утечки памяти (tasks, listeners, history)
-- ✅ Исправлены race conditions
-- ✅ Рефакторинг конфигов (BaseConfig, MessagesConfig, FiltersConfig, SoundsConfig, MuteConfig)
-- ✅ Очистка config.yml (300+ → 52 строки)
-- ✅ Thread-safety для ConfigManager (volatile + synchronized)
-- ✅ Баг с пробелом в табе
-- ✅ Рефакторинг главного класса (185 → 108 строк)
-- ✅ Чистка warnings и deprecated методов
-- ✅ Режим единого чата (опционально через local.enabled: false)
+Commands like `MsgCommand`, `ReplyCommand`, `IgnoreCommand`, `MuteCommand`, `BanCommand` etc. don't use `BaseCommand` hierarchy and repeat the same field/constructor/permission pattern.
 
-**Архитектура:**
-- SOLID принципы (ServiceRegistry, DI)
-- Чистый код (Single Responsibility)
-- Thread-safe reload
-- Минимальный главный класс
+**Fix:** Migrate all to `PlayerCommand` / `AdminCommand`
 
-Проект собирается без ошибок и готов к продакшену.
+### 8. DRY: PM Send Logic Duplicated
+
+`MsgCommand.java:48-59` and `ReplyCommand.java:47-57` have identical PM send code.
+
+**Fix:** Extract to shared method/service
+
+### 9. KISS: `MuteCommand.onCommand()` (~100 lines)
+
+High complexity: argument parsing, flags, fallback logic, permission checks, broadcast logic, voice-mute.
+
+**Fix:** Decompose into `MuteRequest` parser + `MuteExecutor` service
+
+### 10. OOP: Leaked Internals
+
+- `LoChat.getInstance()` — singleton abuse
+- `LoChat` exposes 7+ internal components via public getters
+- `ChatEventListener` casts to concrete `PlayerServiceImpl`
+- `BaseConfig` has `protected` mutable fields
 
 ---
 
-## 📋 ПЛАН ИСПРАВЛЕНИЯ КРИТИЧНЫХ БАГОВ
+## 🔵 MEDIUM PRIORITY
 
-### Фаза 1: Утечки памяти (СРОЧНО)
-1. **AutoMessageManager** - сохранять ссылку на task и отменять в `stop()`
-2. **LoChat.onDisable()** - добавить `HandlerList.unregisterAll(this)`
-3. **MuteHistoryManager** - ограничить размер истории (MAX 50 записей на игрока)
+### 11. Dual Message Configs
 
-### Фаза 2: Race conditions
-4. **ChatEventListener** - проверить `DistanceUtil.isInRange()` на async-safety
-5. **ConfigManager** - использовать `volatile` для thread-safe reload
+`MessageConfig.java` (root, path-based) and `MessagesConfig.java` (config/, typed getters) overlap.
 
-### Фаза 3: Компиляция
-6. **EnhancedChatRenderer** - исправить `appearanceCfg` → `cfg.getAppearanceConfig()`
+**Fix:** Unify into single `MessageConfig`
 
----
+### 12. Filter Classes Don't Share Interface
 
-## 📋 ПЛАН ИСПРАВЛЕНИЯ КОНФИГОВ
+`core/filter/filters/*.java` are standalone. `CooldownFilter`/`MuteFilter` implement `MessageFilter` from api.
 
-### Вариант 1: Всё в config.yml (РЕКОМЕНДУЕТСЯ)
-Объединить все настройки в один `config.yml` с секциями.
+**Fix:** Make all filters implement `MessageFilter`
 
-**Структура config.yml:**
-```yaml
-config-version: 5
+### 13. 5+ Services Repeat Load/Save/Persistence
 
-# Базовые настройки
-chat:
-  global:
-    enabled: true
-    cooldown: 3
-  local:
-    enabled: true
-    radius: 100
-    cooldown: 1
-  pm:
-    enabled: true
-    sound: true
+`NickServiceImpl`, `PlayerServiceImpl`, `ChatServiceImpl`, `PunishmentServiceImpl` all have their own file I/O.
 
-# Внешний вид чата
-chat-appearance:
-  prefixes:
-    global:
-      emoji: "✦"
-      text: "GLOBAL"
-      colors:
-        - "#B798A8"
-        - "#7858E9"
-      separator:
-        text: " ▶ "
-        color: "#9878C9"
-    local:
-      emoji: "◆"
-      text: "LOCAL"
-      colors:
-        - "#9878C9"
-        - "#7858E9"
-      separator:
-        text: " ▶ "
-        color: "#8B6BD6"
-  hover:
-    enabled: true
-    format:
-      - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-      - "&#B798A8✦ &f{player}"
-      - ""
-      - "&#9878C9⏱ &fПинг: &#7858E9{ping}ms"
-      - "&#9878C9♥ &fЗдоровье: &#7858E9{health}/20"
-      - "&#9878C9🍖 &fГолод: &#7858E9{food}/20"
-      - ""
-      - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-      - "&#B798A8✦ &fНажми чтобы написать"
-  emojis:
-    ":heart:": "❤"
-    ":star:": "★"
-    ":diamond:": "◆"
+**Fix:** Shared persistence utility
 
-# Сообщения
-messages:
-  mute:
-    player-muted: "&#9878C9Игрок &#7858E9{player} &#9878C9замучен на &#7858E9{time}"
-    muted-message: "&#CF6679Вы замучены на &#7858E9{time}\n&#B798A8Причина: &f{reason}"
-  local-chat:
-    nobody-heard: "&#9878C9Вас никто не услышал"
-  cooldown:
-    message: "&#B798A8Подождите &#7858E9{remaining} &#B798A8сек"
+### 14. Mute Duration Permissions Not Declared in plugin.yml
 
-# RP команды
-rp:
-  radius: 100
-  cooldowns:
-    me: 3
-    try: 5
-    do: 3
-    roll: 2
-
-# Градиенты
-gradient:
-  enabled: true
-  presets:
-    fire: ["#FF4500", "#FF6347", "#FFD700"]
-    ocean: ["#00CED1", "#1E90FF", "#4169E1"]
-```
-
-**Файлы для изменения:**
-1. `src/main/resources/config.yml` - объединить все настройки
-2. `src/main/java/com/loki/lochat/config/ConfigManager.java` - убрать AppearanceConfig и HardcodedMessages
-3. `src/main/java/com/loki/lochat/renderer/EnhancedChatRenderer.java` - читать из ConfigManager напрямую
-4. Удалить `src/main/java/com/loki/lochat/config/AppearanceConfig.java`
-5. Удалить `src/main/java/com/loki/lochat/config/HardcodedMessages.java`
-6. Удалить все файлы из `src/main/resources/config/`
+`lochat.mute.dur.5m`, `lochat.mute.dur.3h`, `lochat.mute.reason.*` — used in code/configs but missing from plugin.yml.
 
 ---
 
-### Вариант 2: Отдельные файлы в корне resources
-Переместить конфиги в корень `resources/` и создавать их вручную.
+## ⚪ LOW PRIORITY
 
-**Структура:**
-```
-src/main/resources/
-├── config.yml                    # Основной конфиг
-├── chat-appearance.yml           # Внешний вид
-├── messages.yml                  # Сообщения
-├── gradient-config.yml           # Градиенты
-└── custom-commands.yml           # Кастомные команды
-```
+### 15. Performance: Aho-Corasick for Swear Filter
 
-**Файлы для изменения:**
-1. Переместить все из `config/` в корень `resources/`
-2. `AppearanceConfig.java` - изменить путь с `config/chat-appearance.yml` на `chat-appearance.yml`
-3. `HardcodedMessages.java` - изменить путь с `config/hardcoded-messages.yml` на `messages.yml`
-4. Убрать создание папки `config/` в коде
+### 16. Discord Rate Limiter
+
+### 17. Tests: Only 4 test files (150 main files)
+
+### 18. `.project`, `.classpath`, `.settings/` should be gitignored
 
 ---
 
-## 🎯 РЕКОМЕНДАЦИЯ
+## 📋 KNOWN ISSUES
 
-**Использовать Вариант 1** - один большой `config.yml`:
-- ✅ Всё в одном месте
-- ✅ Гарантированно работает
-- ✅ Проще для пользователей
-- ✅ Меньше файлов
-- ✅ Только hex-цвета (&#FFD700)
-
----
-
-## 📝 ЧЕКЛИСТ ВЫПОЛНЕНИЯ
-
-### Шаг 1: Подготовка
-- [ ] Сохранить текущие настройки из всех конфигов
-- [ ] Создать бэкап проекта
-
-### Шаг 2: Объединение конфигов
-- [ ] Скопировать все секции из `config/chat-appearance.yml` в `config.yml`
-- [ ] Скопировать все секции из `config/hardcoded-messages.yml` в `config.yml`
-- [ ] Заменить все `<red>`, `<bold>` на hex-цвета `&#FF0000`
-- [ ] Проверить отступы YAML
-
-### Шаг 3: Изменение кода
-- [ ] `ConfigManager.java` - убрать `AppearanceConfig` и `HardcodedMessages`
-- [ ] `ConfigManager.java` - добавить методы для чтения всех настроек из `config.yml`
-- [ ] `EnhancedChatRenderer.java` - заменить `cfg.getAppearanceConfig()` на прямые вызовы
-- [ ] Удалить `AppearanceConfig.java`
-- [ ] Удалить `HardcodedMessages.java`
-
-### Шаг 4: Очистка
-- [ ] Удалить папку `src/main/resources/config/`
-- [ ] Удалить неиспользуемые импорты
-
-### Шаг 5: Тестирование
-- [ ] `./gradlew clean build -x test`
-- [ ] Проверить что jar собирается
-- [ ] Запустить на тестовом сервере
-- [ ] Проверить что `config.yml` создаётся
-- [ ] Проверить что все настройки работают
-
----
-
-## 🔧 ТЕКУЩЕЕ СОСТОЯНИЕ
-
-**Проблемные файлы:**
-- `src/main/java/com/loki/lochat/renderer/EnhancedChatRenderer.java` - ошибки компиляции
-- `src/main/java/com/loki/lochat/config/ConfigManager.java` - неполный рефакторинг
-
-**Что работает:**
-- Базовые настройки чата
-- Градиенты
-- RP команды с кулдаунами
-
-**Что НЕ работает:**
-- Файлы из `config/` не копируются на сервер
-- Префиксы чата (читаются из несуществующих файлов)
-- Hover подсказки
-- Эмодзи замены
-
----
-
-## 📌 ВАЖНО
-
-- Использовать ТОЛЬКО hex-цвета: `&#FFD700`
-- НЕ использовать MiniMessage: `<red>`, `<bold>`
-- Все настройки в `config.yml`
-- Простая и понятная структура
+- Gradients may not display correctly on clients < 1.16
+- Some filters may block legitimate messages (configurable in `config/filters.yml`)

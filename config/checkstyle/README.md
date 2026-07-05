@@ -1,83 +1,115 @@
-# Checkstyle Configuration
+# Checkstyle Configuration | Конфигурация Checkstyle
 
-Автоматическая проверка качества кода во время билда.
+This project uses **Google Java Style** for code quality enforcement.
+Проект использует **Google Java Style** для контроля качества кода.
 
-## Правила
+---
 
-### Размеры
-- **Файл**: максимум 150 строк
-- **Метод**: максимум 30 строк
-- **Строка**: максимум 120 символов
-- **Параметры**: максимум 5 параметров
+## 🇬🇧 English
 
-### Сложность
-- **Cyclomatic Complexity**: максимум 10
-- **Вложенность if**: максимум 3 уровня
-- **Вложенность try**: максимум 2 уровня
+### Rules
 
-### Качество кода
-- Нет дублирования строк (макс 2 повтора)
-- Нет магических чисел (кроме -1, 0, 1, 2, 3, 4, 5, 10, 20, 100)
-- Нет * импортов
-- Нет неиспользуемых импортов
-- Упрощение boolean выражений
-- equals() и hashCode() вместе
+Based on [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html):
 
-### Форматирование
-- Отступы: 4 пробела
-- Скобки обязательны для if/for/while
-- Один оператор на строку
-- Пробелы вокруг операторов
+| Category | Rule | Value |
+|----------|------|-------|
+| **Indentation** | Basic offset | 2 spaces |
+| **Indentation** | Continuation indent | 4 spaces |
+| **Line length** | Max characters | 100 |
+| **File length** | Max lines | 600 |
+| **Method length** | Max lines | 60 |
+| **Complexity** | Cyclomatic complexity | ≤ 15 |
+| **Parameters** | Max per method | 7 |
+| **Nested if** | Max depth | 3 |
+| **Nested try** | Max depth | 2 |
 
-## Запуск проверки
+### Key Requirements
+
+- **Spaces only** — no tabs
+- **Braces** — required for `if`, `for`, `while`, `do`
+- **Imports** — no wildcards, no unused imports, grouped ordering
+- **Javadoc** — required on all public/protected methods and types
+- **Naming** — camelCase, no abbreviations (except allowed: IO, URL, HTML, etc.)
+
+### Running
 
 ```bash
-# Проверить весь проект
+# Full check
 ./gradlew check
 
-# Проверить только LoChat
+# Only LoChat
 ./gradlew checkstyleMain
-
-# Проверить только LoHub
-./gradlew :lohub:checkstyleMain
-
-# Проверить только LoVelocity
-./gradlew :lovelocity:checkstyleMain
 ```
 
-## Отчеты
+### Reports
 
-После проверки отчеты доступны в:
+After check, reports are available at:
 - `build/reports/checkstyle/main.html`
-- `lohub/build/reports/checkstyle/main.html`
-- `lovelocity/build/reports/checkstyle/main.html`
 
-## Отключение проверки
+### IntelliJ IDEA Setup
 
-Если нужно временно отключить проверку для конкретного файла:
+1. Install "CheckStyle-IDEA" plugin
+2. Settings → Tools → Checkstyle
+3. Add configuration: `config/checkstyle/checkstyle.xml`
+
+---
+
+## 🇷🇺 Русский
+
+### Правила
+
+Основаны на [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html):
+
+| Категория | Правило | Значение |
+|-----------|---------|----------|
+| **Отступы** | Основной | 2 пробела |
+| **Отступы** | Перенос строки | 4 пробела |
+| **Длина строки** | Максимум | 100 символов |
+| **Длина файла** | Максимум | 600 строк |
+| **Длина метода** | Максимум | 60 строк |
+| **Сложность** | Цикломатическая | ≤ 15 |
+| **Параметры** | Макс. на метод | 7 |
+| **Вложенность if** | Макс. глубина | 3 |
+| **Вложенность try** | Макс. глубина | 2 |
+
+### Ключевые требования
+
+- **Только пробелы** — никаких табуляций
+- **Скобки** — обязательны для `if`, `for`, `while`, `do`
+- **Импорты** — без *-импортов, без неиспользуемых, группировка
+- **Javadoc** — обязателен для всех public/protected методов и типов
+- **Именование** — camelCase, без сокращений (кроме разрешённых: IO, URL, HTML и т.д.)
+
+### Запуск
+
+```bash
+# Полная проверка
+./gradlew check
+
+# Только LoChat
+./gradlew checkstyleMain
+```
+
+### Отчёты
+
+После проверки отчёты доступны в:
+- `build/reports/checkstyle/main.html`
+
+### Настройка IntelliJ IDEA
+
+1. Установите плагин "CheckStyle-IDEA"
+2. Settings → Tools → Checkstyle
+3. Добавьте конфигурацию: `config/checkstyle/checkstyle.xml`
+
+### Disabling Checks | Отключение проверок
 
 ```java
 // CHECKSTYLE:OFF
 public class MyClass {
-    // код без проверки
+    // code without checks
 }
 // CHECKSTYLE:ON
-```
 
-Или для конкретной строки:
-
-```java
+// Per line:
 private static final int MAGIC = 42; // CHECKSTYLE IGNORE MagicNumber
 ```
-
-## Интеграция с IDE
-
-### IntelliJ IDEA
-1. Установить плагин "CheckStyle-IDEA"
-2. Settings → Tools → Checkstyle
-3. Добавить конфиг: `config/checkstyle/checkstyle.xml`
-4. Активировать проверку в реальном времени
-
-### VS Code
-1. Установить расширение "Checkstyle for Java"
-2. Настроить путь к конфигу в settings.json

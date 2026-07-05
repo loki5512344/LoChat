@@ -1,27 +1,264 @@
-# LoChat - Advanced Chat Plugin
+# LoChat
 
-Мощный чат плагин для Paper/Folia серверов с градиентными никами, продвинутой модерацией и гибкой конфигурацией.
+> **Advanced chat plugin for Paper/Folia servers**  
+> **Продвинутый чат плагин для Paper/Folia серверов**
 
-## Сборка и локальный тестовый сервер
+[![Build](https://github.com/loki5512344/LoChat/actions/workflows/build.yml/badge.svg)](https://github.com/loki5512344/LoChat/actions/workflows/build.yml)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![](https://img.shields.io/badge/Paper-1.21.4-blue)](https://papermc.io)
+
+---
+
+<div align="center">
+
+**[EN](#english) · [RU](#russian)**
+
+</div>
+
+---
+
+<a name="english"></a>
+
+## 🇬🇧 English
+
+### Overview
+
+LoChat is a powerful Minecraft chat plugin for Paper 1.21+ and Folia servers. It features gradient nicknames, advanced moderation, flexible configuration, Discord integration, and extensive API.
+
+### Features
+
+#### Chat System
+- **Global chat** — cross-server player communication
+- **Local chat** — radius-based proximity chat
+- **Private messages** — PM system with reply support
+- **Ignore system** — block unwanted players
+- **Mentions** — `@player`, `@everyone`, `@here`, `@role`
+- **Hover/Click events** — interactive messages
+- **Custom join/quit/death messages** with weapon name
+
+#### Gradient Nicknames & Prefixes
+- Custom gradient colors (up to 7 colors)
+- Built-in presets (fire, ocean, rainbow, etc.)
+- Custom prefixes and suffixes
+- LuckPerms integration (gradient prefixes/suffixes)
+- PlayerPoints purchase system
+- Cooldowns and limits
+
+#### Moderation
+- Mute system with history
+- Ban system with duration and reason
+- Warn system
+- Temporary and permanent punishments
+- Silent mutes
+- Punishment escalation
+
+#### Chat Filters
+- Swear filter with bypass protection (x→x, o→o, etc.)
+- Anti-spam and anti-flood
+- CAPS filter
+- URL and IP filter
+- Hidden link filter (discord.gg, bit.ly, etc.)
+- Repeated character filter
+- Configurable bad words list
+
+#### RP Commands
+- `/me` — third-person actions
+- `/do` — action descriptions
+- `/try` — chance-based actions
+- `/roll` — dice roll
+- Configurable radius and cooldowns
+
+#### Sound Effects
+- PM and mention sounds
+- Mute/unmute sounds
+- Gradient sounds
+- Command sounds
+- Per-player sound settings
+
+#### Discord Integration
+- Webhook message relay
+- Join/quit/death events
+- Custom formats and colors
+- Player avatars
+- Message filtering
+
+### Quick Start
+
+#### Installation
+
+1. Download the latest release
+2. Place the JAR in `plugins/`
+3. Restart the server
+4. Configure in `plugins/LoChat/`
+
+#### Building from Source
+
+```bash
+git clone https://github.com/loki5512344/LoChat.git
+cd LoChat
+./gradlew build
+# JAR will be in build/libs/
+```
+
+#### Local Test Server
 
 ```bash
 ./gradlew runServer
 ```
 
-Gradle задача `runServer` ([run-paper](https://github.com/jpenilla/run-paper)) скачивает Paper 1.21.1, собирает JAR плагина и кладёт его в `run/plugins`. Первый запуск долгий из-за загрузки. Остановка через `stop` в консоли сервера.
+Uses [run-paper](https://github.com/jpenilla/run-paper) — downloads Paper 1.21.4, builds the plugin, and places it in `run/plugins/`.
 
-## Основные возможности
+### Dependencies
 
-### Чат система
-- Глобальный чат - общение между всеми игроками
-- Локальный чат - общение в радиусе
-- Личные сообщения - PM система с ответами
-- Игнорирование - блокировка нежелательных игроков
-- Упоминания - @player, @everyone, @here, @role
-- Hover/Click события - интерактивные сообщения
-- Кастомные сообщения входа/выхода/смерти с названием оружия
+**Required:** Java 21+, Paper 1.21.1+ or Folia
 
-### Градиентные ники и префиксы
+**Optional:** PlaceholderAPI, LuckPerms, PlayerPoints, LibertyBans, SkinsRestorer
+
+### Commands
+
+#### Chat
+| Command | Description |
+|---------|-------------|
+| `/g <message>` | Global chat |
+| `/l <message>` | Local chat |
+| `/msg <player> <message>` | Private message |
+| `/reply <message>` | Reply to PM |
+| `/ignore <player>` | Ignore player |
+| `/unignore <player>` | Unignore player |
+| `/ignorelist` | List ignored players |
+
+#### Gradients
+| Command | Description |
+|---------|-------------|
+| `/color <hex1> [hex2] ...` | Set gradient |
+| `/prefix <text>` | Set prefix |
+| `/aprefix <command>` | Admin gradient commands |
+
+#### Moderation
+| Command | Description |
+|---------|-------------|
+| `/lmute <player> [time] [-s] [reason]` | Mute player |
+| `/lunmute <player> [-s]` | Unmute player |
+| `/lban <player> [time] [reason]` | Ban player |
+| `/lunban <player>` | Unban player |
+| `/lwarn <player> [reason]` | Warn player |
+| `/lmutelist` | List mutes |
+| `/lmutehistory <player>` | Mute history |
+
+#### RP
+| Command | Description |
+|---------|-------------|
+| `/me <action>` | Third-person action |
+| `/do <description>` | Action description |
+| `/try <attempt>` | Chance attempt |
+| `/roll [number]` | Dice roll |
+
+#### Admin
+| Command | Description |
+|---------|-------------|
+| `/lochat reload` | Reload config |
+| `/clearchat` | Clear chat |
+| `/chatspy` | Spy mode |
+| `/announce <message>` | Announcement |
+
+### Time Formats
+
+- `s` — seconds (`30s` = 30 seconds)
+- `m` — minutes (`15m` = 15 minutes)
+- `h` — hours (`2h` = 2 hours)
+- `d` — days (`7d` = 7 days)
+- `perm` or `0` — permanent
+
+### Placeholders
+
+**Chat:** `{player}`, `{player_prefix}`, `{player_suffix}`, `{message}`, `{emoji}`, `{prefix}`, `{separator}`
+
+**Hover:** `{player}`, `{world}`, `{ping}`, `{gamemode}`, `{health}`, `{food}`
+
+**Death:** `{player}`, `{killer}`, `{weapon}`, `{death_message}`
+
+### Permissions
+
+#### Gradients
+- `gradient.color` — access to `/color`
+- `gradient.prefix` — access to `/prefix`
+- `gradient.bypass.cost` — free usage
+- `gradient.bypass.cooldown` — bypass cooldown
+- `gradient.admin` — admin commands
+
+#### Chat
+- `lochat.chat.colors` — colored messages
+- `lochat.chat.global` — global chat
+- `lochat.chat.local` — local chat
+- `lochat.pm` — private messages
+
+#### Moderation
+- `lochat.mute` — mute players
+- `lochat.mute.silent` — silent mutes
+- `lochat.ban` — ban players
+- `lochat.warn` — warn players
+
+#### Filter Bypass
+- `lochat.bypass.swear` — bypass swear filter
+- `lochat.bypass.spam` — bypass anti-spam
+- `lochat.bypass.flood` — bypass anti-flood
+- `lochat.bypass.caps` — bypass CAPS filter
+- `lochat.bypass.urlfilter` — bypass URL filter
+- `lochat.bypass.cooldown` — bypass cooldown
+
+### API
+
+```java
+// Get ServiceRegistry
+ServiceRegistry registry = plugin.getServiceRegistry();
+
+// Send global message
+ChatService chatService = registry.get(ChatService.class);
+chatService.sendGlobalMessage(player, "Hello!");
+
+// Create custom filter
+public class MyFilter implements MessageFilter {
+    @Override
+    public FilterResult filter(Player player, String message) {
+        if (message.contains("badword")) {
+            return FilterResult.blocked("Message blocked");
+        }
+        return FilterResult.ok(message);
+    }
+}
+```
+
+### Known Issues
+
+- Gradients may not display correctly on clients < 1.16
+- Some filters may block legitimate messages (configurable in `config/filters.yml`)
+
+### License
+
+[GNU General Public License v3.0](LICENSE)
+
+---
+
+<a name="russian"></a>
+
+## 🇷🇺 Русский
+
+### Обзор
+
+LoChat — это мощный чат-плагин для Minecraft Paper 1.21+ и Folia серверов. Включает градиентные ники, продвинутую модерацию, гибкую конфигурацию, Discord интеграцию и обширный API.
+
+### Основные возможности
+
+#### Система чата
+- **Глобальный чат** — общение между всеми игроками
+- **Локальный чат** — общение в радиусе
+- **Личные сообщения** — PM система с ответами
+- **Игнорирование** — блокировка нежелательных игроков
+- **Упоминания** — `@player`, `@everyone`, `@here`, `@role`
+- **Hover/Click события** — интерактивные сообщения
+- **Кастомные сообщения входа/выхода/смерти** с названием оружия
+
+#### Градиентные ники и префиксы
 - Кастомные градиентные цвета (до 7 цветов)
 - Готовые пресеты (огонь, океан, радуга и т.д.)
 - Кастомные префиксы и суффиксы
@@ -29,315 +266,179 @@ Gradle задача `runServer` ([run-paper](https://github.com/jpenilla/run-pap
 - Система покупки через PlayerPoints
 - Кулдауны и ограничения
 
-### Модерация
+#### Модерация
 - Мут система с историей
 - Бан система с временем и причиной
 - Варны (предупреждения)
 - Временные и постоянные наказания
 - Скрытые муты (silent)
-- Готовые причины наказаний
 - Эскалация наказаний
 
-### Фильтры чата
-- Фильтр мата с защитой от обхода (х->x, о->o и т.д.)
+#### Фильтры чата
+- Фильтр мата с защитой от обхода (х→x, о→o и т.д.)
 - Антиспам и антифлуд
 - CAPS фильтр
 - URL и IP фильтр
 - Фильтр скрытых ссылок (discord.gg, bit.ly и т.д.)
 - Фильтр повторяющихся символов
-- Настраиваемый список запрещенных слов
+- Настраиваемый список запрещённых слов
 
-### RP команды
-- /me - действия от третьего лица
-- /do - описание действий
-- /try - попытка действия с шансом
-- /roll - бросок кубика
+#### RP команды
+- `/me` — действия от третьего лица
+- `/do` — описание действий
+- `/try` — попытка действия с шансом
+- `/roll` — бросок кубика
 - Настраиваемый радиус и кулдауны
 
-### Звуковые эффекты
+#### Звуковые эффекты
 - Звуки для PM и упоминаний
 - Звуки для мутов/размутов
 - Звуки для градиентов
 - Звуки для команд
 - Персональные настройки звуков
 
-### Discord интеграция
+#### Discord интеграция
 - Webhook для отправки сообщений
 - События входа/выхода/смерти
 - Кастомные форматы и цвета
 - Аватары игроков
 - Фильтрация сообщений
 
-## Структура конфигов
+### Быстрый старт
 
-```
-plugins/LoChat/
-├── config.yml                    # Основной конфиг (все настройки в одном месте)
-├── messages.yml                  # Сообщения плагина
-├── custom-commands.yml           # Кастомные команды
-├── badwords.txt                  # Список запрещенных слов
-│
-├── config/
-│   ├── appearance.yml            # Внешний вид чата (префиксы, форматы, hover)
-│   ├── discord.yml               # Discord интеграция
-│   ├── filters.yml               # Настройки фильтров
-│   ├── messages.yml              # Дополнительные сообщения
-│   ├── mute.yml                  # Настройки мутов
-│   └── sounds.yml                # Звуковые эффекты
-│
-└── data/
-    ├── mutes.yml                 # Данные мутов
-    ├── bans.yml                  # Данные банов
-    ├── ignores.yml               # Игнорирование
-    └── gradient-data.yml         # Градиентные ники
-```
-
-## Быстрый старт
-
-### Установка
+#### Установка
 
 1. Скачайте последнюю версию из Releases
 2. Поместите JAR в папку `plugins/`
 3. Перезапустите сервер
 4. Настройте конфиги в `plugins/LoChat/`
 
-### Первая настройка
-
-1. **Основной конфиг** (`config.yml`):
-   - Настройте радиус локального чата
-   - Включите/отключите нужные функции
-   - Настройте цены на градиенты
-   - Настройте фильтры
-
-2. **Фильтр мата** (`badwords.txt`):
-   - Добавьте свои запрещенные слова
-   - По одному слову на строку
-   - Строки с # игнорируются
-
-3. **Внешний вид** (`config/appearance.yml`):
-   - Настройте префиксы чата (GLOBAL/LOCAL)
-   - Измените цвета и форматы
-   - Настройте hover подсказки
-   - Добавьте эмодзи
-
-4. **Discord** (`config/discord.yml`):
-   - Вставьте URL вебхука
-   - Настройте форматы сообщений
-   - Включите нужные события
-
-## Сборка из исходников
+#### Сборка из исходников
 
 ```bash
-# Клонировать репозиторий
-git clone https://codeberg.org/loki5512344/Lochat.git
-cd Lochat
-
-# Собрать проект
+git clone https://github.com/loki5512344/LoChat.git
+cd LoChat
 ./gradlew build
-
 # Jar файл будет в build/libs/
 ```
 
-## Зависимости
+#### Локальный тестовый сервер
 
-### Обязательные
-- Java 21+
-- Paper 1.21.1+ или Folia
-
-### Опциональные
-- PlaceholderAPI - для плейсхолдеров
-- LuckPerms - для градиентных префиксов/суффиксов
-- PlayerPoints - для покупки градиентов
-- LibertyBans - синхронизация мутов
-- SkinsRestorer - поддержка скинов
-
-## Команды
-
-### Чат команды
-- `/g <сообщение>` - глобальный чат
-- `/l <сообщение>` - локальный чат
-- `/msg <игрок> <сообщение>` - личное сообщение
-- `/reply <сообщение>` - ответить на ЛС
-- `/ignore <игрок>` - игнорировать игрока
-- `/unignore <игрок>` - разигнорировать
-- `/ignorelist` - список игнорируемых
-
-### Градиенты
-- `/color <hex1> [hex2] ...` - установить градиент
-- `/prefix <текст>` - установить префикс
-- `/aprefix <команда>` - админские команды градиентов
-
-### Модерация
-- `/lmute <игрок> [время] [-s] [причина]` - замутить
-- `/lunmute <игрок> [-s]` - размутить
-- `/lban <игрок> [время] [причина]` - забанить
-- `/lunban <игрок>` - разбанить
-- `/lwarn <игрок> [причина]` - выдать варн
-- `/lmutelist` - список мутов
-- `/lmutehistory <игрок>` - история мутов
-
-### RP команды
-- `/me <действие>` - действие от 3-го лица
-- `/do <описание>` - описание действия
-- `/try <попытка>` - попытка с шансом
-- `/roll [число]` - бросок кубика
-
-### Админские
-- `/lochat reload` - перезагрузить конфиг
-- `/clearchat` - очистить чат
-- `/chatspy` - режим шпиона
-- `/announce <сообщение>` - объявление
-
-## Примеры использования
-
-### Градиентный ник
-```
-/color #FF0000 #00FF00 #0000FF
-```
-Создаст радужный градиент от красного через зеленый к синему.
-
-### Кастомный префикс
-```
-/prefix [VIP]
-```
-Установит префикс `[VIP]` перед ником.
-
-### Настройка системы оплаты градиентов
-
-#### Вариант 1: Через PlayerPoints (платно)
-```yaml
-# config.yml
-gradient:
-  price-per-color: 50
-  prefix-price: 500
-  use-permission-instead-of-cost: false
+```bash
+./gradlew runServer
 ```
 
-#### Вариант 2: Через пермишены (бесплатно)
-```yaml
-# config.yml
-gradient:
-  price-per-color: 0
-  prefix-price: 0
-  use-permission-instead-of-cost: true
-```
+Использует [run-paper](https://github.com/jpenilla/run-paper) — скачивает Paper 1.21.4, собирает плагин и помещает его в `run/plugins/`.
 
-Выдайте игрокам права:
-```
-/lp user <игрок> permission set gradient.color true
-/lp user <игрок> permission set gradient.prefix true
-/lp user <игрок> permission set gradient.bypass.cost true
-```
+### Зависимости
 
-### Основные пермишены
+**Обязательные:** Java 21+, Paper 1.21.1+ или Folia
 
-#### Градиенты
-- `gradient.color` - доступ к /color
-- `gradient.prefix` - доступ к /prefix
-- `gradient.bypass.cost` - бесплатное использование
-- `gradient.bypass.cooldown` - обход кулдауна
-- `gradient.admin` - админские команды
+**Опциональные:** PlaceholderAPI, LuckPerms, PlayerPoints, LibertyBans, SkinsRestorer
+
+### Команды
 
 #### Чат
-- `lochat.chat.colors` - цветные сообщения
-- `lochat.chat.global` - глобальный чат
-- `lochat.chat.local` - локальный чат
-- `lochat.pm` - личные сообщения
+| Команда | Описание |
+|---------|----------|
+| `/g <сообщение>` | Глобальный чат |
+| `/l <сообщение>` | Локальный чат |
+| `/msg <игрок> <сообщение>` | Личное сообщение |
+| `/reply <сообщение>` | Ответить на ЛС |
+| `/ignore <игрок>` | Игнорировать игрока |
+| `/unignore <игрок>` | Разигнорировать |
+| `/ignorelist` | Список игнорируемых |
+
+#### Градиенты
+| Команда | Описание |
+|---------|----------|
+| `/color <hex1> [hex2] ...` | Установить градиент |
+| `/prefix <текст>` | Установить префикс |
+| `/aprefix <команда>` | Админские команды градиентов |
 
 #### Модерация
-- `lochat.mute` - мутить игроков
-- `lochat.mute.silent` - скрытые муты
-- `lochat.ban` - банить игроков
-- `lochat.warn` - выдавать варны
+| Команда | Описание |
+|---------|----------|
+| `/lmute <игрок> [время] [-s] [причина]` | Замутить |
+| `/lunmute <игрок> [-s]` | Размутить |
+| `/lban <игрок> [время] [причина]` | Забанить |
+| `/lunban <игрок>` | Разбанить |
+| `/lwarn <игрок> [причина]` | Выдать варн |
+| `/lmutelist` | Список мутов |
+| `/lmutehistory <игрок>` | История мутов |
+
+#### RP
+| Команда | Описание |
+|---------|----------|
+| `/me <действие>` | Действие от 3-го лица |
+| `/do <описание>` | Описание действия |
+| `/try <попытка>` | Попытка с шансом |
+| `/roll [число]` | Бросок кубика |
+
+#### Админские
+| Команда | Описание |
+|---------|----------|
+| `/lochat reload` | Перезагрузить конфиг |
+| `/clearchat` | Очистить чат |
+| `/chatspy` | Режим шпиона |
+| `/announce <сообщение>` | Объявление |
+
+### Форматы времени
+
+- `s` — секунды (`30s` = 30 секунд)
+- `m` — минуты (`15m` = 15 минут)
+- `h` — часы (`2h` = 2 часа)
+- `d` — дни (`7d` = 7 дней)
+- `perm` или `0` — навсегда
+
+### Плейсхолдеры
+
+**Чат:** `{player}`, `{player_prefix}`, `{player_suffix}`, `{message}`, `{emoji}`, `{prefix}`, `{separator}`
+
+**Hover:** `{player}`, `{world}`, `{ping}`, `{gamemode}`, `{health}`, `{food}`
+
+**Смерть:** `{player}`, `{killer}`, `{weapon}`, `{death_message}`
+
+### Пермишены
+
+#### Градиенты
+- `gradient.color` — доступ к `/color`
+- `gradient.prefix` — доступ к `/prefix`
+- `gradient.bypass.cost` — бесплатное использование
+- `gradient.bypass.cooldown` — обход кулдауна
+- `gradient.admin` — админские команды
+
+#### Чат
+- `lochat.chat.colors` — цветные сообщения
+- `lochat.chat.global` — глобальный чат
+- `lochat.chat.local` — локальный чат
+- `lochat.pm` — личные сообщения
+
+#### Модерация
+- `lochat.mute` — мутить игроков
+- `lochat.mute.silent` — скрытые муты
+- `lochat.ban` — банить игроков
+- `lochat.warn` — выдавать варны
 
 #### Обход фильтров
-- `lochat.bypass.swear` - обход мат-фильтра
-- `lochat.bypass.spam` - обход антиспама
-- `lochat.bypass.flood` - обход антифлуда
-- `lochat.bypass.caps` - обход CAPS фильтра
-- `lochat.bypass.urlfilter` - обход URL фильтра
-- `lochat.bypass.cooldown` - обход кулдауна
+- `lochat.bypass.swear` — обход мат-фильтра
+- `lochat.bypass.spam` — обход антиспама
+- `lochat.bypass.flood` — обход антифлуда
+- `lochat.bypass.caps` — обход CAPS фильтра
+- `lochat.bypass.urlfilter` — обход URL фильтра
+- `lochat.bypass.cooldown` — обход кулдауна
 
-### Мут игрока
-```
-/lmute Player123 1h Спам в чате
-```
-Замутит игрока на 1 час с причиной "Спам в чате".
+### API
 
-### Скрытый мут
-```
-/lmute Player123 30m -s Нарушение правил
-```
-Замутит игрока скрытно (другие игроки не увидят уведомление).
-
-### Бан с причиной
-```
-/lban Player123 7d Читы
-```
-Забанит игрока на 7 дней с причиной "Читы".
-
-## Форматы времени
-
-- `s` - секунды (30s = 30 секунд)
-- `m` - минуты (15m = 15 минут)
-- `h` - часы (2h = 2 часа)
-- `d` - дни (7d = 7 дней)
-- `perm` или `0` - навсегда
-
-Примеры:
-- `1h30m` - 1 час 30 минут
-- `7d` - 7 дней
-- `perm` - навсегда
-
-## Плейсхолдеры
-
-### Чат
-- `{player}` - ник игрока
-- `{player_prefix}` - префикс игрока (LuckPerms/градиент)
-- `{player_suffix}` - суффикс игрока (LuckPerms/градиент)
-- `{message}` - текст сообщения
-- `{emoji}` - эмодзи префикса чата
-- `{prefix}` - префикс чата (GLOBAL/LOCAL)
-- `{separator}` - разделитель
-
-### Hover
-- `{player}` - ник игрока
-- `{world}` - мир игрока
-- `{ping}` - пинг
-- `{gamemode}` - режим игры
-- `{health}` - здоровье
-- `{food}` - голод
-
-### Смерть
-- `{player}` - ник погибшего
-- `{killer}` - ник убийцы
-- `{weapon}` - название оружия
-- `{death_message}` - стандартное сообщение смерти
-
-## API для разработчиков
-
-### Получение сервисов
 ```java
 // Получить ServiceRegistry
 ServiceRegistry registry = plugin.getServiceRegistry();
 
-// Получить сервис чата
-ChatService chatService = registry.get(ChatService.class);
-
 // Отправить глобальное сообщение
+ChatService chatService = registry.get(ChatService.class);
 chatService.sendGlobalMessage(player, "Привет!");
 
-// Получить сервис мутов
-MuteService muteService = registry.get(MuteService.class);
-
-// Проверить мут
-if (muteService.isMuted(player.getUniqueId())) {
-    // Игрок замучен
-}
-```
-
-### Создание кастомного фильтра
-```java
+// Создание кастомного фильтра
 public class MyFilter implements MessageFilter {
     @Override
     public FilterResult filter(Player player, String message) {
@@ -349,53 +450,28 @@ public class MyFilter implements MessageFilter {
 }
 ```
 
-## Известные проблемы
+### Известные проблемы
 
 - Градиенты могут некорректно отображаться в старых версиях клиента (< 1.16)
 - Некоторые фильтры могут блокировать легитимные сообщения (настраивается в `config/filters.yml`)
 
-## Статистика проекта
+### Лицензия
 
-- Версия: 1.5.5
-- Строк кода: 9000+
-- Конфигов: 10+
-- Команд: 30+
+[GNU General Public License v3.0](LICENSE)
 
-## Вклад в проект
+---
 
-Мы приветствуем вклад в развитие проекта! Перед началом работы ознакомьтесь с:
-- [Code of Conduct](CODE_OF_CONDUCT.md) - правила поведения в сообществе
-- [Security Policy](SECURITY.md) - политика безопасности
+## Project Statistics | Статистика проекта
 
-### Как внести вклад
+| Metric | Value |
+|--------|-------|
+| Version | 1.5.5 |
+| Java files | 150+ |
+| Commands | 30+ |
+| Config files | 10+ |
 
-1. Fork репозитория
-2. Создайте ветку для фичи (`git checkout -b feature/amazing-feature`)
-3. Commit изменения (`git commit -m 'Add amazing feature'`)
-4. Push в ветку (`git push origin feature/amazing-feature`)
-5. Откройте Pull Request
-
-### Типы вклада
-
-- 🐛 Исправление багов
-- ✨ Новые функции
-- 📝 Улучшение документации
-- 🎨 Улучшение UI/UX
-- ⚡ Оптимизация производительности
-- 🔒 Улучшение безопасности
-
-## Лицензия
-
-GNU General Public License v3.0 - см. файл [LICENSE](LICENSE)
-
-Это свободное программное обеспечение. Вы можете распространять и/или модифицировать его в соответствии с условиями GNU General Public License версии 3.
-
-## Автор
-
-Loki Development Team
-- Codeberg: @loki5512344
-
-## Ссылки
+## Links | Ссылки
 
 - [Codeberg Repository](https://codeberg.org/loki5512344/Lochat)
 - [Issues](https://codeberg.org/loki5512344/Lochat/issues)
+- [Contributing Guide](CONTRIBUTING.md)

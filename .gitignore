@@ -2,6 +2,9 @@
 .gradle/
 build/
 
+# Compiled output (IDE auto-build)
+bin/
+
 # Local Paper test server (gradlew runServer / run-paper)
 run/
 api_docs/
@@ -12,6 +15,9 @@ api_docs/
 *.iml
 *.ipr
 *.iws
+.classpath
+.project
+.settings/
 .vscode/
 *.code-workspace
 

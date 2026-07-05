@@ -2,10 +2,11 @@ plugins {
     java
     id("xyz.jpenilla.run-paper") version "2.3.1"
     jacoco
+    checkstyle
 }
 
 group = "com.loki"
-version = "1.5.5-1.21.8"
+version = "1.5.5-1.21.x"
 
 repositories {
     mavenCentral()
@@ -28,6 +29,14 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.11.0")
     testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.0")
+}
+
+checkstyle {
+    toolVersion = "10.21.4"
+    configFile = file("config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = false
+    maxErrors = 0
+    maxWarnings = 100
 }
 
 java {
@@ -63,13 +72,12 @@ jacoco {
 }
 
 tasks.jar {
-    archiveFileName.set("LoChat-1.5.5-1.21.8.jar")
+    archiveFileName.set("LoChat-${project.version}.jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 // Локальный Paper для тестов: .\gradlew.bat runServer
 tasks.runServer {
-    minecraftVersion("1.21.4")
-    // Совпадает с compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    minecraftVersion("1.21.4") // lowest supported; runs on any 1.21.x Paper server
 }

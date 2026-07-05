@@ -1,137 +1,123 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                          LoChat Hardcoded Messages                         ║
-# ║                           Цветовая гамма: Spacelegacy                      ║
-# ║                           #B798A8 → #7858E9                                ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
+# LoChat system messages
+# Internal messages for commands, filters, moderation, and general feedback.
+
+# ── Commands ───────────────────────────────────────────────────────────────────
 
 commands:
   mute:
-    usage: "&#B798A8Использование: &#7858E9/mute <ник> [время] [-s] [причина]"
-    time_help: "&#9878C9Время: &#7858E91d&#9878C9, &#7858E92h&#9878C9, &#7858E930m&#9878C9, &#7858E960s&#9878C9, &#7858E9perm"
-    silent_help: "&#B798A8-s &#9878C9— тихий мут (право &#7858E9lochat.mute.silent&#9878C9)"
-    no_silent_permission: "&#CF6679Нет права на тихий мут"
-    default_reason: "Без причины"
-    default_duration: "7d"
+    usage: "&cUsage: &f/mute <player> [time] [-s] [reason]"
+    time-help: "&7Time format: &f1d&7, &f2h&7, &f30m&7, &f60s&7, &fperm"
+    silent-help: "&7-s &7= silent mute (requires &flochat.mute.silent&7)"
+    no-silent-permission: "&cNo permission for silent mute"
+    default-reason: "No reason specified"
+    default-duration: "7d"
 
   cooldown:
-    message: "&#B798A8Подождите &#7858E9{remaining} &#B798A8сек"
+    message: "&cPlease wait &f{remaining} &cseconds"
 
-  clear_chat:
-    lines_cleared: "&#9878C9Чат очищен &#7858E9({lines} строк&#9878C9)"
-    no_permission: "&#CF6679Нет прав для очистки чата"
+  clear-chat:
+    lines-cleared: "&aChat cleared &7({lines} lines)"
+    no-permission: "&cNo permission to clear chat"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ЛОКАЛЬНЫЙ ЧАТ                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Local Chat ─────────────────────────────────────────────────────────────────
 
-local_chat:
-  nobody_heard: "&#9878C9Вас никто не услышал &#B798A8— рядом нет игроков"
-  no_players_nearby: "&#B798A8Рядом нет игроков"
+local-chat:
+  nobody-heard: "&7Nobody heard you — no players nearby"
+  no-players-nearby: "&7No players nearby"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ФИЛЬТРЫ                                         │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Filters ────────────────────────────────────────────────────────────────────
 
 filters:
   caps:
-    min_length: 3
-    blocked_message: "&#CF6679Не кричите в чате"
-    auto_lowercase_notice: "&#B798A8Сообщение автоматически исправлено"
+    min-length: 3
+    blocked-message: "&cPlease don't shout"
+    auto-lowercase-notice: "&7Message auto-corrected"
   spam:
-    blocked_message: "&#CF6679Не спамьте"
-    similar_message: "&#CF6679Вы уже отправляли похожее сообщение"
+    blocked-message: "&cDo not spam"
+    similar-message: "&cYou already sent a similar message"
   swear:
-    blocked_message: "&#CF6679Запрещённые слова"
-    replaced_notice: "&#B798A8Некоторые слова заменены"
+    blocked-message: "&cInappropriate language"
+    replaced-notice: "&7Some words were replaced"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            МУТИРОВАНИЕ                                     │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Mute Messages ──────────────────────────────────────────────────────────────
 
 mute:
-  muted_message: "&#CF6679Вы замучены! &#B798A8Причина: &#7858E9{reason}&#B798A8. Осталось: &#7858E9{time}"
-  muted_permanent: "&#CF6679Вы замучены навсегда! &#B798A8Причина: &#7858E9{reason}"
-  player_muted: "&#9878C9Игрок &#7858E9{player} &#9878C9замучен на &#7858E9{time}&#9878C9. Причина: &#B798A8{reason}"
-  player_muted_permanent: "&#9878C9Игрок &#7858E9{player} &#9878C9замучен навсегда. Причина: &#B798A8{reason}"
-  player_muted_silent: "&#B798A8[&#9878C9ТИХИЙ МУТ&#B798A8] &#7858E9{player} &#B798A8замучен на &#7858E9{time}"
-  player_unmuted: "&#9878C9Игрок &#7858E9{player} &#9878C9размучен"
-  not_muted: "&#B798A8Игрок &#7858E9{player} &#B798A8не замучен"
-  player_not_found: "&#CF6679Игрок не найден!"
-  invalid_time: "&#CF6679Неверный формат времени!"
-  already_muted: "&#CF6679Игрок уже замучен!"
-  no_silent_unmute_permission: "&#CF6679Нет права на тихий размут!"
-  player_not_muted_simple: "&#CF6679Игрок не замучен!"
+  muted-message: "&cYou are muted! &7Reason: &f{reason}&7. Remaining: &f{time}"
+  muted-permanent: "&cYou are permanently muted! &7Reason: &f{reason}"
+  player-muted: "&aPlayer &f{player} &amuted for &f{time}&a. Reason: &7{reason}"
+  player-muted-permanent: "&aPlayer &f{player} &amuted permanently. Reason: &7{reason}"
+  player-muted-silent: "&8[&7SILENT&8] &f{player} &7muted for &f{time}"
+  player-unmuted: "&aPlayer &f{player} &aunmuted"
+  not-muted: "&7Player &f{player} &7is not muted"
+  player-not-found: "&cPlayer not found!"
+  invalid-time: "&cInvalid time format!"
+  already-muted: "&cPlayer is already muted!"
+  no-silent-unmute-permission: "&cNo permission for silent unmute"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ИГРОВЫЕ РЕЖИМЫ                                  │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Gamemodes ──────────────────────────────────────────────────────────────────
 
 gamemodes:
-  survival: "Выживание"
-  creative: "Творчество"
-  adventure: "Приключение"
-  spectator: "Наблюдатель"
+  survival: "Survival"
+  creative: "Creative"
+  adventure: "Adventure"
+  spectator: "Spectator"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ЛИЧНЫЕ СООБЩЕНИЯ                                │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Private Messages ───────────────────────────────────────────────────────────
 
-private_messages:
-  no_reply_target: "&#CF6679Нет цели для ответа"
-  message_sent: "&#B798A8Сообщение отправлено &#7858E9{player}"
-  player_offline: "&#CF6679Игрок &#7858E9{player} &#CF6679не в сети"
-  cannot_message_self: "&#CF6679Нельзя писать самому себе"
+private-messages:
+  no-reply-target: "&cNobody to reply to"
+  message-sent: "&aMessage sent to &f{player}"
+  player-offline: "&cPlayer &f{player} &cis not online"
+  cannot-message-self: "&cYou cannot message yourself"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ИГНОРИРОВАНИЕ                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Ignore ─────────────────────────────────────────────────────────────────────
 
 ignore:
-  player_ignored: "&#9878C9Игрок &#7858E9{player} &#9878C9добавлен в игнор"
-  player_unignored: "&#9878C9Игрок &#7858E9{player} &#9878C9убран из игнора"
-  already_ignored: "&#B798A8Игрок &#7858E9{player} &#B798A8уже в игноре"
-  not_ignored: "&#B798A8Игрок &#7858E9{player} &#B798A8не в игноре"
-  cannot_ignore_self: "&#CF6679Нельзя игнорировать самого себя"
-  ignore_list_empty: "&#B798A8Список игнора пуст"
-  ignore_list_header: "&#B798A8Игнорируемые игроки&#9878C9:"
+  player-ignored: "&aPlayer &f{player} &ais now ignored"
+  player-unignored: "&aPlayer &f{player} &ais no longer ignored"
+  already-ignored: "&7Player &f{player} &7is already ignored"
+  not-ignored: "&7Player &f{player} &7is not ignored"
+  cannot-ignore-self: "&cYou cannot ignore yourself"
+  ignore-list-empty: "&7Your ignore list is empty"
+  ignore-list-header: "&7Ignored players:"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                            ОБЩИЕ СООБЩЕНИЯ                                 │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── General ────────────────────────────────────────────────────────────────────
 
 general:
-  no_permission: "&#CF6679Нет прав!"
-  player_only: "&#CF6679Только для игроков!"
-  invalid_arguments: "&#CF6679Неверные аргументы!"
-  command_disabled: "&#CF6679Команда отключена!"
-  feature_disabled: "&#CF6679Функция отключена!"
-  player_not_found: "&#CF6679Игрок не найден!"
-  time_formats:
-    seconds: "сек"
-    minutes: "мин"
-    hours: "ч"
-    days: "д"
-    permanent: "навсегда"
-  enabled: "&#7858E9Включено"
-  disabled: "&#B798A8Отключено"
-  online: "&#9878C9В сети"
-  offline: "&#B798A8Не в сети"
+  no-permission: "&cNo permission!"
+  player-only: "&cPlayers only!"
+  invalid-arguments: "&cInvalid arguments!"
+  command-disabled: "&cCommand disabled!"
+  feature-disabled: "&cFeature disabled!"
+  player-not-found: "&cPlayer not found!"
+  time-formats:
+    seconds: "s"
+    minutes: "m"
+    hours: "h"
+    days: "d"
+    permanent: "permanent"
+  enabled: "&aEnabled"
+  disabled: "&7Disabled"
+  online: "&aOnline"
+  offline: "&7Offline"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │                     ВАРНЫ / БАНЫ (LoChat)                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Moderation ─────────────────────────────────────────────────────────────────
 
 moderation:
-  default_reason: "Без причины"
-  duration_permanent: "навсегда"
-  warn_received: "&#CF6679⚠ Вам выдано предупреждение! &#B798A8Причина: &#7858E9{reason}"
-  warn_staff_confirm: "&#9878C9Игроку &#7858E9{player} &#9878C9выдан варн. &#B798A8Причина: &#7858E9{reason}"
-  silent_warn_staff: "&#B798A8[&#9878C9ТИХИЙ ВАРН&#B798A8] &#7858E9{player}&#9878C9: &#B798A8{reason}"
-  ban_usage: "&#B798A8Использование: &#7858E9/lban <ник> [время|perm] [причина]"
-  ban_confirm: "&#9878C9Игрок &#7858E9{player} &#9878C9забанен. &#B798A8Срок: &#7858E9{duration}"
-  unban_confirm: "&#9878C9Бан снят с &#7858E9{player}"
-  not_banned: "&#CF6679Игрок не забанен!"
-  already_banned: "&#CF6679Игрок уже забанен!"
-  warn_usage: "&#B798A8Использование: &#7858E9/warn <ник> [причина]"
-  silent_warn_usage: "&#B798A8Использование: &#7858E9/silentwarn <ник> [причина]"
-  ban_kick_message: "<gradient:#FF5555:#8B0000><bold>═══════ ДОСТУП ЗАПРЕЩЁН ═══════</bold></gradient>\n<gray>Вы заблокированы на этом сервере.</gray>\n<white>Причина: <gradient:#7858E9:#B798A8>{reason}</gradient></white>\n<gray>Модератор: <white>{moderator}</white></gray>\n<gray>Срок: <#7858E9>{duration}</#7858E9></gray>\n<gradient:#FF5555:#8B0000><bold>════════════════════════</bold></gradient>"
+  default-reason: "No reason specified"
+  duration-permanent: "permanent"
+  warn-received: "&6\u26A0 &cYou received a warning! &7Reason: &f{reason}"
+  warn-staff-confirm: "&aPlayer &f{player} &awarned. &7Reason: &f{reason}"
+  silent-warn-staff: "&8[&7SILENT&8] &f{player}&7: &7{reason}"
+  ban-usage: "&cUsage: &f/lban <player> [time|perm] [reason]"
+  ban-confirm: "&aPlayer &f{player} &abanned. &7Duration: &f{duration}"
+  unban-confirm: "&aBan lifted for &f{player}"
+  not-banned: "&cPlayer is not banned!"
+  already-banned: "&cPlayer is already banned!"
+  warn-usage: "&cUsage: &f/warn <player> [reason]"
+  silent-warn-usage: "&cUsage: &f/silentwarn <player> [reason]"
+  ban-kick-message: |
+    <red><bold>You are banned from this server.</bold></red>
+    <gray>Reason: <white>{reason}</white></gray>
+    <gray>Moderator: <white>{moderator}</white></gray>
+    <gray>Duration: <white>{duration}</white></gray>
