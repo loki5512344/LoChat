@@ -1,6 +1,10 @@
 package com.loki.lochat.core.filter;
 
-import com.loki.lochat.core.filter.filters.*;
+import com.loki.lochat.core.filter.filters.CharacterFilter;
+import com.loki.lochat.core.filter.filters.FloodFilter;
+import com.loki.lochat.core.filter.filters.SpamFilter;
+import com.loki.lochat.core.filter.filters.SwearFilter;
+import com.loki.lochat.core.filter.filters.UrlFilter;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

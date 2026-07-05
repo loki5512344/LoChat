@@ -14,8 +14,8 @@ import java.nio.file.Files;
  */
 public abstract class BaseConfig {
     protected final JavaPlugin plugin;
-    protected File configFile;
-    protected FileConfiguration config;
+    private File configFile;
+    private FileConfiguration config;
     private final String fileName;
     private final boolean inConfigFolder;
 
@@ -110,6 +110,10 @@ public abstract class BaseConfig {
      */
     protected void onLoad() {
         // Переопределяется в подклассах
+    }
+
+    protected File getConfigFile() {
+        return configFile;
     }
 
     /**

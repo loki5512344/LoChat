@@ -1,16 +1,35 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.commands.admin.broadcast.*;
-import com.loki.lochat.commands.admin.chat.*;
-import com.loki.lochat.commands.admin.system.*;
-import com.loki.lochat.commands.chat.*;
-import com.loki.lochat.commands.messaging.*;
-import com.loki.lochat.commands.moderation.ban.*;
-import com.loki.lochat.commands.moderation.mute.*;
-import com.loki.lochat.commands.moderation.warn.*;
-import com.loki.lochat.commands.nick.*;
-import com.loki.lochat.commands.rp.*;
+import com.loki.lochat.commands.admin.broadcast.AnnounceCommand;
+import com.loki.lochat.commands.admin.broadcast.DiscordCommand;
+import com.loki.lochat.commands.admin.chat.ChatSpyCommand;
+import com.loki.lochat.commands.admin.chat.ClearChatCommand;
+import com.loki.lochat.commands.admin.chat.ClearChatConfigCommand;
+import com.loki.lochat.commands.admin.system.LoChatCommand;
+import com.loki.lochat.commands.admin.system.ReloadConfigCommand;
+import com.loki.lochat.commands.chat.GlobalChatCommand;
+import com.loki.lochat.commands.chat.LocalChatCommand;
+import com.loki.lochat.commands.messaging.IgnoreCommand;
+import com.loki.lochat.commands.messaging.IgnoreListCommand;
+import com.loki.lochat.commands.messaging.MsgCommand;
+import com.loki.lochat.commands.messaging.ReplyCommand;
+import com.loki.lochat.commands.messaging.UnignoreCommand;
+import com.loki.lochat.commands.moderation.ban.BanCommand;
+import com.loki.lochat.commands.moderation.ban.UnbanCommand;
+import com.loki.lochat.commands.moderation.mute.MuteBlameCommand;
+import com.loki.lochat.commands.moderation.mute.MuteCommand;
+import com.loki.lochat.commands.moderation.mute.MuteHistoryCommand;
+import com.loki.lochat.commands.moderation.mute.MuteListCommand;
+import com.loki.lochat.commands.moderation.mute.UnmuteCommand;
+import com.loki.lochat.commands.moderation.warn.SilentWarnCommand;
+import com.loki.lochat.commands.moderation.warn.WarnCommand;
+import com.loki.lochat.commands.nick.NickCommand;
+import com.loki.lochat.commands.nick.PlayerInfoCommand;
+import com.loki.lochat.commands.rp.DoCommand;
+import com.loki.lochat.commands.rp.MeCommand;
+import com.loki.lochat.commands.rp.RollCommand;
+import com.loki.lochat.commands.rp.TryCommand;
 
 import org.bukkit.command.PluginCommand;
 

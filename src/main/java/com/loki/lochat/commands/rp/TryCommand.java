@@ -38,7 +38,8 @@ public class TryCommand extends PlayerCommand {
         int cooldown = plugin.getConfigManager().getInt("rp.cooldowns.try", 0);
         if (cooldown > 0 && playerService.isOnCooldown(player.getUniqueId(), "rp_try", cooldown)) {
             int remaining = playerService.getRemainingCooldown(player.getUniqueId(), "rp_try", cooldown);
-            String msg = plugin.getConfigManager().getMessagesConfig().getCooldownMessage().replace("{remaining}", String.valueOf(remaining));
+            String msg = plugin.getConfigManager().getMessagesConfig().getCooldownMessage()
+                .replace("{remaining}", String.valueOf(remaining));
             player.sendMessage(ChatFormatter.parse(msg));
             return true;
         }

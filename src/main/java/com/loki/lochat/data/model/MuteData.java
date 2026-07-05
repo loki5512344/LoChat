@@ -78,14 +78,14 @@ public class MuteData {
         } // For JSON deserialization
 
         public MuteHistoryEntry(String playerName, long duration, String reason,
-                                String mutedBy, long mutedAt, boolean unmuted,
+                                String mutedBy, long mutedAt,
                                 String unmutedBy, long unmutedAt) {
             this.playerName = playerName;
             this.duration = duration;
             this.reason = reason;
             this.mutedBy = mutedBy;
             this.mutedAt = mutedAt;
-            this.unmuted = unmuted;
+            this.unmuted = unmutedBy != null;
             this.unmutedBy = unmutedBy;
             this.unmutedAt = unmutedAt;
         }

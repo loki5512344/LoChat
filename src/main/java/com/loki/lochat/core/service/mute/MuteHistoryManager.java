@@ -11,7 +11,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MuteHistoryManager {
@@ -33,7 +37,6 @@ public class MuteHistoryManager {
                 reason,
                 mutedBy,
                 System.currentTimeMillis(),
-                false,
                 null,
                 0
         ));

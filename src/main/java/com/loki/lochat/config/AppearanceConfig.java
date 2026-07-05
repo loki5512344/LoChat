@@ -35,9 +35,9 @@ public class AppearanceConfig extends BaseConfig {
      */
     private void loadEmojiCache() {
         emojiCache.clear();
-        if (config.isConfigurationSection("emojis")) {
-            for (String key : config.getConfigurationSection("emojis").getKeys(false)) {
-                emojiCache.put(key, config.getString("emojis." + key));
+        if (getConfig().isConfigurationSection("emojis")) {
+            for (String key : getConfig().getConfigurationSection("emojis").getKeys(false)) {
+                emojiCache.put(key, getConfig().getString("emojis." + key));
             }
         }
     }
@@ -45,7 +45,7 @@ public class AppearanceConfig extends BaseConfig {
     // ========== ПРЕФИКСЫ ==========
     
     private String getPrefixValue(String chatType, String key, String defaultValue) {
-        return config.getString("prefixes." + chatType + "." + key, defaultValue);
+        return getConfig().getString("prefixes." + chatType + "." + key, defaultValue);
     }
     
     public String getGlobalEmoji() {
@@ -55,7 +55,7 @@ public class AppearanceConfig extends BaseConfig {
         return getPrefixValue("global", "text", "GLOBAL");
     }
     public List<String> getGlobalColors() {
-        return config.getStringList("prefixes.global.colors");
+        return getConfig().getStringList("prefixes.global.colors");
     }
     public String getGlobalSeparatorText() {
         return getPrefixValue("global", "separator.text", " ▶ ");
@@ -74,7 +74,7 @@ public class AppearanceConfig extends BaseConfig {
         return getPrefixValue("local", "text", "LOCAL");
     }
     public List<String> getLocalColors() {
-        return config.getStringList("prefixes.local.colors");
+        return getConfig().getStringList("prefixes.local.colors");
     }
     public String getLocalSeparatorText() {
         return getPrefixValue("local", "separator.text", " ▶ ");
@@ -89,20 +89,20 @@ public class AppearanceConfig extends BaseConfig {
     // ========== ФОРМАТ СООБЩЕНИЙ ==========
     
     public String getGlobalChatFormat() {
-        return config.getString("chat-format.global", "{emoji} {prefix} {separator} {player} : {message}");
+        return getConfig().getString("chat-format.global", "{emoji} {prefix} {separator} {player} : {message}");
     }
     
     public String getLocalChatFormat() {
-        return config.getString("chat-format.local", "{emoji} {prefix} {separator} {player} : {message}");
+        return getConfig().getString("chat-format.local", "{emoji} {prefix} {separator} {player} : {message}");
     }
     
     // ========== HOVER ЭФФЕКТЫ ==========
     
     public boolean isHoverEnabled() {
-        return config.getBoolean("hover.enabled", true);
+        return getConfig().getBoolean("hover.enabled", true);
     }
     public List<String> getHoverFormat() {
-        return config.getStringList("hover.format");
+        return getConfig().getStringList("hover.format");
     }
     
     // ========== ЭМОДЗИ ==========
@@ -117,20 +117,20 @@ public class AppearanceConfig extends BaseConfig {
     // ========== НАСТРОЙКИ ЧАТА ==========
     
     public int getLocalRadius() {
-        return config.getInt("chat.local_radius", 100);
+        return getConfig().getInt("chat.local_radius", 100);
     }
     public int getClearLines() {
-        return config.getInt("chat.clear_lines", 100);
+        return getConfig().getInt("chat.clear_lines", 100);
     }
     public int getMinMessageLength() {
-        return config.getInt("chat.min_message_length", 1);
+        return getConfig().getInt("chat.min_message_length", 1);
     }
     public int getMaxMessageLength() {
-        return config.getInt("chat.max_message_length", 2000);
+        return getConfig().getInt("chat.max_message_length", 2000);
     }
     
     private String getChatColor(String type, String defaultColor) {
-        return config.getString("chat.colors." + type, defaultColor);
+        return getConfig().getString("chat.colors." + type, defaultColor);
     }
     
     public String getNobodyHeardColor() {
@@ -152,18 +152,18 @@ public class AppearanceConfig extends BaseConfig {
     // ========== DISCORD ==========
     
     public String getDiscordEmoji(String event) {
-        return config.getString("discord.emojis." + event, "");
+        return getConfig().getString("discord.emojis." + event, "");
     }
     public String getDiscordEventTitle(String event) {
-        return config.getString("discord.event_titles." + event, "");
+        return getConfig().getString("discord.event_titles." + event, "");
     }
     public String getDefaultAvatarUrl() {
-        return config.getString("discord.avatar_urls.default", "https://mc-heads.net/avatar/minecraft/64");
+        return getConfig().getString("discord.avatar_urls.default", "https://mc-heads.net/avatar/minecraft/64");
     }
     public String getPlayerAvatarUrl() {
-        return config.getString("discord.avatar_urls.player", "https://mc-heads.net/avatar/{player}/64");
+        return getConfig().getString("discord.avatar_urls.player", "https://mc-heads.net/avatar/{player}/64");
     }
     public String getDefaultEmbedColor() {
-        return config.getString("discord.default_embed_color", "5865F2");
+        return getConfig().getString("discord.default_embed_color", "5865F2");
     }
 }

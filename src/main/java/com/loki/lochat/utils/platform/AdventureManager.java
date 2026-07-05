@@ -70,7 +70,9 @@ public class AdventureManager {
             try {
                 // Используем Adventure API
                 Object playerAudience = audiences.getClass().getMethod("player", Player.class).invoke(audiences, player);
-                playerAudience.getClass().getMethod("sendMessage", Class.forName("net.kyori.adventure.text.Component")).invoke(playerAudience, message);
+                playerAudience.getClass()
+                    .getMethod("sendMessage", Class.forName("net.kyori.adventure.text.Component"))
+                    .invoke(playerAudience, message);
                 return;
             } catch (Exception e) {
                 // Fallback на legacy

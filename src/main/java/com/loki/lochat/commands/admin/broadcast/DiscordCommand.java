@@ -70,7 +70,10 @@ public class DiscordCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(
+        @NotNull CommandSender sender, @NotNull Command command, @NotNull String alias,
+        @NotNull String[] args
+    ) {
         if (!sender.hasPermission("lochat.discord.admin")) {
             return null;
         }

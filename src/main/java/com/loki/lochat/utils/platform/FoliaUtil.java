@@ -55,7 +55,10 @@ public class FoliaUtil {
             // В Folia используем AsyncScheduler для глобальных задач
             long delayMs = delayTicks * 50; // 1 тик = 50мс
             long periodMs = periodTicks * 50;
-            Bukkit.getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> task.run(), delayMs, periodMs, java.util.concurrent.TimeUnit.MILLISECONDS);
+            Bukkit.getAsyncScheduler().runAtFixedRate(
+                plugin, scheduledTask -> task.run(), delayMs, periodMs,
+                java.util.concurrent.TimeUnit.MILLISECONDS
+            );
         } else {
             // В Paper/Spigot используем обычный scheduler
             Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delayTicks, periodTicks);

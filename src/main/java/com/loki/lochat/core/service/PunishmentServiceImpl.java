@@ -15,9 +15,21 @@ import net.kyori.adventure.text.Component;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -137,11 +149,11 @@ public class PunishmentServiceImpl implements PunishmentService {
             for (Map.Entry<UUID, List<WarnEntry>> e : warns.entrySet()) {
                 List<WarnEntry> list = e.getValue();
                 synchronized (list) {
-                    snap.warns.put(e.getKey().toString(), new ArrayList<>(list));
+                    snap.getWarns().put(e.getKey().toString(), new ArrayList<>(list));
                 }
             }
             for (Map.Entry<UUID, BanRecord> e : bans.entrySet()) {
-                snap.bans.put(e.getKey().toString(), e.getValue());
+                snap.getBans().put(e.getKey().toString(), e.getValue());
             }
             try (Writer w = new OutputStreamWriter(new FileOutputStream(dataFile), java.nio.charset.StandardCharsets.UTF_8)) {
                 gson.toJson(snap, w);
@@ -172,16 +184,16 @@ public class PunishmentServiceImpl implements PunishmentService {
             if (snap == null) {
                 return;
             }
-            if (snap.warns != null) {
-                for (Map.Entry<String, List<WarnEntry>> e : snap.warns.entrySet()) {
+            if (snap.getWarns() != null) {
+                for (Map.Entry<String, List<WarnEntry>> e : snap.getWarns().entrySet()) {
                     try {
                         warns.put(UUID.fromString(e.getKey()), Collections.synchronizedList(new ArrayList<>(e.getValue())));
                     } catch (IllegalArgumentException ignored) {
                     }
                 }
             }
-            if (snap.bans != null) {
-                for (Map.Entry<String, BanRecord> e : snap.bans.entrySet()) {
+            if (snap.getBans() != null) {
+                for (Map.Entry<String, BanRecord> e : snap.getBans().entrySet()) {
                     try {
                         UUID id = UUID.fromString(e.getKey());
                         BanRecord br = e.getValue();
@@ -202,7 +214,15 @@ public class PunishmentServiceImpl implements PunishmentService {
     }
 
     private static class PunishmentSnapshot {
-        Map<String, List<WarnEntry>> warns = new HashMap<>();
-        Map<String, BanRecord> bans = new HashMap<>();
+        private Map<String, List<WarnEntry>> warns = new HashMap<>();
+        private Map<String, BanRecord> bans = new HashMap<>();
+
+        Map<String, List<WarnEntry>> getWarns() {
+            return warns;
+        }
+
+        Map<String, BanRecord> getBans() {
+            return bans;
+        }
     }
 }

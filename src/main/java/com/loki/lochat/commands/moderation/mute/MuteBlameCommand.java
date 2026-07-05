@@ -56,7 +56,9 @@ public class MuteBlameCommand implements CommandExecutor, TabCompleter {
             String status = e.unmuted ? "&#9878C9Размучен" : (e.duration == 0 ? "&#CF6679Активен (навсегда)" :
                     System.currentTimeMillis() > e.mutedAt + e.duration ? "&#B798A8Истёк" : "&#CF6679Активен");
             sender.sendMessage("&#9878C9" + idx + ". &f" + (e.playerName != null ? e.playerName : "???") + " &#B798A8— " + status);
-            sender.sendMessage("   &f" + fmt.format(new Date(e.mutedAt)) + "  &#B798A8Длительность: &f" + (e.duration == 0 ? "навсегда" : muteService.formatTime(e.duration)));
+            sender.sendMessage("   &f" + fmt.format(new Date(e.mutedAt)) + "  &#B798A8Длительность: &f" + (e.duration
+                == 0 ? "навсегда" : muteService.formatTime(e.duration)));
+
             sender.sendMessage("   &#B798A8Причина: &f" + (e.reason != null ? e.reason : "—"));
             idx++;
         }
@@ -64,7 +66,10 @@ public class MuteBlameCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(
+        @NotNull CommandSender sender, @NotNull Command command, @NotNull String alias,
+        @NotNull String[] args
+    ) {
         List<String> c = new ArrayList<>();
         if (args.length == 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {

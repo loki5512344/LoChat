@@ -150,9 +150,7 @@ public class ChatEventListener implements Listener {
     private void recordStatistics(LoChat loChat, Player sender, boolean isGlobal) {
         com.loki.lochat.api.service.PlayerService playerService =
                 loChat.getServiceRegistry().get(com.loki.lochat.api.service.PlayerService.class);
-        if (playerService instanceof com.loki.lochat.core.service.PlayerServiceImpl impl) {
-            impl.recordMessage(sender.getUniqueId(), isGlobal ? "global" : "local");
-        }
+        playerService.recordMessage(sender.getUniqueId(), isGlobal ? "global" : "local");
     }
 
     private record ChatMode(boolean isGlobal, String message) {

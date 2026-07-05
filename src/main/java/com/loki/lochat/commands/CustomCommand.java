@@ -32,7 +32,9 @@ public final class CustomCommand extends Command {
     }
 
     @Override
-    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull
+        String[] args) throws IllegalArgumentException {
+
         // Базовое автодополнение - можно расширить при необходимости
         return new ArrayList<>();
     }

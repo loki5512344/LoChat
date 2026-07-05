@@ -1,6 +1,6 @@
 package com.loki.lochat.gradient.util;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.regex.Pattern;
 

@@ -31,6 +31,8 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         this.muteService = plugin.getServiceRegistry().get(MuteService.class);
     }
 
+    private record ParsedArgs(String targetName, long duration, String reason, boolean silent) { }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
@@ -49,7 +51,38 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // Парсим аргументы
+        ParsedArgs parsed = parseArgs(sender, args, hm);
+        if (parsed == null) {
+            return true;
+        }
+
+        String targetName = parsed.targetName;
+        long duration = parsed.duration;
+        String reason = parsed.reason;
+        boolean silent = parsed.silent;
+
+        if (sender instanceof Player p && !muteService.canMuteForDuration(p, duration)) {
+            long max = muteService.getMaxDuration(p);
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Нельзя мутить на такой срок! &#B798A8Максимум: &#7858E9" +
+                    (max == 0 ? "навсегда" : muteService.formatTime(max))));
+            return true;
+        }
+
+        UUID targetUUID = com.loki.lochat.utils.player.PlayerUtil.findPlayerUUID(targetName);
+        if (targetUUID == null) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
+            return true;
+        }
+        if (muteService.isMuted(targetUUID)) {
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Игрок уже замучен!"));
+            return true;
+        }
+
+        doMute(sender, hm, targetUUID, targetName, duration, reason, silent);
+        return true;
+    }
+
+    private ParsedArgs parseArgs(CommandSender sender, String[] args, MessagesConfig hm) {
         String targetName = null;
         String timeStr = null;
         boolean silent = false;
@@ -72,45 +105,39 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
 
         if (silent && !sender.hasPermission("lochat.mute.silent")) {
             sender.sendMessage(ChatFormatter.parse(hm.getNoSilentMutePermission()));
-            return true;
+            return null;
         }
 
         String reason = reasonBuilder.length() > 0 ? reasonBuilder.toString() : hm.getDefaultMuteReason();
 
-        // Длительность
-        long duration;
+        long duration = resolveDuration(sender, timeStr, hm);
+        if (duration < 0) {
+            return null;
+        }
+
+        return new ParsedArgs(targetName, duration, reason, silent);
+    }
+
+    private long resolveDuration(CommandSender sender, String timeStr, MessagesConfig hm) {
         if (timeStr == null || timeStr.isEmpty()) {
-            duration = sender instanceof Player p ? muteService.getMaxDuration(p) : 0;
-            if (duration == -1) {
-                duration = muteService.parseTime(hm.getDefaultMuteDuration());
+            long dur = sender instanceof Player p ? muteService.getMaxDuration(p) : 0;
+            if (dur == -1) {
+                dur = muteService.parseTime(hm.getDefaultMuteDuration());
             }
-        } else if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
-            duration = 0;
-        } else {
-            duration = muteService.parseTime(timeStr);
-            if (duration < 0) {
-                sender.sendMessage(ChatFormatter.parse(hm.getMuteTimeHelp()));
-                return true;
-            }
+            return dur;
         }
+        if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
+            return 0;
+        }
+        long dur = muteService.parseTime(timeStr);
+        if (dur < 0) {
+            sender.sendMessage(ChatFormatter.parse(hm.getMuteTimeHelp()));
+        }
+        return dur;
+    }
 
-        if (sender instanceof Player p && !muteService.canMuteForDuration(p, duration)) {
-            long max = muteService.getMaxDuration(p);
-            sender.sendMessage(ChatFormatter.parse("&#CF6679Нельзя мутить на такой срок! &#B798A8Максимум: &#7858E9" +
-                    (max == 0 ? "навсегда" : muteService.formatTime(max))));
-            return true;
-        }
-
-        UUID targetUUID = com.loki.lochat.utils.player.PlayerUtil.findPlayerUUID(targetName);
-        if (targetUUID == null) {
-            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
-            return true;
-        }
-        if (muteService.isMuted(targetUUID)) {
-            sender.sendMessage(ChatFormatter.parse("&#CF6679Игрок уже замучен!"));
-            return true;
-        }
-
+    private void doMute(CommandSender sender, MessagesConfig hm, UUID targetUUID,
+                        String targetName, long duration, String reason, boolean silent) {
         Player target = Bukkit.getPlayer(targetUUID);
         String finalName = com.loki.lochat.utils.player.PlayerUtil.getPlayerName(targetUUID);
         String op = sender.getName();
@@ -146,8 +173,6 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             String c = voiceCmd.replace("{player}", finalName).replace("{uuid}", targetUUID.toString());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c);
         }
-
-        return true;
     }
 
     private boolean isTimeFormat(String s) {

@@ -1,10 +1,22 @@
 package com.loki.lochat.core.registry;
 
-import com.loki.lochat.api.service.*;
+import com.loki.lochat.api.service.ChatService;
+import com.loki.lochat.api.service.MentionService;
+import com.loki.lochat.api.service.MessageService;
+import com.loki.lochat.api.service.MessagingService;
+import com.loki.lochat.api.service.MuteService;
+import com.loki.lochat.api.service.NickService;
+import com.loki.lochat.api.service.PlayerService;
+import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.factory.ServiceFactory;
-import com.loki.lochat.core.service.*;
+import com.loki.lochat.core.service.ChatServiceImpl;
+import com.loki.lochat.core.service.MentionServiceImpl;
+import com.loki.lochat.core.service.MessageServiceImpl;
+import com.loki.lochat.core.service.NickServiceImpl;
+import com.loki.lochat.core.service.PlayerServiceImpl;
+import com.loki.lochat.core.service.PunishmentServiceImpl;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

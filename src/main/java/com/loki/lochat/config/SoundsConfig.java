@@ -14,54 +14,54 @@ public class SoundsConfig extends BaseConfig {
     // ── Звуки упоминаний ────────────────────────────────────────────────────────
     
     public boolean isMentionSoundEnabled() {
-        return config.getBoolean("mention.enabled", true);
+        return getConfig().getBoolean("mention.enabled", true);
     }
 
     public String getMentionSound() {
-        return config.getString("mention.sound", "BLOCK_NOTE_BLOCK_PLING");
+        return getConfig().getString("mention.sound", "BLOCK_NOTE_BLOCK_PLING");
     }
 
     public float getMentionVolume() {
-        return (float) config.getDouble("mention.volume", 1.0);
+        return (float) getConfig().getDouble("mention.volume", 1.0);
     }
 
     public float getMentionPitch() {
-        return (float) config.getDouble("mention.pitch", 1.0);
+        return (float) getConfig().getDouble("mention.pitch", 1.0);
     }
 
     // ── Звуки личных сообщений ──────────────────────────────────────────────────
     
     public boolean isPmSoundEnabled() {
-        return config.getBoolean("pm.enabled", true);
+        return getConfig().getBoolean("pm.enabled", true);
     }
 
     public String getPmSound() {
-        return config.getString("pm.sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
+        return getConfig().getString("pm.sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
     }
 
     public float getPmVolume() {
-        return (float) config.getDouble("pm.volume", 1.0);
+        return (float) getConfig().getDouble("pm.volume", 1.0);
     }
 
     public float getPmPitch() {
-        return (float) config.getDouble("pm.pitch", 1.0);
+        return (float) getConfig().getDouble("pm.pitch", 1.0);
     }
 
     // ── Звуки команд ────────────────────────────────────────────────────────────
     
     public boolean isCommandSoundEnabled() {
-        return config.getBoolean("command.enabled", false);
+        return getConfig().getBoolean("command.enabled", false);
     }
 
     public String getCommandSound() {
-        return config.getString("command.sound", "UI_BUTTON_CLICK");
+        return getConfig().getString("command.sound", "UI_BUTTON_CLICK");
     }
 
     public float getCommandVolume() {
-        return (float) config.getDouble("command.volume", 0.5);
+        return (float) getConfig().getDouble("command.volume", 0.5);
     }
 
     public float getCommandPitch() {
-        return (float) config.getDouble("command.pitch", 1.0);
+        return (float) getConfig().getDouble("command.pitch", 1.0);
     }
 }

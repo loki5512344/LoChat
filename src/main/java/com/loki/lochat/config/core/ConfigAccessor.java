@@ -173,7 +173,8 @@ public class ConfigAccessor {
     }
 
     public String getDeathPlayerKillFormat() {
-        return config.getString("messages.death.player_kill", "&#CF6679☠ &#B798A8{player} &#7858E9был убит игроком &#B798A8{killer} &#9878C9({weapon})");
+        return config.getString("messages.death.player_kill", "&#CF6679☠ &#B798A8{player} &#7858E9был убит"
+                + "игроком &#B798A8{killer} &#9878C9({weapon})");
     }
 
     public String getDeathMobKillFormat() {

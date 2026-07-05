@@ -1,6 +1,8 @@
 package com.loki.lochat.renderer;
 
-import com.loki.lochat.renderer.components.*;
+import com.loki.lochat.renderer.components.EmojiComponent;
+import com.loki.lochat.renderer.components.GradientBuilder;
+import com.loki.lochat.renderer.components.UrlProcessor;
 import com.loki.lochat.utils.format.TextFormatter;
 import com.loki.lochat.utils.player.MentionHandler;
 
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Map;
 
 import io.papermc.paper.chat.ChatRenderer;
 
@@ -63,12 +66,18 @@ public class EnhancedChatRenderer implements ChatRenderer {
         Component playerSuffix = buildPlayerSuffix(source);
         Component player = buildPlayerComponent(source);
         
-        return buildFormattedMessage(format, emoji, prefix, separator, playerPrefix, playerSuffix, player, processed);
+        return buildFormattedMessage(format, Map.of(
+            "emoji", emoji,
+            "prefix", prefix,
+            "separator", separator,
+            "player_prefix", playerPrefix,
+            "player", player,
+            "player_suffix", playerSuffix,
+            "message", processed
+        ));
     }
     
-    private Component buildFormattedMessage(String format, Component emoji, Component prefix, 
-                                           Component separator, Component playerPrefix, Component playerSuffix,
-                                           Component player, Component message) {
+    private Component buildFormattedMessage(String format, Map<String, Component> parts) {
         Component result = Component.empty();
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\{([^}]+)\\}");
         java.util.regex.Matcher matcher = pattern.matcher(format);
@@ -81,16 +90,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
             }
             
             String placeholder = matcher.group(1);
-            switch (placeholder) {
-                case "emoji" -> result = result.append(emoji);
-                case "prefix" -> result = result.append(prefix);
-                case "separator" -> result = result.append(separator);
-                case "player_prefix" -> result = result.append(playerPrefix);
-                case "player" -> result = result.append(player);
-                case "player_suffix" -> result = result.append(playerSuffix);
-                case "message" -> result = result.append(message);
-                default -> result = result.append(Component.text("{" + placeholder + "}"));
-            }
+            result = result.append(parts.getOrDefault(placeholder, Component.text("{" + placeholder + "}")));
             
             lastEnd = matcher.end();
         }

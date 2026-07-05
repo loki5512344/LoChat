@@ -55,71 +55,67 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         }
 
         UUID uuid = player.getUniqueId();
-        GradientModule gradient = plugin.getGradientModule();
 
         return switch (params.toLowerCase()) {
             case "ignored_count" -> String.valueOf(messagingService.getIgnoredCount(uuid));
             case "global_enabled" -> String.valueOf(!chatService.isGlobalChatDisabled(uuid));
-            case "last_pm" -> {
-                Optional<UUID> lastOpt = messagingService.getLastConversation(uuid);
-                if (lastOpt.isEmpty()) {
-                    yield "";
-                }
-                var lastPlayer = Bukkit.getOfflinePlayer(lastOpt.get());
-                yield lastPlayer.getName() != null ? lastPlayer.getName() : "";
-            }
+            case "last_pm" -> resolveLastPm(player, uuid);
             case "spy_enabled" -> String.valueOf(messagingService.isSpying(uuid));
+            case "gradient_full", "full" -> resolveGradient(player, GradientQuery.FULL);
+            case "gradient_name", "name" -> resolveGradient(player, GradientQuery.NAME);
+            case "gradient_prefix", "prefix" -> resolveGradient(player, GradientQuery.PREFIX);
+            case "lp_prefix" -> resolveGradient(player, GradientQuery.LP_PREFIX);
+            default -> null;
+        };
+    }
 
-            // Gradient placeholders (совместимость с LoPreff)
-            // Используем TAB формат §x§R§R§G§G§B§B для совместимости с TAB плагином
-            case "gradient_full", "full" -> {
-                Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) {
-                    yield player.getName() != null ? player.getName() : "";
-                }
+    private enum GradientQuery { FULL, NAME, PREFIX, LP_PREFIX }
 
-                // Если gradient модуль выключен — берём только LuckPerms префикс + ник
+    private String resolveGradient(OfflinePlayer player, GradientQuery query) {
+        GradientModule gradient = plugin.getGradientModule();
+        Player onlinePlayer = player.getPlayer();
+
+        if (onlinePlayer == null) {
+            return switch (query) {
+                case FULL, NAME -> player.getName() != null ? player.getName() : "";
+                case PREFIX, LP_PREFIX -> "";
+            };
+        }
+
+        return switch (query) {
+            case FULL -> {
                 if (gradient == null || !gradient.isEnabled()) {
                     yield player.getName() != null ? player.getName() : "";
                 }
-
-                // Используем TAB формат для плейсхолдеров
                 yield gradient.getFormattedNameForTab(onlinePlayer);
             }
-            case "gradient_name", "name" -> {
-                Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) {
-                    yield player.getName() != null ? player.getName() : "";
-                }
-
+            case NAME -> {
                 if (gradient == null || !gradient.isEnabled()) {
                     yield player.getName();
                 }
                 yield gradient.getGradientNick(onlinePlayer);
             }
-            case "gradient_prefix", "prefix" -> {
-                Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) {
-                    yield "";
-                }
-
+            case PREFIX -> {
                 if (gradient == null || !gradient.isEnabled()) {
                     yield "";
                 }
                 yield gradient.getPrefix(onlinePlayer);
             }
-            case "lp_prefix" -> {
-                Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) {
-                    yield "";
-                }
-
+            case LP_PREFIX -> {
                 if (gradient == null || !gradient.isEnabled()) {
                     yield "";
                 }
                 yield gradient.getLuckPermsPrefix(onlinePlayer);
             }
-            default -> null;
         };
+    }
+
+    private String resolveLastPm(OfflinePlayer player, UUID uuid) {
+        Optional<UUID> lastOpt = messagingService.getLastConversation(uuid);
+        if (lastOpt.isEmpty()) {
+            return "";
+        }
+        var lastPlayer = Bukkit.getOfflinePlayer(lastOpt.get());
+        return lastPlayer.getName() != null ? lastPlayer.getName() : "";
     }
 }

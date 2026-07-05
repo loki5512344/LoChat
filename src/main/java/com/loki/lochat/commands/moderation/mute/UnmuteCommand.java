@@ -84,7 +84,10 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(
+        @NotNull CommandSender sender, @NotNull Command command, @NotNull String alias,
+        @NotNull String[] args
+    ) {
         List<String> c = new ArrayList<>();
         if (args.length == 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {

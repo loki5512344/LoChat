@@ -44,7 +44,9 @@ public class IgnoreListCommand implements CommandExecutor {
                 player.sendMessage(ChatFormatter.parse("&#9878C9◆ &f" + name));
             }
         }
-        player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-footer").replace("{count}", String.valueOf(ignored.size()))));
+        player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-footer")
+            .replace("{count}", String.valueOf(ignored.size()))));
+
         return true;
     }
 }

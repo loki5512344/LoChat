@@ -73,6 +73,38 @@ public class BanCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        DurationResult parsed = parseDuration(sender, args, msg);
+        if (!parsed.valid) {
+            return true;
+        }
+
+        long durationMs = parsed.durationMs;
+        String reason = parsed.reason;
+        String finalName = PlayerUtil.getPlayerName(targetUuid);
+        if (finalName == null) {
+            finalName = targetName;
+        }
+
+        punishmentService.ban(targetUuid, finalName, durationMs, reason, sender.getName());
+
+        String durationLabel = durationMs == 0
+                ? msg.getModerationDurationPermanent()
+                : muteService.formatTime(durationMs);
+        sender.sendMessage(ChatFormatter.parse(msg.getBanConfirm().replace("{player}", finalName).replace("{duration}", durationLabel)));
+
+        BanRecord ban = punishmentService.getActiveBan(targetUuid);
+        if (ban != null) {
+            Player kicked = Bukkit.getPlayer(targetUuid);
+            if (kicked != null && kicked.isOnline()) {
+                kicked.kick(punishmentService.buildBanKickMessage(ban));
+            }
+        }
+        return true;
+    }
+
+    private record DurationResult(long durationMs, String reason, boolean valid) { }
+
+    private DurationResult parseDuration(CommandSender sender, String[] args, MessagesConfig msg) {
         String timeStr = null;
         StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
@@ -95,31 +127,12 @@ public class BanCommand implements CommandExecutor, TabCompleter {
             durationMs = muteService.parseTime(timeStr);
             if (durationMs < 0) {
                 sender.sendMessage(ChatFormatter.parse(msg.getInvalidTime()));
-                return true;
+                return new DurationResult(0, "", false);
             }
         }
 
         String reason = reasonBuilder.length() > 0 ? reasonBuilder.toString() : msg.getModerationDefaultReason();
-        String finalName = PlayerUtil.getPlayerName(targetUuid);
-        if (finalName == null) {
-            finalName = targetName;
-        }
-
-        punishmentService.ban(targetUuid, finalName, durationMs, reason, sender.getName());
-
-        String durationLabel = durationMs == 0
-                ? msg.getModerationDurationPermanent()
-                : muteService.formatTime(durationMs);
-        sender.sendMessage(ChatFormatter.parse(msg.getBanConfirm().replace("{player}", finalName).replace("{duration}", durationLabel)));
-
-        BanRecord ban = punishmentService.getActiveBan(targetUuid);
-        if (ban != null) {
-            Player kicked = Bukkit.getPlayer(targetUuid);
-            if (kicked != null && kicked.isOnline()) {
-                kicked.kick(punishmentService.buildBanKickMessage(ban));
-            }
-        }
-        return true;
+        return new DurationResult(durationMs, reason, true);
     }
 
     private boolean isTimeFormat(String s) {

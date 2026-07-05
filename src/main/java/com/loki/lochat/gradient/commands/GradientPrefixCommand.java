@@ -1,7 +1,11 @@
 package com.loki.lochat.gradient.commands;
 
 import com.loki.lochat.gradient.GradientModule;
-import com.loki.lochat.gradient.commands.handlers.prefix.*;
+import com.loki.lochat.gradient.commands.handlers.prefix.PrefixOffHandler;
+import com.loki.lochat.gradient.commands.handlers.prefix.PrefixOnHandler;
+import com.loki.lochat.gradient.commands.handlers.prefix.PrefixResetHandler;
+import com.loki.lochat.gradient.commands.handlers.prefix.PrefixSetHandler;
+import com.loki.lochat.gradient.commands.handlers.prefix.PrefixSubCommandHandler;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +15,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Команда /prefix для установки кастомного префикса

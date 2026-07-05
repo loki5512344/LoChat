@@ -2,7 +2,12 @@ package com.loki.lochat.gradient.commands;
 
 import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
-import com.loki.lochat.gradient.commands.handlers.color.*;
+import com.loki.lochat.gradient.commands.handlers.color.ColorCopyHandler;
+import com.loki.lochat.gradient.commands.handlers.color.ColorOffHandler;
+import com.loki.lochat.gradient.commands.handlers.color.ColorOnHandler;
+import com.loki.lochat.gradient.commands.handlers.color.ColorResetHandler;
+import com.loki.lochat.gradient.commands.handlers.color.ColorSetHandler;
+import com.loki.lochat.gradient.commands.handlers.color.SubCommandHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -13,7 +18,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Команда /color для установки градиента ника
