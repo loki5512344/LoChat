@@ -1,7 +1,6 @@
 package com.loki.lochat.listener;
 
 import com.loki.lochat.api.service.PunishmentService;
-import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.data.model.BanRecord;
 
 import org.bukkit.event.EventHandler;
@@ -16,8 +15,8 @@ public class ModerationListener implements Listener {
 
     private final PunishmentService punishmentService;
 
-    public ModerationListener(ServiceRegistry registry) {
-        this.punishmentService = registry.get(PunishmentService.class);
+    public ModerationListener(PunishmentService punishmentService) {
+        this.punishmentService = punishmentService;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

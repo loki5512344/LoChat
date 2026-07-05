@@ -1,7 +1,6 @@
 package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.ChatService;
-import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.persistence.FilePersistence;
@@ -29,7 +28,7 @@ public class ChatServiceImpl implements ChatService {
     private final JavaPlugin plugin;
     private final Set<UUID> globalChatDisabled = ConcurrentHashMap.newKeySet();
 
-    public ChatServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
+    public ChatServiceImpl(JavaPlugin plugin) {
         this.plugin = plugin;
         loadDisabled();
     }

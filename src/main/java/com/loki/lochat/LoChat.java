@@ -1,5 +1,9 @@
 package com.loki.lochat;
 
+import com.loki.lochat.api.service.MessageService;
+import com.loki.lochat.api.service.MessagingService;
+import com.loki.lochat.api.service.NickService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.commands.CommandManager;
 import com.loki.lochat.config.ConfigManager;
@@ -65,7 +69,12 @@ public final class LoChat extends JavaPlugin {
         // Команды и слушатели
         commandManager = new CommandManager(this);
         commandManager.registerCommands();
-        initializer.registerListeners(serviceRegistry, discordIntegration);
+        initializer.registerListeners(serviceRegistry, discordIntegration,
+            serviceRegistry.get(MessageService.class),
+            serviceRegistry.get(PlayerService.class),
+            serviceRegistry.get(MessagingService.class),
+            serviceRegistry.get(NickService.class),
+            serviceRegistry.get(PunishmentService.class));
         initializer.registerPluginChannels();
         
         // Автосообщения

@@ -6,7 +6,6 @@ import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
-import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.utils.format.ChatFormatter;
 
 import net.kyori.adventure.text.Component;
@@ -32,11 +31,12 @@ public class PlayerEventListener implements Listener {
     private final AdvancedMessageFilter advancedFilter;
     private final ConfigManager configManager;
 
-    public PlayerEventListener(LoChat plugin, ServiceRegistry registry, AdvancedMessageFilter advancedFilter) {
+    public PlayerEventListener(LoChat plugin, PlayerService playerService, MessagingService messagingService,
+                                NickService nickService, AdvancedMessageFilter advancedFilter) {
         this.plugin = plugin;
-        this.playerService = registry.get(PlayerService.class);
-        this.messagingService = registry.get(MessagingService.class);
-        this.nickService = registry.get(NickService.class);
+        this.playerService = playerService;
+        this.messagingService = messagingService;
+        this.nickService = nickService;
         this.advancedFilter = advancedFilter;
         this.configManager = plugin.getConfigManager();
     }

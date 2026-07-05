@@ -1,6 +1,11 @@
 package com.loki.lochat.core;
 
 import com.loki.lochat.LoChat;
+import com.loki.lochat.api.service.MessageService;
+import com.loki.lochat.api.service.MessagingService;
+import com.loki.lochat.api.service.NickService;
+import com.loki.lochat.api.service.PlayerService;
+import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
@@ -96,18 +101,20 @@ public class PluginInitializer {
     /**
      * Зарегистрировать слушатели событий
      */
-    public AdvancedMessageFilter registerListeners(ServiceRegistry serviceRegistry, DiscordIntegration discordIntegration) {
-        // Создаём один экземпляр фильтра и передаём в оба листенера
+    public AdvancedMessageFilter registerListeners(ServiceRegistry serviceRegistry, DiscordIntegration discordIntegration,
+                                                     MessageService messageService, PlayerService playerService,
+                                                     MessagingService messagingService, NickService nickService,
+                                                     PunishmentService punishmentService) {
         AdvancedMessageFilter filter = new AdvancedMessageFilter(plugin.getConfig(), plugin);
-        
+
         plugin.getServer().getPluginManager().registerEvents(
-            new ChatEventListener(plugin, serviceRegistry, filter), plugin
+            new ChatEventListener(plugin, messageService, playerService, filter), plugin
         );
         plugin.getServer().getPluginManager().registerEvents(
-            new PlayerEventListener(plugin, serviceRegistry, filter), plugin
+            new PlayerEventListener(plugin, playerService, messagingService, nickService, filter), plugin
         );
         plugin.getServer().getPluginManager().registerEvents(
-            new ModerationListener(serviceRegistry), plugin
+            new ModerationListener(punishmentService), plugin
         );
         
         // Discord listener

@@ -6,7 +6,6 @@ import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.core.filter.CooldownFilter;
 import com.loki.lochat.core.filter.MuteFilter;
-import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.data.model.ChatMessage;
 
 import org.bukkit.entity.Player;
@@ -21,13 +20,10 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     private final List<MessageFilter> filters;
 
-    public MessageServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
+    public MessageServiceImpl(JavaPlugin plugin, MuteService muteService, PlayerService playerService) {
         this.filters = new ArrayList<>();
-
-        // Регистрируем фильтры в порядке применения
-        // MuteFilter теперь получает plugin для доступа к HardcodedMessages
-        filters.add(new MuteFilter(registry.get(MuteService.class), plugin));
-        filters.add(new CooldownFilter(registry.get(PlayerService.class), plugin));
+        filters.add(new MuteFilter(muteService, plugin));
+        filters.add(new CooldownFilter(playerService, plugin));
     }
 
     @Override

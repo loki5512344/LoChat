@@ -2,9 +2,9 @@ package com.loki.lochat.listener;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessageService;
+import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
 import com.loki.lochat.core.filter.FilterResult;
-import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.utils.format.ChatFormatter;
 
@@ -22,11 +22,14 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 public class ChatEventListener implements Listener {
     private final JavaPlugin plugin;
     private final MessageService messageService;
+    private final PlayerService playerService;
     private final AdvancedMessageFilter advancedFilter;
 
-    public ChatEventListener(JavaPlugin plugin, ServiceRegistry registry, com.loki.lochat.core.filter.AdvancedMessageFilter filter) {
+    public ChatEventListener(JavaPlugin plugin, MessageService messageService, PlayerService playerService,
+                             AdvancedMessageFilter filter) {
         this.plugin = plugin;
-        this.messageService = registry.get(MessageService.class);
+        this.messageService = messageService;
+        this.playerService = playerService;
         this.advancedFilter = filter;
     }
 
@@ -148,8 +151,6 @@ public class ChatEventListener implements Listener {
     }
 
     private void recordStatistics(LoChat loChat, Player sender, boolean isGlobal) {
-        com.loki.lochat.api.service.PlayerService playerService =
-                loChat.getServiceRegistry().get(com.loki.lochat.api.service.PlayerService.class);
         playerService.recordMessage(sender.getUniqueId(), isGlobal ? "global" : "local");
     }
 

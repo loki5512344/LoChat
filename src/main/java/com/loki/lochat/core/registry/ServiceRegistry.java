@@ -41,16 +41,15 @@ public class ServiceRegistry {
     }
 
     private void registerServicesWithDeps(ConfigManager configManager, MessageConfig messageConfig) {
-        register(ChatService.class, new ChatServiceImpl(plugin, this));
-        register(MuteService.class, ServiceFactory.createMuteService(plugin));
+        MuteService muteService = ServiceFactory.createMuteService(plugin);
+        register(MuteService.class, muteService);
 
-        // ✅ NEW: Объединённый PlayerService (Cooldown + PlayerData)
         PlayerService playerService = new PlayerServiceImpl(plugin);
         register(PlayerService.class, playerService);
 
-        register(MessageService.class, new MessageServiceImpl(plugin, this));
+        register(ChatService.class, new ChatServiceImpl(plugin));
+        register(MessageService.class, new MessageServiceImpl(plugin, muteService, playerService));
 
-        // ✅ NEW: Объединённый MessagingService (PM + Spy + Ignore) через фабрику
         PrivateMessageServiceImpl pmService = new PrivateMessageServiceImpl((LoChat) plugin);
         MessagingService messagingService = ServiceFactory.createMessagingService(plugin, messageConfig, pmService);
         pmService.init(messagingService);
