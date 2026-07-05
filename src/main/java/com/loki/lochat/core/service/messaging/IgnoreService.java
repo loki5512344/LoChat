@@ -1,12 +1,12 @@
 package com.loki.lochat.core.service.messaging;
 
+import com.loki.lochat.utils.persistence.FilePersistence;
 import com.loki.lochat.utils.platform.FoliaUtil;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,11 +23,9 @@ public class IgnoreService {
 
     private final JavaPlugin plugin;
     private final Map<UUID, Set<UUID>> ignoreMap = new ConcurrentHashMap<>();
-    private final File ignoreFile;
 
     public IgnoreService(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.ignoreFile = new File(plugin.getDataFolder(), "ignores.yml");
     }
     
     public void init() {
@@ -75,11 +73,7 @@ public class IgnoreService {
     }
 
     public void load() {
-        if (!ignoreFile.exists()) {
-            return;
-        }
-
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(ignoreFile);
+        FileConfiguration config = FilePersistence.loadYaml(plugin, "ignores.yml");
         for (String key : config.getKeys(false)) {
             try {
                 UUID uuid = UUID.fromString(key);
@@ -114,11 +108,7 @@ public class IgnoreService {
             config.set(entry.getKey().toString(), ignoredList);
         }
 
-        try {
-            config.save(ignoreFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Не удалось сохранить игноры: " + e.getMessage());
-        }
+        FilePersistence.saveYaml(plugin, "ignores.yml", config);
     }
 
     private void saveAsync() {

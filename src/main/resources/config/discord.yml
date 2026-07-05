@@ -71,3 +71,5 @@ performance:
   timeout: 10
   retry-attempts: 3
   retry-delay: 1000
+  max-requests-per-second: 5
+  rate-limit-burst: 10

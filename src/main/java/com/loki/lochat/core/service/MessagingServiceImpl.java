@@ -3,7 +3,7 @@ package com.loki.lochat.core.service;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.service.messaging.IgnoreService;
-import com.loki.lochat.core.service.messaging.PrivateMessageService;
+import com.loki.lochat.core.service.messaging.PrivateMessageServiceImpl;
 import com.loki.lochat.core.service.messaging.SpyService;
 
 import net.kyori.adventure.text.Component;
@@ -21,12 +21,12 @@ import java.util.UUID;
  */
 public class MessagingServiceImpl implements MessagingService {
 
-    private final PrivateMessageService pmService;
+    private final PrivateMessageServiceImpl pmService;
     private final SpyService spyService;
     private final IgnoreService ignoreService;
 
-    public MessagingServiceImpl(JavaPlugin plugin, MessageConfig messageConfig) {
-        this.pmService = new PrivateMessageService();
+    public MessagingServiceImpl(JavaPlugin plugin, MessageConfig messageConfig, PrivateMessageServiceImpl pmService) {
+        this.pmService = pmService;
         this.spyService = new SpyService(messageConfig);
         this.ignoreService = new IgnoreService(plugin);
         this.ignoreService.init();

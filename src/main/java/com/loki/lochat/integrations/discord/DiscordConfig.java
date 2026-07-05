@@ -70,6 +70,14 @@ public class DiscordConfig {
     public boolean isAsync() {
         return config.getBoolean("performance.async", true);
     }
+
+    public double getMaxRequestsPerSecond() {
+        return config.getDouble("performance.max-requests-per-second", 5.0);
+    }
+
+    public int getRateLimitBurst() {
+        return config.getInt("performance.rate-limit-burst", 10);
+    }
     
     public boolean isChatEnabled() {
         return config.getBoolean("chat.enabled", true);

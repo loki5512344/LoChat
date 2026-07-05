@@ -5,6 +5,7 @@ import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.service.MessagingServiceImpl;
 import com.loki.lochat.core.service.MuteServiceImpl;
+import com.loki.lochat.core.service.messaging.PrivateMessageServiceImpl;
 import com.loki.lochat.core.service.mute.MuteDataStorage;
 import com.loki.lochat.core.service.mute.MuteHistoryManager;
 import com.loki.lochat.core.service.mute.strategies.ChatMuteStrategy;
@@ -50,7 +51,8 @@ public class ServiceFactory {
     /**
      * Создать MessagingService со всеми зависимостями
      */
-    public static MessagingService createMessagingService(JavaPlugin plugin, MessageConfig messageConfig) {
-        return new MessagingServiceImpl(plugin, messageConfig);
+    public static MessagingService createMessagingService(
+            JavaPlugin plugin, MessageConfig messageConfig, PrivateMessageServiceImpl pmService) {
+        return new MessagingServiceImpl(plugin, messageConfig, pmService);
     }
 }

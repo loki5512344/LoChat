@@ -281,6 +281,9 @@ permissions:
   lochat.mute.see-silent:
     description: Can see silent mute notifications
     default: op
+  lochat.mute.dur.5m:
+    description: Can mute for 5 minutes
+    default: false
   lochat.mute.dur.10m:
     description: Can mute for 10 minutes
     default: false
@@ -289,6 +292,9 @@ permissions:
     default: false
   lochat.mute.dur.1h:
     description: Can mute for 1 hour
+    default: false
+  lochat.mute.dur.3h:
+    description: Can mute for 3 hours
     default: false
   lochat.mute.dur.6h:
     description: Can mute for 6 hours
@@ -314,6 +320,46 @@ permissions:
   lochat.mute.dur.perm:
     description: Can mute permanently
     default: op
+
+  lochat.mute.reason.spam:
+    description: Can use spam mute reason
+    default: false
+  lochat.mute.reason.caps:
+    description: Can use caps mute reason
+    default: false
+  lochat.mute.reason.swear:
+    description: Can use swear mute reason
+    default: false
+  lochat.mute.reason.flood:
+    description: Can use flood mute reason
+    default: false
+  lochat.mute.reason.advertising:
+    description: Can use advertising mute reason
+    default: false
+  lochat.mute.reason.insult:
+    description: Can use insult mute reason
+    default: false
+  lochat.mute.reason.toxicity:
+    description: Can use toxicity mute reason
+    default: false
+  lochat.mute.reason.politics:
+    description: Can use politics mute reason
+    default: false
+  lochat.mute.reason.religion:
+    description: Can use religion mute reason
+    default: false
+  lochat.mute.reason.begging:
+    description: Can use begging mute reason
+    default: false
+  lochat.mute.notify:
+    description: Receive mute notifications
+    default: op
+  lochat.mute.ip:
+    description: Can mute by IP address
+    default: false
+  lochat.appeal:
+    description: Can use /appeal command
+    default: true
 
   lochat.warn:
     description: Issue a visible warning
@@ -347,6 +393,9 @@ permissions:
     default: op
   lochat.heademoji.use:
     description: Can use head emojis in chat
+    default: true
+  chat.emoji.use:
+    description: Can use emojis in chat
     default: true
   lochat.nick:
     description: Can use custom nicknames

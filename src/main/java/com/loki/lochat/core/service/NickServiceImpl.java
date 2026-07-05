@@ -3,18 +3,16 @@ package com.loki.lochat.core.service;
 import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
+import com.loki.lochat.utils.persistence.FilePersistence;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,26 +24,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NickServiceImpl implements NickService {
     private final JavaPlugin plugin;
     private final Map<UUID, String> nicknames = new ConcurrentHashMap<>();
-    private final File dataFile;
     private FileConfiguration data;
 
     public NickServiceImpl(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.dataFile = new File(plugin.getDataFolder(), "nicknames.yml");
         load();
     }
 
     private void load() {
-        if (!dataFile.exists()) {
-            try {
-                dataFile.getParentFile().mkdirs();
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                plugin.getLogger().warning("Не удалось создать nicknames.yml: " + e.getMessage());
-            }
-        }
-
-        data = YamlConfiguration.loadConfiguration(dataFile);
+        data = FilePersistence.loadYaml(plugin, "nicknames.yml");
 
         // Загружаем ники
         if (data.contains("nicknames")) {
@@ -67,11 +54,7 @@ public class NickServiceImpl implements NickService {
             data.set("nicknames." + entry.getKey().toString(), entry.getValue());
         }
 
-        try {
-            data.save(dataFile);
-        } catch (IOException e) {
-            plugin.getLogger().warning("Не удалось сохранить nicknames.yml: " + e.getMessage());
-        }
+        FilePersistence.saveYaml(plugin, "nicknames.yml", data);
     }
 
     @Override

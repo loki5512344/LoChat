@@ -2,28 +2,19 @@ package com.loki.lochat.core.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.data.model.WarnEntry;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.format.TimeFormatter;
+import com.loki.lochat.utils.persistence.FilePersistence;
 import com.loki.lochat.utils.platform.FoliaUtil;
 
 import net.kyori.adventure.text.Component;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +30,6 @@ public class PunishmentServiceImpl implements PunishmentService {
 
     private final JavaPlugin plugin;
     private final MessagesConfig messages;
-    private final File dataFile;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private final Map<UUID, List<WarnEntry>> warns = new ConcurrentHashMap<>();
@@ -48,7 +38,6 @@ public class PunishmentServiceImpl implements PunishmentService {
     public PunishmentServiceImpl(JavaPlugin plugin, MessagesConfig messagesConfig) {
         this.plugin = plugin;
         this.messages = messagesConfig;
-        this.dataFile = new File(plugin.getDataFolder(), "punishments.json");
         load();
     }
 
@@ -141,26 +130,17 @@ public class PunishmentServiceImpl implements PunishmentService {
 
     @Override
     public void save() {
-        try {
-            if (!dataFile.getParentFile().exists() && !dataFile.getParentFile().mkdirs()) {
-                plugin.getLogger().warning("Could not create data folder for punishments");
+        PunishmentSnapshot snap = new PunishmentSnapshot();
+        for (Map.Entry<UUID, List<WarnEntry>> e : warns.entrySet()) {
+            List<WarnEntry> list = e.getValue();
+            synchronized (list) {
+                snap.getWarns().put(e.getKey().toString(), new ArrayList<>(list));
             }
-            PunishmentSnapshot snap = new PunishmentSnapshot();
-            for (Map.Entry<UUID, List<WarnEntry>> e : warns.entrySet()) {
-                List<WarnEntry> list = e.getValue();
-                synchronized (list) {
-                    snap.getWarns().put(e.getKey().toString(), new ArrayList<>(list));
-                }
-            }
-            for (Map.Entry<UUID, BanRecord> e : bans.entrySet()) {
-                snap.getBans().put(e.getKey().toString(), e.getValue());
-            }
-            try (Writer w = new OutputStreamWriter(new FileOutputStream(dataFile), java.nio.charset.StandardCharsets.UTF_8)) {
-                gson.toJson(snap, w);
-            }
-        } catch (IOException e) {
-            plugin.getLogger().warning("Failed to save punishments: " + e.getMessage());
         }
+        for (Map.Entry<UUID, BanRecord> e : bans.entrySet()) {
+            snap.getBans().put(e.getKey().toString(), e.getValue());
+        }
+        FilePersistence.saveJson(plugin, "punishments.json", snap, gson);
     }
 
     @Override
@@ -175,41 +155,33 @@ public class PunishmentServiceImpl implements PunishmentService {
     }
 
     private void load() {
-        if (!dataFile.exists()) {
+        PunishmentSnapshot snap = FilePersistence.loadJson(plugin, "punishments.json", PunishmentSnapshot.class, gson);
+        if (snap == null) {
             return;
         }
-        try (Reader r = new InputStreamReader(new FileInputStream(dataFile), java.nio.charset.StandardCharsets.UTF_8)) {
-            Type type = new TypeToken<PunishmentSnapshot>() { }.getType();
-            PunishmentSnapshot snap = gson.fromJson(r, type);
-            if (snap == null) {
-                return;
-            }
-            if (snap.getWarns() != null) {
-                for (Map.Entry<String, List<WarnEntry>> e : snap.getWarns().entrySet()) {
-                    try {
-                        warns.put(UUID.fromString(e.getKey()), Collections.synchronizedList(new ArrayList<>(e.getValue())));
-                    } catch (IllegalArgumentException ignored) {
-                    }
+        if (snap.getWarns() != null) {
+            for (Map.Entry<String, List<WarnEntry>> e : snap.getWarns().entrySet()) {
+                try {
+                    warns.put(UUID.fromString(e.getKey()), Collections.synchronizedList(new ArrayList<>(e.getValue())));
+                } catch (IllegalArgumentException ignored) {
                 }
             }
-            if (snap.getBans() != null) {
-                for (Map.Entry<String, BanRecord> e : snap.getBans().entrySet()) {
-                    try {
-                        UUID id = UUID.fromString(e.getKey());
-                        BanRecord br = e.getValue();
-                        if (br != null) {
-                            br.uuid = id;
-                            if (!br.isPermanent() && br.isExpired()) {
-                                continue;
-                            }
-                            bans.put(id, br);
+        }
+        if (snap.getBans() != null) {
+            for (Map.Entry<String, BanRecord> e : snap.getBans().entrySet()) {
+                try {
+                    UUID id = UUID.fromString(e.getKey());
+                    BanRecord br = e.getValue();
+                    if (br != null) {
+                        br.uuid = id;
+                        if (!br.isPermanent() && br.isExpired()) {
+                            continue;
                         }
-                    } catch (IllegalArgumentException ignored) {
+                        bans.put(id, br);
                     }
+                } catch (IllegalArgumentException ignored) {
                 }
             }
-        } catch (IOException e) {
-            plugin.getLogger().warning("Failed to load punishments: " + e.getMessage());
         }
     }
 

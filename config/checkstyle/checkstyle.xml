@@ -12,6 +12,8 @@
         <property name="fileNamePattern" value=".*[\\/]src[\\/]test[\\/].*"/>
     </module>
 
+    <module name="SuppressWarningsFilter"/>
+
     <module name="FileLength">
         <property name="max" value="600"/>
     </module>
@@ -23,6 +25,7 @@
     </module>
 
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder"/>
 
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
@@ -103,6 +106,5 @@
         <module name="ArrayTypeStyle"/>
         <module name="UnnecessaryParentheses"/>
         <module name="MissingSwitchDefault"/>
-
     </module>
 </module>

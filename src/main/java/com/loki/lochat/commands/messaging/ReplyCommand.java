@@ -2,11 +2,10 @@ package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
+import com.loki.lochat.api.service.pm.PrivateMessageService;
 import com.loki.lochat.utils.format.ChatFormatter;
-import com.loki.lochat.utils.player.PlayerUtil;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,10 +19,12 @@ public class ReplyCommand implements CommandExecutor {
 
     private final LoChat plugin;
     private final MessagingService messagingService;
+    private final PrivateMessageService pmService;
 
     public ReplyCommand(LoChat plugin) {
         this.plugin = plugin;
         this.messagingService = plugin.getServiceRegistry().get(MessagingService.class);
+        this.pmService = plugin.getServiceRegistry().get(PrivateMessageService.class);
     }
 
     @Override
@@ -57,19 +58,7 @@ public class ReplyCommand implements CommandExecutor {
         }
 
         String message = String.join(" ", args);
-        player.sendMessage(ChatFormatter.formatPmSentNew(plugin.getMessageConfig().getPmFormatSent(), player, target, message));
-        target.sendMessage(ChatFormatter.formatPmReceivedNew(plugin.getMessageConfig().getPmFormatReceived(), player, target, message));
-        if (plugin.getConfigManager().isPmSoundEnabled()) {
-            Sound sound = PlayerUtil.parseSound(plugin.getConfigManager().getPmSoundType(), null);
-            if (sound != null) {
-                target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
-            }
-        }
-        messagingService.broadcastPM(player, target, message);
-        messagingService.setLastConversation(target.getUniqueId(), player.getUniqueId());
-        if (plugin.getConfigManager().isPmLogEnabled()) {
-            plugin.getLogger().info("[PM] " + player.getName() + " -> " + target.getName() + ": " + message);
-        }
+        pmService.sendPrivateMessage(player, target, message);
         return true;
     }
 }

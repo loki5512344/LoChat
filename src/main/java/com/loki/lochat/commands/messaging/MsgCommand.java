@@ -2,11 +2,10 @@ package com.loki.lochat.commands.messaging;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
+import com.loki.lochat.api.service.pm.PrivateMessageService;
 import com.loki.lochat.utils.format.ChatFormatter;
-import com.loki.lochat.utils.player.PlayerUtil;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +16,12 @@ public class MsgCommand implements CommandExecutor {
 
     private final LoChat plugin;
     private final MessagingService messagingService;
+    private final PrivateMessageService pmService;
 
     public MsgCommand(LoChat plugin) {
         this.plugin = plugin;
         this.messagingService = plugin.getServiceRegistry().get(MessagingService.class);
+        this.pmService = plugin.getServiceRegistry().get(PrivateMessageService.class);
     }
 
     @Override
@@ -56,24 +57,7 @@ public class MsgCommand implements CommandExecutor {
         }
 
         String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
-        sendPm(player, target, message);
+        pmService.sendPrivateMessage(player, target, message);
         return true;
-    }
-
-    private void sendPm(Player sender, Player target, String message) {
-        sender.sendMessage(ChatFormatter.formatPmSentNew(plugin.getMessageConfig().getPmFormatSent(), sender, target, message));
-        target.sendMessage(ChatFormatter.formatPmReceivedNew(plugin.getMessageConfig().getPmFormatReceived(), sender, target, message));
-        if (plugin.getConfigManager().isPmSoundEnabled()) {
-            Sound sound = PlayerUtil.parseSound(plugin.getConfigManager().getPmSoundType(), null);
-            if (sound != null) {
-                target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
-            }
-        }
-        messagingService.broadcastPM(sender, target, message);
-        messagingService.setLastConversation(sender.getUniqueId(), target.getUniqueId());
-        messagingService.setLastConversation(target.getUniqueId(), sender.getUniqueId());
-        if (plugin.getConfigManager().isPmLogEnabled()) {
-            plugin.getLogger().info("[PM] " + sender.getName() + " -> " + target.getName() + ": " + message);
-        }
     }
 }

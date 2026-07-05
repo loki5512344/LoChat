@@ -4,18 +4,18 @@ import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
 import com.loki.lochat.utils.format.ChatFormatter;
+import com.loki.lochat.utils.persistence.FilePersistence;
 import com.loki.lochat.utils.platform.FoliaUtil;
 import com.loki.lochat.utils.player.DistanceUtil;
 
 import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,11 +28,9 @@ public class ChatServiceImpl implements ChatService {
 
     private final JavaPlugin plugin;
     private final Set<UUID> globalChatDisabled = ConcurrentHashMap.newKeySet();
-    private final File playersFile;
 
     public ChatServiceImpl(JavaPlugin plugin, ServiceRegistry registry) {
         this.plugin = plugin;
-        this.playersFile = new File(plugin.getDataFolder(), "data/players.yml");
         loadDisabled();
     }
 
@@ -99,10 +97,7 @@ public class ChatServiceImpl implements ChatService {
     // ──────────────────────────────────────────────────────────────────────────
 
     private void loadDisabled() {
-        if (!playersFile.exists()) {
-            return;
-        }
-        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(playersFile);
+        FileConfiguration cfg = FilePersistence.loadYaml(plugin, "data/players.yml");
         for (String uuidStr : cfg.getStringList("global-chat-disabled")) {
             try {
                 globalChatDisabled.add(UUID.fromString(uuidStr));
@@ -112,25 +107,10 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private void saveDisabled() {
-        try {
-            ensureDir();
-            YamlConfiguration cfg = playersFile.exists()
-                    ? YamlConfiguration.loadConfiguration(playersFile)
-                    : new YamlConfiguration();
-
-            cfg.set("global-chat-disabled",
-                    globalChatDisabled.stream().map(UUID::toString).toList());
-            cfg.save(playersFile);
-        } catch (IOException e) {
-            plugin.getLogger().warning("[LoChat] Failed to save players.yml: " + e.getMessage());
-        }
-    }
-
-    private void ensureDir() {
-        File dir = playersFile.getParentFile();
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        YamlConfiguration cfg = new YamlConfiguration();
+        cfg.set("global-chat-disabled",
+                globalChatDisabled.stream().map(UUID::toString).toList());
+        FilePersistence.saveYaml(plugin, "data/players.yml", cfg);
     }
 
     private Component toComponent(Object message) {

@@ -2,6 +2,7 @@ package com.loki.lochat.integrations;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.loki.lochat.integrations.discord.DiscordRateLimiter;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,6 +30,7 @@ public class DiscordWebhook {
     private final int timeout;
     private final int retryAttempts;
     private final long retryDelay;
+    private final DiscordRateLimiter rateLimiter;
 
     // Выделенный пул — не засоряем ForkJoinPool.commonPool()
     private final ExecutorService executor = Executors.newSingleThreadExecutor(
@@ -39,8 +41,10 @@ public class DiscordWebhook {
             }
     );
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public DiscordWebhook(JavaPlugin plugin, String webhookUrl, String username, String avatarUrl,
-                          int timeout, int retryAttempts, long retryDelay) {
+                          int timeout, int retryAttempts, long retryDelay,
+                          double maxRequestsPerSecond, int rateLimitBurst) {
         this.plugin = plugin;
         this.webhookUrl = webhookUrl != null ? webhookUrl.trim() : null;
         this.username = username;
@@ -48,6 +52,7 @@ public class DiscordWebhook {
         this.timeout = timeout * 1000;
         this.retryAttempts = retryAttempts;
         this.retryDelay = retryDelay;
+        this.rateLimiter = new DiscordRateLimiter(maxRequestsPerSecond, rateLimitBurst);
     }
 
     // ── Публичные методы отправки ─────────────────────────────────────────────
@@ -114,6 +119,7 @@ public class DiscordWebhook {
     private CompletableFuture<Boolean> sendWebhook(JsonObject json) {
         return CompletableFuture.supplyAsync(() -> {
             for (int attempt = 1; attempt <= retryAttempts; attempt++) {
+                rateLimiter.waitIfNeeded();
                 try {
                     if (sendWebhookSync(json.toString())) {
                         return true;

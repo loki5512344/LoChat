@@ -29,7 +29,9 @@ public class DiscordMessageService {
             getAvatarUrl(),
             config.getTimeout(),
             config.getRetryAttempts(),
-            config.getRetryDelay()
+            config.getRetryDelay(),
+            config.getMaxRequestsPerSecond(),
+            config.getRateLimitBurst()
         );
     }
     
