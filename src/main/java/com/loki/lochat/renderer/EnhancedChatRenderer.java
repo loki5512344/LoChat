@@ -3,6 +3,7 @@ package com.loki.lochat.renderer;
 import com.loki.lochat.renderer.components.EmojiComponent;
 import com.loki.lochat.renderer.components.GradientBuilder;
 import com.loki.lochat.renderer.components.UrlProcessor;
+import com.loki.lochat.translate.TranslationService;
 import com.loki.lochat.utils.format.TextFormatter;
 import com.loki.lochat.utils.player.MentionHandler;
 
@@ -12,10 +13,12 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +55,7 @@ public class EnhancedChatRenderer implements ChatRenderer {
 
         if (viewer instanceof Player vp) {
             processed = mentionHandler.processMentions(processed, source, vp);
+            processed = applyTranslation(processed, vp);
         }
 
         // Получаем формат из конфига
@@ -196,6 +200,66 @@ public class EnhancedChatRenderer implements ChatRenderer {
         return displayName
                 .hoverEvent(HoverEvent.showText(hoverBuilder.build()))
                 .clickEvent(ClickEvent.suggestCommand("/msg " + player.getName() + " "));
+    }
+
+    private Component applyTranslation(Component message, Player viewer) {
+        if (!cfg.isTranslationEnabled()) {
+            return message;
+        }
+        com.loki.lochat.LoChat loChat = (com.loki.lochat.LoChat) plugin;
+        TranslationService ts = loChat.getTranslationService();
+        if (!ts.isEnabled()) {
+            return message;
+        }
+        String plainText = PlainTextComponentSerializer.plainText().serialize(message);
+        if (plainText.isBlank()) {
+            return message;
+        }
+        String viewerLang = viewer.locale().getLanguage();
+        String translated = ts.translate(plainText, viewerLang);
+        if (translated.equals(plainText)) {
+            return message;
+        }
+        String langName = LANGUAGE_NAMES.getOrDefault(viewerLang, viewerLang.toUpperCase(java.util.Locale.ROOT));
+        Component hover = Component.text()
+                .append(com.loki.lochat.utils.format.ChatFormatter.parse(
+                        "&#AAAAAA[" + langName + "]&#FFFFFF "))
+                .append(Component.text(translated))
+                .build();
+        return message.hoverEvent(HoverEvent.showText(hover));
+    }
+
+    private static final Map<String, String> LANGUAGE_NAMES = new HashMap<>();
+    static {
+        LANGUAGE_NAMES.put("en", "EN");
+        LANGUAGE_NAMES.put("ru", "RU");
+        LANGUAGE_NAMES.put("de", "DE");
+        LANGUAGE_NAMES.put("fr", "FR");
+        LANGUAGE_NAMES.put("es", "ES");
+        LANGUAGE_NAMES.put("pt", "PT");
+        LANGUAGE_NAMES.put("it", "IT");
+        LANGUAGE_NAMES.put("nl", "NL");
+        LANGUAGE_NAMES.put("pl", "PL");
+        LANGUAGE_NAMES.put("uk", "UA");
+        LANGUAGE_NAMES.put("zh", "CN");
+        LANGUAGE_NAMES.put("ja", "JP");
+        LANGUAGE_NAMES.put("ko", "KR");
+        LANGUAGE_NAMES.put("ar", "AR");
+        LANGUAGE_NAMES.put("tr", "TR");
+        LANGUAGE_NAMES.put("vi", "VN");
+        LANGUAGE_NAMES.put("th", "TH");
+        LANGUAGE_NAMES.put("cs", "CS");
+        LANGUAGE_NAMES.put("sv", "SV");
+        LANGUAGE_NAMES.put("da", "DA");
+        LANGUAGE_NAMES.put("fi", "FI");
+        LANGUAGE_NAMES.put("el", "EL");
+        LANGUAGE_NAMES.put("hu", "HU");
+        LANGUAGE_NAMES.put("ro", "RO");
+        LANGUAGE_NAMES.put("no", "NO");
+        LANGUAGE_NAMES.put("sk", "SK");
+        LANGUAGE_NAMES.put("bg", "BG");
+        LANGUAGE_NAMES.put("hr", "HR");
+        LANGUAGE_NAMES.put("sr", "SR");
     }
 
     private TextColor parseColor(String hex) {

@@ -27,6 +27,18 @@ chat:
   max-message-length: 2000
   clear-lines: 100
 
+  # ── Chat Translation ──────
+  # Translates chat messages on hover into each viewer's Minecraft client language.
+  # Uses LibreTranslate API (free, open-source).
+  # Public instances: https://libretranslate.com, https://translate.argosopentech.com
+  # You can self-host: https://github.com/LibreTranslate/LibreTranslate
+  translation:
+    enabled: false
+    # API endpoint URL (LibreTranslate-compatible)
+    endpoint: "https://libretranslate.com"
+    # Optional API key if the endpoint requires authentication
+    api-key: ""
+
 # ── Chat Appearance ────────────────────────────────────────────────────────────
 
 appearance:

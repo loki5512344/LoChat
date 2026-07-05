@@ -15,6 +15,7 @@ import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.integrations.DiscordIntegration;
 import com.loki.lochat.managers.AutoMessageManager;
 import com.loki.lochat.managers.CustomCommandManager;
+import com.loki.lochat.translate.TranslationService;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,7 @@ public final class LoChat extends JavaPlugin {
     private ServiceRegistry serviceRegistry;
     private ConfigManager configManager;
     private MessageConfig messageConfig;
+    private TranslationService translationService;
     private GradientModule gradientModule;
     private AutoMessageManager autoMessageManager;
     private CustomCommandManager customCommandManager;
@@ -53,6 +55,12 @@ public final class LoChat extends JavaPlugin {
         // Конфиги
         configManager = initializer.initConfigs();
         messageConfig = initializer.initMessageConfig();
+        translationService = new TranslationService(
+            configManager.getTranslationEndpoint(),
+            configManager.getTranslationApiKey(),
+            configManager.isTranslationEnabled(),
+            getLogger()
+        );
         
         // Service Registry (SOLID DI)
         serviceRegistry = initializer.initServiceRegistry(configManager, messageConfig);
@@ -140,5 +148,9 @@ public final class LoChat extends JavaPlugin {
 
     public DiscordIntegration getDiscordIntegration() {
         return discordIntegration;
+    }
+
+    public TranslationService getTranslationService() {
+        return translationService;
     }
 }

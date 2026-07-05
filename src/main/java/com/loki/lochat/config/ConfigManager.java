@@ -227,6 +227,20 @@ public class ConfigManager {
         return accessor.getAnnouncementTitleDuration();
     }
 
+    // ========== Chat Translation ==========
+
+    public boolean isTranslationEnabled() {
+        return accessor.isTranslationEnabled();
+    }
+
+    public String getTranslationEndpoint() {
+        return accessor.getTranslationEndpoint();
+    }
+
+    public String getTranslationApiKey() {
+        return accessor.getTranslationApiKey();
+    }
+
     // ========== LoPreff integration ==========
 
     public boolean isLopreffEnabled() {

@@ -20,7 +20,7 @@ public class ConfigLoader {
 
     public void updateConfig() {
         int currentVersion = config.getInt("config-version", 1);
-        int requiredVersion = 5;
+        int requiredVersion = 6;
 
         if (currentVersion < requiredVersion) {
             plugin.getLogger().info("Обновление конфига с версии " + currentVersion + " до " + requiredVersion);
@@ -51,6 +51,9 @@ public class ConfigLoader {
         setIfMissing("lopreff.use-gradient-name", true);
         setIfMissing("lopreff.use-custom-prefix", true);
         setIfMissing("moderation.voice-mute-console-command", "");
+        setIfMissing("chat.translation.enabled", false);
+        setIfMissing("chat.translation.endpoint", "https://libretranslate.com");
+        setIfMissing("chat.translation.api-key", "");
     }
 
     private void setIfMissing(String path, Object value) {

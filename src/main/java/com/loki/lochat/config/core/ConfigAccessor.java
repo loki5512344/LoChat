@@ -136,6 +136,20 @@ public class ConfigAccessor {
         return config.getInt("announcements.title-duration", 3);
     }
 
+    // ========== Chat Translation ==========
+
+    public boolean isTranslationEnabled() {
+        return config.getBoolean("chat.translation.enabled", false);
+    }
+
+    public String getTranslationEndpoint() {
+        return config.getString("chat.translation.endpoint", "https://libretranslate.com");
+    }
+
+    public String getTranslationApiKey() {
+        return config.getString("chat.translation.api-key", "");
+    }
+
     // ========== LoPreff integration ==========
 
     public boolean isLopreffEnabled() {
