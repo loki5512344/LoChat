@@ -1,8 +1,9 @@
 package com.loki.lochat.listener;
 
 import com.loki.lochat.integrations.DiscordIntegration;
-import io.papermc.paper.event.player.AsyncChatEvent;
+
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import io.papermc.paper.event.player.AsyncChatEvent;
 
 /**
  * Слушатель событий для Discord интеграции
@@ -26,7 +29,9 @@ public class DiscordEventListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
-        if (!discord.isEnabled()) return;
+        if (!discord.isEnabled()) {
+            return;
+        }
         
         Player player = event.getPlayer();
         String message = PlainTextComponentSerializer.plainText().serialize(event.message());
@@ -47,7 +52,9 @@ public class DiscordEventListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!discord.isEnabled()) return;
+        if (!discord.isEnabled()) {
+            return;
+        }
         
         Player player = event.getPlayer();
         discord.sendPlayerJoin(player);
@@ -58,7 +65,9 @@ public class DiscordEventListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if (!discord.isEnabled()) return;
+        if (!discord.isEnabled()) {
+            return;
+        }
         
         Player player = event.getPlayer();
         discord.sendPlayerQuit(player);
@@ -69,7 +78,9 @@ public class DiscordEventListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if (!discord.isEnabled()) return;
+        if (!discord.isEnabled()) {
+            return;
+        }
         
         Player player = event.getEntity();
         String deathMessage = event.deathMessage() != null ? 

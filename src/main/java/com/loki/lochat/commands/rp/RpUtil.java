@@ -2,8 +2,10 @@ package com.loki.lochat.commands.rp;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.player.DistanceUtil;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -34,7 +36,8 @@ public final class RpUtil {
             if (plugin.getGradientModule() != null && plugin.getGradientModule().isEnabled()) {
                 return plugin.getGradientModule().getFormattedName(player);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         // Пробуем взять displayName (может содержать градиент от NickService)
         Component displayName = player.displayName();

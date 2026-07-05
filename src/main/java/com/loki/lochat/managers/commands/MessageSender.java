@@ -1,8 +1,10 @@
 package com.loki.lochat.managers.commands;
 
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -10,6 +12,9 @@ import java.time.Duration;
 
 public class MessageSender {
     
+    private MessageSender() {
+    }
+
     public static void sendChat(String target, Player sender, String message) {
         Component formatted = ChatFormatter.parse(message);
         

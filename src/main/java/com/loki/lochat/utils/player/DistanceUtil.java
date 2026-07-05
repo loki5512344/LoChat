@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
  */
 public class DistanceUtil {
 
+    private DistanceUtil() {
+    }
+
     public static boolean isInRange(Player player1, Player player2, int radius) {
         if (!player1.getWorld().equals(player2.getWorld())) {
             return false;

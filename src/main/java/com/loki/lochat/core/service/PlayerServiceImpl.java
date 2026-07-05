@@ -2,6 +2,7 @@ package com.loki.lochat.core.service;
 
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,7 +48,9 @@ public class PlayerServiceImpl implements PlayerService {
         Map<UUID, Long> cooldowns = getCooldownMap(type);
         Long lastTime = cooldowns.get(player);
         
-        if (lastTime == null) return false;
+        if (lastTime == null) {
+            return false;
+        }
         
         long elapsed = (System.currentTimeMillis() - lastTime) / 1000;
         return elapsed < cooldownSeconds;
@@ -58,7 +61,9 @@ public class PlayerServiceImpl implements PlayerService {
         Map<UUID, Long> cooldowns = getCooldownMap(type);
         Long lastTime = cooldowns.get(player);
         
-        if (lastTime == null) return 0;
+        if (lastTime == null) {
+            return 0;
+        }
         
         long elapsed = (System.currentTimeMillis() - lastTime) / 1000;
         return Math.max(0, cooldownSeconds - (int) elapsed);
@@ -89,6 +94,8 @@ public class PlayerServiceImpl implements PlayerService {
             case "global" -> globalChatCount.incrementAndGet();
             case "local" -> localChatCount.incrementAndGet();
             case "pm" -> pmCount.incrementAndGet();
+            default -> {
+            }
         }
     }
     
@@ -152,6 +159,8 @@ public class PlayerServiceImpl implements PlayerService {
     
     private void ensureDir() {
         File dir = statsFile.getParentFile();
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 }

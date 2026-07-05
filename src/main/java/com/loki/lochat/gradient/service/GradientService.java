@@ -2,6 +2,7 @@ package com.loki.lochat.gradient.service;
 
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.GradientUtil;
+
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
  */
 public class GradientService {
     
+    private GradientService() {
+    }
+
     /**
      * Применяет градиент к тексту если у игрока есть цвета
      */

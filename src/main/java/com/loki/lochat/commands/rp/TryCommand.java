@@ -4,7 +4,9 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +31,9 @@ public class TryCommand extends PlayerCommand {
     @Override
     protected boolean executePlayerCommand(@NotNull Player player, @NotNull Command command,
                                            @NotNull String label, @NotNull String[] args) {
-        if (!requirePermission(player, "lochat.rp.try")) return true;
+        if (!requirePermission(player, "lochat.rp.try")) {
+            return true;
+        }
 
         int cooldown = plugin.getConfigManager().getInt("rp.cooldowns.try", 0);
         if (cooldown > 0 && playerService.isOnCooldown(player.getUniqueId(), "rp_try", cooldown)) {
@@ -64,7 +68,9 @@ public class TryCommand extends PlayerCommand {
         int radius = plugin.getConfigManager().getInt("rp.radius", 100);
         RpUtil.sendToRadius(player, message, radius);
 
-        if (cooldown > 0) playerService.setCooldown(player.getUniqueId(), "rp_try");
+        if (cooldown > 0) {
+            playerService.setCooldown(player.getUniqueId(), "rp_try");
+        }
         plugin.getLogger().info("[TRY] " + player.getName() + ": " + action + " -> " + (success ? "SUCCESS" : "FAIL"));
         return true;
     }

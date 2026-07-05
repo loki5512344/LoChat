@@ -1,6 +1,7 @@
 package com.loki.lochat.integrations;
 
 import com.loki.lochat.LoChat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -57,7 +58,9 @@ public class SkinsRestorerHook {
      * @return URL текстуры или null
      */
     public String getPlayerSkinTexture(Player player) {
-        if (!enabled) return null;
+        if (!enabled) {
+            return null;
+        }
 
         try {
             Object property = getSkinDataMethod.invoke(skinsAPI, player.getName());

@@ -4,7 +4,9 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +28,9 @@ public class MeCommand extends PlayerCommand {
     @Override
     protected boolean executePlayerCommand(@NotNull Player player, @NotNull Command command,
                                            @NotNull String label, @NotNull String[] args) {
-        if (!requirePermission(player, "lochat.rp.me")) return true;
+        if (!requirePermission(player, "lochat.rp.me")) {
+            return true;
+        }
 
         int cooldown = plugin.getConfigManager().getInt("rp.cooldowns.me", 0);
         if (cooldown > 0 && playerService.isOnCooldown(player.getUniqueId(), "rp_me", cooldown)) {
@@ -54,7 +58,9 @@ public class MeCommand extends PlayerCommand {
         int radius = plugin.getConfigManager().getInt("rp.radius", 100);
         RpUtil.sendToRadius(player, message, radius);
 
-        if (cooldown > 0) playerService.setCooldown(player.getUniqueId(), "rp_me");
+        if (cooldown > 0) {
+            playerService.setCooldown(player.getUniqueId(), "rp_me");
+        }
         plugin.getLogger().info("[ME] " + player.getName() + ": " + action);
         return true;
     }

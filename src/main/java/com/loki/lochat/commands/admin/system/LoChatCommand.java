@@ -2,6 +2,7 @@ package com.loki.lochat.commands.admin.system;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,9 +55,15 @@ public class LoChatCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (!sender.hasPermission("lochat.admin")) return new ArrayList<>();
-        if (args.length == 1) return List.of("reload", "commands").stream().filter(s -> s.startsWith(args[0].toLowerCase())).toList();
-        if (args.length == 2 && args[0].equalsIgnoreCase("commands")) return List.of("reload");
+        if (!sender.hasPermission("lochat.admin")) {
+            return new ArrayList<>();
+        }
+        if (args.length == 1) {
+            return List.of("reload", "commands").stream().filter(s -> s.startsWith(args[0].toLowerCase())).toList();
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("commands")) {
+            return List.of("reload");
+        }
         return new ArrayList<>();
     }
 }

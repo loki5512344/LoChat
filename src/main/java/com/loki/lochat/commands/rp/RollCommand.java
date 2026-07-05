@@ -4,7 +4,9 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.commands.base.PlayerCommand;
 import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +31,9 @@ public class RollCommand extends PlayerCommand {
     @Override
     protected boolean executePlayerCommand(@NotNull Player player, @NotNull Command command,
                                            @NotNull String label, @NotNull String[] args) {
-        if (!requirePermission(player, "lochat.rp.roll")) return true;
+        if (!requirePermission(player, "lochat.rp.roll")) {
+            return true;
+        }
 
         int max = RatConfig.ROLL_DEFAULT_MAX;
 

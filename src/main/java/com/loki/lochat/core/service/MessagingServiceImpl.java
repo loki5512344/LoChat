@@ -5,7 +5,9 @@ import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.service.messaging.IgnoreService;
 import com.loki.lochat.core.service.messaging.PrivateMessageService;
 import com.loki.lochat.core.service.messaging.SpyService;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

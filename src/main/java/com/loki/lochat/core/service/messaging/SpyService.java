@@ -2,8 +2,10 @@ package com.loki.lochat.core.service.messaging;
 
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -53,7 +55,9 @@ public class SpyService {
     }
 
     public void sendToSpies(Player sender, Component message, boolean isGlobal) {
-        if (spyEnabled.isEmpty()) return;
+        if (spyEnabled.isEmpty()) {
+            return;
+        }
 
         String chatType = isGlobal ? "Global" : "Local";
         String plainMessage = PlainTextComponentSerializer.plainText().serialize(message);

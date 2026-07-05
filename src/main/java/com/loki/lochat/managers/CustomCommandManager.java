@@ -5,6 +5,7 @@ import com.loki.lochat.commands.CustomCommand;
 import com.loki.lochat.managers.commands.MessageSender;
 import com.loki.lochat.managers.commands.PlaceholderProcessor;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
@@ -44,7 +45,9 @@ public class CustomCommandManager {
 
         for (String commandName : commandsConfig.getKeys(false)) {
             ConfigurationSection section = commandsConfig.getConfigurationSection(commandName);
-            if (section == null) continue;
+            if (section == null) {
+                continue;
+            }
 
             CustomCommandData data = new CustomCommandData(
                     commandName,
@@ -96,7 +99,9 @@ public class CustomCommandManager {
             }
         }
 
-        if (data == null) return false;
+        if (data == null) {
+            return false;
+        }
 
         if (!data.enabled()) {
             return true;

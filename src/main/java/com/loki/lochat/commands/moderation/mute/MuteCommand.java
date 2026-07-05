@@ -4,6 +4,7 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -62,7 +63,9 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             } else if (timeStr == null && isTimeFormat(arg)) {
                 timeStr = arg;
             } else {
-                if (reasonBuilder.length() > 0) reasonBuilder.append(" ");
+                if (reasonBuilder.length() > 0) {
+                    reasonBuilder.append(" ");
+                }
                 reasonBuilder.append(arg);
             }
         }
@@ -78,12 +81,17 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         long duration;
         if (timeStr == null || timeStr.isEmpty()) {
             duration = sender instanceof Player p ? muteService.getMaxDuration(p) : 0;
-            if (duration == -1) duration = muteService.parseTime(hm.getDefaultMuteDuration());
+            if (duration == -1) {
+                duration = muteService.parseTime(hm.getDefaultMuteDuration());
+            }
         } else if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
             duration = 0;
         } else {
             duration = muteService.parseTime(timeStr);
-            if (duration < 0) { sender.sendMessage(ChatFormatter.parse(hm.getMuteTimeHelp())); return true; }
+            if (duration < 0) {
+                sender.sendMessage(ChatFormatter.parse(hm.getMuteTimeHelp()));
+                return true;
+            }
         }
 
         if (sender instanceof Player p && !muteService.canMuteForDuration(p, duration)) {
@@ -94,8 +102,14 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         }
 
         UUID targetUUID = com.loki.lochat.utils.player.PlayerUtil.findPlayerUUID(targetName);
-        if (targetUUID == null) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found")); return true; }
-        if (muteService.isMuted(targetUUID)) { sender.sendMessage(ChatFormatter.parse("&#CF6679Игрок уже замучен!")); return true; }
+        if (targetUUID == null) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
+            return true;
+        }
+        if (muteService.isMuted(targetUUID)) {
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Игрок уже замучен!"));
+            return true;
+        }
 
         Player target = Bukkit.getPlayer(targetUUID);
         String finalName = com.loki.lochat.utils.player.PlayerUtil.getPlayerName(targetUUID);
@@ -116,7 +130,11 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
 
         if (silent) {
             String msgText = hm.getPlayerMutedSilent().replace("{player}", finalName).replace("{time}", timeDisplay);
-            for (Player p : Bukkit.getOnlinePlayers()) if (p.hasPermission("lochat.mute.see-silent")) p.sendMessage(ChatFormatter.parse(msgText));
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.hasPermission("lochat.mute.see-silent")) {
+                    p.sendMessage(ChatFormatter.parse(msgText));
+                }
+            }
         } else {
             String broadcastMsg = (duration == 0 ? hm.getPlayerMutedPermanent() : hm.getPlayerMuted())
                     .replace("{player}", finalName).replace("{time}", timeDisplay).replace("{reason}", reason);
@@ -141,8 +159,11 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
                                                 @NotNull String alias, @NotNull String[] args) {
         List<String> c = new ArrayList<>();
         if (args.length == 1) {
-            for (Player p : Bukkit.getOnlinePlayers())
-                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) c.add(p.getName());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+                    c.add(p.getName());
+                }
+            }
         } else if (args.length == 2) {
             c.addAll(List.of("10m", "30m", "1h", "6h", "12h", "1d", "7d", "30d", "perm", "-s"));
         } else if (args.length == 3) {

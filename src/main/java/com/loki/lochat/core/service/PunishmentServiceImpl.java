@@ -7,10 +7,12 @@ import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.data.model.WarnEntry;
-import com.loki.lochat.utils.platform.FoliaUtil;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.format.TimeFormatter;
+import com.loki.lochat.utils.platform.FoliaUtil;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -48,7 +50,9 @@ public class PunishmentServiceImpl implements PunishmentService {
     @Override
     public List<WarnEntry> getWarns(UUID uuid) {
         List<WarnEntry> list = warns.get(uuid);
-        if (list == null) return List.of();
+        if (list == null) {
+            return List.of();
+        }
         synchronized (list) {
             return List.copyOf(list);
         }
@@ -81,8 +85,12 @@ public class PunishmentServiceImpl implements PunishmentService {
     @Override
     public boolean isBanned(UUID uuid) {
         BanRecord b = bans.get(uuid);
-        if (b == null) return false;
-        if (b.isPermanent()) return true;
+        if (b == null) {
+            return false;
+        }
+        if (b.isPermanent()) {
+            return true;
+        }
         if (b.isExpired()) {
             bans.remove(uuid, b);
             saveAsync();
@@ -93,7 +101,9 @@ public class PunishmentServiceImpl implements PunishmentService {
 
     @Override
     public BanRecord getActiveBan(UUID uuid) {
-        if (!isBanned(uuid)) return null;
+        if (!isBanned(uuid)) {
+            return null;
+        }
         return bans.get(uuid);
     }
 
@@ -153,11 +163,15 @@ public class PunishmentServiceImpl implements PunishmentService {
     }
 
     private void load() {
-        if (!dataFile.exists()) return;
+        if (!dataFile.exists()) {
+            return;
+        }
         try (Reader r = new InputStreamReader(new FileInputStream(dataFile), java.nio.charset.StandardCharsets.UTF_8)) {
-            Type type = new TypeToken<PunishmentSnapshot>() {}.getType();
+            Type type = new TypeToken<PunishmentSnapshot>() { }.getType();
             PunishmentSnapshot snap = gson.fromJson(r, type);
-            if (snap == null) return;
+            if (snap == null) {
+                return;
+            }
             if (snap.warns != null) {
                 for (Map.Entry<String, List<WarnEntry>> e : snap.warns.entrySet()) {
                     try {
@@ -173,7 +187,9 @@ public class PunishmentServiceImpl implements PunishmentService {
                         BanRecord br = e.getValue();
                         if (br != null) {
                             br.uuid = id;
-                            if (!br.isPermanent() && br.isExpired()) continue;
+                            if (!br.isPermanent() && br.isExpired()) {
+                                continue;
+                            }
                             bans.put(id, br);
                         }
                     } catch (IllegalArgumentException ignored) {

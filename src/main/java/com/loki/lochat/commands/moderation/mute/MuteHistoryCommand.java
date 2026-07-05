@@ -3,6 +3,7 @@ package com.loki.lochat.commands.moderation.mute;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.data.model.MuteData;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,15 +32,29 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.hasPermission("lochat.mutehistory")) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission")); return true; }
-        if (args.length < 1) { sender.sendMessage("&#CF6679Использование: /lmutehistory <ник>"); return true; }
+        if (!sender.hasPermission("lochat.mutehistory")) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission"));
+            return true;
+        }
+        if (args.length < 1) {
+            sender.sendMessage("&#CF6679Использование: /lmutehistory <ник>");
+            return true;
+        }
 
         UUID uuid = com.loki.lochat.utils.player.PlayerUtil.findPlayerUUID(args[0]);
-        if (uuid == null) uuid = muteService.getUUIDByName(args[0]);
-        if (uuid == null) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found")); return true; }
+        if (uuid == null) {
+            uuid = muteService.getUUIDByName(args[0]);
+        }
+        if (uuid == null) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
+            return true;
+        }
 
         List<MuteData.MuteHistoryEntry> history = muteService.getPlayerHistory(uuid);
-        if (history.isEmpty()) { sender.sendMessage("&#9878C9У &#7858E9" + args[0] + " &#9878C9нет истории мутов"); return true; }
+        if (history.isEmpty()) {
+            sender.sendMessage("&#9878C9У &#7858E9" + args[0] + " &#9878C9нет истории мутов");
+            return true;
+        }
 
         sender.sendMessage("&#7858E9▬▬▬▬▬ &#B798A8История мутов &#9878C9" + args[0] + " &#9878C9(" + history.size() + "&#9878C9) &#7858E9▬▬▬▬▬");
         int idx = 1;
@@ -50,17 +65,26 @@ public class MuteHistoryCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("&#9878C9" + idx + ". &f" + fmt.format(new Date(e.mutedAt)) + " &#B798A8— " + status);
             sender.sendMessage("   &#B798A8Длительность: &f" + (e.duration == 0 ? "навсегда" : muteService.formatTime(e.duration)));
             sender.sendMessage("   &#B798A8Причина: &f" + (e.reason != null ? e.reason : "—") + "  &#B798A8Выдал: &#7858E9" + e.mutedBy);
-            if (e.unmuted && e.unmutedBy != null)
+            if (e.unmuted && e.unmutedBy != null) {
                 sender.sendMessage("   &#B798A8Размутил: &#7858E9" + e.unmutedBy + " &f(" + fmt.format(new Date(e.unmutedAt)) + ")");
+            }
         }
-        if (history.size() > 10) sender.sendMessage("&#B798A8...и ещё " + (history.size() - 10) + " записей");
+        if (history.size() > 10) {
+            sender.sendMessage("&#B798A8...и ещё " + (history.size() - 10) + " записей");
+        }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> c = new ArrayList<>();
-        if (args.length == 1) for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) c.add(p.getName());
+        if (args.length == 1) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+                    c.add(p.getName());
+                }
+            }
+        }
         return c;
     }
 }

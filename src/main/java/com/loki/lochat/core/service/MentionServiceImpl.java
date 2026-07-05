@@ -3,6 +3,7 @@ package com.loki.lochat.core.service;
 import com.loki.lochat.api.service.MentionService;
 import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -113,8 +114,12 @@ public class MentionServiceImpl implements MentionService {
 
     @Override
     public void notifyIfMentioned(String message, Player viewer, Player sender) {
-        if (viewer.equals(sender)) return;
-        if (!configManager.isMentionSoundEnabled()) return;
+        if (viewer.equals(sender)) {
+            return;
+        }
+        if (!configManager.isMentionSoundEnabled()) {
+            return;
+        }
 
         if (isPlayerMentioned(message, viewer)) {
             String soundName = configManager.getMentionSoundType();

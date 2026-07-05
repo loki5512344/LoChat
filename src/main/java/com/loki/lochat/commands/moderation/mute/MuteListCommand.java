@@ -3,6 +3,7 @@ package com.loki.lochat.commands.moderation.mute;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.data.model.MuteData;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,10 +28,16 @@ public class MuteListCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.hasPermission("lochat.mutelist")) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission")); return true; }
+        if (!sender.hasPermission("lochat.mutelist")) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission"));
+            return true;
+        }
 
         Map<UUID, MuteData> mutes = muteService.getActiveMutes();
-        if (mutes.isEmpty()) { sender.sendMessage("&#9878C9Нет активных мутов"); return true; }
+        if (mutes.isEmpty()) {
+            sender.sendMessage("&#9878C9Нет активных мутов");
+            return true;
+        }
 
         sender.sendMessage("&#7858E9▬▬▬▬▬ &#B798A8Активные муты &#9878C9(" + mutes.size() + "&#9878C9) &#7858E9▬▬▬▬▬");
         int i = 1;

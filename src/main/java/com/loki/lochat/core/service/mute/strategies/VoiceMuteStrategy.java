@@ -57,7 +57,9 @@ public class VoiceMuteStrategy implements MuteStrategy {
     }
 
     private void muteVoiceChat(UUID uuid, boolean mute) {
-        if (voicechatService == null) return;
+        if (voicechatService == null) {
+            return;
+        }
 
         try {
             Player player = Bukkit.getPlayer(uuid);

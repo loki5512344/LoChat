@@ -4,6 +4,9 @@ import org.bukkit.entity.Player;
 
 public class PlaceholderProcessor {
     
+    private PlaceholderProcessor() {
+    }
+
     public static String process(String message, Player player, String[] args) {
         String result = message;
         

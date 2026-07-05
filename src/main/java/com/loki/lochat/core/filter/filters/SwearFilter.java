@@ -1,6 +1,7 @@
 package com.loki.lochat.core.filter.filters;
 
 import com.loki.lochat.core.filter.FilterResult;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

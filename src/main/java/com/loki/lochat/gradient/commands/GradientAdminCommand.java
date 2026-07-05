@@ -8,6 +8,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -125,7 +126,9 @@ public class GradientAdminCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
-        if (!sender.hasPermission("gradient.admin")) return new ArrayList<>();
+        if (!sender.hasPermission("gradient.admin")) {
+            return new ArrayList<>();
+        }
 
         if (args.length == 1) {
             return Arrays.asList("reload", "info", "setcolor", "setprefix", "coloron", "coloroff",

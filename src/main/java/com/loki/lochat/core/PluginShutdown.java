@@ -3,13 +3,14 @@ package com.loki.lochat.core;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.api.service.MuteService;
-import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.api.service.PlayerService;
+import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.integrations.DiscordIntegration;
 import com.loki.lochat.managers.AutoMessageManager;
+
 import org.bukkit.event.HandlerList;
 
 /**
@@ -59,7 +60,9 @@ public class PluginShutdown {
      * Сохранить все данные через сервисы
      */
     private void saveAllData(ServiceRegistry serviceRegistry) {
-        if (serviceRegistry == null) return;
+        if (serviceRegistry == null) {
+            return;
+        }
         
         // Статистика игроков
         PlayerService playerService = serviceRegistry.get(PlayerService.class);

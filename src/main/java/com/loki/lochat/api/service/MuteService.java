@@ -1,6 +1,7 @@
 package com.loki.lochat.api.service;
 
 import com.loki.lochat.data.model.MuteData;
+
 import org.bukkit.entity.Player;
 
 import java.util.List;

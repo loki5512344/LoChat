@@ -2,6 +2,7 @@ package com.loki.lochat.integrations;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
+
 import org.bukkit.entity.Player;
 
 /**

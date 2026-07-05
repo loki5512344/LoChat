@@ -5,6 +5,7 @@ import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,7 +56,9 @@ public class SilentWarnCommand implements CommandExecutor, TabCompleter {
                 ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length))
                 : msg.getModerationDefaultReason();
         String name = PlayerUtil.getPlayerName(targetUuid);
-        if (name == null) name = args[0];
+        if (name == null) {
+            name = args[0];
+        }
 
         punishmentService.addWarn(targetUuid, name, mod, reason, true);
 
@@ -77,7 +80,9 @@ public class SilentWarnCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String p = args[0].toLowerCase();
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().toLowerCase().startsWith(p)) out.add(pl.getName());
+                if (pl.getName().toLowerCase().startsWith(p)) {
+                    out.add(pl.getName());
+                }
             }
         }
         return out;

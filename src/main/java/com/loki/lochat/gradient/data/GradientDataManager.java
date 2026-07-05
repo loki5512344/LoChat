@@ -1,6 +1,7 @@
 package com.loki.lochat.gradient.data;
 
 import com.loki.lochat.gradient.config.GradientConfig;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,7 +65,9 @@ public class GradientDataManager {
 
     private void loadYamlData() {
         File dataFile = new File(plugin.getDataFolder(), "gradient-data.yml");
-        if (!dataFile.exists()) return;
+        if (!dataFile.exists()) {
+            return;
+        }
 
         FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
         for (String uuidStr : data.getKeys(false)) {
@@ -118,7 +121,9 @@ public class GradientDataManager {
 
     public void savePlayerData(UUID uuid) {
         GradientPlayerData data = cache.get(uuid);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         if (useSqlite && sqliteConnection != null) {
             try (PreparedStatement stmt = sqliteConnection.prepareStatement(

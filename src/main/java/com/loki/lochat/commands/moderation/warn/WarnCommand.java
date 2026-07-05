@@ -5,6 +5,7 @@ import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -58,7 +59,9 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         String mod = sender.getName();
         String reason = buildReason(msg, args, 1);
         String name = PlayerUtil.getPlayerName(targetUuid);
-        if (name == null) name = args[0];
+        if (name == null) {
+            name = args[0];
+        }
 
         Player targetOnline = Bukkit.getPlayer(targetUuid);
         if (targetOnline != null && targetOnline.hasPermission("lochat.bypass.warn")) {
@@ -82,7 +85,9 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = from; i < args.length; i++) {
-            if (sb.length() > 0) sb.append(" ");
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
             sb.append(args[i]);
         }
         return sb.toString();
@@ -95,7 +100,9 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String p = args[0].toLowerCase();
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().toLowerCase().startsWith(p)) out.add(pl.getName());
+                if (pl.getName().toLowerCase().startsWith(p)) {
+                    out.add(pl.getName());
+                }
             }
         }
         return out;

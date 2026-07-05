@@ -7,6 +7,7 @@ import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,15 +32,21 @@ public class GradientGUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder() instanceof GradientConfirmGUI gui)) return;
+        if (!(event.getInventory().getHolder() instanceof GradientConfirmGUI gui)) {
+            return;
+        }
 
         event.setCancelled(true);
 
-        if (!(event.getWhoClicked() instanceof Player player) || !player.equals(gui.getPlayer())) return;
+        if (!(event.getWhoClicked() instanceof Player player) || !player.equals(gui.getPlayer())) {
+            return;
+        }
 
         switch (event.getRawSlot()) {
             case RatConfig.GUI_CONFIRM_SLOT -> handleConfirm(player, gui);
             case RatConfig.GUI_CANCEL_SLOT -> handleCancel(player);
+            default -> {
+            }
         }
     }
 
@@ -76,13 +83,14 @@ public class GradientGUIListener implements Listener {
                 data.setPrefixEnabled(true);
                 data.setPrefixPurchased(true);
                 data.setLastPrefixChange(System.currentTimeMillis());
-                // Сохраняем существующие цвета если они есть
                 if (gui.getColors() != null && !gui.getColors().isEmpty()) {
                     data.setColors(gui.getColors());
                     data.setColorEnabled(true);
                 }
                 msg.send(player, price > 0 ? "prefix-success" : "prefix-success-free",
                         "price", String.valueOf(price));
+            }
+            default -> {
             }
         }
 

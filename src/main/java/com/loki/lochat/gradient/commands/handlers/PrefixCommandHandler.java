@@ -5,6 +5,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -38,7 +39,9 @@ public class PrefixCommandHandler {
 
         StringBuilder prefixBuilder = new StringBuilder();
         for (int i = 2; i < args.length; i++) {
-            if (i > 2) prefixBuilder.append(" ");
+            if (i > 2) {
+                prefixBuilder.append(" ");
+            }
             prefixBuilder.append(args[i]);
         }
         String prefix = prefixBuilder.toString();

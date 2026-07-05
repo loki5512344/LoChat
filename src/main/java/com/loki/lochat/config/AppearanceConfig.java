@@ -2,9 +2,9 @@ package com.loki.lochat.config;
 
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Конфигурация внешнего вида чата (config/appearance.yml)
@@ -48,19 +48,43 @@ public class AppearanceConfig extends BaseConfig {
         return config.getString("prefixes." + chatType + "." + key, defaultValue);
     }
     
-    public String getGlobalEmoji() { return getPrefixValue("global", "emoji", "🌍"); }
-    public String getGlobalText() { return getPrefixValue("global", "text", "GLOBAL"); }
-    public List<String> getGlobalColors() { return config.getStringList("prefixes.global.colors"); }
-    public String getGlobalSeparatorText() { return getPrefixValue("global", "separator.text", " ▶ "); }
-    public String getGlobalSeparatorColor() { return getPrefixValue("global", "separator.color", "#FFD700"); }
-    public String getGlobalMessageColor() { return getPrefixValue("global", "message-color", "#FFFFFF"); }
+    public String getGlobalEmoji() {
+        return getPrefixValue("global", "emoji", "🌍");
+    }
+    public String getGlobalText() {
+        return getPrefixValue("global", "text", "GLOBAL");
+    }
+    public List<String> getGlobalColors() {
+        return config.getStringList("prefixes.global.colors");
+    }
+    public String getGlobalSeparatorText() {
+        return getPrefixValue("global", "separator.text", " ▶ ");
+    }
+    public String getGlobalSeparatorColor() {
+        return getPrefixValue("global", "separator.color", "#FFD700");
+    }
+    public String getGlobalMessageColor() {
+        return getPrefixValue("global", "message-color", "#FFFFFF");
+    }
     
-    public String getLocalEmoji() { return getPrefixValue("local", "emoji", ""); }
-    public String getLocalText() { return getPrefixValue("local", "text", "LOCAL"); }
-    public List<String> getLocalColors() { return config.getStringList("prefixes.local.colors"); }
-    public String getLocalSeparatorText() { return getPrefixValue("local", "separator.text", " ▶ "); }
-    public String getLocalSeparatorColor() { return getPrefixValue("local", "separator.color", "#FFFFFF"); }
-    public String getLocalMessageColor() { return getPrefixValue("local", "message-color", "#FFFFFF"); }
+    public String getLocalEmoji() {
+        return getPrefixValue("local", "emoji", "");
+    }
+    public String getLocalText() {
+        return getPrefixValue("local", "text", "LOCAL");
+    }
+    public List<String> getLocalColors() {
+        return config.getStringList("prefixes.local.colors");
+    }
+    public String getLocalSeparatorText() {
+        return getPrefixValue("local", "separator.text", " ▶ ");
+    }
+    public String getLocalSeparatorColor() {
+        return getPrefixValue("local", "separator.color", "#FFFFFF");
+    }
+    public String getLocalMessageColor() {
+        return getPrefixValue("local", "message-color", "#FFFFFF");
+    }
     
     // ========== ФОРМАТ СООБЩЕНИЙ ==========
     
@@ -74,36 +98,72 @@ public class AppearanceConfig extends BaseConfig {
     
     // ========== HOVER ЭФФЕКТЫ ==========
     
-    public boolean isHoverEnabled() { return config.getBoolean("hover.enabled", true); }
-    public List<String> getHoverFormat() { return config.getStringList("hover.format"); }
+    public boolean isHoverEnabled() {
+        return config.getBoolean("hover.enabled", true);
+    }
+    public List<String> getHoverFormat() {
+        return config.getStringList("hover.format");
+    }
     
     // ========== ЭМОДЗИ ==========
     
-    public Map<String, String> getEmojis() { return new HashMap<>(emojiCache); }
-    public String getEmoji(String key) { return emojiCache.get(key); }
+    public Map<String, String> getEmojis() {
+        return new HashMap<>(emojiCache);
+    }
+    public String getEmoji(String key) {
+        return emojiCache.get(key);
+    }
     
     // ========== НАСТРОЙКИ ЧАТА ==========
     
-    public int getLocalRadius() { return config.getInt("chat.local_radius", 100); }
-    public int getClearLines() { return config.getInt("chat.clear_lines", 100); }
-    public int getMinMessageLength() { return config.getInt("chat.min_message_length", 1); }
-    public int getMaxMessageLength() { return config.getInt("chat.max_message_length", 2000); }
+    public int getLocalRadius() {
+        return config.getInt("chat.local_radius", 100);
+    }
+    public int getClearLines() {
+        return config.getInt("chat.clear_lines", 100);
+    }
+    public int getMinMessageLength() {
+        return config.getInt("chat.min_message_length", 1);
+    }
+    public int getMaxMessageLength() {
+        return config.getInt("chat.max_message_length", 2000);
+    }
     
     private String getChatColor(String type, String defaultColor) {
         return config.getString("chat.colors." + type, defaultColor);
     }
     
-    public String getNobodyHeardColor() { return getChatColor("nobody_heard", "#FFA726"); }
-    public String getErrorColor() { return getChatColor("error", "#FF6B6B"); }
-    public String getSuccessColor() { return getChatColor("success", "#6BCB77"); }
-    public String getWarningColor() { return getChatColor("warning", "#FFA726"); }
-    public String getInfoColor() { return getChatColor("info", "#87CEEB"); }
+    public String getNobodyHeardColor() {
+        return getChatColor("nobody_heard", "#FFA726");
+    }
+    public String getErrorColor() {
+        return getChatColor("error", "#FF6B6B");
+    }
+    public String getSuccessColor() {
+        return getChatColor("success", "#6BCB77");
+    }
+    public String getWarningColor() {
+        return getChatColor("warning", "#FFA726");
+    }
+    public String getInfoColor() {
+        return getChatColor("info", "#87CEEB");
+    }
     
     // ========== DISCORD ==========
     
-    public String getDiscordEmoji(String event) { return config.getString("discord.emojis." + event, ""); }
-    public String getDiscordEventTitle(String event) { return config.getString("discord.event_titles." + event, ""); }
-    public String getDefaultAvatarUrl() { return config.getString("discord.avatar_urls.default", "https://mc-heads.net/avatar/minecraft/64"); }
-    public String getPlayerAvatarUrl() { return config.getString("discord.avatar_urls.player", "https://mc-heads.net/avatar/{player}/64"); }
-    public String getDefaultEmbedColor() { return config.getString("discord.default_embed_color", "5865F2"); }
+    public String getDiscordEmoji(String event) {
+        return config.getString("discord.emojis." + event, "");
+    }
+    public String getDiscordEventTitle(String event) {
+        return config.getString("discord.event_titles." + event, "");
+    }
+    public String getDefaultAvatarUrl() {
+        return config.getString("discord.avatar_urls.default", "https://mc-heads.net/avatar/minecraft/64");
+    }
+    public String getPlayerAvatarUrl() {
+        return config.getString("discord.avatar_urls.player", "https://mc-heads.net/avatar/{player}/64");
+    }
+    public String getDefaultEmbedColor() {
+        return config.getString("discord.default_embed_color", "5865F2");
+    }
 }

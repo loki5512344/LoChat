@@ -1,6 +1,7 @@
 package com.loki.lochat.api.service;
 
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.entity.Player;
 
 import java.util.Optional;

@@ -8,6 +8,7 @@ import com.loki.lochat.data.model.MuteData;
 import com.loki.lochat.data.model.WarnEntry;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,7 +56,9 @@ public class PlayerInfoCommand implements CommandExecutor, TabCompleter {
         }
 
         String name = PlayerUtil.getPlayerName(uuid);
-        if (name == null) name = args[0];
+        if (name == null) {
+            name = args[0];
+        }
 
         Player target = Bukkit.getPlayer(uuid);
 
@@ -129,7 +132,9 @@ public class PlayerInfoCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String p = args[0].toLowerCase();
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().toLowerCase().startsWith(p)) out.add(pl.getName());
+                if (pl.getName().toLowerCase().startsWith(p)) {
+                    out.add(pl.getName());
+                }
             }
         }
         return out;

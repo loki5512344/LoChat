@@ -3,6 +3,7 @@ package com.loki.lochat.commands.messaging;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,13 +23,28 @@ public class IgnoreCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) { sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly()); return true; }
-        if (args.length == 0) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/ignore <ник>"))); return true; }
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
+            return true;
+        }
+        if (args.length == 0) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/ignore <ник>")));
+            return true;
+        }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getPlayerNotFound())); return true; }
-        if (target.equals(player)) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.self"))); return true; }
-        if (messagingService.isIgnoring(player.getUniqueId(), target.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.already-ignored"))); return true; }
+        if (target == null) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getPlayerNotFound()));
+            return true;
+        }
+        if (target.equals(player)) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.self")));
+            return true;
+        }
+        if (messagingService.isIgnoring(player.getUniqueId(), target.getUniqueId())) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.already-ignored")));
+            return true;
+        }
 
         messagingService.addIgnore(player.getUniqueId(), target.getUniqueId());
         player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.added", "{player}", target.getName())));

@@ -8,6 +8,7 @@ import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.gradient.util.GradientUtil;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

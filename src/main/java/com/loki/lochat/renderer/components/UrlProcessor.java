@@ -10,6 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UrlProcessor {
+    private UrlProcessor() {
+    }
+
     private static final Pattern URL_PATTERN = Pattern.compile(
         "https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+"
     );

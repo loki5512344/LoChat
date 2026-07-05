@@ -1,6 +1,7 @@
 package com.loki.lochat.core.filter.filters;
 
 import com.loki.lochat.core.filter.FilterResult;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -41,15 +42,21 @@ public class SpamFilter {
 
         // Добавляем в историю (храним последние 10)
         history.addLast(message);
-        if (history.size() > 10) history.pollFirst();
+        if (history.size() > 10) {
+            history.pollFirst();
+        }
 
         return FilterResult.ok(null);
     }
 
     private int similarity(String a, String b) {
-        if (a.equals(b)) return 100;
+        if (a.equals(b)) {
+            return 100;
+        }
         int maxLen = Math.max(a.length(), b.length());
-        if (maxLen == 0) return 100;
+        if (maxLen == 0) {
+            return 100;
+        }
         
         int dist = levenshtein(
             a.toLowerCase().substring(0, Math.min(a.length(), 50)),
@@ -60,7 +67,9 @@ public class SpamFilter {
 
     private int levenshtein(String a, String b) {
         int[] dp = new int[b.length() + 1];
-        for (int j = 0; j <= b.length(); j++) dp[j] = j;
+        for (int j = 0; j <= b.length(); j++) {
+            dp[j] = j;
+        }
         
         for (int i = 1; i <= a.length(); i++) {
             int prev = dp[0];

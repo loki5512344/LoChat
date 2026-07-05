@@ -2,6 +2,7 @@ package com.loki.lochat.integrations.discord;
 
 import com.loki.lochat.integrations.DiscordWebhook;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -140,7 +141,9 @@ public class DiscordMessageService {
     }
     
     private String sanitizeMessage(String message) {
-        if (message == null) return "";
+        if (message == null) {
+            return "";
+        }
         
         message = COLOR_CODE_PATTERN.matcher(message).replaceAll("");
         

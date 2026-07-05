@@ -2,10 +2,12 @@ package com.loki.lochat.gradient.service;
 
 import com.loki.lochat.gradient.config.GradientConfig;
 import com.loki.lochat.gradient.data.GradientPlayerData;
+
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.user.User;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -128,9 +130,13 @@ public class PrefixService {
         }
         
         StringBuilder result = new StringBuilder();
-        if (!prefix.isEmpty()) result.append(prefix).append(" ");
+        if (!prefix.isEmpty()) {
+            result.append(prefix).append(" ");
+        }
         result.append(nick);
-        if (!suffix.isEmpty()) result.append(" ").append(suffix);
+        if (!suffix.isEmpty()) {
+            result.append(" ").append(suffix);
+        }
         
         return result.toString();
     }
@@ -149,9 +155,13 @@ public class PrefixService {
         }
         
         StringBuilder result = new StringBuilder();
-        if (!prefix.isEmpty()) result.append(prefix).append(" ");
+        if (!prefix.isEmpty()) {
+            result.append(prefix).append(" ");
+        }
         result.append(nick);
-        if (!suffix.isEmpty()) result.append(" ").append(suffix);
+        if (!suffix.isEmpty()) {
+            result.append(" ").append(suffix);
+        }
         
         return result.toString();
     }

@@ -2,6 +2,7 @@ package com.loki.lochat.integrations;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -78,10 +79,18 @@ public class DiscordWebhook {
     private JsonObject buildEmbed(String title, String description, String color,
                                   String thumbnailUrl, JsonArray fields) {
         JsonObject embed = new JsonObject();
-        if (title != null) embed.addProperty("title", title);
-        if (description != null) embed.addProperty("description", description);
-        if (color != null) embed.addProperty("color", Integer.parseInt(color, 16));
-        if (fields != null) embed.add("fields", fields);
+        if (title != null) {
+            embed.addProperty("title", title);
+        }
+        if (description != null) {
+            embed.addProperty("description", description);
+        }
+        if (color != null) {
+            embed.addProperty("color", Integer.parseInt(color, 16));
+        }
+        if (fields != null) {
+            embed.add("fields", fields);
+        }
         if (thumbnailUrl != null) {
             JsonObject thumb = new JsonObject();
             thumb.addProperty("url", thumbnailUrl);
@@ -106,13 +115,19 @@ public class DiscordWebhook {
         return CompletableFuture.supplyAsync(() -> {
             for (int attempt = 1; attempt <= retryAttempts; attempt++) {
                 try {
-                    if (sendWebhookSync(json.toString())) return true;
+                    if (sendWebhookSync(json.toString())) {
+                        return true;
+                    }
                 } catch (Exception e) {
                     plugin.getLogger().warning("Discord webhook attempt " + attempt + " failed: " + e.getMessage());
                 }
                 if (attempt < retryAttempts) {
-                    try { Thread.sleep(retryDelay); }
-                    catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
+                    try {
+                        Thread.sleep(retryDelay);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
                 }
             }
             plugin.getLogger().severe("Failed to send Discord webhook after " + retryAttempts + " attempts");
@@ -134,8 +149,13 @@ public class DiscordWebhook {
                 os.write(jsonPayload.getBytes(StandardCharsets.UTF_8));
             }
             int code = conn.getResponseCode();
-            if (code == 204) return true;
-            if (code == 429) { plugin.getLogger().warning("Discord webhook rate limited (429)"); return false; }
+            if (code == 204) {
+                return true;
+            }
+            if (code == 429) {
+                plugin.getLogger().warning("Discord webhook rate limited (429)");
+                return false;
+            }
             plugin.getLogger().warning("Discord webhook returned code: " + code);
             return false;
         } finally {
@@ -144,12 +164,22 @@ public class DiscordWebhook {
     }
 
     public boolean isValid() {
-        if (webhookUrl == null || webhookUrl.trim().isEmpty()) return false;
+        if (webhookUrl == null || webhookUrl.trim().isEmpty()) {
+            return false;
+        }
         String url = webhookUrl.trim();
         if (!url.startsWith("https://discord.com/api/webhooks/") &&
-            !url.startsWith("https://discordapp.com/api/webhooks/")) return false;
-        if (url.length() < 50) return false;
-        try { URI.create(url); } catch (IllegalArgumentException e) { return false; }
+            !url.startsWith("https://discordapp.com/api/webhooks/")) {
+            return false;
+        }
+        if (url.length() < 50) {
+            return false;
+        }
+        try {
+            URI.create(url);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         return true;
     }
 }

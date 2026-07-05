@@ -1,6 +1,7 @@
 package com.loki.lochat.core.filter;
 
 import com.loki.lochat.core.filter.filters.*;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -80,24 +81,32 @@ public class AdvancedMessageFilter {
         // 2. Мат
         if (config.getBoolean("filters.swear.enabled", true) && !canBypassFilter(player, "swear")) {
             FilterResult swear = swearFilter.filter(player, message);
-            if (!swear.allowed()) return swear;
+            if (!swear.allowed()) {
+                return swear;
+            }
             message = swear.filteredMessage();
         }
 
         // 3. URL фильтры
         if (config.getBoolean("filters.advertising.enabled", true)) {
             FilterResult r = urlFilter.filterUrls(player, message);
-            if (!r.allowed()) return r;
+            if (!r.allowed()) {
+                return r;
+            }
             message = r.filteredMessage();
 
             r = urlFilter.filterHiddenUrls(player, message);
-            if (!r.allowed()) return r;
+            if (!r.allowed()) {
+                return r;
+            }
         }
 
         // 4. IP
         if (config.getBoolean("filters.ip.enabled", true)) {
             FilterResult r = urlFilter.filterIPs(player, message);
-            if (!r.allowed()) return r;
+            if (!r.allowed()) {
+                return r;
+            }
             message = r.filteredMessage();
         }
 
@@ -109,13 +118,17 @@ public class AdvancedMessageFilter {
         // 6. Anti-flood
         if (config.getBoolean("filters.flood.enabled", true) && !canBypassFilter(player, "flood")) {
             FilterResult r = floodFilter.filter(player);
-            if (!r.allowed()) return r;
+            if (!r.allowed()) {
+                return r;
+            }
         }
 
         // 7. Anti-spam
         if (config.getBoolean("filters.spam.enabled", true) && !canBypassFilter(player, "spam")) {
             FilterResult r = spamFilter.filter(player, message);
-            if (!r.allowed()) return r;
+            if (!r.allowed()) {
+                return r;
+            }
         }
 
         return FilterResult.ok(message);

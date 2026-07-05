@@ -1,6 +1,7 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,7 +43,9 @@ public class EmojiManager {
 
         // Загружаем все категории
         for (String category : config.getKeys(false)) {
-            if (category.equals("settings")) continue;
+            if (category.equals("settings")) {
+                continue;
+            }
 
             ConfigurationSection section = config.getConfigurationSection(category);
             if (section != null) {
@@ -66,7 +69,9 @@ public class EmojiManager {
      * Заменяет смайлики в сообщении
      */
     public String process(String message, Player player) {
-        if (!enabled) return message;
+        if (!enabled) {
+            return message;
+        }
 
         // Проверка права
         if (requirePermission && player != null && !player.hasPermission("chat.emoji.use")) {
@@ -82,7 +87,9 @@ public class EmojiManager {
     }
 
     public String process(String message) {
-        if (!enabled) return message;
+        if (!enabled) {
+            return message;
+        }
 
         String result = message;
         for (Map.Entry<String, String> entry : emojis.entrySet()) {

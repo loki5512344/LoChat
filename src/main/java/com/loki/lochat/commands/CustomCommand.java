@@ -1,6 +1,7 @@
 package com.loki.lochat.commands;
 
 import com.loki.lochat.managers.CustomCommandManager;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

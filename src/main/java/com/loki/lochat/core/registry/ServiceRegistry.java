@@ -5,6 +5,7 @@ import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.config.MessageConfig;
 import com.loki.lochat.core.factory.ServiceFactory;
 import com.loki.lochat.core.service.*;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;

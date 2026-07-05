@@ -10,6 +10,7 @@ import com.loki.lochat.core.service.mute.MuteHistoryManager;
 import com.loki.lochat.core.service.mute.strategies.ChatMuteStrategy;
 import com.loki.lochat.core.service.mute.strategies.MuteStrategy;
 import com.loki.lochat.core.service.mute.strategies.VoiceMuteStrategy;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,6 +21,9 @@ import java.util.List;
  * Factory pattern для инициализации сложных объектов
  */
 public class ServiceFactory {
+
+    private ServiceFactory() {
+    }
 
     /**
      * Создать MuteService со всеми зависимостями

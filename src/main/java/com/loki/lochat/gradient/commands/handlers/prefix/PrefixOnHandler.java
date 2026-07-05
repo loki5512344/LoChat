@@ -4,6 +4,7 @@ import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.util.DisplayNameUtil;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.entity.Player;
 
 /**

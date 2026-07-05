@@ -2,8 +2,10 @@ package com.loki.lochat.commands.admin.broadcast;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,8 +40,9 @@ public class AnnounceCommand implements CommandExecutor {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(formatted);
-            if (plugin.getConfigManager().isAnnouncementActionBarEnabled())
+            if (plugin.getConfigManager().isAnnouncementActionBarEnabled()) {
                 player.sendActionBar(formatted);
+            }
             if (plugin.getConfigManager().isAnnouncementTitleEnabled()) {
                 player.showTitle(Title.title(
                         ChatFormatter.parse(plugin.getConfigManager().getAnnouncementTitleHeader()),

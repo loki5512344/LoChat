@@ -31,7 +31,9 @@ public class BanRecord {
     }
 
     public boolean isExpired() {
-        if (isPermanent()) return false;
+        if (isPermanent()) {
+            return false;
+        }
         return System.currentTimeMillis() >= until;
     }
 }

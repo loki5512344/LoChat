@@ -25,7 +25,9 @@ public final class GradientUtil {
 
         char[] chars = text.toCharArray();
         int length = chars.length;
-        if (length == 0) return text;
+        if (length == 0) {
+            return text;
+        }
 
         StringBuilder result = new StringBuilder();
 
@@ -61,9 +63,15 @@ public final class GradientUtil {
     }
 
     private static Color interpolateMultiColor(Color[] colors, double ratio) {
-        if (colors.length == 1) return colors[0];
-        if (ratio <= 0) return colors[0];
-        if (ratio >= 1) return colors[colors.length - 1];
+        if (colors.length == 1) {
+            return colors[0];
+        }
+        if (ratio <= 0) {
+            return colors[0];
+        }
+        if (ratio >= 1) {
+            return colors[colors.length - 1];
+        }
 
         double scaledRatio = ratio * (colors.length - 1);
         int index = (int) scaledRatio;
@@ -128,7 +136,9 @@ public final class GradientUtil {
 
         char[] chars = text.toCharArray();
         int length = chars.length;
-        if (length == 0) return text;
+        if (length == 0) {
+            return text;
+        }
 
         StringBuilder result = new StringBuilder();
 

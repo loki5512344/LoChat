@@ -1,136 +1,98 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                    LoChat — config/appearance.yml                            ║
-# ║  In-game chat look: prefixes, format, hover, emoji shortcuts, Discord UI   ║
-# ║  Palette (Spacelegacy): #B798A8 (dusty rose) → #7858E9 (violet)            ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
+# LoChat chat appearance
+# Controls how messages look in-game: prefixes, format, hover, emojis.
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Chat prefixes (gradient label + separator + default message color)         │
-# └─────────────────────────────────────────────────────────────────────────────┘
-#
-# Gradient: use 2+ hex colors; letters are blended smoothly along the label.
-# message-color: used when the player does NOT have lochat.chat.colors (see plugin.yml).
+# ── Chat Prefixes ──────────────────────────────────────────────────────────────
 
 prefixes:
   global:
-    emoji: "✦"
+    emoji: "\u2726"
     text: "GLOBAL"
-    colors:
-      - "#B798A8"
-      - "#7858E9"
-    separator:
-      text: " ▶ "
-      color: "#9878C9"
-    message-color: "#E8E0F0"
+    separator: " \u25B6 "
+    message-color: "&7"
 
   local:
-    emoji: "◆"
+    emoji: "\u25C6"
     text: "LOCAL"
-    colors:
-      - "#9878C9"
-      - "#7858E9"
-    separator:
-      text: " ▶ "
-      color: "#8B6BD6"
-    message-color: "#E8E0F0"
+    separator: " \u25B6 "
+    message-color: "&7"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Rendered chat line layout                                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
-#
+# ── Chat Format ────────────────────────────────────────────────────────────────
 # Placeholders:
-#   {emoji}          — prefix emoji (✦ / ◆)
-#   {prefix}         — gradient prefix text (GLOBAL / LOCAL)
-#   {separator}      — separator (e.g. ▶)
-#   {player_prefix}  — LuckPerms / gradient prefix from LoPreff
-#   {player}         — display name + hover (click to /msg)
-#   {player_suffix}  — LuckPerms / gradient suffix from LoPreff
-#   {message}        — message body
-#
-# Examples:
-#   Default:  {emoji} {prefix} {separator} {player} : {message}
-#   Minimal:  {player_prefix} {player} ▶ {message}
-#   Custom:   ✦ {player_prefix} {player} {player_suffix} ▶ {message}
+#   {emoji}, {prefix}, {separator}
+#   {player_prefix}, {player}, {player_suffix}
+#   {message}
 
 chat-format:
-  global: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix} : {message}"
-  local: "{emoji} {prefix} {separator} {player_prefix}{player}{player_suffix} : {message}"
+  global: "{emoji} {prefix}{separator}{player_prefix}{player}{player_suffix}&f: {message}"
+  local: "{emoji} {prefix}{separator}{player_prefix}{player}{player_suffix}&f: {message}"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Hover shown when pointing at the player name in chat                         │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Hover on Player Name ───────────────────────────────────────────────────────
 
 hover:
   enabled: true
   format:
-    - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-    - "&#B798A8✦ &f{player}"
+    - "&8\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550"
+    - " \u2726 &f{player}"
     - ""
-    - "&#9878C9⏱ &fПинг: &#7858E9{ping}ms"
-    - "&#9878C9❤ &fЗдоровье: &#7858E9{health}/20"
-    - "&#9878C9🍖 &fГолод: &#7858E9{food}/20"
+    - " &7Ping: &b{ping}ms"
+    - " &7Health: &a{health}&7/20"
+    - " &7Food: &6{food}&7/20"
     - ""
-    - "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-    - "&#B798A8✦ &fНажми чтобы написать"
+    - "&8\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550"
+    - " &7Click to message"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Text shortcuts → unicode (applied to outgoing chat before URLs / mentions)   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Emoji Shortcuts ────────────────────────────────────────────────────────────
+# Text shortcuts replaced in outgoing messages before processing.
 
 emojis:
-  ":heart:": "❤"
-  ":hearts:": "♥"
-  ":star:": "★"
-  ":stars:": "✦"
-  ":diamond:": "♦"
-  ":check:": "✓"
-  ":cross:": "✗"
-  ":arrow:": "→"
-  ":up:": "↑"
-  ":down:": "↓"
-  ":left:": "←"
-  ":right:": "→"
-  ":music:": "♪"
-  ":note:": "♫"
+  ":heart:": "\u2764"
+  ":hearts:": "\u2665"
+  ":star:": "\u2605"
+  ":stars:": "\u2726"
+  ":diamond:": "\u2666"
+  ":check:": "\u2713"
+  ":cross:": "\u2717"
+  ":arrow:": "\u2192"
+  ":up:": "\u2191"
+  ":down:": "\u2193"
+  ":left:": "\u2190"
+  ":right:": "\u2192"
+  ":music:": "\u266A"
+  ":note:": "\u266B"
   ":smile:": ":)"
   ":sad:": ":("
-  ":wink:": ";)"
-  ":shrug:": "¯\\_(ツ)_/¯"
+  ":shrug:": "\u00AF\\_(\u30C4)_/\u00AF"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Radius, length limits, and misc chat UI colors (plugin internals)          │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Chat Settings ──────────────────────────────────────────────────────────────
 
 chat:
-  local_radius: 100
-  clear_lines: 100
-  min_message_length: 1
-  max_message_length: 2000
+  local-radius: 100
+  clear-lines: 100
+  min-message-length: 1
+  max-message-length: 2000
   colors:
-    nobody_heard: "#9878C9"
-    error: "#CF6679"
-    success: "#9878C9"
-    warning: "#B798A8"
-    info: "#A485BC"
+    nobody-heard: "&7"
+    error: "&c"
+    success: "&a"
+    warning: "&6"
+    info: "&7"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Discord webhook embeds (see also config/discord.yml for webhooks)          │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Discord Embeds ─────────────────────────────────────────────────────────────
 
 discord:
   emojis:
-    global_chat: "✦"
-    local_chat: "◆"
-    player_join: "♦"
-    player_quit: "◈"
-    player_death: "✗"
-  avatar_urls:
+    global-chat: "\u2726"
+    local-chat: "\u25C6"
+    player-join: "\u25C6"
+    player-quit: "\u25C7"
+    player-death: "\u2717"
+  avatar-urls:
     default: "https://mc-heads.net/avatar/minecraft/64"
     player: "https://mc-heads.net/avatar/{player}/64"
-  default_embed_color: "7858E9"
-  event_titles:
-    join: "♦ Игрок зашел на сервер"
-    quit: "◈ Игрок покинул сервер"
-    death: "✗ Смерть игрока"
-    global_chat: "✦ Глобальный чат"
-    local_chat: "◆ Локальный чат"
+  default-embed-color: "3498DB"
+  event-titles:
+    join: "Player joined"
+    quit: "Player left"
+    death: "Player died"
+    global-chat: "Global Chat"
+    local-chat: "Local Chat"

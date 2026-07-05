@@ -1,10 +1,11 @@
 package com.loki.lochat.managers;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.utils.platform.FoliaUtil;
 import com.loki.lochat.utils.format.ChatFormatter;
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import com.loki.lochat.utils.platform.FoliaUtil;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,6 +13,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 
 public class AutoMessageManager {
 
@@ -133,7 +136,9 @@ public class AutoMessageManager {
         }
 
         List<String> lines = messages.get(messageKey);
-        if (lines == null || lines.isEmpty()) return;
+        if (lines == null || lines.isEmpty()) {
+            return;
+        }
 
         boolean isFirstLine = true;
         for (String line : lines) {

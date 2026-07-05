@@ -3,8 +3,10 @@ package com.loki.lochat.core.service;
 import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

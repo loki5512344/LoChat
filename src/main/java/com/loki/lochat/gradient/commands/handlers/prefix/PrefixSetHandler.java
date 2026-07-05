@@ -7,6 +7,7 @@ import com.loki.lochat.gradient.config.GradientMessages;
 import com.loki.lochat.gradient.data.GradientPlayerData;
 import com.loki.lochat.gradient.gui.GradientConfirmGUI;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
@@ -80,7 +81,9 @@ public class PrefixSetHandler implements PrefixSubCommandHandler {
     }
 
     private int calculatePrice(Player player, GradientConfig cfg, GradientPlayerData data) {
-        if (player.hasPermission("gradient.bypass.cost")) return 0;
+        if (player.hasPermission("gradient.bypass.cost")) {
+            return 0;
+        }
         return (cfg.isPrefixOneTimePurchase() && data.isPrefixPurchased()) ? 0 : cfg.getPrefixPrice();
     }
 

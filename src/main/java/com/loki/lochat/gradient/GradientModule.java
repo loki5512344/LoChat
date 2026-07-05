@@ -11,6 +11,7 @@ import com.loki.lochat.gradient.listeners.GradientGUIListener;
 import com.loki.lochat.gradient.listeners.GradientPlayerListener;
 import com.loki.lochat.gradient.service.GradientService;
 import com.loki.lochat.gradient.service.PrefixService;
+
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
@@ -113,7 +114,9 @@ public class GradientModule {
      * Получает отформатированное имя игрока (префикс + ник с градиентом)
      */
     public String getFormattedName(Player player) {
-        if (!enabled) return player.getName();
+        if (!enabled) {
+            return player.getName();
+        }
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return prefixService.getFullName(player, data);
@@ -123,7 +126,9 @@ public class GradientModule {
      * Получает отформатированное имя для TAB плагина
      */
     public String getFormattedNameForTab(Player player) {
-        if (!enabled) return player.getName();
+        if (!enabled) {
+            return player.getName();
+        }
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return prefixService.getFullNameForTab(player, data);
@@ -133,7 +138,9 @@ public class GradientModule {
      * Получает только градиентный ник (без префикса)
      */
     public String getGradientNick(Player player) {
-        if (!enabled) return player.getName();
+        if (!enabled) {
+            return player.getName();
+        }
 
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return GradientService.applyGradient(player, player.getName(), data);
@@ -143,7 +150,9 @@ public class GradientModule {
      * Получает префикс игрока (кастомный или LuckPerms) с градиентом
      */
     public String getPrefix(Player player) {
-        if (!enabled) return "";
+        if (!enabled) {
+            return "";
+        }
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return prefixService.getPrefix(player, data);
@@ -153,7 +162,9 @@ public class GradientModule {
      * Получает суффикс игрока из LuckPerms с градиентом
      */
     public String getSuffix(Player player) {
-        if (!enabled) return "";
+        if (!enabled) {
+            return "";
+        }
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return prefixService.getLuckPermsSuffix(player, data);
@@ -163,7 +174,9 @@ public class GradientModule {
      * Получает только LuckPerms префикс
      */
     public String getLuckPermsPrefix(Player player) {
-        if (!enabled) return "";
+        if (!enabled) {
+            return "";
+        }
         
         GradientPlayerData data = dataManager.getPlayerData(player.getUniqueId());
         return prefixService.getLuckPermsPrefix(player, data);

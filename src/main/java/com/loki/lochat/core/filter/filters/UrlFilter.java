@@ -1,11 +1,11 @@
 package com.loki.lochat.core.filter.filters;
 
 import com.loki.lochat.core.filter.FilterResult;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

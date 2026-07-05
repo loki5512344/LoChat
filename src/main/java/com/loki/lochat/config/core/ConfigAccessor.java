@@ -1,6 +1,7 @@
 package com.loki.lochat.config.core;
 
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;

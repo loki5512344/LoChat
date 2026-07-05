@@ -1,6 +1,7 @@
 package com.loki.lochat.api.filter;
 
 import com.loki.lochat.data.model.ChatMessage;
+
 import org.bukkit.entity.Player;
 
 /**

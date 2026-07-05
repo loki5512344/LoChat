@@ -1,8 +1,9 @@
 package com.loki.lochat.listener;
 
 import com.loki.lochat.api.service.PunishmentService;
-import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.core.registry.ServiceRegistry;
+import com.loki.lochat.data.model.BanRecord;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

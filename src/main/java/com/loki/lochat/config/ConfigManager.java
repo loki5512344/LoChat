@@ -1,9 +1,8 @@
 package com.loki.lochat.config;
 
 import com.loki.lochat.LoChat;
-import com.loki.lochat.config.core.ConfigLoader;
 import com.loki.lochat.config.core.ConfigAccessor;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.loki.lochat.config.core.ConfigLoader;
 
 import java.util.List;
 

@@ -3,7 +3,9 @@ package com.loki.lochat.gradient.util;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.config.GradientConfig;
 import com.loki.lochat.gradient.data.GradientPlayerData;
+
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
@@ -38,7 +40,9 @@ public final class DisplayNameUtil {
      * Конвертирует MiniMessage <#RRGGBB> формат в §x§R§R§G§G§B§B для display name
      */
     private static String convertMiniMessageToLegacy(String text) {
-        if (text == null) return "";
+        if (text == null) {
+            return "";
+        }
 
         // Конвертируем <#RRGGBB> в §x§R§R§G§G§B§B
         Pattern pattern = Pattern.compile("<#([0-9a-fA-F]{6})>");
@@ -59,7 +63,9 @@ public final class DisplayNameUtil {
     }
 
     public static String buildColoredPrefix(GradientModule module, GradientPlayerData data) {
-        if (!data.hasPrefix() || !data.isPrefixEnabled()) return null;
+        if (!data.hasPrefix() || !data.isPrefixEnabled()) {
+            return null;
+        }
 
         GradientConfig cfg = module.getConfig();
         // ✅ FIX: Убрал stripTrailing() чтобы сохранить пробел из prefix-format

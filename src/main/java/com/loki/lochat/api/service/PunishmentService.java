@@ -2,6 +2,7 @@ package com.loki.lochat.api.service;
 
 import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.data.model.WarnEntry;
+
 import net.kyori.adventure.text.Component;
 
 import java.util.List;

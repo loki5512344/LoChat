@@ -4,6 +4,7 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -28,17 +29,31 @@ public class MsgCommand implements CommandExecutor {
             sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
             return true;
         }
-        if (!plugin.getConfigManager().isPmEnabled()) return true;
+        if (!plugin.getConfigManager().isPmEnabled()) {
+            return true;
+        }
         if (args.length < 2) {
             player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().getInvalidUsage("/msg <ник> <сообщение>")));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.player-offline"))); return true; }
-        if (target.equals(player)) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.self"))); return true; }
-        if (messagingService.isIgnoring(target.getUniqueId(), player.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored"))); return true; }
-        if (messagingService.isIgnoring(player.getUniqueId(), target.getUniqueId())) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored"))); return true; }
+        if (target == null) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.player-offline")));
+            return true;
+        }
+        if (target.equals(player)) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.self")));
+            return true;
+        }
+        if (messagingService.isIgnoring(target.getUniqueId(), player.getUniqueId())) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored")));
+            return true;
+        }
+        if (messagingService.isIgnoring(player.getUniqueId(), target.getUniqueId())) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("pm.ignored")));
+            return true;
+        }
 
         String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
         sendPm(player, target, message);
@@ -50,12 +65,15 @@ public class MsgCommand implements CommandExecutor {
         target.sendMessage(ChatFormatter.formatPmReceivedNew(plugin.getMessageConfig().getPmFormatReceived(), sender, target, message));
         if (plugin.getConfigManager().isPmSoundEnabled()) {
             Sound sound = PlayerUtil.parseSound(plugin.getConfigManager().getPmSoundType(), null);
-            if (sound != null) target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
+            if (sound != null) {
+                target.playSound(target.getLocation(), sound, 1.0f, 1.0f);
+            }
         }
         messagingService.broadcastPM(sender, target, message);
         messagingService.setLastConversation(sender.getUniqueId(), target.getUniqueId());
         messagingService.setLastConversation(target.getUniqueId(), sender.getUniqueId());
-        if (plugin.getConfigManager().isPmLogEnabled())
+        if (plugin.getConfigManager().isPmLogEnabled()) {
             plugin.getLogger().info("[PM] " + sender.getName() + " -> " + target.getName() + ": " + message);
+        }
     }
 }

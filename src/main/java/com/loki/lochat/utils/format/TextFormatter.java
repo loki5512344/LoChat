@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 public class TextFormatter {
 
+    private TextFormatter() {
+    }
+
     private static final Pattern BOLD_PATTERN = Pattern.compile("\\*\\*(.+?)\\*\\*");
     private static final Pattern ITALIC_PATTERN = Pattern.compile("\\*(.+?)\\*");
     private static final Pattern UNDERLINE_PATTERN = Pattern.compile("__(.+?)__");

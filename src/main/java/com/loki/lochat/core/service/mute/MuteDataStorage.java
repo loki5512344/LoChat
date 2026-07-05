@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loki.lochat.data.model.MuteData;
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -59,7 +60,7 @@ public class MuteDataStorage {
         }
 
         try (Reader reader = new FileReader(dataFile)) {
-            Type type = new TypeToken<Map<String, MuteData>>() {}.getType();
+            Type type = new TypeToken<Map<String, MuteData>>() { }.getType();
             Map<String, MuteData> loaded = gson.fromJson(reader, type);
             if (loaded != null) {
                 loaded.forEach((key, value) -> {

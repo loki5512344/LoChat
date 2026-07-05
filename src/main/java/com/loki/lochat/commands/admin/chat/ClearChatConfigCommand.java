@@ -2,6 +2,7 @@ package com.loki.lochat.commands.admin.chat;
 
 import com.loki.lochat.LoChat;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,10 +32,19 @@ public class ClearChatConfigCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         switch (args[0].toLowerCase()) {
-            case "enable"  -> { plugin.getConfigManager().setClearChatMessageEnabled(true);  sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение очистки &#7858E9включено")); }
-            case "disable" -> { plugin.getConfigManager().setClearChatMessageEnabled(false); sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение очистки &#B798A8отключено")); }
+            case "enable"  -> {
+                plugin.getConfigManager().setClearChatMessageEnabled(true);
+                sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение очистки &#7858E9включено"));
+            }
+            case "disable" -> {
+                plugin.getConfigManager().setClearChatMessageEnabled(false);
+                sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение очистки &#B798A8отключено"));
+            }
             case "message" -> {
-                if (args.length < 2) { sender.sendMessage(ChatFormatter.parse("&#CF6679Укажите текст!")); return true; }
+                if (args.length < 2) {
+                    sender.sendMessage(ChatFormatter.parse("&#CF6679Укажите текст!"));
+                    return true;
+                }
                 String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                 plugin.getConfigManager().setClearChatMessage(msg);
                 sender.sendMessage(ChatFormatter.parse("&#9878C9Сообщение установлено: &f" + msg));
@@ -50,8 +60,10 @@ public class ClearChatConfigCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1) return List.of("enable", "disable", "message", "status").stream()
-                .filter(s -> s.startsWith(args[0].toLowerCase())).toList();
+        if (args.length == 1) {
+            return List.of("enable", "disable", "message", "status").stream()
+                    .filter(s -> s.startsWith(args[0].toLowerCase())).toList();
+        }
         return null;
     }
 }

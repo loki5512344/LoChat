@@ -3,10 +3,12 @@ package com.loki.lochat.core.service;
 import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.renderer.EnhancedChatRenderer;
-import com.loki.lochat.utils.player.DistanceUtil;
-import com.loki.lochat.utils.platform.FoliaUtil;
 import com.loki.lochat.utils.format.ChatFormatter;
+import com.loki.lochat.utils.platform.FoliaUtil;
+import com.loki.lochat.utils.player.DistanceUtil;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -97,12 +99,15 @@ public class ChatServiceImpl implements ChatService {
     // ──────────────────────────────────────────────────────────────────────────
 
     private void loadDisabled() {
-        if (!playersFile.exists()) return;
+        if (!playersFile.exists()) {
+            return;
+        }
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(playersFile);
         for (String uuidStr : cfg.getStringList("global-chat-disabled")) {
             try {
                 globalChatDisabled.add(UUID.fromString(uuidStr));
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
     }
 
@@ -123,7 +128,9 @@ public class ChatServiceImpl implements ChatService {
 
     private void ensureDir() {
         File dir = playersFile.getParentFile();
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 
     private Component toComponent(Object message) {

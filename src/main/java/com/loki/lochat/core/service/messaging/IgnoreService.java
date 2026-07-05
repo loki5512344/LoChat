@@ -1,6 +1,7 @@
 package com.loki.lochat.core.service.messaging;
 
 import com.loki.lochat.utils.platform.FoliaUtil;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,15 +37,21 @@ public class IgnoreService {
     public boolean addIgnore(UUID player, UUID target) {
         Set<UUID> ignored = ignoreMap.computeIfAbsent(player, k -> ConcurrentHashMap.newKeySet());
         boolean added = ignored.add(target);
-        if (added) saveAsync();
+        if (added) {
+            saveAsync();
+        }
         return added;
     }
 
     public boolean removeIgnore(UUID player, UUID target) {
         Set<UUID> ignored = ignoreMap.get(player);
-        if (ignored == null) return false;
+        if (ignored == null) {
+            return false;
+        }
         boolean removed = ignored.remove(target);
-        if (removed) saveAsync();
+        if (removed) {
+            saveAsync();
+        }
         return removed;
     }
 
@@ -63,7 +70,9 @@ public class IgnoreService {
     }
 
     public void load() {
-        if (!ignoreFile.exists()) return;
+        if (!ignoreFile.exists()) {
+            return;
+        }
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(ignoreFile);
         for (String key : config.getKeys(false)) {

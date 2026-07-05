@@ -4,7 +4,7 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.ChatService;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.gradient.GradientModule;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
@@ -48,7 +50,9 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        if (player == null) return "";
+        if (player == null) {
+            return "";
+        }
 
         UUID uuid = player.getUniqueId();
         GradientModule gradient = plugin.getGradientModule();
@@ -58,7 +62,9 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             case "global_enabled" -> String.valueOf(!chatService.isGlobalChatDisabled(uuid));
             case "last_pm" -> {
                 Optional<UUID> lastOpt = messagingService.getLastConversation(uuid);
-                if (lastOpt.isEmpty()) yield "";
+                if (lastOpt.isEmpty()) {
+                    yield "";
+                }
                 var lastPlayer = Bukkit.getOfflinePlayer(lastOpt.get());
                 yield lastPlayer.getName() != null ? lastPlayer.getName() : "";
             }
@@ -68,7 +74,9 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             // Используем TAB формат §x§R§R§G§G§B§B для совместимости с TAB плагином
             case "gradient_full", "full" -> {
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
+                if (onlinePlayer == null) {
+                    yield player.getName() != null ? player.getName() : "";
+                }
 
                 // Если gradient модуль выключен — берём только LuckPerms префикс + ник
                 if (gradient == null || !gradient.isEnabled()) {
@@ -80,7 +88,9 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             }
             case "gradient_name", "name" -> {
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield player.getName() != null ? player.getName() : "";
+                if (onlinePlayer == null) {
+                    yield player.getName() != null ? player.getName() : "";
+                }
 
                 if (gradient == null || !gradient.isEnabled()) {
                     yield player.getName();
@@ -89,16 +99,24 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             }
             case "gradient_prefix", "prefix" -> {
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield "";
+                if (onlinePlayer == null) {
+                    yield "";
+                }
 
-                if (gradient == null || !gradient.isEnabled()) yield "";
+                if (gradient == null || !gradient.isEnabled()) {
+                    yield "";
+                }
                 yield gradient.getPrefix(onlinePlayer);
             }
             case "lp_prefix" -> {
                 Player onlinePlayer = player.getPlayer();
-                if (onlinePlayer == null) yield "";
+                if (onlinePlayer == null) {
+                    yield "";
+                }
 
-                if (gradient == null || !gradient.isEnabled()) yield "";
+                if (gradient == null || !gradient.isEnabled()) {
+                    yield "";
+                }
                 yield gradient.getLuckPermsPrefix(onlinePlayer);
             }
             default -> null;

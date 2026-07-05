@@ -1,225 +1,166 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                           LoChat — messages.yml                            ║
-# ║  Default palette (Spacelegacy): #7858E9 (dusty rose) → #7858E9 (violet)     ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-#
-# Color roles (reference when editing strings below):
-#   &#7858E9 — primary labels / body (dusty rose)
-#   &#9878C9 — accents / separators (mid violet)
-#   &#7858E9 — emphasis / values (deep violet)
-#   &f / #E8E0F0 — message body white
-#   &#CF6679 — errors (muted red, fits the palette)
+# LoChat player messages
+# All messages sent to players. Supports & color codes and placeholders.
 
-prefix: "&#7858E9[&#9878C9L&#8B6BD6o&#7858E9C&#8565DCh&#8B6BD6a&#9878C9t&#7858E9]"
+prefix: "&8[&3LoChat&8]"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Global chat (toggle messages, server-disabled notice)                       │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Global Chat ────────────────────────────────────────────────────────────────
 
 global:
-  toggled-on: "&#9878C9Глобальный чат &#7858E9включён"
-  toggled-off: "&#9878C9Глобальный чат &#7858E9отключён"
-  disabled: "&#CF6679Глобальный чат отключён на этом сервере"
+  toggled-on: "&aGlobal chat enabled"
+  toggled-off: "&cGlobal chat disabled"
+  disabled: "&cGlobal chat is disabled on this server"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Local chat (no recipients nearby)                                            │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Local Chat ─────────────────────────────────────────────────────────────────
 
 local:
-  no-players: "&#7858E9Рядом нет игроков"
-  nobody-heard: "&#9878C9Вас никто не услышал &#7858E9— рядом нет игроков"
+  no-players: "&cNo players nearby"
+  nobody-heard: "&7Nobody heard you — no players nearby"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Private messages (/msg, /reply)                                             │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Private Messages ───────────────────────────────────────────────────────────
 
 pm:
-  format-sent: "&#7858E9[&#9878C9→&#7858E9] &#9878C9Вы &#7858E9→ {receiver_display}&#7858E9: &f{message}"
-  format-received: "&#7858E9[&#9878C9←&#7858E9] {sender_display} &#7858E9→ &#9878C9Вы&#7858E9: &f{message}"
-  use-gradient-names: true
-  sent: "&#7858E9[&#9878C9→&#7858E9] &#9878C9Вы &#7858E9→ &f{player}&#7858E9: &f{message}"
-  received: "&#7858E9[&#9878C9←&#7858E9] &f{player} &#7858E9→ &#9878C9Вы&#7858E9: &f{message}"
-  no-reply: "&#CF6679Некому ответить"
-  ignored: "&#CF6679Этот игрок вас игнорирует"
-  player-offline: "&#CF6679Игрок не в сети"
-  self: "&#CF6679Нельзя писать самому себе"
+  format-sent: "&8[&a\u2192&8] &7You &a\u2192 &f{receiver_display}&8: &f{message}"
+  format-received: "&8[&e\u2190&8] &f{sender_display} &e\u2192 &7You&8: &f{message}"
+  no-reply: "&cNobody to reply to"
+  ignored: "&cThis player is ignoring you"
+  player-offline: "&cPlayer is not online"
+  self: "&cYou cannot message yourself"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Ignore list                                                                  │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Ignore List ────────────────────────────────────────────────────────────────
 
 ignore:
-  added: "&#9878C9Игрок &#7858E9{player} &#9878C9добавлен в игнор"
-  removed: "&#9878C9Игрок &#7858E9{player} &#9878C9убран из игнора"
-  already-ignored: "&#7858E9Игрок &#7858E9{player} &#7858E9уже в игноре"
-  not-ignored: "&#7858E9Игрок &#7858E9{player} &#7858E9не в игноре"
-  self: "&#CF6679Нельзя игнорировать самого себя"
-  list-empty: "&#7858E9Ваш список игнора пуст"
-  list-header: "&#7858E9▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-  list-footer: "&#7858E9Всего: &#7858E9{count} &#7858E9игроков"
+  added: "&aPlayer &f{player} &ais now ignored"
+  removed: "&aPlayer &f{player} &ais no longer ignored"
+  already-ignored: "&7Player &f{player} &7is already ignored"
+  not-ignored: "&7Player &f{player} &7is not ignored"
+  self: "&cYou cannot ignore yourself"
+  list-empty: "&7Your ignore list is empty"
+  list-header: "&8\u2500\u2500\u2500\u2500\u2500 Ignored Players \u2500\u2500\u2500\u2500\u2500"
+  list-footer: "&7Total: &f{count} &7players"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Announcements                                                                │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Announcements ──────────────────────────────────────────────────────────────
 
 announce:
-  reloaded: "&#9878C9Конфигурация &#7858E9перезагружена"
+  reloaded: "&aConfiguration reloaded"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Chat spy (moderation)                                                        │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Chat Spy ───────────────────────────────────────────────────────────────────
 
 spy:
-  enabled: "&#9878C9Режим шпиона &#7858E9включён"
-  disabled: "&#9878C9Режим шпиона &#7858E9отключён"
-  format: "&#7858E9[&#9878C9SPY&#7858E9] &#7858E9{sender} &#7858E9→ &#9878C9{receiver}&#7858E9: &f{message}"
-  chat-format: "&#7858E9[&#9878C9SPY&#7858E9] &#7858E9{type} &#7858E9{sender}&#7858E9: &f{message}"
+  enabled: "&aSpy mode enabled"
+  disabled: "&cSpy mode disabled"
+  format: "&8[&4SPY&8] &f{sender} &8\u2192 &7{receiver}&8: &f{message}"
+  chat-format: "&8[&4SPY&8] &f{sender}&8: &f{message}"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Message filters                                                              │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Filters ────────────────────────────────────────────────────────────────────
 
 filter:
-  blocked: "&#CF6679Сообщение заблокировано"
-  warning: "&#7858E9Предупреждение"
+  blocked: "&cMessage blocked"
+  warning: "&6Warning"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Cooldowns                                                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Cooldowns ──────────────────────────────────────────────────────────────────
 
 cooldown:
-  wait: "&#7858E9Подождите &#7858E9{time} &#7858E9сек"
+  wait: "&cPlease wait &f{time} &cseconds"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Anti-spam (caps, repeat, similar messages)                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Anti-Spam ──────────────────────────────────────────────────────────────────
 
 antispam:
-  caps: "&#CF6679Не кричите в чате"
-  repeat: "&#CF6679Не повторяйте символы"
-  similar: "&#CF6679Не отправляйте одинаковые сообщения"
+  caps: "&cPlease don't shout"
+  repeat: "&cPlease don't repeat characters"
+  similar: "&cPlease don't send the same message"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Clear chat                                                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Clear Chat ─────────────────────────────────────────────────────────────────
 
 clearchat:
-  cleared: "&#9878C9Чат очищен &#7858E9администратором &#7858E9{player}"
+  cleared: "&aChat cleared by &f{player}"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Command / usage errors                                                       │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Errors ─────────────────────────────────────────────────────────────────────
 
 errors:
-  no-permission: "&#CF6679Нет прав"
-  player-not-found: "&#CF6679Игрок не найден"
-  invalid-usage: "&#7858E9Использование: &#7858E9{usage}"
+  no-permission: "&cNo permission"
+  player-not-found: "&cPlayer not found"
+  invalid-usage: "&cUsage: &f{usage}"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ General (permissions, reload, hub, etc.)                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── General ────────────────────────────────────────────────────────────────────
 
 general:
-  no-permission: "&#CF6679У вас нет прав!"
-  players-only: "&#CF6679Только для игроков!"
-  config-reloaded: "&#9878C9Конфиг &#7858E9перезагружен!"
-  invalid-player: "&#CF6679Игрок &#7858E9{player} &#CF6679не найден!"
-  cooldown-active: "&#7858E9Подождите &#7858E9{time}с"
-  command-disabled: "&#CF6679Команда отключена!"
+  no-permission: "&cYou don't have permission!"
+  players-only: "&cThis command is for players only!"
+  config-reloaded: "&aConfiguration reloaded!"
+  invalid-player: "&cPlayer &f{player} &cnot found!"
+  cooldown-active: "&cPlease wait &f{time}&cs"
+  command-disabled: "&cCommand disabled!"
+
+# ── Hub ────────────────────────────────────────────────────────────────────────
 
 hub:
-  connecting: "&#9878C9Подключение к &#7858E9{server}&#9878C9..."
+  connecting: "&aConnecting to &f{server}&a..."
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Mutes                                                                        │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Mute ───────────────────────────────────────────────────────────────────────
 
 mute:
-  muted: "&#9878C9Игрок &#7858E9{player} &#9878C9замучен на &#7858E9{time}"
-  unmuted: "&#9878C9Игрок &#7858E9{player} &#9878C9размучен"
-  already-muted: "&#7858E9Игрок &#7858E9{player} &#7858E9уже замучен"
-  not-muted: "&#7858E9Игрок &#7858E9{player} &#7858E9не замучен"
-  you-muted: "&#CF6679Вы замучены! &#7858E9Осталось: &#7858E9{time}"
-  permanent: "&#CF6679Вы замучены навсегда!"
+  muted: "&aPlayer &f{player} &amuted for &f{time}"
+  unmuted: "&aPlayer &f{player} &aunmuted"
+  already-muted: "&7Player &f{player} &7is already muted"
+  not-muted: "&7Player &f{player} &7is not muted"
+  you-muted: "&cYou are muted! &7Remaining: &f{time}"
+  permanent: "&cYou are permanently muted!"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Gradient nick module (LoPreff)                                               │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Gradients ──────────────────────────────────────────────────────────────────
 
 gradient:
-  color-set: "&#9878C9Градиент &#7858E9установлен!"
-  color-enabled: "&#9878C9Градиентный ник &#7858E9включён"
-  color-disabled: "&#7858E9Градиентный ник &#9878C9отключён"
-  color-reset: "&#7858E9Градиент сброшен"
-  prefix-set: "&#9878C9Префикс &#7858E9установлен!"
-  prefix-reset: "&#7858E9Префикс сброшен"
-  prefix-reset-success: "&#9878C9Префикс успешно &#7858E9сброшен!"
-  prefix-enabled: "&#9878C9Префикс &#7858E9включён"
-  prefix-disabled: "&#7858E9Префикс &#9878C9отключён"
-  invalid-hex: "&#CF6679Неверный HEX цвет: &#7858E9{color}"
-  invalid-color: "&#CF6679Неверный цвет: &#7858E9{color}"
-  too-many-colors: "&#CF6679Слишком много цветов! Максимум: &#7858E9{max}"
-  too-few-colors: "&#CF6679Слишком мало цветов! Минимум: &#7858E9{min}"
-  not-enough-colors: "&#CF6679Слишком мало цветов! Минимум: &#7858E9{min}"
-  cooldown: "&#7858E9Подождите &#7858E9{time} &#7858E9сек"
-  not-enough-points: "&#CF6679Недостаточно поинтов! Нужно: &#7858E9{price}"
-  not-enough-points-color: "&#CF6679Недостаточно поинтов! Нужно: &#7858E9{price}"
-  not-enough-points-prefix: "&#CF6679Недостаточно поинтов! Нужно: &#7858E9{price}"
-  player-not-found: "&#CF6679Игрок не найден"
-  color-help: "&#7858E9Использование: &#7858E9/color <HEX1> <HEX2>"
-  color-success: "&#9878C9Градиент успешно &#7858E9установлен!"
-  color-no-colors: "&#7858E9У вас нет установленных цветов"
-  color-copy-usage: "&#7858E9Использование: &#7858E9/color copy <игрок>"
-  color-copy-no-colors: "&#7858E9У игрока &#7858E9{player} &#7858E9нет цветов"
-  prefix-help: "&#7858E9Использование: &#7858E9/prefix <текст> &#7858E9или &#7858E9/prefix reset"
-  prefix-success: "&#9878C9Префикс установлен! &#7858E9Стоимость: &#7858E9{price} &#7858E9поинтов"
-  prefix-success-free: "&#9878C9Префикс &#7858E9установлен!"
-  prefix-no-prefix: "&#7858E9У вас нет префикса"
-  prefix-too-long: "&#CF6679Префикс слишком длинный! Максимум: &#7858E9{max}"
-  prefix-no-colors: "&#CF6679Префикс не может содержать цветовые коды!"
-  prefix-invalid-chars: "&#CF6679Недопустимые символы в префиксе!"
-  prefix-blacklisted: "&#CF6679Этот префикс запрещён!"
-  only-player: "&#CF6679Только для игроков!"
-  no-permission: "&#CF6679Нет прав!"
-  reload-success: "&#9878C9Конфигурация &#7858E9перезагружена!"
-  info-header: "&#7858E9▬▬▬▬▬▬▬▬ &#7858E9{player} &#7858E9▬▬▬▬▬▬▬▬"
-  info-prefix: "&#7858E9Префикс: &f{prefix}"
-  info-prefix-enabled: "&#7858E9Префикс активен: &f{enabled}"
-  info-colors: "&#7858E9Цвета: &f{colors}"
-  info-color-enabled: "&#7858E9Цвет активен: &f{enabled}"
-  info-prefix-purchased: "&#7858E9Куплен: &f{purchased}"
+  color-set: "&aGradient set!"
+  color-enabled: "&aGradient nickname enabled"
+  color-disabled: "&7Gradient nickname disabled"
+  color-reset: "&7Gradient reset"
+  prefix-set: "&aPrefix set!"
+  prefix-reset: "&7Prefix reset"
+  prefix-enabled: "&aPrefix enabled"
+  prefix-disabled: "&7Prefix disabled"
+  invalid-hex: "&cInvalid hex color: &f{color}"
+  invalid-color: "&cInvalid color: &f{color}"
+  too-many-colors: "&cToo many colors! Maximum: &f{max}"
+  too-few-colors: "&cToo few colors! Minimum: &f{min}"
+  cooldown: "&cPlease wait &f{time} &cseconds"
+  not-enough-points: "&cNot enough points! Need: &f{price}"
+  player-not-found: "&cPlayer not found"
+  color-help: "&cUsage: &f/color <hex1> <hex2> ..."
+  color-success: "&aGradient applied!"
+  color-no-colors: "&7You have no colors set"
+  prefix-help: "&cUsage: &f/prefix <text>"
+  prefix-success: "&aPrefix set!"
+  prefix-success-free: "&aPrefix set!"
+  prefix-no-prefix: "&7You have no prefix"
+  prefix-too-long: "&cPrefix too long! Max: &f{max}"
+  prefix-no-colors: "&cPrefix cannot contain color codes"
+  only-player: "&cPlayers only!"
+  no-permission: "&cNo permission!"
+  reload-success: "&aConfiguration reloaded!"
+  info-header: "&8\u2500\u2500\u2500\u2500\u2500 &f{player} &8\u2500\u2500\u2500\u2500\u2500"
+  info-prefix: "&7Prefix: &f{prefix}"
+  info-colors: "&7Colors: &f{colors}"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Custom nicknames (/nick)                                                     │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── Custom Nicknames ───────────────────────────────────────────────────────────
 
 nick:
-  current: "&#7858E9Ваш ник: &#7858E9{nick}"
-  usage: "&#7858E9Использование: &#7858E9/nick <ник> &#7858E9или &#7858E9/nick reset"
-  reset-usage: "&#7858E9Используйте &#7858E9/nick reset &#7858E9для сброса"
-  set-usage: "&#7858E9Используйте &#7858E9/nick <ник> &#7858E9для установки"
-  no-nick: "&#7858E9У вас нет кастомного ника"
-  reset-success: "&#9878C9Ник &#7858E9сброшен!"
-  set-success: "&#9878C9Ник изменён на: &f{nick}"
-  invalid: "&#CF6679Невалидный ник!"
-  requirements-header: "&#7858E9Требования:"
-  requirements-length: "&#9878C9◆ &fДлина: 3-16 символов"
-  requirements-chars: "&#9878C9◆ &fБуквы, цифры, _, русские буквы"
-  requirements-colors: "&#9878C9◆ &fЦвета: &#7858E9&#RRGGBB&#7858E9текст"
-  taken: "&#CF6679Этот ник уже занят!"
-  error: "&#CF6679Не удалось установить ник!"
+  current: "&7Your nickname: &f{nick}"
+  usage: "&cUsage: &f/nick <name> &7or &f/nick reset"
+  no-nick: "&7You have no custom nickname"
+  reset-success: "&aNickname reset!"
+  set-success: "&aNickname changed to: &f{nick}"
+  invalid: "&cInvalid nickname!"
+  taken: "&cThis nickname is already taken!"
+  error: "&cFailed to set nickname!"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Roleplay commands (/me, /try, /do, /roll)                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
+# ── RP Commands ────────────────────────────────────────────────────────────────
 
 rp:
-  me: "<color:#7858E9>* {player} {action}</color>"
-  try-format: "<color:#7858E9>* {player} пытается {action}...</color> {result}"
-  try-success: "<color:#9878C9><bold>[Успех!]</bold></color>"
-  try-fail: "<color:#CF6679><bold>[Провал!]</bold></color>"
-  do-format: "<color:#7858E9>[<color:#7858E9>Сцена</color>]</color> <white>{description}</white> <color:#9878C9>({player})</color>"
-  roll-format: "<color:#7858E9>* {player} бросает кубик и получает </color><color:#7858E9><bold>{result}</bold></color><color:#7858E9> из </color><color:#9878C9>{max}</color>"
-  roll-min-error: "<color:#CF6679>Минимальное значение кубика: 2</color>"
-  roll-max-error: "<color:#CF6679>Максимальное значение: 1000000</color>"
-  roll-invalid-number: "<color:#CF6679>Укажите число: /roll [максимум]</color>"
+  me: "&7* {player} {action}"
+  try-format: "&7* {player} tries {action}... &f{result}"
+  try-success: "&a[Success!]"
+  try-fail: "&c[Fail!]"
+  do-format: "&8[Scene] &f{description} &7({player})"
+  roll-format: "&7* {player} rolls &f{result} &7out of &f{max}"
+  roll-min-error: "&cMinimum dice value: 2"
+  roll-max-error: "&cMaximum dice value: 1000000"
+  roll-invalid-number: "&cPlease specify a number: /roll [max]"

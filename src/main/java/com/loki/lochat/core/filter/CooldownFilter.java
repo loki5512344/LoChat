@@ -3,6 +3,7 @@ package com.loki.lochat.core.filter;
 import com.loki.lochat.api.filter.MessageFilter;
 import com.loki.lochat.api.service.PlayerService;
 import com.loki.lochat.data.model.ChatMessage;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

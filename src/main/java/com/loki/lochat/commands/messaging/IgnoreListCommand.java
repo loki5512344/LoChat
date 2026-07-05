@@ -4,6 +4,7 @@ import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MessagingService;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,15 +26,23 @@ public class IgnoreListCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) { sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly()); return true; }
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(plugin.getConfigManager().getMessagesConfig().getPlayerOnly());
+            return true;
+        }
 
         Set<UUID> ignored = messagingService.getIgnoredPlayers(player.getUniqueId());
-        if (ignored.isEmpty()) { player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-empty"))); return true; }
+        if (ignored.isEmpty()) {
+            player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-empty")));
+            return true;
+        }
 
         player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-header")));
         for (UUID uuid : ignored) {
             String name = PlayerUtil.getPlayerName(uuid);
-            if (name != null) player.sendMessage(ChatFormatter.parse("&#9878C9◆ &f" + name));
+            if (name != null) {
+                player.sendMessage(ChatFormatter.parse("&#9878C9◆ &f" + name));
+            }
         }
         player.sendMessage(ChatFormatter.parse(plugin.getMessageConfig().get("ignore.list-footer").replace("{count}", String.valueOf(ignored.size()))));
         return true;

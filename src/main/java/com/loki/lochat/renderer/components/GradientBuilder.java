@@ -8,6 +8,9 @@ import java.util.List;
 
 public class GradientBuilder {
     
+    private GradientBuilder() {
+    }
+
     public static Component build(String text, List<String> colors) {
         if (colors == null || colors.size() < 2) {
             return Component.text(text);

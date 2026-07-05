@@ -9,6 +9,9 @@ import org.bukkit.plugin.Plugin;
  */
 public class AdventureManager {
 
+    private AdventureManager() {
+    }
+
     private static boolean adventureAvailable = false;
     private static Object audiences;
 

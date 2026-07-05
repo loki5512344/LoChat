@@ -3,10 +3,12 @@ package com.loki.lochat.gradient.gui;
 import com.loki.lochat.config.RatConfig;
 import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.gradient.util.GradientUtil;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -49,7 +51,9 @@ public final class GradientConfirmGUI implements InventoryHolder {
     }
 
     private void initInventory() {
-        if (inventory != null) return;
+        if (inventory != null) {
+            return;
+        }
         this.inventory = Bukkit.createInventory(this, 27,
                 Component.text("Подтверждение", NamedTextColor.DARK_GRAY));
         setupItems();
@@ -128,7 +132,7 @@ public final class GradientConfirmGUI implements InventoryHolder {
         boolean useLegacyForPreview = true;
 
         // Если нет кастомного префикса - используем LuckPerms префикс
-        if ((prefixToUse == null || prefixToUse.isEmpty())) {
+        if (prefixToUse == null || prefixToUse.isEmpty()) {
             String lpPrefix = module.getPrefixService().getLuckPermsPrefix(player, data);
             if (lpPrefix != null && !lpPrefix.isEmpty()) {
                 // Конвертируем LP префикс в legacy формат
@@ -163,7 +167,9 @@ public final class GradientConfirmGUI implements InventoryHolder {
      * Конвертирует MiniMessage теги в legacy формат
      */
     private String convertToLegacy(String text) {
-        if (text == null) return "";
+        if (text == null) {
+            return "";
+        }
         // Конвертируем <#RRGGBB> в &#RRGGBB
         return text.replaceAll("<#([A-Fa-f0-9]{6})>", "&#$1");
     }
@@ -172,7 +178,9 @@ public final class GradientConfirmGUI implements InventoryHolder {
      * Убирает цветовые коды из строки
      */
     private String stripColors(String text) {
-        if (text == null) return "";
+        if (text == null) {
+            return "";
+        }
         return text.replaceAll("(?i)(§x(§[0-9a-f]){6}|§[0-9a-fk-or]|&[0-9a-fk-or]|&#[0-9a-f]{6}|<[^>]+>)", "");
     }
 

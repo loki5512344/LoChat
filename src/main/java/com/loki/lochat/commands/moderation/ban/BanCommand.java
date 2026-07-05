@@ -7,6 +7,7 @@ import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.data.model.BanRecord;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -78,7 +79,9 @@ public class BanCommand implements CommandExecutor, TabCompleter {
             if (timeStr == null && isTimeFormat(args[i])) {
                 timeStr = args[i];
             } else {
-                if (reasonBuilder.length() > 0) reasonBuilder.append(" ");
+                if (reasonBuilder.length() > 0) {
+                    reasonBuilder.append(" ");
+                }
                 reasonBuilder.append(args[i]);
             }
         }
@@ -98,7 +101,9 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 
         String reason = reasonBuilder.length() > 0 ? reasonBuilder.toString() : msg.getModerationDefaultReason();
         String finalName = PlayerUtil.getPlayerName(targetUuid);
-        if (finalName == null) finalName = targetName;
+        if (finalName == null) {
+            finalName = targetName;
+        }
 
         punishmentService.ban(targetUuid, finalName, durationMs, reason, sender.getName());
 
@@ -126,8 +131,11 @@ public class BanCommand implements CommandExecutor, TabCompleter {
                                                 @NotNull String alias, @NotNull String[] args) {
         List<String> c = new ArrayList<>();
         if (args.length == 1) {
-            for (Player p : Bukkit.getOnlinePlayers())
-                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) c.add(p.getName());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+                    c.add(p.getName());
+                }
+            }
         } else if (args.length == 2) {
             c.addAll(List.of("1h", "1d", "7d", "30d", "perm"));
         }

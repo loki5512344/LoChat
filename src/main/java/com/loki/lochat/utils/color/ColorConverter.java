@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
  */
 public class ColorConverter {
     
+    private ColorConverter() {
+    }
+
     private static final Pattern HEX_PATTERN_1 = Pattern.compile("&#([0-9a-fA-F]{6})");
     private static final Pattern HEX_PATTERN_2 = Pattern.compile("(?<!<)#([0-9a-fA-F]{6})(?![^<]*>)");
     
@@ -66,7 +69,9 @@ public class ColorConverter {
      * Конвертирует legacy форматы цветов в MiniMessage формат
      */
     public static String convertLegacyFormats(String message) {
-        if (message == null) return "";
+        if (message == null) {
+            return "";
+        }
 
         // Конвертируем &#RRGGBB в <color:#RRGGBB>
         message = convertHexFormat1(message);
@@ -138,7 +143,9 @@ public class ColorConverter {
      * Экранирует текст для безопасного использования внутри MiniMessage тегов
      */
     public static String escapeForMiniMessage(String text) {
-        if (text == null) return "";
+        if (text == null) {
+            return "";
+        }
         return text.replace("\\", "\\\\").replace("<", "\\<");
     }
 }

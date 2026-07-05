@@ -1,19 +1,22 @@
 package com.loki.lochat.renderer;
 
 import com.loki.lochat.renderer.components.*;
-import com.loki.lochat.utils.player.MentionHandler;
 import com.loki.lochat.utils.format.TextFormatter;
-import io.papermc.paper.chat.ChatRenderer;
+import com.loki.lochat.utils.player.MentionHandler;
+
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+
+import io.papermc.paper.chat.ChatRenderer;
 
 /**
  * Рендерер чата — глобальный и локальный режимы
@@ -185,7 +188,9 @@ public class EnhancedChatRenderer implements ChatRenderer {
                     .replace("{food}",     String.valueOf(player.getFoodLevel()));
 
             hoverBuilder.append(com.loki.lochat.utils.format.ChatFormatter.parse(line));
-            if (i < hoverLines.size() - 1) hoverBuilder.append(Component.newline());
+            if (i < hoverLines.size() - 1) {
+                hoverBuilder.append(Component.newline());
+            }
         }
 
         return displayName
@@ -194,7 +199,9 @@ public class EnhancedChatRenderer implements ChatRenderer {
     }
 
     private TextColor parseColor(String hex) {
-        if (hex == null || hex.isBlank()) return FALLBACK_COLOR;
+        if (hex == null || hex.isBlank()) {
+            return FALLBACK_COLOR;
+        }
         String n = hex.startsWith("#") ? hex : "#" + hex;
         TextColor c = TextColor.fromHexString(n);
         return c != null ? c : FALLBACK_COLOR;

@@ -8,6 +8,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Утилита для совместимости с Folia
  */
 public class FoliaUtil {
+    private FoliaUtil() {
+    }
+
     private static boolean isFolia;
 
     static {

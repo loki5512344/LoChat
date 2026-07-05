@@ -5,6 +5,7 @@ import com.loki.lochat.api.service.PunishmentService;
 import com.loki.lochat.config.MessagesConfig;
 import com.loki.lochat.utils.format.ChatFormatter;
 import com.loki.lochat.utils.player.PlayerUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -56,7 +57,9 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
         }
 
         String name = PlayerUtil.getPlayerName(uuid);
-        if (name == null) name = args[0];
+        if (name == null) {
+            name = args[0];
+        }
 
         punishmentService.unban(uuid);
         sender.sendMessage(ChatFormatter.parse(msg.getUnbanConfirm().replace("{player}", name)));
@@ -70,7 +73,9 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String p = args[0].toLowerCase();
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().toLowerCase().startsWith(p)) out.add(pl.getName());
+                if (pl.getName().toLowerCase().startsWith(p)) {
+                    out.add(pl.getName());
+                }
             }
         }
         return out;

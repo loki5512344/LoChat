@@ -2,6 +2,7 @@ package com.loki.lochat.integrations;
 
 import com.loki.lochat.integrations.discord.DiscordConfig;
 import com.loki.lochat.integrations.discord.DiscordMessageService;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,7 +41,9 @@ public class DiscordIntegration {
     }
 
     public void sendChatMessage(Player player, String message, boolean isGlobal) {
-        if (!enabled || !config.isChatEnabled()) return;
+        if (!enabled || !config.isChatEnabled()) {
+            return;
+        }
         
         if (config.isGlobalOnly() && !isGlobal) {
             return;
@@ -50,22 +53,30 @@ public class DiscordIntegration {
     }
 
     public void sendPlayerJoin(Player player) {
-        if (!enabled || !config.isEventEnabled("join")) return;
+        if (!enabled || !config.isEventEnabled("join")) {
+            return;
+        }
         messageService.sendPlayerJoin(player);
     }
 
     public void sendPlayerQuit(Player player) {
-        if (!enabled || !config.isEventEnabled("quit")) return;
+        if (!enabled || !config.isEventEnabled("quit")) {
+            return;
+        }
         messageService.sendPlayerQuit(player);
     }
 
     public void sendPlayerDeath(Player player, String deathMessage) {
-        if (!enabled || !config.isEventEnabled("death")) return;
+        if (!enabled || !config.isEventEnabled("death")) {
+            return;
+        }
         messageService.sendPlayerDeath(player, deathMessage);
     }
 
     public void sendTestMessage(String message, String senderName) {
-        if (!enabled) return;
+        if (!enabled) {
+            return;
+        }
         messageService.sendTestMessage(message, senderName);
     }
 

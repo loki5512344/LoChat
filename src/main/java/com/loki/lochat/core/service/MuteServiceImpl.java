@@ -7,6 +7,7 @@ import com.loki.lochat.core.service.mute.MutePermissionChecker;
 import com.loki.lochat.core.service.mute.strategies.MuteStrategy;
 import com.loki.lochat.data.model.MuteData;
 import com.loki.lochat.utils.format.TimeFormatter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,12 +83,18 @@ public class MuteServiceImpl implements MuteService {
 
     @Override
     public boolean isMuted(UUID uuid) {
-        if (uuid == null) return false;
+        if (uuid == null) {
+            return false;
+        }
 
         MuteData data = storage.get(uuid);
-        if (data == null) return false;
+        if (data == null) {
+            return false;
+        }
 
-        if (!isExpired(data)) return true;
+        if (!isExpired(data)) {
+            return true;
+        }
 
         // Мут истек - удаляем
         storage.remove(uuid);
@@ -104,8 +111,12 @@ public class MuteServiceImpl implements MuteService {
     @Override
     public long getRemainingTime(UUID uuid) {
         MuteData data = storage.get(uuid);
-        if (data == null) return 0;
-        if (data.getEndTime() == 0) return -1;
+        if (data == null) {
+            return 0;
+        }
+        if (data.getEndTime() == 0) {
+            return -1;
+        }
         return Math.max(0, data.getEndTime() - System.currentTimeMillis());
     }
 

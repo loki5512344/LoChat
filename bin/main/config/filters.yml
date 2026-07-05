@@ -1,44 +1,34 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║                        LoChat — Фильтры чата                                 ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
+# LoChat chat filters
+# Control spam, swearing, URLs, and other unwanted content.
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Мат-фильтр                                                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Использует badwords.txt для списка слов
-# Автоматически ловит замены букв: х->x, о->o, е->e и т.д.
-# Обход: lochat.bypass.swear
+# ── Swear Filter ───────────────────────────────────────────────────────────────
+# Uses badwords.txt for the word list.
+# Bypass permission: lochat.bypass.swear
 
 swear:
   enabled: true
-  replace: false          # true = заменять на ***, false = блокировать сообщение
+  replace: false
   replacement: "***"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ URL фильтр                                                                   │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует ссылки в чате
-# Обход: lochat.bypass.urlfilter
+# ── URL Filter ─────────────────────────────────────────────────────────────────
+# Blocks URLs in messages.
+# Bypass permission: lochat.bypass.urlfilter
 
 url:
   enabled: true
-  replacement: "[ссылка скрыта]"
+  replacement: "&7[URL hidden]"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ IP фильтр                                                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует IP адреса в чате
-# Обход: lochat.bypass.ipfilter
+# ── IP Filter ──────────────────────────────────────────────────────────────────
+# Blocks IP addresses in messages.
+# Bypass permission: lochat.bypass.ipfilter
 
 ip:
   enabled: true
-  replacement: "[IP скрыт]"
+  replacement: "&7[IP hidden]"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Скрытые URL (discord.gg и т.д.)                                             │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует популярные сокращенные ссылки
-# Обход: lochat.bypass.hiddenurls
+# ── Hidden URL Filter ──────────────────────────────────────────────────────────
+# Blocks known link shorteners and invite links.
+# Bypass permission: lochat.bypass.hiddenurls
 
 hidden-urls:
   enabled: true
@@ -49,33 +39,27 @@ hidden-urls:
     - "tinyurl\\.com"
     - "goo\\.gl"
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Анти-спам                                                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует повторяющиеся символы (ааааааа, хххххх)
-# Обход: lochat.bypass.spam
+# ── Spam Filter ────────────────────────────────────────────────────────────────
+# Blocks messages with excessive repeated characters.
+# Bypass permission: lochat.bypass.spam
 
 spam:
   enabled: true
-  max-repeating-chars: 5  # Максимум повторений одного символа
+  max-repeating-chars: 5
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Анти-флуд                                                                    │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует одинаковые сообщения подряд
-# Обход: lochat.bypass.flood
+# ── Flood Filter ───────────────────────────────────────────────────────────────
+# Blocks identical messages sent in quick succession.
+# Bypass permission: lochat.bypass.flood
 
 flood:
   enabled: true
-  max-same-messages: 3    # Сколько раз можно отправить одно и то же
+  max-same-messages: 3
 
-# ┌─────────────────────────────────────────────────────────────────────────────┐
-# │ Капс-фильтр                                                                  │
-# └─────────────────────────────────────────────────────────────────────────────┘
-# Блокирует сообщения с большим количеством заглавных букв
-# Обход: lochat.bypass.caps
+# ── CAPS Filter ────────────────────────────────────────────────────────────────
+# Blocks messages with too many capital letters.
+# Bypass permission: lochat.bypass.caps
 
 caps:
   enabled: true
-  max-caps-percent: 70    # Максимум % заглавных букв
-  min-length: 5           # Минимальная длина для проверки
+  max-caps-percent: 70
+  min-length: 5

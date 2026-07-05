@@ -11,6 +11,7 @@ import com.loki.lochat.gradient.GradientModule;
 import com.loki.lochat.integrations.DiscordIntegration;
 import com.loki.lochat.managers.AutoMessageManager;
 import com.loki.lochat.managers.CustomCommandManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,9 +83,15 @@ public final class LoChat extends JavaPlugin {
         configManager.reload();
         messageConfig.reload();
         autoMessageManager.reload();
-        if (gradientModule != null) gradientModule.reload();
-        if (customCommandManager != null) customCommandManager.reload();
-        if (discordIntegration != null) discordIntegration.reload();
+        if (gradientModule != null) {
+            gradientModule.reload();
+        }
+        if (customCommandManager != null) {
+            customCommandManager.reload();
+        }
+        if (discordIntegration != null) {
+            discordIntegration.reload();
+        }
         if (serviceRegistry != null) {
             try {
                 serviceRegistry.get(PunishmentService.class).save();

@@ -3,8 +3,10 @@ package com.loki.lochat.commands.nick;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.NickService;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -84,8 +86,12 @@ public class NickCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> c = new ArrayList<>();
         if (args.length == 1) {
-            if ("reset".startsWith(args[0].toLowerCase())) c.add("reset");
-            if (sender instanceof Player p) nickService.getNickname(p.getUniqueId()).ifPresent(c::add);
+            if ("reset".startsWith(args[0].toLowerCase())) {
+                c.add("reset");
+            }
+            if (sender instanceof Player p) {
+                nickService.getNickname(p.getUniqueId()).ifPresent(c::add);
+            }
         }
         return c;
     }

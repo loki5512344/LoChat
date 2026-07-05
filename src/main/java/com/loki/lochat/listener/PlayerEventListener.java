@@ -8,7 +8,9 @@ import com.loki.lochat.config.ConfigManager;
 import com.loki.lochat.core.filter.AdvancedMessageFilter;
 import com.loki.lochat.core.registry.ServiceRegistry;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

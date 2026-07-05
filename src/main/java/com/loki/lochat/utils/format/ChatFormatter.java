@@ -1,9 +1,11 @@
 package com.loki.lochat.utils.format;
 
 import com.loki.lochat.utils.color.ColorConverter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -20,13 +22,17 @@ public final class ChatFormatter {
     // ========== Базовые методы ==========
 
     public static Component parse(String message) {
-        if (message == null) return Component.empty();
+        if (message == null) {
+            return Component.empty();
+        }
         String converted = ColorConverter.convertLegacyFormats(message);
         return MM.deserialize(converted);
     }
 
     public static Component parseWithDefaultMessageColor(String message, String hexCode) {
-        if (message == null) message = "";
+        if (message == null) {
+            message = "";
+        }
         String hex = (hexCode == null || hexCode.isBlank()) ? "#FFFFFF" : 
                      (hexCode.startsWith("#") ? hexCode : "#" + hexCode);
         String escaped = ColorConverter.escapeForMiniMessage(message);
@@ -34,7 +40,9 @@ public final class ChatFormatter {
     }
 
     public static Component parse(String message, String... replacements) {
-        if (message == null) return Component.empty();
+        if (message == null) {
+            return Component.empty();
+        }
         String result = message;
         for (int i = 0; i + 1 < replacements.length; i += 2) {
             result = result.replace(replacements[i], replacements[i + 1]);
@@ -46,7 +54,9 @@ public final class ChatFormatter {
     // ========== Утилиты ==========
 
     public static String stripTags(String message) {
-        if (message == null) return "";
+        if (message == null) {
+            return "";
+        }
         return PLAIN.serialize(MM.deserialize(message));
     }
 
@@ -55,7 +65,9 @@ public final class ChatFormatter {
     }
 
     public static String toPlain(Object obj) {
-        if (obj == null) return "";
+        if (obj == null) {
+            return "";
+        }
         if (obj instanceof Component component) {
             return PLAIN.serialize(component);
         }
@@ -69,7 +81,9 @@ public final class ChatFormatter {
     }
 
     public static String convertAllColors(String message) {
-        if (message == null) return "";
+        if (message == null) {
+            return "";
+        }
         return ColorConverter.convertLegacyFormats(message);
     }
 

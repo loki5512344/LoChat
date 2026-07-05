@@ -3,6 +3,7 @@ package com.loki.lochat.commands.moderation.mute;
 import com.loki.lochat.LoChat;
 import com.loki.lochat.api.service.MuteService;
 import com.loki.lochat.utils.format.ChatFormatter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,14 +29,23 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.hasPermission("lochat.unmute")) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission")); return true; }
-        if (args.length < 1) { sender.sendMessage(ChatFormatter.parse("&#CF6679Использование: /unmute <ник> [-s]")); return true; }
+        if (!sender.hasPermission("lochat.unmute")) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.no-permission"));
+            return true;
+        }
+        if (args.length < 1) {
+            sender.sendMessage(ChatFormatter.parse("&#CF6679Использование: /unmute <ник> [-s]"));
+            return true;
+        }
 
         String targetName = null;
         boolean silent = false;
         for (String a : args) {
-            if (a.equalsIgnoreCase("-s")) silent = true;
-            else if (targetName == null) targetName = a;
+            if (a.equalsIgnoreCase("-s")) {
+                silent = true;
+            } else if (targetName == null) {
+                targetName = a;
+            }
         }
         if (silent && !sender.hasPermission("lochat.mute.silent")) { 
             sender.sendMessage(ChatFormatter.parse(plugin.getConfigManager().getMessagesConfig().getNoSilentUnmutePermission())); 
@@ -43,7 +53,10 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         }
 
         UUID uuid = com.loki.lochat.utils.player.PlayerUtil.findPlayerUUID(targetName);
-        if (uuid == null) { sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found")); return true; }
+        if (uuid == null) {
+            sender.sendMessage(plugin.getMessageConfig().getComponent("errors.player-not-found"));
+            return true;
+        }
 
         String name = com.loki.lochat.utils.player.PlayerUtil.getPlayerName(uuid);
         Player target = Bukkit.getPlayer(uuid);
@@ -51,10 +64,16 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
 
         if (muteService.unmute(uuid, op)) {
             sender.sendMessage(ChatFormatter.parse("&#9878C9Игрок &#7858E9" + name + " &#9878C9размучен"));
-            if (target != null) target.sendMessage(ChatFormatter.parse("&#9878C9Вы были &#7858E9размучены!"));
+            if (target != null) {
+                target.sendMessage(ChatFormatter.parse("&#9878C9Вы были &#7858E9размучены!"));
+            }
             if (silent) {
                 String msg = "&#B798A8[&#9878C9ТИХО&#B798A8] &#7858E9" + name + " &#B798A8размучен &#9878C9(" + op + ")";
-                for (Player p : Bukkit.getOnlinePlayers()) if (p.hasPermission("lochat.mute.see-silent")) p.sendMessage(ChatFormatter.parse(msg));
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.hasPermission("lochat.mute.see-silent")) {
+                        p.sendMessage(ChatFormatter.parse(msg));
+                    }
+                }
             } else {
                 Bukkit.broadcast(ChatFormatter.parse("&#9878C9Игрок &#7858E9" + name + " &#9878C9размучен модератором &#7858E9" + op));
             }
@@ -67,8 +86,15 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> c = new ArrayList<>();
-        if (args.length == 1) for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) c.add(p.getName());
-        else if (args.length == 2) c.add("-s");
+        if (args.length == 1) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+                    c.add(p.getName());
+                }
+            }
+        } else if (args.length == 2) {
+            c.add("-s");
+        }
         return c;
     }
 }
