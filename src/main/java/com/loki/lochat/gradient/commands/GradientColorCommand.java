@@ -88,7 +88,7 @@ public class GradientColorCommand implements CommandExecutor, TabCompleter {
 
         String firstArg = args[0].toLowerCase();
 
-        if (args.length == 2 && firstArg.equals("copy")) {
+        if (args.length == 2 && "copy".equals(firstArg)) {
             return Bukkit.getOnlinePlayers().stream().map(Player::getName)
                     .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).toList();
         }

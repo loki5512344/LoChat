@@ -78,7 +78,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
     
     private Map<UUID, Long> getCooldownMap(String type) {
-        return type.equals("global") ? globalCooldowns : localCooldowns;
+        return "global".equals(type) ? globalCooldowns : localCooldowns;
     }
     
     // ========== Statistics Implementation ==========

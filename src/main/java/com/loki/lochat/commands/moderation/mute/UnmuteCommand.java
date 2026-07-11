@@ -41,7 +41,7 @@ public class UnmuteCommand implements CommandExecutor, TabCompleter {
         String targetName = null;
         boolean silent = false;
         for (String a : args) {
-            if (a.equalsIgnoreCase("-s")) {
+            if ("-s".equalsIgnoreCase(a)) {
                 silent = true;
             } else if (targetName == null) {
                 targetName = a;

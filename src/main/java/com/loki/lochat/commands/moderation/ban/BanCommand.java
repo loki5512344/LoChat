@@ -121,7 +121,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
         long durationMs;
         if (timeStr == null || timeStr.isEmpty()) {
             durationMs = 0;
-        } else if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
+        } else if ("perm".equalsIgnoreCase(timeStr) || "0".equals(timeStr)) {
             durationMs = 0;
         } else {
             durationMs = muteService.parseTime(timeStr);
@@ -136,7 +136,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isTimeFormat(String s) {
-        return s.equalsIgnoreCase("perm") || s.matches("\\d+[dhms]?");
+        return "perm".equalsIgnoreCase(s) || s.matches("\\d+[dhms]?");
     }
 
     @Override

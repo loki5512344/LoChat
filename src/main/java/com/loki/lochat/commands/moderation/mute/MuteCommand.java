@@ -89,7 +89,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
         StringBuilder reasonBuilder = new StringBuilder();
 
         for (String arg : args) {
-            if (arg.equalsIgnoreCase("-s")) {
+            if ("-s".equalsIgnoreCase(arg)) {
                 silent = true;
             } else if (targetName == null) {
                 targetName = arg;
@@ -126,7 +126,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
             }
             return dur;
         }
-        if (timeStr.equalsIgnoreCase("perm") || timeStr.equals("0")) {
+        if ("perm".equalsIgnoreCase(timeStr) || "0".equals(timeStr)) {
             return 0;
         }
         long dur = muteService.parseTime(timeStr);
@@ -176,7 +176,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isTimeFormat(String s) {
-        return s.equalsIgnoreCase("perm") || s.matches("\\d+[dhms]?");
+        return "perm".equalsIgnoreCase(s) || s.matches("\\d+[dhms]?");
     }
 
     @Override

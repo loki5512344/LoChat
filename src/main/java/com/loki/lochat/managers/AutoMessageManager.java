@@ -132,7 +132,7 @@ public class AutoMessageManager {
 
         String messageKey;
 
-        if (mode.equals("random")) {
+        if ("random".equals(mode)) {
             messageKey = messageOrder.get(random.nextInt(messageOrder.size()));
         } else {
             int index = currentIndex.getAndUpdate(i -> (i + 1) % messageOrder.size());

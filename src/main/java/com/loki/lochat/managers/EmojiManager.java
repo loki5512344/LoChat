@@ -43,7 +43,7 @@ public class EmojiManager {
 
         // Загружаем все категории
         for (String category : config.getKeys(false)) {
-            if (category.equals("settings")) {
+            if ("settings".equals(category)) {
                 continue;
             }
 
